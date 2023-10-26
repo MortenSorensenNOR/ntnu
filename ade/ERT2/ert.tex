@@ -1,0 +1,23 @@
+\documentclass{article}
+
+% Packages
+\usepackage{circuitikz}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\begin{document}
+
+\begin{circuitikz}[american]
+    \draw (0,0) to[vsource, v=$V_0$] (0,3) -- (2,3)
+    to[R=$R_1$] (2,0) -- (0,0);
+    \draw (2,3) -- (4,3) to[R=$R_2$]
+    (4,0) -- (2,0);
+\end{circuitikz}
+
+\end{document}

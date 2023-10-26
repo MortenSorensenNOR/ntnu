@@ -1,0 +1,86 @@
+\documentclass{article}
+
+% Packages
+\usepackage{braket}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage[shortlabels]{enumitem}
+
+% Margins
+\topmargin=-2.5cm
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+% Commands
+\makeatletter
+\newcommand{\listintertext}{\@ifstar\listintertext@\listintertext@@}
+\newcommand{\listintertext@}[1]{% \listintertext*{#1}
+\hspace*{-\@totalleftmargin}#1}
+\newcommand{\listintertext@@}[1]{% \listintertext{#1}
+\hspace{-\leftmargin}#1}
+\makeatother
+
+\title{\huge{Øving 6\\ Diskret matematikk}}
+\author{Morten Sørensen}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\subsection*{Oppgave 1.}
+\begin{enumerate}[(a)]
+    \item {
+        Dersom Eva går frem med å finne riktig boks i en tilfeldig rekkefølge, har hun ved 
+        sjekking av den første boksen en sannsynlighet $P = \frac{1}{b}$ for å finne tallet $k$.
+        Kaller vi tilfellet der hun finner $k$ for $F$ og ikke finner tallet for $\overline{F}$, har hun
+        ved åpning av den andre boksen har hun en sannsynlighet 
+        $$P = \overline{F} \cdot F = \frac{b-1}{b} \cdot \frac{1}{b-1} = \frac{1}{b}$$
+        for å finne tallet. For boks to har vi tilsvarende
+        $$P = \overline{F} \cdot \overline{F} \cdot F = \frac{b-1}{b} \cdot \frac{b-2}{b-1} \cdot \frac{1}{b-2} = \frac{1}{b}$$
+        Kan derfor vises med induksjon at sannsynligheten for å finne tallet $k$ i en vilkårlig boks 
+        er $P = \frac{1}{b}$. Forventningsverdien til systemet blir da 
+        $$E(N) = 1 \cdot \frac{1}{b} + 2 \cdot \frac{1}{b} + 3 \cdot \frac{1}{b} + \dots + b \cdot \frac{1}{b}$$
+        der $N$ er den stokastiske variablen som representerer hvor mange bokser Eva må åpne for å finne $k$.
+        Uttrykket forenkles til 
+        $$E(N) = \frac{1}{b} \cdot (1 + 2 + 3 + \dots + b)$$
+        som er en aritmetisk rekke som gir at 
+        $$E(N) = \frac{1}{b} \cdot \frac{b(b+1)}{2} = \frac{b+1}{2} \text{.}$$
+        Altså har vi at det gjennomsnittlig vil ta $T = t \cdot \frac{b+1}{2}$ sekunder for 
+        Eva å finne tallet $k$.
+    }
+    \item {
+        6 uker tilsvarer 1008 timer. For at den forventede tiden $T = t \cdot \frac{b+1}{2}$ skal være større 
+        lenger enn reisetiden må $b > 2007$, gitt $t = 1 \text{ time}$, men et multiplum av det hadde senket 
+        sannsynligheten for at Eva finner tallet betraktelig.
+    }
+\end{enumerate}
+
+\subsection*{Oppgave 2.}
+\begin{enumerate}[(a)]
+    \item {
+        $A = 2^{69} = 2^{68} \cdot 2 \equiv 52 \cdot 2 \equiv 104 \equiv 3 \mod{(101)}$
+    }
+    \item {
+        $B = 2^{38} \:\%\: 101 = 9$
+    }
+    \item {
+        $B^{69} = (B^{34})^2 \cdot B \equiv 58^2 \cdot 9 \equiv 77 \mod{(101)}$
+    }
+    \item {
+        $A^{38} \:\%\: q = 77$ \\
+        $A^{38} \:\%\: q = B^{69} \:\%\: q$
+    }
+    \item {
+        Siden A er definert som $A = g^{a} \mod p$ og B som $B = g^{b} \mod p$ kan Eva 
+        ved hjelp av $P$ finne $a$ pg $b$ gitt $A$, $B$ og $g$, ettersom at den diskrete 
+        logatimen reverserer prosessen som genererte $A$ og $B$. Når Eva har funnet $a$ og 
+        $b$, kan hun utføre den samme utreningen som Bob og Alice gjorde, og komme frem til 
+        $K$.
+    }
+\end{enumerate}
+\end{document}

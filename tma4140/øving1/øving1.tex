@@ -1,0 +1,124 @@
+\documentclass{article}
+
+% Packages
+\usepackage{braket}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage[shortlabels]{enumitem}
+
+% Margins
+\topmargin=-2.5cm
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+% Commands
+\makeatletter
+\newcommand{\listintertext}{\@ifstar\listintertext@\listintertext@@}
+\newcommand{\listintertext@}[1]{% \listintertext*{#1}
+  \hspace*{-\@totalleftmargin}#1}
+\newcommand{\listintertext@@}[1]{% \listintertext{#1}
+  \hspace{-\leftmargin}#1}
+\makeatother
+
+\title{\huge{Øving 1\\ Diskret matematikk}}
+\author{Morten Sørensen}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\subsection*{Oppgave 1.}
+La $\mathcal{U} = \mathbb{N}$, $A = \set{2x \mid x \in \mathbb{N}}$, 
+$B = \set{3x \mid x \in \mathbb{N}}$, $C = \set{4x \mid x \in \mathbb{N}}$ og 
+$D = \set{2x + 1 \mid x \in \mathbb{N}}$
+\begin{enumerate}[(a)]
+    \item {
+        Ser at $B \cap D$ må være alle positive oddetall delelig på 3. Kan derfor definere 
+        $$B \cap D = \set{3(2x + 1) \mid x \in \mathbb{N}}\text{.}$$
+    }
+    \item {
+        Vi har at $A \cap C \cap B$ er alle tall delelig på både 2, 3 og 4, noe som vi kan forenkle til delelighet på 3 og 4, 
+        ettersom at alle tall delelig på 4 også må være delelig på 2 - dersom $p \in C$, så finnes det en $q \in \mathbb{N}$ s.a. 
+        $p = 4q = 2(2q)$, altså har vi at $p \in A$ . Vi har da at et element i $A \cap C \cap B$ kunn må være 
+        delelig på 4 og 3, altså må et element $x \in A \cap C \cap B$ oppfylle $12 \mid x$. Vi kan derfor definere 
+        $$A \cap C \cap B = \set{12a \mid a \in \mathbb{N}}\text{.}$$
+    }
+    \item {
+        $B \setminus A$ er alle oddetall i $\mathbb{N}$ delelig på 3. Kan derfor definere 
+        $$B \setminus A = \set{3(2x + 1) \mid x \in \mathbb{N}}\text{.}$$ 
+    }
+    \item {
+        Gitt et element $p \in C$, så har vi at det eksisterer et element $q \in \mathbb{N}$ s.a. 
+        $p = 4q = 2(2q)$, altså må $p \in A$. $C \subseteq A$. $\blacksquare$
+    }
+    \item {
+        For at et vilårlig element $x \in \mathbb{N}$ ikke skal være et element i $A$, må elementet oppfylle 
+        $x \equiv 1 (\textrm{mod}\ 2)$, altså må $x = 1 + 2n, n \in \mathbb{N}$. Vi kan derfor definere 
+        $$\overline{A} = \set{2n + 1 \mid n \in \mathbb{N}}\text{,}$$
+        altså må 
+        $$\overline{A} = D \:\:\blacksquare$$
+    }
+    \item {
+        Skal vurdere om utsaget $A \subseteq C$ er sant. Lar $p \in A$. Da eksisterer det en $q \in \mathbb{N}$ s.a.
+        $p = 2q$. Ettersom at $D \subseteq \mathbb{N}$, eksisterer det verdier for $p$ der $q \in D$. Dersom $4 \mid p$ skal være 
+        sant for alle $p \in A$, så har vi at følgende må stemme for verdier $q \in D$
+        $$p = 2(2x + 1) = 0 + 4n$$
+        for en vilkårlig $x, n \in \mathbb{N}$. Løser vi for $x$, får vi at
+        $$x = n - \frac{1}{2}\text{.}$$
+        Vi har derfor en motsigelse der $x \in \mathbb{N}$ og $x \notin \mathbb{N}$, altså eksisterer det verdier for 
+        $q$ s.a. $p \notin C$. Altså kan ikke $A \subseteq C$. $\blacksquare$
+    }
+    \item {
+        Skal vurdere om $\overline{B} \subseteq A$. Vi kan skrive om $\overline{B} = \set{3x + 1 \mid x \in \mathbb{N}} \cup \set{3x + 2 \mid x \in \mathbb{N}}$.
+        Lar $e \in \overline{B}$. Antar først at $e \in \set{3x + 1 \mid x \in \mathbb{N}}$. Dersom $4 \mid e$ for alle $e \in \set{3x + 1 \mid x \in \mathbb{N}}$
+        så har vi at følgende må stemme 
+        $$3x + 1 = 0 + 2n$$
+        for $x, n \in \mathbb{N}$. Løser for $x$, og får at 
+        $$x = \frac{2}{3}n - \frac{1}{3}\text{.}$$
+        Motsetningen $x \in \mathbb{N}$ og $x \notin \mathbb{N}$ viser at det eksisterer elementer $e \in \overline{B}$ s.a. $e \notin A$, altså 
+        har vi at $\overline{B} \not\subseteq A$.$\blacksquare$
+    }
+\end{enumerate}
+
+\subsection*{Oppgave 2.}
+La $A$ og $B$ være vilkårlige mengder i et vilkårlig univers.
+\begin{enumerate}[(a)]
+    \item {
+        Skal vise at $\mathcal{P}(A) \subseteq \mathcal{P}(A \cup B)$. Lar $S_A \in \mathcal{P}(A)$ være en 
+        vilkårlig delmengde på $A$, der $x \in S_A$ er et vilkårlig element i denne mengden. Vi har da at $x \in A$ og 
+        at $x \in A \cup B$ for alle $x$. Altså må $S_A \subseteq A \cup B$ og $S_A \in \mathcal{P}(A \cup B)$. Derfor må 
+        $$\mathcal{P}(A) \subseteq \mathcal{P}(A \cup B)\text{.}\:\:\blacksquare$$ 
+    }
+    \item {
+        Skal vise at $\mathcal{P}(B) \cup \mathcal{P}(A) \subseteq \mathcal{P}(A \cup B)$.
+        Lar $S \in \mathcal{P}(B) \cup \mathcal{P}(A)$. Antar først at $S \subseteq \mathcal{P}(B)$, og lar $x \in S$ være 
+        et vilkårlig element i denne mengden. Vi har da at $x \in B$ og at $x \in A \cup B$, altså er da $S \subseteq \mathcal{P}(A \cup B)$.
+        Antar så at $S \not\subseteq \mathcal{P}(B)$. Da må $S \subseteq \mathcal{P}(A)$, og vi lar $x \in S$ være et vilkårlig element 
+        i denne mengden. Vi har da at $x \in A$ og at $x \in A \cup B$. Altså må $S \subseteq \mathcal{P}(A \cup B)$. Vi har da vist at 
+        $$\mathcal{P}(B) \cup \mathcal{P}(A) \subseteq \mathcal{P}(A \cup B)\text{.}\:\:\blacksquare$$
+    }
+    \item {
+        Skal vise at følgende utsagn ikke stemmer $\mathcal{P}(A \cup B) \subseteq \mathcal{P}(B) \cup \mathcal{P}(A)$. 
+        Dersom $A = \set{1}$ og $B = \set{2}$, så har vi at \\ 
+        $$\mathcal{P}(A \cup B) = \set{\emptyset, \set{1}, \set{2}, \set{1, 2}}\text{,}$$ 
+        og at \\
+        $$\mathcal{P}(B) \cup \mathcal{P}(A) = \set{\emptyset, \set{2}} \cup \set{\emptyset, \set{1}} = \set{\emptyset, \set{1}, \set{2}}\text{.}$$
+        Altså er eksisterer det et element $\set{1, 2} \in \mathcal{P}(A \cup B)$ som ikke er et element i $\mathcal{P}(B) \cup \mathcal{P}(A)$. \\
+        $$\mathcal{P}(A \cup B) \not\subseteq \mathcal{P}(B) \cup \mathcal{P}(A)\text{.}\:\:\blacksquare$$
+    }
+    \item {
+        Skal vise at $\mathcal{P}(A \setminus B) = \mathcal{P}(A) \cap \mathcal{P}(\overline{B})$.
+        Starter med å skrive om til set-form.
+        $$\mathcal{P}(A \setminus B) = \set{ S_{A \setminus B} \mid S_{A \setminus B} \subseteq A \text{ og } S_{A \setminus B} \not\subseteq B}\text{.}$$
+        Gjør det samme for $\mathcal{P}(A) \cap \mathcal{P}(\overline{B})$:
+        $$\mathcal{P}(A) \cap \mathcal{P}(\overline{B}) = \set{S_A \mid S_A \subseteq A} \cap \set{S_{\overline{B}} \mid S_{\overline{B}} \subseteq \overline{B}} = \set{S_{A \cap \overline{B}} \mid S_{A \cap \overline{B}} \subseteq A \text{ og } S_{A \cap \overline{B}} \not\subseteq B}$$
+        Vi har altså at 
+        $$\mathcal{P}(A \setminus B) = \mathcal{P}(A) \cap \mathcal{P}(\overline{B})\text{.}\:\:\blacksquare$$
+    }
+\end{enumerate}
+\end{document}
