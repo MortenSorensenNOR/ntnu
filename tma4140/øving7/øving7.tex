@@ -1,0 +1,108 @@
+\documentclass{article}
+
+% Packages
+\usepackage{braket}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage[shortlabels]{enumitem}
+
+% Margins
+\topmargin=-2.5cm
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+% Commands
+\makeatletter
+\newcommand{\listintertext}{\@ifstar\listintertext@\listintertext@@}
+\newcommand{\listintertext@}[1]{% \listintertext*{#1}
+\hspace*{-\@totalleftmargin}#1}
+\newcommand{\listintertext@@}[1]{% \listintertext{#1}
+\hspace{-\leftmargin}#1}
+\makeatother
+
+\title{\huge{Øving 7\\ Diskret matematikk}}
+\author{Morten Sørensen}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\subsection*{Oppgave 1.}
+\begin{enumerate}[(a)]
+    \item {
+        Ja, fordi både $p_2^{\mathcal{M}} \in T^{\mathcal{M}}$ og 
+        $p_3^{\mathcal{M}} \in T^{\mathcal{M}}$, altså må $T(p_2)$ og $T(p_3)$ begge 
+        være sann i $\mathcal{M}$.
+    }
+    \item {
+        Nei, fordi $p_4^{\mathcal{M}} \notin T^{\mathcal{M}}$.
+    }
+    \item {
+        Ja, fordi både $p_4^{\mathcal{M}}, p_5^{\mathcal{M}} \notin T^{\mathcal{M}}$.
+    }
+    \item {
+        Ja, f.eks. for $x = p_1$ og $y = p_4$.
+    }
+    \item {
+        Velger en modell $\mathcal{M}_1$ s.a. $\mathcal{D}_1 = \mathcal{D}$ og $T^{\mathcal{M}} = \set{1, 3}$. \\
+        $T(p_1) \wedge \neg T(p_2)$ blir da sann.
+    }
+    \item {
+        Alle valueringer av $T(p_1) \wedge T(p_2)$ krever at $T(p_2)$ er sann, atlså er $T(p_2)$ en 
+        konsekvens av $T(p_1) \wedge T(p_2)$ uansett modell.
+    }
+\end{enumerate}
+
+\subsection*{Oppgave 2.}
+\begin{enumerate}[(a)]
+    \item {
+        Ja, for $x = a_1$.
+    }
+    \item {
+        Relasjonen $R^{\mathcal{M}_2}$ er refleksiv, så det finnes ingen $x$ s.a. $\varphi$ er sann.
+    }
+    \item {
+        Dersom vi lar $x = 1$. Da har vi at 
+        $$\forall y ((R(1, y) \vee R(y, 1) \vee L(y, 1)) \wedge \neg R(1, 1)) \text{.}$$
+        Siden $\neg R(1, 1)$ alltid er sann, har vi tilfellet der $y^{\mathcal{M}} = 1$ og der 
+        $y^{\mathcal{M}} = 0$. Hvis $y^{\mathcal{M}} = 1$ vil $L(y, 1)$ være sann. Hvis 
+        $y^{\mathcal{M}} = 0$ vil $\vee R(y, 1)$ være sann. $\varphi$ er dermed sann i $\mathcal{M}_3$.
+    }
+    \item {
+        $\varphi$ kan ikke være sann i $\mathcal{M}_4$.
+    }
+\end{enumerate}
+
+\subsection*{Oppgave 3.}
+\begin{enumerate}[(a)]
+    \item {
+        Ja, for vi har at $\forall x L(x, x)$ sann.
+    }
+    \item {
+        Termen $f(b, b)$ i $\mathcal{M}$ gir $1 + 1 \:\%\: 3 = 2$.
+    }
+    \item {
+        Termen $f(f(c, c), b)$ i $\mathcal{M}$ gir $f^{\mathcal{M}}(f^{\mathcal{M}}(2, 2), 1)$ som gir termen $2$.
+    }
+    \item {
+        Formelen $\forall x L(x, (f(a, x)))$ i $\mathcal{M}$ tilsvarer at $x + 0 = x, \forall x$, noe som 
+        stemmer for addisjon.
+    }
+    \item {
+        Ja, formelen evalueres til sann for $x = c$ i $\mathcal{M}$.
+    }
+    \item {
+        Formelen betyr at for alle $x$ og alle $y$ i konstantsymbolene til $\mathcal{S}$ er $x + y = y + x$. Siden funksjonen $f$ i $\mathcal{M}$ er 
+        kommutativ, må formelen være sann i $\mathcal{M}$.
+    }
+    \item {
+        Formelen sier at for alle $x$ og $z$ så finnes det en $y$ s.a. $f^{\mathcal{M}}(x, y) = z$, 
+        som stemmer for alle verdier av $x$ og $z$.
+    }
+\end{enumerate}
+\end{document}
