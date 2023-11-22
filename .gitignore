@@ -1,0 +1,9 @@
+.venv/
+npm/
+node/
+*.fdb_latexmk
+*.log
+*.aux
+*.synctex.gz
+*.fls
+tdt4110/tdt4110-ovinger/\!Ovinger!

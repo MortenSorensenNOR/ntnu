@@ -57,6 +57,10 @@ const TemperatureRenderer = ({ temperature }) => {
 		lables.push(convertUnixToTime(time))
 	}
 
+	if (tmpData.length < 1 || lables.length < 1) {
+		return (<></>)
+	}
+
 	return (
 		<View style={{ width: Dimensions.get("window").width * 0.85}}>
 			<LineChart 

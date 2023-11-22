@@ -13,10 +13,17 @@
     "expo-status-bar": "~1.6.0",
     "firebase": "^10.5.0",
     "react": "18.2.0",
+<<<<<<< HEAD
     "react-native": "0.72.5",
     "react-native-chart-kit": "^6.12.0",
     "react-native-live-stream": "^1.0.1",
-    "react-native-webview": "13.2.2"
+    "react-native-webview": "13.2.2",
+    "react-native-web": "~0.19.6",
+    "react-dom": "18.2.0",
+    "@expo/webpack-config": "^19.0.0"
+=======
+    "react-native": "0.72.6"
+>>>>>>> parent of 521fa33 (Update: elsys gk)
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
