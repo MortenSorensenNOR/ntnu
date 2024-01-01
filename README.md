@@ -1,6 +1,6 @@
 Files, tasks and resources pertaining to subjects I have taken at NTNU.
 
-- 2023H
+- 2023H \n
   -- Inf. analog og digital elektronikk, ade
   -- Elektronisk systemdesign, grunnkurs, elsys
   -- Diskret matematikk, tma4140
