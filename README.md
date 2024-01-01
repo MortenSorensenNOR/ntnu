@@ -8,7 +8,7 @@ Files, tasks and resources pertaining to subjects I have taken at NTNU.
 - Informasjonsteknologi, grunnkurs **-** *tdt4110*
 
 **2024V**:
-- Prosedyre- og objektorientert programmering, *tdt4102*
-- Matematikk 2, *tma4106*
-- Statistikk, *tma4245*
-- Elektronisk systemdesign og -analyse I, *ttt4260*
+- Prosedyre- og objektorientert programmering **-** *tdt4102*
+- Matematikk 2 **-** *tma4106*
+- Statistikk **-** *tma4245*
+- Elektronisk systemdesign og -analyse I **-** *ttt4260*
