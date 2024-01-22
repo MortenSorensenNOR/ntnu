@@ -1,0 +1,54 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{plot\PYGZus{}gain\PYGZus{}gausian}\PYG{p}{(}\PYG{n}{ax}\PYG{p}{,} \PYG{n}{time}\PYG{p}{,} \PYG{n}{ch1}\PYG{p}{,} \PYG{n}{ch2}\PYG{p}{,} \PYG{n}{title}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}}\PYG{p}{):}
+    \PYG{n}{Amp\PYGZus{}val} \PYG{o}{=} \PYG{n}{ch2}\PYG{o}{/}\PYG{n}{ch1}
+    \PYG{n}{Amp\PYGZus{}val} \PYG{o}{=} \PYG{n+nb}{sorted}\PYG{p}{([}\PYG{n}{val} \PYG{k}{for} \PYG{n}{val} \PYG{o+ow}{in} \PYG{n}{Amp\PYGZus{}val} \PYG{k}{if} \PYG{n}{val} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{reverse}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+    \PYG{n}{Amp\PYGZus{}val} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{20}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{log10}\PYG{p}{(}\PYG{n}{val}\PYG{p}{)} \PYG{k}{for} \PYG{n}{val} \PYG{o+ow}{in} \PYG{n}{Amp\PYGZus{}val}\PYG{p}{]}
+    \PYG{n}{weights} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ones\PYGZus{}like}\PYG{p}{(}\PYG{n}{Amp\PYGZus{}val}\PYG{p}{)}\PYG{o}{/}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{Amp\PYGZus{}val}\PYG{p}{)}
+
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{hist}\PYG{p}{(}\PYG{n}{Amp\PYGZus{}val}\PYG{p}{,} \PYG{n}{bins}\PYG{o}{=}\PYG{l+m+mi}{250}\PYG{p}{,} \PYG{n}{density}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.7}\PYG{p}{,} \PYGZbs{}
+        \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}blue\PYGZdq{}}\PYG{p}{,} \PYG{n}{edgecolor}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}black\PYGZdq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Histogram\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{mu}\PYG{p}{,} \PYG{n}{std} \PYG{o}{=} \PYG{n}{norm}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{Amp\PYGZus{}val}\PYG{p}{)}
+    \PYG{n}{x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{min}\PYG{p}{(}\PYG{n}{Amp\PYGZus{}val}\PYG{p}{),} \PYG{n}{np}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(}\PYG{n}{Amp\PYGZus{}val}\PYG{p}{),} \PYG{l+m+mi}{1000}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{norm}\PYG{o}{.}\PYG{n}{pdf}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{mu}\PYG{p}{,} \PYG{n}{std}\PYG{p}{),} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Gaussian plot\PYGZdq{}}\PYG{p}{,} \PYGZbs{}
+        \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}orange\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{axvline}\PYG{p}{(}\PYG{n}{mu}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}red\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}dashed\PYGZsq{}}\PYG{p}{,} \PYG{n}{linewidth}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYGZbs{}
+        \PYG{n}{label}\PYG{o}{=}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}Mean = }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{mu}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{axvline}\PYG{p}{(}\PYG{n}{mu} \PYG{o}{+} \PYG{n}{std}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}turquoise\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}dashed\PYGZsq{}}\PYG{p}{,} \PYGZbs{}
+        \PYG{n}{linewidth}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}Standard Deviation = }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{std}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{axvline}\PYG{p}{(}\PYG{n}{mu} \PYG{o}{\PYGZhy{}} \PYG{n}{std}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}turquoise\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}dashed\PYGZsq{}}\PYG{p}{,} \PYGZbs{}
+        \PYG{n}{linewidth}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{n}{title}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}gain/loss [db]\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}xticks}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{mu}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{5}\PYG{o}{*}\PYG{n}{std}\PYG{p}{),} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{))}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlim}\PYG{p}{(}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{mu} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{5}\PYG{o}{*}\PYG{n}{std}\PYG{p}{),} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{mu} \PYG{o}{+} \PYG{l+m+mi}{5}\PYG{o}{*}\PYG{n}{std}\PYG{p}{))}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}upper right\PYGZsq{}}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{desibel\PYGZus{}plot}\PYG{p}{(}\PYG{n}{ax}\PYG{p}{,} \PYG{n}{time}\PYG{p}{,} \PYG{n}{ch1}\PYG{p}{,} \PYG{n}{ch2}\PYG{p}{,} \PYG{n}{title}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}}\PYG{p}{):}
+    \PYG{n}{Amp\PYGZus{}val} \PYG{o}{=} \PYG{n}{ch2}\PYG{o}{/}\PYG{n}{ch1}
+    \PYG{n}{Amp\PYGZus{}val} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{20}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{log10}\PYG{p}{(}\PYG{n}{val}\PYG{p}{)} \PYG{k}{for} \PYG{n}{val} \PYG{o+ow}{in} \PYG{n}{Amp\PYGZus{}val}\PYG{p}{]}
+
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{time}\PYG{p}{,} \PYG{n}{Amp\PYGZus{}val}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{n}{label}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{n}{title}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Time [s]\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Gain/Loss [dB]\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}upper right\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{fig}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{(}\PYG{n}{pad}\PYG{o}{=}\PYG{l+m+mf}{2.5}\PYG{p}{)}
+\PYG{n}{fig}\PYG{o}{.}\PYG{n}{set\PYGZus{}figheight}\PYG{p}{(}\PYG{l+m+mf}{6.5}\PYG{p}{)}
+\PYG{n}{fig}\PYG{o}{.}\PYG{n}{set\PYGZus{}figwidth}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{)}
+
+\PYG{n}{filename1} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}../Maalinger/acq0002.csv\PYGZsq{}}
+\PYG{n}{filename2} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}../Maalinger/acq0004.csv\PYGZsq{}}
+
+\PYG{n}{time1}\PYG{p}{,} \PYG{n}{ch1\PYGZus{}1}\PYG{p}{,} \PYG{n}{ch2\PYGZus{}1} \PYG{o}{=} \PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{n}{filename1}\PYG{p}{)}
+\PYG{n}{time2}\PYG{p}{,} \PYG{n}{ch1\PYGZus{}2}\PYG{p}{,} \PYG{n}{ch2\PYGZus{}2} \PYG{o}{=} \PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{n}{filename2}\PYG{p}{)}
+
+\PYG{n}{desibel\PYGZus{}plot}\PYG{p}{(}\PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{time1}\PYG{p}{,} \PYG{n}{ch1\PYGZus{}1}\PYG{p}{,} \PYG{n}{ch2\PYGZus{}1}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}\PYGZdl{}A\PYGZus{}}\PYG{l+s+si}{\PYGZob{}min\PYGZcb{}}\PYG{l+s+s2}{\PYGZdl{}\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}\PYGZdl{}v\PYGZus{}2/v\PYGZus{}1\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{desibel\PYGZus{}plot}\PYG{p}{(}\PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{time2}\PYG{p}{,} \PYG{n}{ch1\PYGZus{}2}\PYG{p}{,} \PYG{n}{ch2\PYGZus{}2}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}\PYGZdl{}A\PYGZus{}}\PYG{l+s+si}{\PYGZob{}max\PYGZcb{}}\PYG{l+s+s2}{\PYGZdl{}\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}\PYGZdl{}v\PYGZus{}2/v\PYGZus{}1\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}desibel\PYGZus{}plot.png\PYGZdq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{500}\PYG{p}{)}
+\end{Verbatim}

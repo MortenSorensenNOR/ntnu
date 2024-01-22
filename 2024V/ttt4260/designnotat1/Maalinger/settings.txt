@@ -1,0 +1,19 @@
+#Digilent WaveForms Oscilloscope Acquisition
+#Device Name: Discovery2
+#Serial Number: SN:210321B27D21
+#Date Time: 2024-01-21 18:44:48.691
+#Sample rate: 4e+06Hz
+#Samples: 8192
+#Trigger: Source: v_in Type: Edge Condition: Rising Level: 0 V Hyst.: Auto HoldOff: 0 s
+#v_in: Range: 500 mV/div Offset: 0 V Attenuation: 1 X Sample Mode: Average
+#v_out: Range: 500 mV/div Offset: 0 V Attenuation: 1 X Sample Mode: Average
+#Wavegen Channel 1: Running
+#Mode: Simple
+#Type: Sine
+#Frequency: 1 kHz
+#Period: 1 ms
+#Amplitude: 1 V
+#Offset: 0 V
+#Symmetry: 50 %
+#Phase: 0 °
+

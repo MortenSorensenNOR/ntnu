@@ -1,0 +1,194 @@
+[
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG.c.o -c ../subprojects/SDL2_image-2.6.2/IMG.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_avif.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_avif.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_avif.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_avif.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_avif.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_avif.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_bmp.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_bmp.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_bmp.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_bmp.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_bmp.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_bmp.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_gif.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_gif.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_gif.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_gif.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_gif.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_gif.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_jpg.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_jpg.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_jpg.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_jpg.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_jpg.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_jpg.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_jxl.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_jxl.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_jxl.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_jxl.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_jxl.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_jxl.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_lbm.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_lbm.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_lbm.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_lbm.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_lbm.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_lbm.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_pcx.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_pcx.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_pcx.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_pcx.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_pcx.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_pcx.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_png.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_png.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_png.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_png.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_png.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_png.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_pnm.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_pnm.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_pnm.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_pnm.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_pnm.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_pnm.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_qoi.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_qoi.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_qoi.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_qoi.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_qoi.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_qoi.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_stb.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_stb.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_stb.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_stb.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_stb.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_stb.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_svg.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_svg.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_svg.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_svg.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_svg.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_svg.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_tga.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_tga.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_tga.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_tga.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_tga.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_tga.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_tif.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_tif.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_tif.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_tif.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_tif.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_tif.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_webp.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_webp.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_webp.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_webp.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_webp.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_webp.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_WIC.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_WIC.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_WIC.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_WIC.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_WIC.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_WIC.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xcf.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xcf.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xcf.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_xcf.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_xcf.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xcf.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xpm.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xpm.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xpm.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_xpm.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_xpm.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xpm.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xv.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xv.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xv.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_xv.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_xv.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xv.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache cc -Isubprojects/SDL2_image-2.6.2/libsdl2image.a.p -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/libpng16 -I/usr/include/x86_64-linux-gnu -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -std=c17 -g -fPIC -D_REENTRANT -DLOAD_BMP -DLOAD_PNG -DLOAD_JPG -DLOAD_TIF -MD -MQ subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xxx.c.o -MF subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xxx.c.o.d -o subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xxx.c.o -c ../subprojects/SDL2_image-2.6.2/IMG_xxx.c",
+    "file": "../subprojects/SDL2_image-2.6.2/IMG_xxx.c",
+    "output": "subprojects/SDL2_image-2.6.2/libsdl2image.a.p/IMG_xxx.c.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache c++ -Isubprojects/animationwindow/libanimationwindow.a.p -Isubprojects/animationwindow -I../subprojects/animationwindow -I../subprojects/animationwindow/include -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -std=c++20 -g -fPIC -D_REENTRANT -MD -MQ subprojects/animationwindow/libanimationwindow.a.p/src_internal_FontCache.cpp.o -MF subprojects/animationwindow/libanimationwindow.a.p/src_internal_FontCache.cpp.o.d -o subprojects/animationwindow/libanimationwindow.a.p/src_internal_FontCache.cpp.o -c ../subprojects/animationwindow/src/internal/FontCache.cpp",
+    "file": "../subprojects/animationwindow/src/internal/FontCache.cpp",
+    "output": "subprojects/animationwindow/libanimationwindow.a.p/src_internal_FontCache.cpp.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache c++ -Isubprojects/animationwindow/libanimationwindow.a.p -Isubprojects/animationwindow -I../subprojects/animationwindow -I../subprojects/animationwindow/include -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -std=c++20 -g -fPIC -D_REENTRANT -MD -MQ subprojects/animationwindow/libanimationwindow.a.p/src_internal_KeyboardKeyConverter.cpp.o -MF subprojects/animationwindow/libanimationwindow.a.p/src_internal_KeyboardKeyConverter.cpp.o.d -o subprojects/animationwindow/libanimationwindow.a.p/src_internal_KeyboardKeyConverter.cpp.o -c ../subprojects/animationwindow/src/internal/KeyboardKeyConverter.cpp",
+    "file": "../subprojects/animationwindow/src/internal/KeyboardKeyConverter.cpp",
+    "output": "subprojects/animationwindow/libanimationwindow.a.p/src_internal_KeyboardKeyConverter.cpp.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache c++ -Isubprojects/animationwindow/libanimationwindow.a.p -Isubprojects/animationwindow -I../subprojects/animationwindow -I../subprojects/animationwindow/include -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -std=c++20 -g -fPIC -D_REENTRANT -MD -MQ subprojects/animationwindow/libanimationwindow.a.p/src_internal_nuklear_implementation.cpp.o -MF subprojects/animationwindow/libanimationwindow.a.p/src_internal_nuklear_implementation.cpp.o.d -o subprojects/animationwindow/libanimationwindow.a.p/src_internal_nuklear_implementation.cpp.o -c ../subprojects/animationwindow/src/internal/nuklear_implementation.cpp",
+    "file": "../subprojects/animationwindow/src/internal/nuklear_implementation.cpp",
+    "output": "subprojects/animationwindow/libanimationwindow.a.p/src_internal_nuklear_implementation.cpp.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache c++ -Isubprojects/animationwindow/libanimationwindow.a.p -Isubprojects/animationwindow -I../subprojects/animationwindow -I../subprojects/animationwindow/include -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -std=c++20 -g -fPIC -D_REENTRANT -MD -MQ subprojects/animationwindow/libanimationwindow.a.p/src_widgets_Button.cpp.o -MF subprojects/animationwindow/libanimationwindow.a.p/src_widgets_Button.cpp.o.d -o subprojects/animationwindow/libanimationwindow.a.p/src_widgets_Button.cpp.o -c ../subprojects/animationwindow/src/widgets/Button.cpp",
+    "file": "../subprojects/animationwindow/src/widgets/Button.cpp",
+    "output": "subprojects/animationwindow/libanimationwindow.a.p/src_widgets_Button.cpp.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache c++ -Isubprojects/animationwindow/libanimationwindow.a.p -Isubprojects/animationwindow -I../subprojects/animationwindow -I../subprojects/animationwindow/include -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -std=c++20 -g -fPIC -D_REENTRANT -MD -MQ subprojects/animationwindow/libanimationwindow.a.p/src_widgets_TextInput.cpp.o -MF subprojects/animationwindow/libanimationwindow.a.p/src_widgets_TextInput.cpp.o.d -o subprojects/animationwindow/libanimationwindow.a.p/src_widgets_TextInput.cpp.o -c ../subprojects/animationwindow/src/widgets/TextInput.cpp",
+    "file": "../subprojects/animationwindow/src/widgets/TextInput.cpp",
+    "output": "subprojects/animationwindow/libanimationwindow.a.p/src_widgets_TextInput.cpp.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache c++ -Isubprojects/animationwindow/libanimationwindow.a.p -Isubprojects/animationwindow -I../subprojects/animationwindow -I../subprojects/animationwindow/include -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -std=c++20 -g -fPIC -D_REENTRANT -MD -MQ subprojects/animationwindow/libanimationwindow.a.p/src_widgets_DropdownList.cpp.o -MF subprojects/animationwindow/libanimationwindow.a.p/src_widgets_DropdownList.cpp.o.d -o subprojects/animationwindow/libanimationwindow.a.p/src_widgets_DropdownList.cpp.o -c ../subprojects/animationwindow/src/widgets/DropdownList.cpp",
+    "file": "../subprojects/animationwindow/src/widgets/DropdownList.cpp",
+    "output": "subprojects/animationwindow/libanimationwindow.a.p/src_widgets_DropdownList.cpp.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache c++ -Isubprojects/animationwindow/libanimationwindow.a.p -Isubprojects/animationwindow -I../subprojects/animationwindow -I../subprojects/animationwindow/include -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -std=c++20 -g -fPIC -D_REENTRANT -MD -MQ subprojects/animationwindow/libanimationwindow.a.p/src_AnimationWindow.cpp.o -MF subprojects/animationwindow/libanimationwindow.a.p/src_AnimationWindow.cpp.o.d -o subprojects/animationwindow/libanimationwindow.a.p/src_AnimationWindow.cpp.o -c ../subprojects/animationwindow/src/AnimationWindow.cpp",
+    "file": "../subprojects/animationwindow/src/AnimationWindow.cpp",
+    "output": "subprojects/animationwindow/libanimationwindow.a.p/src_AnimationWindow.cpp.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache c++ -Isubprojects/animationwindow/libanimationwindow.a.p -Isubprojects/animationwindow -I../subprojects/animationwindow -I../subprojects/animationwindow/include -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -std=c++20 -g -fPIC -D_REENTRANT -MD -MQ subprojects/animationwindow/libanimationwindow.a.p/src_Color.cpp.o -MF subprojects/animationwindow/libanimationwindow.a.p/src_Color.cpp.o.d -o subprojects/animationwindow/libanimationwindow.a.p/src_Color.cpp.o -c ../subprojects/animationwindow/src/Color.cpp",
+    "file": "../subprojects/animationwindow/src/Color.cpp",
+    "output": "subprojects/animationwindow/libanimationwindow.a.p/src_Color.cpp.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache c++ -Isubprojects/animationwindow/libanimationwindow.a.p -Isubprojects/animationwindow -I../subprojects/animationwindow -I../subprojects/animationwindow/include -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -std=c++20 -g -fPIC -D_REENTRANT -MD -MQ subprojects/animationwindow/libanimationwindow.a.p/src_Image.cpp.o -MF subprojects/animationwindow/libanimationwindow.a.p/src_Image.cpp.o.d -o subprojects/animationwindow/libanimationwindow.a.p/src_Image.cpp.o -c ../subprojects/animationwindow/src/Image.cpp",
+    "file": "../subprojects/animationwindow/src/Image.cpp",
+    "output": "subprojects/animationwindow/libanimationwindow.a.p/src_Image.cpp.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache c++ -Isubprojects/animationwindow/libanimationwindow.a.p -Isubprojects/animationwindow -I../subprojects/animationwindow -I../subprojects/animationwindow/include -Isubprojects/SDL2_image-2.6.2 -I../subprojects/SDL2_image-2.6.2 -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -std=c++20 -g -fPIC -D_REENTRANT -MD -MQ subprojects/animationwindow/libanimationwindow.a.p/src_Widget.cpp.o -MF subprojects/animationwindow/libanimationwindow.a.p/src_Widget.cpp.o.d -o subprojects/animationwindow/libanimationwindow.a.p/src_Widget.cpp.o -c ../subprojects/animationwindow/src/Widget.cpp",
+    "file": "../subprojects/animationwindow/src/Widget.cpp",
+    "output": "subprojects/animationwindow/libanimationwindow.a.p/src_Widget.cpp.o"
+  },
+  {
+    "directory": "/home/morten/ntnu/2024V/tdt4102/Øvinger/Øving1/builddir",
+    "command": "ccache c++ -Iprogram.p -I. -I.. -I../subprojects/animationwindow/include -I/usr/include/SDL2 -fdiagnostics-color=always -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -std=c++20 -g -D_REENTRANT -Wconversion -fdiagnostics-color=always -Werror=return-type -MD -MQ program.p/main.cpp.o -MF program.p/main.cpp.o.d -o program.p/main.cpp.o -c ../main.cpp",
+    "file": "../main.cpp",
+    "output": "program.p/main.cpp.o"
+  }
+]

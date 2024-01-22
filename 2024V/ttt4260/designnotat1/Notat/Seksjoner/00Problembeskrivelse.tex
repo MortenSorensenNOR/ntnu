@@ -1,0 +1,21 @@
+\section{Problembeskrivelse}
+\label{problemBeskrivelse}
+
+%Her kan du skrive om din problembeskrivelse
+Vi skal her ta for oss et design av en variabel nivåregulator utelukkende for demping av signaler.
+Dette designet skal gi en variabel demping av et vilkårlig signal i området $[-A_{min}, -A_{max}]$dB,
+der dempestyrken $A$ skal kunne reguleres gjennom dreibar kontroll. Signalkilden er antatt å være 
+et signussignal med frekvens $f = 1000$ Hz med utgangsmotstand $R_k \approx 0\Omega$, og utgangen 
+er tiltenkt å ha utgangsmotstand $R_L \approx \infty\Omega$. 
+
+Realiserte $A_{max}$ og $A_{min}$ skal ha et 
+avvik $\leq 0.1$ dB fra spesifisert verdi.
+
+Systemet er illustrert i figur 1.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Bilder/nivaaregulator.png}
+    \caption{Generell nivåregulator \cite{teknot}}
+    \label{fig:nivaaregulator}
+\end{figure}

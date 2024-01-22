@@ -1,0 +1,10 @@
+~~~ Theory ~~~
+1. Pre-process, compile and link the program
+2. Finding type erros, etc.
+3. Probably a memory error, either related to memory leaks or illegal 
+   memory access
+4. 
+   a) It stores an array of Point structs, all with x=y=z=0. 
+      This would be the same if the code after = was omitted.
+   b) (int*)(pArray + 1) will be pArray + 0xc, or 12 bytes, as each int 
+      is 4 bytes, this pointer points to the x value of the second struct in pArray
