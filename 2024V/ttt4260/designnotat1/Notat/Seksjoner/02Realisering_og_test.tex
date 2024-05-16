@@ -1,0 +1,73 @@
+\section{Realisering og test}
+\label{realiseringOgTest}
+
+%Her kan du skrive om realisering og test
+\subsection{Realisering}
+For realiseringen av systemet er $A_{min} = -5\text{dB}$ og $A_{max} = -22\text{dB}$ valgt.
+Setter vi $A_{min}$ og $A_{max}$ inn i likning (2) og (3) får vi følgende likningsett
+\begin{align}
+    &20 \cdot \lg{\left(\frac{R + R_2}{R + R_1 + R_2}\right)} = -5 \text{dB} \label{eq:eq1} \tag{I} \\
+    &20 \cdot \lg{\left(\frac{R_2}{R_1 + R_2}\right)} = -22 \text{dB} \label{eq:eq2} \tag{II}
+\end{align}
+
+Velger først et potensiometer med målt maksverdi på $R \approx 10.65k\Omega$, og løser for $R_1$ og $R_2$.
+Dette gir $R_1 \approx 8885\Omega$ og $R_2 \approx 767\Omega$. Fordi motstandene brukt i realiseringen 
+hadde en toleranse på $\pm 5$\% ble følgende kombinasjon av motstander brukt etter eksperimentering og måling
+\begin{align*}
+    &R_1 = 2 \cdot 3.3k\Omega + 2 \cdot 1k\Omega + 220\Omega + 3 \cdot 33\Omega + 10\Omega = 8929\Omega \pm 5\% \\
+    &R_2 = 2 \cdot 330\Omega + 100\Omega + \left(10 \mid\mid 10 \mid\mid 10 \mid\mid 10\right)\Omega = 762\Omega \pm 5\%
+\end{align*}
+
+Vi forventer da å få følgende målte $A_{min}$ og $A_{max}$ verdier:
+\begin{align*}
+    &A = A_{min} = (-5.0 \pm 0.2) \text{dB} \\
+    &A = A_{max} = (-22.0 \pm 0.8) \text{dB} 
+\end{align*}
+
+\subsection{Testing}
+For analyse av systemet har en Analog Discovery 2 \cite{discovery} blitt brukt. 
+W1 generatoren til Discovery-en ble koblet på $v_1$ inngangen på nivåregulatoren,
+mens CH1 og CH2 oscilloskopene var koblet til henholdsvis $v_1$ og $v_2$. Signalgeneratoren og 
+de to oscilloskopene var alle koblet til felles ground.
+
+Signalgeneratoren ble satt til å generere et sinussignal med amplitude på 1V og 
+frekvens $f = 1000$Hz, og hadde en sampling rate på $4 \cdot 10^6$Hz og hver datalogging 
+hadde en varighet på 2ms.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Bilder/voltage_plot.png}
+    \caption{Volt/Tid plott fra oscilloskop inngang CH1 og CH2.}
+    \label{fig:volt_plot}
+\end{figure}
+
+Forsøket ble utført ved $A = A_{min}$ og $A = A_{max}$. I figur 3. ser man 
+spenningsplottet til utgangen av nivåregulatoren over tid. For $A_{min}$ 
+var maks amplitude $0.566\text{V}$ som medfører at $A_{min} = -4.94\text{dB}$, 
+og for $A_{max}$ var maks amplitude $0.080 \text{V}$ som tilsvarer at 
+$A_{max} = -21.92 \text{dB}$. Altså er avviket fra ønsket verdi 
+$\Delta A \leq 0.1\text{dB}$ i begge tilfellene.
+
+Til tross for at realiseringen er innenfor toleransene når signalet er på sitt høyeste,
+kan en se en relativt stor spredning i dataene, med et standardavvik på henholdsvis 
+$0.42$dB og $1.10$dB for $A_{min}$ og $A_{max}$ (se figur 4). 
+
+Det kan være flere grunner for det store spriket i $A$-verdier. I figur 5 er dempingen 
+$A$ plottet over tid med samme tidsakse som i figur 3. Når $v_1$ og $v_2$ går mot 0V, divergerer 
+dempingen fra den forventede dempningsverdien. Dette er trolig på grunn av begrenset presisjon 
+i måleverkyøyet. Medianen til avviket fra spesifisert $A_{min}$ til målt data er på $0.03$dB, og 
+for $A_{max}$ var medianen til avviket $0.17$dB.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Bilder/gauss_plot.png}
+    \caption{Gaussfordeling og boksplott av demping av signalet.}
+    \label{fig:gaus_plot}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Bilder/desibel_plot.png}
+    \caption{Desibel/Tid plott fra oscilloskop inngang CH1 og CH2.}
+    \label{fig:gain_plot}
+\end{figure}

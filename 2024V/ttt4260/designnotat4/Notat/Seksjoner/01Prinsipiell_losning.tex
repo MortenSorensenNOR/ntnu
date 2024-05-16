@@ -1,0 +1,308 @@
+\section{Prinsipiell løsning}
+\label{prinsipiellLoesning}
+
+Den prinsipielle løsningen foreslått er som vist i figur \ref{fig:prinsip_sys}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Bilder/sys_overview.png}
+    \caption{Illustrering av den prinsipielle løsningens overordnet form}
+    \label{fig:prinsip_sys}
+\end{figure}
+
+Signalet $x_1(t)$ sendes først inn i et ulineært system. Målet med det ulineære systemet 
+er å generere overharmoniske frekvenser ved $2f$, $3f$, $4f$, osv. Ved å sende utgangssignalet 
+$y(t)$ fra det ulineære systemet gjennom et båndpassfilter kan frekvenskomponenten ved $2f$ isoleres,
+og dermed oppnå det ønskede utgangssignalet $x_2(t)$. Kvaliteten på båndpassfilteret vil da være den 
+dominerende faktoren overfor kvaliteten på utgangssignalet, altså hvor stor SDR systemet klarer å oppnå.
+Et skarpere filter med større demping i båndstopp-området vil føre til mindre støy og overharmoniske, 
+og dermed også et renere sinussignal og en større SDR.
+
+\subsection{Det ulineære systemet}
+For å oppnå den ønskede oppførselen til det ulineære systemet er designet i figur \ref{fig:ulin_sys} foreslått.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{Bilder/ulinear_sys.png}
+    \caption{Prinsipielt design av det ulineære systemet}
+    \label{fig:ulin_sys}
+\end{figure}
+
+Siden inngangssignalet $x_1(t)$ ossilerer rundt 0, vil dioden føre til at signalet blir forvrengt slik at 
+det ikke lenger er sinus-formet. Men siden utgangssignalet $y(t)$ fortsatt har samme periode som inngangssignalet,
+vil utgangssignalet ha en grunnfrekvens $f$ i tillegg til overharmoniske frekvenskomponenter ved $2f$, $3f$, $4f$, osv., 
+slik vi ønsket. For dette designet er $R1$ valgt stor.
+
+\subsection{Båndpassfilter}
+Ettersom at båndpassfilteret spiller en sentral rolle i kvaliteten på systemet er to metoder for 
+båndpassfiltrering foreslått. De to prinsipielle løsningene er et analogt RLC båndpassfilter og et digitalt 
+FIR\footnote{\textit{Finite Impulse Response}} båndpassfilter. Begge filtrene har sine fordeler og ulemper. RLC filteret 
+er svært simpelt, energi- og kosteffektivt, men har dårligere filterkarakteristikker enn det digitale FIR filteret.
+
+\subsubsection{Analog RLC båndpassfilter}
+Prinsipielt er det analoge RLC båndpassfilteret simpelt: en spole, en kondensator og en motstand kobles i serie med ground
+som vist i figur \ref{fig:rlc_idea}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.34\textwidth]{Bilder/rlc_bandpass.png}
+    \caption{Prinsipielt design for analogt RLC båndpassfilter}
+    \label{fig:rlc_idea}
+\end{figure}
+
+Utgangsspenningen til filteret blir dermed spenningsfallet over 
+motstanden i relasjon til ground. 
+
+For å kunne undersøke påvirkningen av båndpassfilteret på systemet kan 
+vi undersøke fourierkoeffisientene til inn- og utgangssignalet.
+Vi lar $c_k^2$ representere den $k$-te fourierkoeffisienten til 
+utgangssignalet $x_2(t)$, $H(j\omega_k)$ være 
+systemresponsen til båndpassfilteret ved den $k$-te multiplum av grunnvinkelfrekvensen
+$\omega_1$ og $c_k^y$ være den $k$-te fourierkoeffisienten til $y(t)$. Vi har da at
+\[
+    c_k^2 = H(j\omega_k) \cdot c_k^y
+\]
+
+Men det er en kaviat; dette gjelder kunn dersom inngangsimpedansen til filteret er mye større enn utgangsimpedansen til det ulineære systemet.
+Dette kan vi forsikre oss om ved å koble inn en buffer mellom de to systemene.
+Vi lar så inn- og utgangsspenningen til Op-Ampen V+ og V- være større enn $A_1$ for å 
+forhindre at den også introduserer nye overharmoniske inn i signalet.
+
+Ser vi på systemet i sin helhet får vi kretsskjemaet i figur \ref{fig:anal_rlc_sys}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Bilder/Analog_sys.png}
+    \caption{Prinsipielt design av det totale systemet med et analogt RLC båndpassfilter}
+    \label{fig:anal_rlc_sys}
+\end{figure}
+
+Videre skal vi se på hvordan vi kan velge komponentverdiene i RLC filteret slik at det oppnår den 
+filterkarakteristikken vi er ute etter. Hovedsakelig ønsker vi å designe båndpassfilteret slik at 
+hele spenningsfallet ligger over motstanden $R_2$ når vinkelfrekvensen $\omega_k$ går mot $2\pi 2f$. 
+Dette kan vi oppnå ved å velge komponentverdier for $L$ og $C$ s.a. resonnansfrekvensen til systemet 
+samsvarer med den ønskede senterfrekvensen til båndpassfilteret ved $2f$.
+
+Vi ønsker da at summen av impedansene til spolen og kondensatoren skal bli 0 når $w_k = 2\pi 2f$, altså at 
+\[
+    Z_L + Z_C = 0 \implies j \cdot 2\pi \cdot 2f \cdot L + \frac{1}{j \cdot 2\pi \cdot 2f \cdot C} = 0
+\]
+
+Løser vi likningen for $LC$ får vi at 
+\[
+    LC = \frac{1}{4\pi^2 \cdot (2f)^2}
+\]
+
+Altså kan vi ved å velge en verdi for enten spolen $L$ eller kodensatoren $C$, regne ut 
+den andre ukjente komponentverdien vi trenger for filteret.
+
+Videre kan vi gitt verdiene for $L$ og $C$ finne et uttrykk for motstanden $R_2$ gitt en ønsket 
+kvalitetsfaktor $Q$ til filteret. Vi har at 
+
+\[
+    Q = \sqrt{\frac{L}{C R_2^2}} \implies R_2 = \sqrt{\frac{L}{C Q^2}}
+\]
+
+Vi har da alle verdiene vi trenger for å kunne implementere båndpassfilteret.
+
+For å videre forbedre filterkarakteristikken til båndpassfilteret er en kaskadekobling av flere båndpassfiltere mulig \cite{design3}.
+Dette kan oppnås ved å koble utgangen av et filter gjennom et buffer til det neste slik som i figur \ref{fig:cascade}. Den resulterende frekvensresponsen til 
+systemet for $n$ sammenkoblede filtre blir da 
+\[
+    H_{tot}(s) = H_1(s) \cdot H_2(s) \cdot H_3(s) \cdot ... \cdot H_{n-1}(s) \cdot H_n(s)
+\]
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Bilder/buffer.png}
+    \caption{Kaskadekobling av filtre \cite{design3}}
+    \label{fig:cascade}
+\end{figure}
+
+\subsubsection{Digitalt FIR båndpassfilter}
+Et digitalt FIR filter er en type digitalt filter ofte brukt i signalbehandling. Denne prinsipielle løsningen 
+skal ta for seg et diskret tid digitalt FIR filter. Prinsipiellt kan et FIR filter beskrives med følgende differensligning
+\[
+    y[n] = \sum_{k=0}^{N} b_k \cdot x[n-k]
+\]
+
+der $y$ er utgangssignalet, $x$ er inngangssignalet, $b_k$ er filterkoeffisientene og $N$ er filterets orden. Mer vanlig 
+er visualiseringen i figur \ref{fig:fir_filter_overview}, der operasjonen $z^{-1}$ er en delay operator på signalet, skrevet i Z-transform notasjon.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Bilder/FIR_Filter_overview.png}
+    \caption{N-te ordens diskret tid FIR filter \cite{fir_wiki}}
+    \label{fig:fir_filter_overview}
+\end{figure}
+
+For enkelthetens skyld kan man tenke på $z^{-1}$ som nettop en delay operator, eller forsinkelsesoperator, 
+altså at $x[n-1] = z^{-1}x[n]$.
+
+\newpage
+Det er hovedsakelig tre parametre å velge for FIR filteret:
+\begin{enumerate}
+    \item Samplingfrekvensen til systemet - $f_s$
+    \item Filterets orden - $N$
+    \item Filterkoeffisientene - $b_k$
+\end{enumerate}
+
+Samplingfrekvensen $f_s$ er som regel styrt av applikasjonen. For dette systemet må signalet gå fra 
+kontinuerlig tid til diskret tid. Det betyr at systemet må ta høyde for aliasing\footnote{Frekvenser over Nyquist-frekvensen fremstår feilaktig som lavere frekvenskomponenter grunnet utilstrekkelig samplingrate \cite{aliasing}} 
+når samplingfrekvensen blir valgt.
+For å oppnå Nyquist-kriteriet \cite{nyquist} må samplingfrekvensen være \textit{minst} dobbelt så stor som den høyeste
+frekvenskomponenten i signalet som blir målt. Dette er et krav for at man skal kunne rekonstruere det opprinnelige signalet 
+nøyaktig fra diskrete målinger av et kontinuerlig signal. Dersom vi setter samplingfrekvensen $f_s = 20f$ ligger vi godt innenfor 
+Nyquist frekvensen, selv for den doblede frekvensen til den første overharmoniske. Høyere samplingfrekvens vil også gjøre det mulig 
+å få høyere oppløsning av signalet i tid, men dette fører til at filterets orden må økes for å kompansere.
+Både filterets orden og filterkoeffisentene strengt avhengig av applikasjonen og hvilken frekvens vi ønsker 
+at båndpassfilteret skal operere på.
+
+For å videre forhindre aliasing når vi sampler signalet ønsker vi å kjøre signalet først gjennom et analogt 
+lavpassfilter med cutoff-frekvens lik Nyquist-frekvensen ($f_s/2$).
+
+Akproksimering av kraf for filter orden $N$:
+\[
+    N \simeq \frac{A_s - 7.95}{14.36 \Delta f} + 1
+\]
+hvor $A_s$ er dempingen i stopbandet og $\Delta f$ er sampling frekvensen.
+
+To prinsipielle løsninger for hvordan FIR filteret kan benyttes er gitt:
+\begin{enumerate}
+    \item Programvare gjennom python kode
+    \item Hardware implementering på FPGA med SystemVerilog
+\end{enumerate}
+
+\textbf{Python programvare}\\
+Følgende python programvare tar inn et parameter \textit{signal} og en kjerne \textit{kernel} - filterkoeffisientene - og benytter 
+konvolusjon på signalet for å produsere et filtrert utgangssignal \textit{output}. 
+
+\begin{tcolorbox}[colback=white, colframe=white!55!black]
+\begin{minted}{python}
+import numpy as np
+
+def fir_convolve(signal, kernel):
+    kernel_size = len(kernel)
+    output = np.zeros_like(signal)
+    shift = np.zeros(kernel_size) 
+
+    for i in range(len(signal)):
+        shift = np.concatenate((np.array([signal[i]]), \
+            np.array(shift[0:kernel_size-1])))
+        products = shift * kernel
+        output[i] = np.sum(products)
+    
+    return output
+\end{minted}
+\end{tcolorbox}
+
+Denne python programvaren kjører ikke i sanntid, og er derfor begrenset til applikasjoner der sanntidsaspektet av 
+systemet ikke er nødvendig, men kan lett modifiseres til å gjøre det. 
+
+\textbf{Hardware - SystemVerilog}\\
+\begin{tcolorbox}[colback=white, colframe=white!55!black]
+\begin{minted}{verilog}
+module FIR_FILTER (
+    input                   clk,
+    input   signed  [11:0]  data_in,
+    input                   drdy,
+    input                   rst,
+    output  signed  [11:0]  data_out);
+
+    parameter N;
+    integer i, j, k;
+    reg signed [23:0] coeff [0:N] = { b0, b1, ..., bN, };
+    reg signed [11:0] shift_register [0:N];
+    reg signed [35:0] product [0:N];
+    reg signed [35:0] accumulate;
+
+    always @(posedge clk) begin // Shift register
+        if (rst) begin
+            for (i = 0; i < 24; i = i + 1) begin
+                shift_register[i] <= 0;
+            end
+            accumulate <= 36'd0;
+        end else if (drdy) begin
+            shift_register[0] <= data;
+
+            for (j = 1; j < 24; j = j + 1) begin
+                shift_register[i] <= shift_register[i-1];
+            end
+        end
+    end
+
+    always @(posedge clk) begin // Multiply
+        for (k = 0; k < 24; k = k + 1) begin
+            product[k] <= shift_register[k] * coeff[k];
+        end
+    end
+
+    always @(posedge clk) begin // Accumulate
+        accumulate <= product[0] + product[1] + product[2] + ...
+                      product[N-2]  + product[N-1]  + product[N];
+    end
+
+    assign data_out = $signed(accumulate[35:24]);
+endmodule
+\end{minted}
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=white, colframe=white!55!black]
+    \textbf{TODO:}
+    \begin{enumerate}
+        \item Forklare HDL kode
+        \item Vise kretstegning som for figur \ref{fig:fir_sys}
+        \item Gå gjennom utregning av filterkoeffisienter - Matlab
+    \end{enumerate}
+\end{tcolorbox}
+
+
+\subsection{Signal-til-distorsjonsforholdet}
+For å kunne gi en kvalitativ måling på hvor godt systemet klarer å produsere en tilnærming 
+av et rent sinussignal ved den doble frekvensen er SDR foreslått. 
+
+Vi kan tenke oss at det produserte signalet $\hat{x}_2(t)$ er summen av det ønskede utgangssignalet $x_2(t)$
+og et forstyrringssignal $d(t)$. Siden vi har at alle signalene stammer fra samme kilde med overharmoniske 
+perioder som går opp i $T = \frac{1}{f}$, kan vi finne middeleffekten til de forskjellige signalene på følgende vis
+
+\[
+    P_{x_k} = \frac{1}{T} \int_{0}^{T} x_k^2(t)dt \text{,}
+\]
+
+\[
+    P_{\hat{x}_k} = \frac{1}{T} \int_{0}^{T} \hat{x}_k^2(t)dt
+\]
+
+og 
+
+\[
+    P_{d} = \frac{1}{T} \int_{0}^{T} d^2(t)dt
+\]
+
+Vi kan derfor skrive målet på SDR som 
+\[
+    \text{SDR} = \frac{P_{x_k}}{P_d}
+\]
+
+og vi har ved Parsevals stats at effekten til $\hat{x}_k(t)$ kan skrives som 
+\[
+    P_{x_k} = \sum_{n=-\infty}^{\infty}|c_n|^2 = |c_0|^2 + 2\sum_{n=-\infty}^{\infty}|c_n|^2
+\]
+
+Ettersom at signalet $x_k$ er et signal med $k$ ganger større frekvens enn inngangssignalet $x_1$, er nå 
+$x_k$ den $k$-te-harmoniske til $\hat{x}_k(t)$, slik at vi får at 
+\[
+    P_{x_k} = 2|c_k|^2
+\]
+og 
+\[
+    P_d = P_{\hat{x}_k} - P_{x_k}
+\]
+
+Vi kan derfor estimere SDR ved å måle effektverdiene (RMS) til de ulike spektralkomponentene i
+signalet. Dersom vi måler den totale effektverdien til signalet $V_{\hat{x}_2}$ og 
+effektverdien til frekvenskomponenten vi er interessert i, altså $V_{x_2}$, kan vi regne ut SDR ved 
+følgende formel:
+\[
+    \text{SDR} = \frac{P_{x_2}}{P_{\hat{x}_2} - P_{x_2}} = \frac{V_{x_2}^2}{V_{\hat{x}_2}^2 - V_{x_2}^2}
+\]
+

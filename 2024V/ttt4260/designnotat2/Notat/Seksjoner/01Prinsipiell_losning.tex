@@ -1,0 +1,19 @@
+\section{Prinsipiell løsning}
+\label{prinsipiellLoesning}
+
+Prinsipielt kan systemet for den elektroniske terningen representeres som i figur 2. Terningen har som input en knapp, som enten sender et høyt eller 
+et lavt signal til systemet. Når signalet fra knappen er høyt, altså når knappen er trykket inn, itereres en teller. Når tallet i telleren er større 
+enn 6, resettes telleren til 1. Når signalet fra knappen går lavt, blir verdien i output registeret satt lik tallet i telleren. Tallet i output 
+registeret blir så omgjort til et signal som representerer hvilke lysdioder som skal være aktive for å realisere det korrosponderende mønsteret på 
+lysdiodene, før de relevante diodene så får et høyt signal.
+
+I denne løsningen vil altså utgangsverdien av hvert "kast" være tilnærmet deterministisk, men dersom klokkehastigheten til systemet er slik at telleren 
+teller fra 1 til 6 flere ganger i tiden det tar fra brukeren slipper knappen til utgansverdien fra knappen går lavt, vil resultatet oppleves tilfeldig.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Bilder/esda_flow.png}
+    \caption{Flytdiagram representasjon av en mulig prinsipiell løsning}
+\end{figure}
+
+% Lag en kretstegning for hvordan lysdiodene blir koblet opp, og beskriv

@@ -1,0 +1,78 @@
+Running in Lattice mode
+
+
+Starting:    /home/morten/lscc/iCEcube2.2017.08/synpbase/linux_a_64/mbin/synbatch
+Install:     /home/morten/lscc/iCEcube2.2017.08/synpbase
+Hostname:    laptop
+Date:        Tue Feb  6 17:49:22 2024
+Version:     L-2016.09L+ice40
+
+Arguments:   -product synplify_pro -batch fpga_syn.prj
+ProductType: synplify_pro
+
+
+
+
+
+log file: "/home/morten/ntnu/2024V/ttt4260/designnotat2/fpga/fpga_Implmnt/fpga.srr"
+Running: fpga_Implmnt in foreground
+
+Running fpga_syn|fpga_Implmnt
+
+Running: compile (Compile) on fpga_syn|fpga_Implmnt
+# Tue Feb  6 17:49:22 2024
+
+Running: compile_flow (Compile Process) on fpga_syn|fpga_Implmnt
+# Tue Feb  6 17:49:22 2024
+
+Running: compiler (Compile Input) on fpga_syn|fpga_Implmnt
+# Tue Feb  6 17:49:22 2024
+Copied /home/morten/ntnu/2024V/ttt4260/designnotat2/fpga/fpga_Implmnt/synwork/fpga_comp.srs to /home/morten/ntnu/2024V/ttt4260/designnotat2/fpga/fpga_Implmnt/fpga.srs
+
+compiler completed
+# Tue Feb  6 17:49:23 2024
+
+Return Code: 0
+Run Time:00h:00m:01s
+
+Running: multi_srs_gen (Multi-srs Generator) on fpga_syn|fpga_Implmnt
+# Tue Feb  6 17:49:23 2024
+
+multi_srs_gen completed
+# Tue Feb  6 17:49:23 2024
+
+Return Code: 0
+Run Time:00h:00m:00s
+Copied /home/morten/ntnu/2024V/ttt4260/designnotat2/fpga/fpga_Implmnt/synwork/fpga_mult.srs to /home/morten/ntnu/2024V/ttt4260/designnotat2/fpga/fpga_Implmnt/fpga.srs
+Complete: Compile Process on fpga_syn|fpga_Implmnt
+
+Running: premap (Pre-mapping) on fpga_syn|fpga_Implmnt
+# Tue Feb  6 17:49:23 2024
+
+premap completed
+# Tue Feb  6 17:49:24 2024
+
+Return Code: 0
+Run Time:00h:00m:01s
+Complete: Compile on fpga_syn|fpga_Implmnt
+
+Running: map (Map) on fpga_syn|fpga_Implmnt
+# Tue Feb  6 17:49:24 2024
+License granted for 4 parallel jobs
+
+Running: fpga_mapper (Map & Optimize) on fpga_syn|fpga_Implmnt
+# Tue Feb  6 17:49:24 2024
+Copied /home/morten/ntnu/2024V/ttt4260/designnotat2/fpga/fpga_Implmnt/synwork/fpga_m.srm to /home/morten/ntnu/2024V/ttt4260/designnotat2/fpga/fpga_Implmnt/fpga.srm
+
+fpga_mapper completed with warnings
+# Tue Feb  6 17:49:24 2024
+
+Return Code: 1
+Run Time:00h:00m:00s
+Complete: Map on fpga_syn|fpga_Implmnt
+Complete: Logic Synthesis on fpga_syn|fpga_Implmnt
+
+exit status=0
+
+exit status=0
+

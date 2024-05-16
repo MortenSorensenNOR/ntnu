@@ -1,0 +1,10 @@
+\section{Konklusjon}
+\label{konklusjon}
+
+Det er blitt designet og implementert en elektrisk terning ved bruk av en Lattice ICE40 FPGA.
+Termingen "kastes" ved å trykke inn en knapp, og resultatet vises som et mønster på 
+LEDs lignende en ordinær terning når knappen slippes. Implementeringen benyttet en teller for å 
+generere et sudo-tilfeldig tall, og det ble implementert debounce på FPGA-en for å forhindre 
+systemet å vise resultatet for tidlig, grunnet "bounce" i knappen. Designet var så testet, og 
+effektforbruket til systemet ble målt gitt tre forskjellige LED-typer av forskjellige farger. 
+Dette gav en forventet effektbruk på $\sim\SI{250}{\milli\watt}$.

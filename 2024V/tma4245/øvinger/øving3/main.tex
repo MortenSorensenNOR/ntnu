@@ -1,0 +1,212 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+Har gitt to uavhengige stokastiske variabler $X_A$ og $X_B$, som representerer 
+antall feil på systemet av type A og type B ila. 365 dager, som følger poissonprosesser
+med intensitet på henholdsvis $\lambda_A$ og $\lambda_B$, per dag.
+
+Lar $\lambda_A = \frac{3}{73} = 0.0411$ og $\lambda_B = \frac{1}{73} = 0.0137$.
+
+\begin{enumerate}
+    \item {
+        Forventningsverdien til poissonprosessen A blir
+        \[
+            E[X_A] = \lambda t = 0.0411 \cdot 356 \approx \underline{\underline{15}}
+        \]
+
+        Sannsynligheten for at $X_A \leq 15$ er lik den kommulative fordelingen
+        \[ 
+            F(15) = \sum_{s=0}^{x}{\frac{(\lambda t)^s}{s!}e^{-\lambda t}} = \sum_{s=0}^{15}{\frac{(0.0411 \cdot 356)^s}{s!}e^{-0.0411 \cdot 365}} \approx \underline{\underline{0.568}}
+        \]
+
+        Siden A og B er uavhengige hendelser, blir sannsynligheten for 
+        at $X_A \leq$ og $X_B \leq 10$ lik produktet av hendelsene
+        \begin{align*}
+            P(X_A \leq 15 \cap X_B \leq 10) &= P(X_A \leq 15) \cdot P(X_B \leq 10) \\
+                                            &= P(X_A \leq 15) \cdot \sum_{s=0}^{10}{\frac{(0.0137 \cdot 365)^s}{s!}e^{-0.0137 \cdot 365}} \approx \underline{\underline{0.560}}
+        \end{align*}
+
+        Siden A og B er uavhengige, blir 
+        \[
+            P(X_A \leq 15 \mid X_B \leq 10) = P(X_A \leq 15) \approx \underline{\underline{0.568}}
+        \]
+    }
+    \item {
+        Lar $Z = X_A + X_B$ være totalt antall feil som oppstår i løpet av et år.
+        
+        Vi har at
+        \[
+            M_Z(t) = M_{X_A + X_B}(t) = M_{X_A}(t) \cdot M_{X_B}(t)
+        \]
+
+        Vi får da at 
+        \begin{align*}
+            M_Z(t) &= e^{\lambda_A t_A (e^t - 1)} \cdot e^{\lambda_B t_B (e^t - 1)} \\ 
+                   &= e^{\left(e^t-1\right)(\lambda_A t_A + \lambda_B t_B)} = e^{\left(e^t-1\right)(\lambda_Z t_Z)}
+        \end{align*}
+
+        Siden vi her kan skrive om den momentgenererende funksjonen til Z på formen av en 
+        poissonfordeling, må Z være poissonfordelt.
+    }
+    \item {
+        Vi har da at 
+        \begin{align*}
+            P(X_A = x_1 \mid Z = z) &= \frac{P(X_A = x_a \cap Z = z)}{P(Z = z)} \\ 
+                                    &= \frac{P(Z = z \mid X_A = x_A) \cdot P(X_A = x_A)}{P(Z = z)} \\ 
+                                    &= \frac{P(x_B = z - x_A) \cdot P(X_A = x_A)}{p(z = x_A + x_B)}
+        \end{align*}
+
+        Vi har gitt at 
+        \begin{align*}
+            &f_{X_B}(x) = \frac{5^x}{x!}e^{-5} \\ 
+            &f_{X_A}(x) = \frac{15^x}{x!}e^{-15} \implies \\ 
+            &f_{X_A + X_B} = \frac{20^x}{x!}e^{-20}
+        \end{align*}
+
+        og siden vi i 1b fant at den momentgenererende funksjonen til $X_A + X_B$ hadde 
+        $\lambda_Z = \lambda_A t_A + \lambda_B t_B$, får vi at
+        \begin{align*}
+            \frac{P(x_B = z - x_A) \cdot P(X_A = x_A)}{p(z = x_A + x_B)} &= \frac{\frac{5^{z-x_A}}{(z-x_A)!} \cdot \frac{15^{x_A}}{x_A!} \cdot e^{-5-15}}{\frac{20^{\lambda_A + \lambda_B}}{(x_A + x_B)!}e^{-20}}
+        \end{align*}
+        (Er 3 min til innlevering, kom ikke lenger)
+    }
+\end{enumerate}
+
+\section*{Oppgave 2.}
+\begin{enumerate}
+    \item {
+        Gitt at $X$ er normalfordelt med forventningsverdi $\mu = 3500$ 
+        og standardavvik $\sigma = 570$, får vi følgende:
+
+        Regner ut de korrosponderende Z-skårene
+        \begin{align}
+            &Z_{3000} = \frac{3000 - 3500}{570} \approx -0.88 \\
+            &Z_{3200} = \frac{3200 - 3500}{570} \approx -0.53 \\
+            &Z_{3500} = \frac{3500 - 3500}{570} = 0 \\
+            &Z_{4000} = \frac{4000 - 3500}{570} \approx 0.88
+        \end{align}
+
+        Får så at \\
+        1)
+        \begin{align*}
+            P(X \geq 3000) &= 1 - P(Z \leq -0.88) \\ 
+                           &\approx 1-0.1894 = 0.8106
+        \end{align*}
+
+        2)
+        \begin{align*}
+            P(3200 \leq X \leq 4000) &= P(Z \leq 0.88) - P(Z \leq -0.53) \\ 
+                                     &\approx 0.8106 - 0.2981 = 0.5125
+        \end{align*}
+        
+        3)
+        \begin{align*}
+            P(X \geq 3500 \mid X \geq 3000) &= \frac{P(X \geq 3000 \mid X \geq 3500) \cdot P(X \geq 3500)}{P(X \geq 3200)} \\ 
+                                            &= \frac{P(X \geq 3500)}{P(X \geq 3000)}
+                                            \approx \frac{0.5}{0.8106} = 0.6168
+        \end{align*}
+        
+        4)
+        \begin{align*}
+            P(X \leq 4000 \mid X \geq 3200) &= \frac{P(3200 \leq X \leq 4000)}{P(X \geq 3200)} \\ 
+                                            &\approx \frac{0.5125}{1-0.2981} = 0.7302
+        \end{align*}
+    }
+    \item {
+        For å finne verdien til $c$ s.a. $P(X < c) = 0.01$, finner vi den korrosponderende 
+        z-skåren til 0.01, som er $z = -2.33$. Regner vi baklengs får vi da at 
+        \[
+            z = -2.33 = \frac{c - 3500}{570} \implies c = 2172
+        \]
+
+        Forutsatt at Y følger en binomisk fordeling får vi at
+        \[
+            P(Y \geq 1) = 1 - P(Y < 1) = 1 - (0.99^{100}) \approx 0.6340
+        \]
+        og 
+        \[
+            P(Y \geq 2 \mid Y \geq 1) = \frac{1 - (100 \cdot 0.01 \cdot 0.99^{99} + 0.99^{100})}{1 - 0.99^{100}} \approx 0.4168
+        \]
+    }
+\end{enumerate}
+
+\section*{Oppgave 3.}
+\begin{enumerate}
+    \item {
+        Bruker formelen for kumulativ fordelingsfunksjon for eksponensialfordelingen.
+        \[
+            F(X) = 1 - e^{-\lambda x}
+        \]
+        for $x \geq 0$.
+
+        Bruker dette for å finne at 
+        \[
+            P(X_1 \geq 2) = 1 - F(2) = e^{-\lambda \cdot 2} = \frac{1}{e} \approx 0.3679
+        \]
+
+        For å finne $P(X_1 + X_2 \geq 4)$ må vi bruke at summen av uavhengige eksponensialfordelte variabler 
+        er en gammafordeling med $\alpha = n$ og $\beta = \frac{1}{\lambda}$, der $n$ er antallet variabler.
+        Kaller denne fordelingen $Y$, og vi får da at punktsannsynligheten
+        \[
+            f_{Y}(y) = \lambda^{2}ye^{-y\lambda}
+        \]
+        for $y \geq 0$. Tar vi så integralet fra 0 til y, får vi den komulative fordelingsfunksjonen
+        \[
+            F_{Y}(y) = \int_{0}^{y}{\lambda^2te^{-t\lambda}dt}
+        \]
+        Finner så $P(X_1 + X_2 \geq 4)$ ved at 
+        \[
+            P(X_1 + X_2 \geq 4) = 1 - \lambda^2\int_{0}^{4}{te^{-t\lambda}} \approx 0.4060
+        \]
+    }
+    \item {
+        \begin{align*}
+            f(x) &= \frac{1}{\left(\frac{1}{\lambda}\right) \cdot \Gamma(1)}e^{-x\lambda} \\ 
+                 &= \lambda e^{-x\lambda} 
+        \end{align*}
+    }
+    % \item {
+    %     Vi har da en gammafordeling for $\alpha = n-1$ og $\beta = \frac{1}{\lambda}$
+    %     \begin{align*}
+    %         f_X(x) &= \frac{1}{\left(\frac{1}{\lambda}\right)^{n-1} \Gamma(n-1)} x^{n-2}e^{-x\lambda} \\ 
+    %                &= \frac{\lambda^{n-1}}{\Gamma(n-1)} x^{n-2}e^{-x\lambda} \\ 
+    %     \end{align*} 
+    %    
+    %     Vi får at 
+    %     \begin{align*}
+    %         P(z_n = z) &= P(z_{n-1} + X_n = z) \\
+    %                    &= P(X_n = z - z_{n-1}) \\ 
+    %                    &= \sum_{t}
+    %     \end{align*}
+    %
+    % }
+\end{enumerate}
+
+\section*{Oppgave 4.}
+\begin{enumerate}
+    \item {
+        Vi har da at 
+        \[
+            E[Y] = E[aX + b] = E[aX] + E[b] = a\mu + b
+        \]
+        og 
+        \[
+            Var[Y] = Var[aX + b] = Var[aX] + Var[b] = a^2Var[X] + 0 = a^2\sigma^2
+        \]
+    }
+    \item {
+        Fra definisjonen til Y vil $X = \frac{Y-b}{a} = \omega(y)$. Siden $Y = U(X)$ er strengt monoton
+        kan vi benytte transformasjonsformelen for å finne $f_{Y}(y)$ som
+        \begin{align*}
+            f_Y(y) &= f_X(\frac{y-b}{a}) \cdot \omega'(y) \\ 
+                   &= \frac{1}{\sqrt{w\pi}\sigma_X}e
+        \end{align*}
+    }
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,192 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+Her er Verilog implementeringen til systemet
+\begin{verilogcode}
+module Switch_To_LED
+    (input i_Switch_1,
+     output o_LED_1);
+
+ assign o_LED_1 = i_Switch_1;
+
+endmodule
+\end{verilogcode}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Bilder/oppgave1.jpg}
+    \caption{LED lyser når Switch 1 blir trykket}
+\end{figure}
+
+\section*{Oppgave 2.}
+Her er Verilog implementeringen til systemet
+\begin{verilogcode}
+module PMOD_To_Board
+    (input i_Switch_1,
+    output io_PMOD_1);
+
+ assign io_PMOD_1 = i_Switch_1;
+
+endmodule
+\end{verilogcode}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth, angle=-90]{Bilder/oppgave2.jpg}
+    \caption{LED lyser pga. signal fra PMOD}
+\end{figure}
+
+\newpage
+\section*{Oppgave 3.}
+Her er Verilog implementeringen til systemet
+\begin{verilogcode}
+module XOR_LED
+    (input i_Switch_1,
+     input i_Switch_2,
+     output o_LED_1);
+
+ assign o_LED_1 = i_Switch_1 ^ i_Switch_2;
+
+endmodule
+\end{verilogcode}
+
+\section*{Oppgave 4.}
+Her er sannhetstabellen for $f = A \cdot \overline{B} + \overline{A} \cdot B$
+\begin{center}
+    \begin{tabular}{|| c | c | c ||} 
+        \hline
+        A & B & f \\ [0.5ex] 
+        \hline\hline
+        0 & 0 & 0 \\ 
+        \hline
+        0 & 1 & 1 \\
+        \hline
+        1 & 0 & 1 \\
+        \hline
+        1 & 1 & 0 \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\section*{Oppgave 5.}
+Starter med følgende bools uttrykk:
+\[
+    f = \overline{A}B\overline{C} + A\overline{B}\overline{C} + AB\overline{C}
+\]
+Forkorter så uttrykket
+\begin{align*}
+    \overline{A}B\overline{C} + A\overline{B}\overline{C} + AB\overline{C} &\implies \\
+    B\overline{C}(\overline{A} + A) + A\overline{B}\overline{C} &\implies \\ 
+    B\overline{C} + A\overline{B}\overline{C} &\implies \\ 
+    \overline{C}(A\overline{B} + B) &\implies 
+    \underline{\underline{\overline{C}(A + B)}}
+\end{align*}
+
+\newpage
+\section*{Oppgave 6.}
+Her er Verilog implementeringen til systemet
+\begin{verilogcode}
+module Boolean_Expr
+    (input i_Switch_1,
+     input i_Switch_2,
+     input i_Switch_3,
+     output o_LED_1);
+
+ assign o_LED_1 = (!i_Switch_3 & i_Switch_1) | (!i_Switch_3 & i_Switch_2);
+
+endmodule    
+\end{verilogcode}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth, angle=-90]{Bilder/oppgave4.jpg}
+    \includegraphics[width=0.6\textwidth, angle=-90]{Bilder/oppgave6.jpg}
+    % \begin{subfigure}
+    % \end{subfigure}
+    % \begin{subfigure}
+    % \end{subfigure}
+    \caption{Switch 1 (A) og Switch 2 (B) fører til at lyset lyser. Hvis C (switch 3) blir aktivert, slutter lyster å lyse}
+\end{figure}
+
+\newpage
+\section*{Oppgave 7.}
+Her er Verilog implementeringen til systemet
+\begin{verilogcode}
+module Full_Adderer
+    (input A,
+     input B,
+     input C_in,
+     output S,
+     output C_out);
+
+ wire A_XOR_B = (A ^ B);
+
+ assign S = A_XOR_B ^ C_in;
+ assign C_out = (A & B) | (A_XOR_B & C_in);
+
+endmodule
+\end{verilogcode}
+
+\newpage
+\section*{Oppgave 8.}
+Her er Verilog implementeringen til systemet
+\begin{verilogcode}
+module Full_Adderer_2bit
+    (input i_Switch_1,
+     input i_Switch_2,
+     input i_Switch_3,
+     input i_Switch_4,
+     output o_LED_1,
+     output o_LED_2,
+     output o_LED_3);
+
+ wire S1;
+ wire S2;
+ wire C_out1;
+ wire C_out2;
+
+ Full_Adderer Full_Adderer_Inst_1
+    (.A(i_Switch_1),
+     .B(i_Switch_3),
+     .C_in(1'b0),
+     .S(S1),
+     .C_out(C_out1));
+
+ Full_Adderer Full_Adderer_Inst_2
+    (.A(i_Switch_2),
+     .B(i_Switch_4),
+     .C_in(C_out1),
+     .S(S2),
+     .C_out(C_out2));
+
+ assign o_LED_1 = S1;
+ assign o_LED_2 = S2;
+ assign o_LED_3 = C_out2;
+
+endmodule
+\end{verilogcode}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.415\textwidth, angle=-90]{Bilder/2bitadder.jpg}
+    \includegraphics[width=0.415\textwidth, angle=-90]{Bilder/2bitadder2.jpg}
+    \includegraphics[width=0.415\textwidth, angle=-90]{Bilder/2bitadder3.jpg}
+    % \begin{subfigure}
+    % \end{subfigure}
+    % \begin{subfigure}
+    % \end{subfigure} 
+    % \begin{subfigure}
+    % \end{subfigure}
+    \caption{2-Bits full-addereren med forskjellige inputverdier. Tall 1 består av switch 1 og 2, mens tall 2 består av switch 3 og 4}
+\end{figure}
+
+\section*{Oppgave 9.}
+Vi har fått gitt at $C = \SI{50}{\micro\farad}$ og en frekvens $f_c = \SI{1}{\hertz}$.
+Skal finne $R$. Har da at 
+\[
+    \tau = RC = \frac{1}{\SI{1}{\hertz}} \implies R = \frac{1}{\SI{1}{\hertz} \cdot \SI{50}{\micro\farad}} \approx \underline{\underline{\SI{20}{\kilo\ohm}}}
+\]
+
+\end{document}

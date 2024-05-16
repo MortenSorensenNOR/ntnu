@@ -1,0 +1,218 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{figure}[htbp]
+    \centering
+    \begin{circuitikz}
+        \draw
+        (0,0) to[battery1,l=$V$] ++(0,2)
+        to[switch,l=$S$] ++(2,0)
+        to[R,l=$R$] ++(2.5,0) coordinate(node1)
+        to[short ,-*] ++(1.5,0) node[below]{+}
+        (node1) to[C,l=$C$,*-*] ++(0, -2) coordinate(node2)
+        to [short,-*] ++(1.5,0) node[above]{-}
+        ++(0,1) node[]{$v_C$}
+        (node2) to [short] (0,0)
+        ;
+    \end{circuitikz}
+    \caption{Krets for oppgave 1.}
+\end{figure}
+
+\begin{enumerate}[label=\alph*)]
+    \item {
+        Vi har fra definisjonen at
+        \[
+            \tau = R \cdot C = 1k\Omega \cdot 100\mu F = 100\text{ms}
+        \]
+        Dette gir at uttrykket for spenningen $v_C(t)$ er gitt ved
+        \[
+            v_C(t) = 5V(1 + -e^{-\frac{t}{\tau}})
+        \]
+        Følgende plot viser $v_C(t)$ ved flere multipler av $\tau$
+        \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.65\textwidth]{Bilder/tau.png}
+                \caption{Spenningsplott for forskjellige multipler av $\tau$}
+        \end{figure}
+    }
+    \item {
+        Koblet opp kretsen fra med $R = \SI{1}{\kilo\ohm}$ og $C = \SI{100}{\micro\farad}$ og fikk målt tidskonstant
+        $\tau = \SI{0.093}{\s}$.
+        \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.65\textwidth]{Bilder/wave.png}
+                \caption{Målt spenning over kondensatoren $v_c$ + $\tau$}
+        \end{figure}
+
+    }
+\end{enumerate}
+
+
+\section*{Oppgave 2.}
+\begin{figure}[htbp]
+    \centering
+    \begin{circuitikz}
+        \draw
+        (0,0) to [battery1,l=$V$] ++(0,2)
+        to[opening switch,l=$S$] ++(2 ,0)
+        to[R,l=$R_1$] ++(2.5,0) coordinate(node1)
+        to[R,l_=$R_2$,*-*] ++(0,-2)
+        (node1) to[short] ++(1,0) coordinate(node2)
+        to[R,l=$R_3$,*-*] ++(0,-2)
+        (node2) to[R,l=$R_4$,*-*] ++(2,0) coordinate(node3)
+        to[short,-*] ++(1.5,0) node[below]{+}
+        (node3) to[C,l=$C$,*-*] ++(0,-2) coordinate(node4)
+        to[short,-*] ++(1.5,0) node[above]{-}
+        ++(0,1) node[]{$v_C$}
+        (node4) to[short] (0,0)
+        ;
+    \end{circuitikz}
+    \caption{Krets for oppgave 2.}
+\end{figure}
+Regner ut thevenin-ekvivalent med hensyn på V
+\[
+    R_{th} = R_4 + \frac{R_3 \cdot R_{12}}{R_3 + R_{12}} = \left(300 + \frac{220 \cdot 140}{220 + 140}\right)\Omega \approx 385\Omega
+\]
+Thevenin-spenningen blir
+\[
+    V_{th} = \frac{\frac{470 \cdot 220}{470 + 220}}{\left(200 + \frac{470 \cdot 220}{470 + 220}\right)} \cdot 5V \approx 2.15V 
+\]
+For å finne tidskonstanten til kretsen bruker vi thevenin-ekvivalent på kretsen når bryteren er åpen med hensyn på kondensatoren. Får da at 
+thevenin-mostanden $R_{th}$ er lik
+\[
+    R_{th} = R_4 + R_2 \mid \mid R_3 \approx 450\Omega
+\]
+Får da at tidskonstanten er lik
+\[
+    \tau = 450\Omega \cdot 10\text{nF} = 4.5\mu\text{s}
+\]
+Siden $v_C(0) = 2.15V$ får vi da at uviklingen er gitt ved
+\[
+    v_C(t) = 2.15e^{-\frac{t}{4.5\mu\text{s}}}V
+\]
+Får da følgende plott for spenningen over tid
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Bilder/vc.png}
+    \caption{Spenningsplott for $v_C(t)$}
+\end{figure}
+
+
+\section*{Oppgave 3.}
+\begin{figure}[htbp]
+    \centering
+    \begin{circuitikz}
+        \draw
+        (0,0) to[battery1,l=$V$] ++(0,2)
+        to[switch,l=$S_1$] ++(2,0)
+        to[R,l=$R_1$] ++(2.5,0) coordinate(node1)
+        to[R,l_=$R_2$ ,*-*] ++(0,-2)
+        (node1) to[short] ++(1,0) node[below]{+} coordinate(vc)
+        ++(0,-1) node[]{$v_C$}
+        ++(0,-1) node[above]{$-$}
+        (vc) to[short] ++(1,0) coordinate(node2)
+        to[C,l=$C$,*-*] ++(0,-2)
+        (node2) to[switch, l=$S_2$] ++(2,0)
+        to[R,l=$R_3$] ++(0,-2)
+        to[short] (0,0)
+        ;
+    \end{circuitikz}
+    \caption{Krets for oppgave 3.}
+\end{figure}
+\begin{enumerate}[label=\alph*)]
+    \item {
+        Starter med å regne ut thevenin-spenningen for systemet sett fra kondensatoren.
+        \[
+            V_{th} = \frac{R_2}{R_1 + R_2} \cdot V = \frac{\SI{1}{\kilo\ohm}}{\SI{1}{\kilo\ohm} + \SI{1}{\kilo\ohm}} \cdot \SI{1}{\volt} = \SI{0.5}{\volt}
+        \]
+        Tidskonstanten til systemet blir 
+        \[
+            \tau = \SI{1}{\kilo\ohm} \cdot \SI{100}{\micro\farad} = \SI{100}{\milli\s}
+        \]
+        Får da at oppladningen følger 
+        \[
+            v_C(t) = 0.5\left(1 - e^{-\frac{t}{\SI{100}{\milli\s}}}\right)\text{V}
+        \]
+    }
+    \item {
+        Når $S_2$ lukkes når $t = 6 \cdot \tau$ blir spenningsplottet
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{Bilder/dual_plot_b.png}
+            \caption{Spenningsplott for $v_C(t)$}
+        \end{figure}
+    }
+    \item {
+        Når $S_2$ lukkes når $t = 0.5 \cdot \tau$ blir spenningsplottet
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{Bilder/dual_plot_c.png}
+            \caption{Spenningsplott for $v_C(t)$}
+        \end{figure}
+    }
+\end{enumerate}
+
+\section*{Oppgave 4.}
+\begin{figure}[htbp]
+    \centering
+    \begin{circuitikz}
+        \draw
+        (0,0) to[square voltage source,l=$v_1$] ++(0,2)
+        to[R,l=$R$] ++(2.5,0) coordinate(node1)
+        to[short,-*] ++(1.5,0) node[below]{+}
+        (node1) to[C,l=$C$,*-*] ++(0,-2) coordinate(node2)
+        to[short,-*] ++(1.5,0) node[above]{-}
+        ++(0,1) node[]{$v_2$}
+        (node2) to[short] (0,0)
+        ;
+    \end{circuitikz}
+    \caption{Krets for oppgave 4.}
+\end{figure}
+\begin{enumerate}[label=\alph*)]
+    \item \hspace{-0.175cm}Tidskonstanten $\tau = \SI{1}{\kilo\ohm} \cdot \SI{10}{\nano\farad} = \SI{10}{\micro\farad}$.
+    \item {
+        Når $f = 5$kHz med tidskonstant $\tau = \SI{10}{\micro\farad}$ får vi følgende plott
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.7\textwidth]{Bilder/square.png}
+            \caption{Spenningsplott for $v_C(t)$}
+        \end{figure}
+    }
+    \item {
+        Når $f = 30$kHz med tidskonstant $\tau = \SI{10}{\micro\farad}$ får vi følgende plott
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.7\textwidth]{Bilder/square2.png}
+            \caption{Spenningsplott for $v_C(t)$}
+        \end{figure}
+    }
+    \item {
+        Her er resultatene for henholdsvis $f = \SI{5}{\kilo\hertz}$ og $f = \SI{30}{\kilo\hertz}$
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.7\textwidth]{Bilder/5k.png}
+            \caption{$f = \SI{5}{\kilo\hertz}$}
+        \end{figure}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.7\textwidth]{Bilder/30k.png}
+            \caption{$f = \SI{30}{\kilo\hertz}$}
+        \end{figure}
+    }
+    \item {
+        Vi har da at spenningsfunksjonen er gitt ved 
+        \[
+            v_C(t) = (1 - e^{-\frac{t}{R \cdot C}})
+        \]
+        der $v_C(1/5000) = \SI{0.8}{\volt}$. Setter vi $C = \SI{10}{\nano\farad}$ 
+        får vi at $R \approx \SI{12.5}{\kilo\ohm}$.
+        Dette viste seg å ikke fungere i testing. :)
+    }
+\end{enumerate}
+
+\end{document}

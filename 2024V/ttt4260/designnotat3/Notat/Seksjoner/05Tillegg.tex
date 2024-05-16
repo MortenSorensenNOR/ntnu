@@ -1,0 +1,28 @@
+%Tillegg. Flere tillegg legges til ved å lage flere sections:-----------------
+\appendix
+
+\section{Tillegg}
+\label{ekstraGreier}
+
+\subsection{Python IIR filter kode}
+\begin{pythoncode}
+import numpy as np
+from scipy.io import wavfile
+from scipy.signal import iirnotch, lfilter
+
+def notch_filter_wav(input_wav, output_wav, notch_freq, quality_factor=30):
+    sample_rate, data = wavfile.read(input_wav)
+    data = data / np.max(np.abs(data),axis=0)
+    b, a = iirnotch(notch_freq, quality_factor, sample_rate)
+
+    if len(data.shape) == 1:
+        filtered_data = lfilter(b, a, data)
+    else:
+        filtered_data = np.apply_along_axis(lambda d: \ 
+                            lfilter(b, a, d), axis=0, arr=data)
+
+    filtered_data = np.array(filtered_data * 32767, dtype=np.int16)
+    wavfile.write(output_wav, sample_rate, filtered_data)
+
+notch_filter_wav('Lydsignal_82.wav', 'Signal_filtered.wav', notch_freq=1480)
+\end{pythoncode}

@@ -1,0 +1,266 @@
+\documentclass{article}
+
+% Packages
+\usepackage{braket}
+\usepackage{xcolor}
+% \usepackage{minted}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{tcolorbox}
+\usepackage[shortlabels]{enumitem}
+
+\pagecolor[rgb]{0.1,0.1,0.1} %black
+\color[rgb]{1,1,1} %grey
+
+% Margins
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+% Commands
+\makeatletter
+\newcommand{\listintertext}{\@ifstar\listintertext@\listintertext@@}
+\newcommand{\listintertext@}[1]{% \listintertext*{#1}
+\hspace*{-\@totalleftmargin}#1}
+\newcommand{\listintertext@@}[1]{% \listintertext{#1}
+\hspace{-\leftmargin}#1}
+\makeatother
+
+\graphicspath{ {./images/} }
+
+\title{\huge{Lecture 01\\ OS}}
+\author{Morten Sørensen}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Assignments}
+\begin{enumerate}
+    \item{
+        \textbf{8 theoretical assignments - not mandatory}
+        \begin{itemize}
+            \item Helpful for the final exam.
+            \item Usefull to make sure that you are keeping up with the materials.
+        \end{itemize}
+    }
+    \item{
+        \textbf{4 practical assignments - Lab sessions}
+        \begin{itemize}
+            \item Programming tasks, using C language
+            \item Have to be submitted on time and passed successfully. Otherwise, one is unqualified for the final exam.
+        \end{itemize}
+    }
+\end{enumerate}
+
+\subsection{Practical assignment}
+\begin{enumerate}
+    \item {
+        \textbf{Purpose} \\
+        Hand-on experience with kernel-level programming. Implement some functions within a simplified OS
+    }
+    \item{
+        \textbf{XV6}
+        \begin{itemize}
+            \item A simplified Unix-like teaching operating systems
+            \item Developed at MIT for operating system course since 2006
+            \item The lates version is based on RISC-V architecture
+            \item More inforation will be introduced on 19th Jan in the practical lecture
+        \end{itemize}
+    }
+    \item {
+        The practical assignments can be challenging, because
+        \begin{itemize}
+            \color{red!45!white}
+            \item You are not familiar with C programming
+            \item You are not familiar with low-level/system-level programming
+            \item You are not familiar with XV6
+        \end{itemize}
+    }
+\end{enumerate}
+
+\section{Administration}
+\begin{itemize}
+    \item You are free to work from home
+    \item Both lectures and practical lectures will be recorded using Panopto and can be watched on Blackboard
+    \item The projects will be submitted via Blackboard
+\end{itemize}
+
+\section{Textbook}
+\begin{enumerate}
+    \item The course is mainly based on OSTEP - OS in three easy pieces
+    \item Other excellent textbook can be used as reference
+\end{enumerate}
+
+\section{Learning goals}
+\begin{enumerate}
+\item Grasp basic and fundamental knowladge about Operating Systems (\textbf{theory}) and systems-level programming (\textbf{practice})
+    \item Important concepts
+        \begin{itemize}[-]
+            \color{blue!45!white}
+            \item \textbf{Process}
+            \item \textbf{Scheduling}
+            \item \textbf{Memory}
+            \item \textbf{Page}
+            \item \textbf{Concurrency}
+            \item \textbf{Lock}
+            \item \textbf{Semaphore}
+            \item \textbf{I/O Devices}
+            \item \textbf{File systems}
+        \end{itemize}
+\end{enumerate}
+
+\section{What is an operating system?}
+\textit{
+    An operating system is a program that manages a computer's hardware. It also provides a basis for application programs and acts as an intermediary between 
+    the computer user and the computer hardware. \\ 
+    --- \textbf{Operating Systems Concepts}
+}
+
+\subsection{What does OS Provide}
+\begin{itemize}
+    \item \textbf{What is a resource?}
+        \begin{itemize}[-]
+            \item Anything valuable
+        \end{itemize}
+    \item \textbf{What abbstaction does modern OS typically provide for each resource?}
+        \begin{itemize}[-]
+            \item CPU: process and/or thread
+            \item Memory: adress space
+            \item Disk: files
+        \end{itemize}
+    \item \textbf{Advantages of OS providing abstraction}
+        \begin{itemize}[-]
+            \item Seperate interface and underlying hardware implementation
+            \item Allow application to reuse common facilities
+            \item Make different devices look the same
+        \end{itemize}
+    \item \textbf{\color{red!45!white}Resource management} -- Share resources in a good manner
+        \begin{itemize}[-]
+            \item Protect applications from one another
+            \item efficient access to resources (cost, time, energy)
+            \item Provide fair access to resources
+        \end{itemize}
+    \item \textbf{\color{blue!45!white} Policies}
+        \begin{itemize}[-]
+            \item What to do?
+            \item E.g. scheduling
+        \end{itemize}
+    \item \textbf{\color{blue!45!white} Mechenisms}
+        \begin{itemize}[-]
+            \item How do we do it?
+            \item A scheduling algorithm is designed and implemented in a specific way
+        \end{itemize}
+\end{itemize}
+
+\section{OS Structure}
+\begin{itemize}
+    \item OS's are becoming \textbf{\color{red!45!white} more complicated} as more functions are added
+    \item To manage fthe increasing complexity, some techniques can be deployed:
+        \begin{itemize}[-]
+            \color{blue!45!white}
+            \item Modularity
+            \item Abstraction
+            \item Layering
+            \item Hierarchy
+        \end{itemize}
+    \item Complex OS's are divided into several \textbf{\color{blue!45!white} several layers}
+    \item \textbf{\color{blue!45!white}Kernel} is the core of an OS
+    \item It is the software responsible for providing secure access to the hardware and executing programs
+        \begin{itemize}[-]
+            \color{blue!45!white}
+            \item Process management
+            \item Device driver
+            \item Memory management
+            \item System calls
+        \end{itemize}
+\end{itemize}
+
+\section{System Calls}
+\begin{itemize}
+    \item \textbf{\color{blue!45!white}System calls} provide the interface between a running program and the \textbf{\color{blue!45!white} the operating system kernel}
+        \begin{itemize}[-]
+            \item Generally available in routines written in C and C++
+            \item Certain low-level tasks may have to be written using \textbf{\color{blue!45!white}assembly language} 
+        \end{itemize}
+
+    \item The run-time support system (run-time libraries) provides a system-call interface
+        \begin{itemize}[-]
+            \item A number assosiated with each system call
+            \item System-call interface maintains a table indexed according to these numbers
+        \end{itemize}
+    \item Major differences in how they are implemented (e.g., Windows vs. Unix)
+\end{itemize}
+
+\subsection{OS Structure II}
+\begin{itemize}
+    \item \textbf{\large{\color{white!60!green}Simple structure}}
+        \begin{itemize}[-]
+            \item Programs and OS have the same level of privilege
+            \item \textbf{\color{blue!45!white}Pros: Efficiency, no switch}
+            \item \textbf{\color{red!45!white}Cons: No isolation, security}
+            \item \textbf{Example: MS-DOS}  
+        \end{itemize}
+    \item \textbf{\large{\color{white!60!yellow}Monolithic Kernel}}
+        \begin{itemize}[-]
+            \item The entire OS works in kernel space
+            \item \textbf{\color{blue!45!white}Pros: Good Isolation, security}
+            \item \textbf{\color{red!45!white}Cons: Reliability, inflexibility}
+            \item \textbf{Example: Linux, Unix} 
+        \end{itemize}
+    \item \textbf{\large{\color{white!60!purple}Microkernel}}
+        \begin{itemize}[-]
+            \item Some services or modules are decoupled from the OS kernel and stay in the user space
+            \item \textbf{\color{blue!45!white}Pros: Reliability, security, flexibility}
+            \item \textbf{\color{red!45!white}Cons: Complexity, communication overhead}
+            \item \textbf{Example: Mach, BlackBerry QNX, L4} 
+        \end{itemize}
+    \item \textbf{\large{\color{white!60!cyan}Hybrid kernel}}
+        \begin{itemize}[-]
+            \item Combines monolithic kernel and microkernel
+            \item \textbf{\color{blue!45!white}A trade-off between the two catergories}
+            \item \textbf{\color{red!45!white}Inherits pros and cons from both}
+            \item \textbf{Example: Windows, Apple OSs} 
+        \end{itemize}
+\end{itemize}
+
+\section{Goals of OS}
+\begin{itemize}
+    \item Primary goals of Operating systems:
+        \begin{itemize}[-]
+            \item Use the computer hardware in an \textbf{\color{blue!45!white}efficient} manner
+            \item Execute user programs and make solving user promblems easier
+            \item More stuff, was distracted
+        \end{itemize}
+
+    \item Protection
+        \begin{itemize}[-]
+            \item Between applications, between OS and applications
+            \item Isolation: Prevent bad processes to harm others
+        \end{itemize}
+    \item Reliability
+        \begin{itemize}[-]
+            \item OS plays a fundamental role for applications' execution
+            \item OS runs non-stop
+        \end{itemize}
+    \item Energy efficiency
+        \begin{itemize}[-]
+            \item Sustainability
+            \item Battery-supplied devices
+        \end{itemize}
+    \item Security
+        \begin{itemize}
+            \item More sensitive and private data
+        \end{itemize}
+    \item Mobility
+        \begin{itemize}[-]
+            \item IoT devices and embedded devices
+        \end{itemize}
+\end{itemize}
+
+\end{document}

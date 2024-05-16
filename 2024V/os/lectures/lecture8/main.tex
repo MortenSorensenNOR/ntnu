@@ -1,0 +1,65 @@
+\documentclass[a4paper,11pt,english]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\begin{center}
+    \Large{\textbf{Concurrency}}
+\end{center}
+
+\section*{Motivation}
+\begin{itemize}
+    \item CPU: Low frequency, but multiple cores
+    \item Goal: Write applications that fully utilize many cores
+    \item Abstraction: \textbf{\color{blue} Process}
+    \item Build applications using communicating processes
+    \item Example: Chrome (process per tab)
+    \item Pros: \textbf{\color{blue} No need for new abstractions; isolation}
+    \item Cons:
+        \begin{itemize}
+            \item \textbf{\color{red} Cumbersome programming}
+            \item \textbf{\color{red} High communication overheads}
+            \item \textbf{\color{red} Expensive context switching (why expensive?)} 
+        \end{itemize}
+    \item Inter-process communication
+\end{itemize}
+
+\section*{Threads}
+\begin{itemize}
+    \item New abstraction: \textbf{\color{blue} Thread}
+    \item Threads are just \textbf{\color{blue} like processes}, but threads of same process \textbf{\color{blue} share the address space}
+    \item Break large tasks into several cooperative threads 
+    \item Communicate through shared address space
+    \item Allow multiple threads of the same process to be independent of each other
+        \begin{itemize}
+            \item Each thread may \textbf{\color{red} execute different code} at the same time
+        \end{itemize}
+    \item \textit{Multiple threads within a process will share}
+        \begin{itemize}
+            \item \textbf{\color{blue} Process ID}
+            \item \textbf{\color{blue} The address space: code most data (heap)}
+            \item \textbf{\color{blue} Open files (file descriptors)}
+            \item \textbf{\color{blue} Current working directory}
+            \item \textbf{\color{blue} Other resources}
+        \end{itemize}
+    \item \textit{Each thead has its own:}
+        \begin{itemize}
+            \item \textbf{\color{red} Thread ID}
+            \item \textbf{\color{red} Set of registers, including Program counter and stack pointer}
+            \item \textbf{\color{red} Stack for local variables and return addresses}
+        \end{itemize}
+    \item \textit{Advantages}
+        \begin{itemize}
+            \item \textbf{\color{blue} Efficient and fast resource sharing}
+            \item \textbf{\color{blue} Efficient utilization of many CPU cores with only one process}
+            \item \textbf{\color{blue} Less context switching overheads}
+        \end{itemize}
+    \item \textbf{\color{blue} POSIX thread -> Pthread}
+    \item \textit{A Portable Operating System Interface (POSIX) library, written in C language}
+    \item \textit{API specifies behavior of the thread library}
+ 
+\end{itemize}
+
+\end{document}

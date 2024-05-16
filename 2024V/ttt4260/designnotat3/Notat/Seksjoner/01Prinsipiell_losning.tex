@@ -1,0 +1,82 @@
+\section{Prinsipiell løsning}
+\label{prinsipiellLoesning}
+
+Ettersom at vi vet at støysignalet $w(t)$ kan tilnærmes til èn spesifik, tidsinvariant frekvens $f_w$, kan den prinsipielle løsningen av 
+problemet deles inn i to deler:
+\begin{enumerate}
+    \item Finne frekvensen $f_w$ ved spektralanalyse
+    \item Designe et filter der mest mulig av spekteret til $s(t)$ slipper gjennom, og minst mulig av spekteret til $w(t)$ gjør det, altså ikke $f_w$
+\end{enumerate}
+
+\subsection{Spektralanalyse}
+Gitt at musikken som blir spilt inn ikke er en håndfull rene sinustoner, vil den konstante, tidsinvariante forstyrrelsen $w(t)$ vise seg på 
+spektralanalysen som et relativt høy spiss om frekvensen $f_w$. Det er derfor mulig å lese av frekvensen $f_w$ direkte fra spekteret. Det er også 
+foretrukket å kjøre spektralanalysen på hele lydsignalet, siden $w(t)$ igjen er et tidsinvariant signal og de aller fleste av frekvenskomponentene ellers 
+i lydsignalet ikke er det. Analysen bør hovedsakelig ta for seg frekvensområdet $\SI{20}{\hertz}$ til $\SI{20}{\kilo\hertz}$, ettersom 
+at det er dette som er grensene for menneskelig hørsel, og derfor relevant for lydsignalet $x(t)$.
+
+\subsection{Prinsipielt filter design}
+Når frekvensen $f_w$ er kjent, kan vi designe et båndstop-filter for akkurat frekvensen til forstyrrelsen $w(t)$. 
+Fordi vi kunn ønsker å filtrere ut signaler ved frekvensen $f = f_w$, ønsker vi en liten båndbredde. 
+I tillegg ønsker vi at senteret av båndstopp området skal ligge i $f_w$, og vi ønsker  en høy dempning der.
+Den ønskede amplituderesponsen til båndstop-filteret vil da være som i figur 2, her sentrert rundt $\SI{50}{\hertz}$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Bilder/ideal_notch_filter.jpg}
+    \caption{Et eksempel på et båndstopp-filter med liten båndbredde og høy kvalitetsfaktor}
+\end{figure}
+
+Flere filterdesign er mulige for å oppnå et de karakteristikkene vi er ute etter. Det fins både aktive og passive 
+båndstoppfiltre. Vi skal ta for oss to forskjellige design av et passivt båndstoppfilter.
+
+Passive båndstoppfiltre har fordelen at de er mye simplere enn aktive filtre, siden de kunn trenger motstander, spoler og kondensatorer for å fungere.
+To mulige design av et passivt RLC båndstopp-filter er vist i figur 3.
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.7\textwidth]{Bilder/prinsip_rcl.png}
+    \caption{To mulige realiseringer av et passivt RLC båndstopp-filter}
+\end{figure}
+
+Filter 1 (venstre) ble valgt som som den prinsipielle løsningen, men filter 2 (høyre) skal vist nok gi en mindre båndbredde enn den til venstre.
+
+%%%%% UTREGNING AV KOMPONENTVERDIER %%%%%
+For å finne de rette komponentverdiene for $R$, $L$ og $C$ er det viktig å forstå hvordan filteret fungerer.
+Når frekvensen $f$ er lik resonansfrekvensen til $LC$ seriekoblingen vil utgansspennigen $s(t)$ gå mot 0. Altså 
+er det ønskelig at resonansfrekvensen $f_0 = f_w$. Vi får da at 
+\[
+    f_w = \frac{1}{2\pi \sqrt{LC}} \implies LC = \frac{1}{\left(2\pi f_w\right)^2} 
+\]
+
+Dersom vi velger en verdi for $L$ får vi en verdi for $C$, og motsatt. Motstandsverdien $R$ blir valgt for å justere båndbredden
+til filteret og hvor kraftig amplituderesponsen til filteret blir om $f_w$. 
+I dette designet har et potensiometer blitt valgt, s.a. forskjellige motstandsverdier kan utforskes.
+
+For å oppnå en mindre båndbredde og høyere kvalitetsfaktor er det også mulig å lage et filter ved å 
+kaskadekoble flere RLC filtre etter hverandre slik som i figur 4, dersom inngansimpedansen til system $H_n$ er mye større enn 
+utgangsimpedansen til det foregående systemet $H_{n-1}$ i kaskaden.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Bilder/kaskade.png}
+    \caption{System ved kaskadekopling av filtre $H_i$}
+\end{figure}
+
+Vi har da at totalresponsen er produktet av delresponsene, altså at 
+\[
+    H_{tot}(f) = H_1(f) H_2(f) \cdot\cdot\cdot H_n(f)
+\]
+En mulig måte å oppnå de ønskede inngans- og utgansimpedansene er ved å benytte en buffer som i figur 5.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Bilder/buffer.png}
+    \caption{System ved kaskadekopling av filtre $H_i$}
+\end{figure}
+
+\subsection{Digitalt filter}
+Et annet mulig design av filter er et digitalt IIR filter (Infinite Impulse Response filter).
+Filteret benytter en algoritme for å beregne fourier transformen til innganssignalet for diskrete tidsintervall, og filtrerer signalet i
+frekvensdomenet, og transformerer det filtrerte frekvenssignalet tilbake til et så filtrert lydsignal. Ettersom at filtreringen blir gjort 
+i frekvensdomenet, vil den effektive amplituderesponsen til systemet kunne ha en effektiv båndbredde lik oppløsningen til den diskrete fouriertransformasjonen,
+og ha at $|H(f_w)| \approx -\infty$. Et slikt filter er mulig å implementere både i Python og i hardware, f.eks. på en FPGA.

@@ -1,0 +1,109 @@
+\section{Realisering}
+\label{realiseringOgTest}
+
+Realiseringen av systemet er blitt gjort ved å sende et generert sinussignal 
+med frekvens $f = \SI{2600}{\hertz}$ og amplitude $A_1 = \SI{1}{\volt}$ gjennom systemet.
+Signalet ble generert av an Analog Discovery 2 \cite{analog_discovery}. 
+
+For evalueringen av hele systemet ble Analog Discovery-ens to oscilloskop brukt. Den første, Channel 1,
+ble koblet til inngangssignalet $x_1(t)$. Den andre, Channel 2, ble koblet 
+til utgangssignalet $x_2(t)$.
+For hvert av de underliggende systemene - det ulineære systemet og båndpassfilteret - ble 
+Channel 1 koblet til inngangssignalet og Channel 2 koblet til utgangssignalet av systemet.
+
+\subsection{Det ulineære systemet}
+For realiseringen av det ulineære systemet har en motstandsverdi $R_1$ på $\SI{100}{\kilo\ohm}$ blitt brukt. Denne komponentverdien 
+ble valgt for å forhindre mulige ikke-idealiteter i den valgte dioden med henhold til diodens motstandsverdi.
+
+\subsection{Båndpassfilter}
+
+\subsubsection{RLC båndpass}
+For realiseringen av det analoge RLC båndpassfilteret har en induktansverdi på $L = \SI{100}{\milli\henry}$ blitt valgt. To slike spoler ble 
+målt, der begge ble målt til en verdi på $L = \SI{100}{\milli\henry} \pm \SI{1}{\milli\henry}$ over et spektrum fra $\SI{1}{\kilo\hertz}$ til $\SI{20}{\kilo\hertz}$. 
+Får å oppnå den ønskede senterfrekvensen til systemet får vi at kondensatorverdien til 
+RLC filteret blir 
+\[
+    C = \frac{1}{4\pi^2 \cdot (2f)^2 \cdot L} = \SI{9.37}{\nano\farad}
+\]
+
+For realiseringen av systemet har en parallellkobling av to $\SI{4.7}{\nano\farad}$
+kondensatorer blitt brukt, slik vist i figur \ref{fig:impl_rcl_sys}.
+Parallellkoblingen av kondensatorene ble målt til en kombinert kapasitansverdi på $C = \SI{9.265}{\nano\farad} \pm \SI{0.08}{\nano\farad}$ over et spektrum fra $\SI{1}{\kilo\hertz}$ til $\SI{20}{\kilo\hertz}$.
+Dette gir en effektiv senterfrekvens til realiseringen av filteret på $f_c = \SI{5226}{\hertz}$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Bilder/Analog_sys_val.png}
+    \caption{Realisering av et RLC båndpassfilter med senterfrekvens $f_c = \SI{5.2}{\kilo\hertz}$}
+    \label{fig:impl_rcl_sys}
+\end{figure}
+
+Til slutt er et $\SI{10}{\kilo\ohm}$ potensiometer valgt for $R_2$ for å kunne justere kvalitetsfaktoren
+til filteret. 
+
+Det endelige systemet ble valgt til å ha et andre ordens filter der et identisk filter til filteret i figur \ref{fig:impl_rcl_sys} ble 
+kaskadekoblet med en buffer i mellom. Implementeringen av systemet er vist i figur \ref{fig:impl_rcl_sys_img}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{Bilder/Analog_sys_img.jpg}
+    \caption{Realisering av et andre ordens RLC båndpassfilter med senterfrekvens $f_c = \SI{5.2}{\kilo\hertz}$}
+    \label{fig:impl_rcl_sys_img}
+\end{figure}
+
+\subsubsection{FIR båndpass}
+\begin{tcolorbox}[colback=white, colframe=white!55!black]
+    \textbf{TODO:}
+    \begin{enumerate}
+        \item Lage testbench for HDL kode
+        \item Forklare utregning av filterkoeffisienter - Matlab
+            \begin{itemize}
+                \item FIR bandstop 
+                \item Sample frequency $\SI{50}{\kilo\hertz}$
+                \item Equaripple
+                \item Variere filter orden N
+            \end{itemize}
+    \end{enumerate}
+\end{tcolorbox}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Bilder/Digital_sys.png}
+    \caption{Realisering av system med FIR båndpassfilter og en samplingfrekvens $f_s = \SI{50}{\kilo\hertz}$}
+    \label{fig:fir_sys}
+\end{figure}
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.9\textwidth]{Bilder/fir_filter_perf.png}
+    \caption{Sammenlikning av første og andre ordens RLC båndpassfilter med senterfrekvens $f_c = \SI{5.2}{\kilo\hertz}$}
+    \label{fig:test_fir_filter_perf}
+\end{figure}
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.9\textwidth]{Bilder/fir_filter_perf_250.png}
+    \caption{Sammenlikning av første og andre ordens RLC båndpassfilter med senterfrekvens $f_c = \SI{5.2}{\kilo\hertz}$}
+    \label{fig:test_fir_filter_perf_250}
+\end{figure}
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.9\textwidth]{Bilder/fir_filter_perf_175.png}
+    \caption{Sammenlikning av første og andre ordens RLC båndpassfilter med senterfrekvens $f_c = \SI{5.2}{\kilo\hertz}$}
+    \label{fig:test_fir_filter_perf_175}
+\end{figure}
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.5\textwidth]{Bilder/Zturn.jpg}
+    \caption{Z-Turn V2 7Z020 FPGA board \cite{zturn}}
+    \label{fig:zturn}
+\end{figure}
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.9\textwidth]{Bilder/Vivado_fir_filter.png}
+    \caption{Blokk diagram fra Vivado; System implementering av FIR på FPGA}
+    \label{fig:vivado_fir_block_diagram}
+\end{figure}

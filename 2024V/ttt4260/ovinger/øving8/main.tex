@@ -1,0 +1,87 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\subsection*{Teoretisk del}
+Vi har følgende formel for fourierkoeffisientene til signalet
+\begin{align*}
+    c_k &= \frac{1}{T} \int_{T}{x(t)e^{-j\omega_k t} dt} \\
+        &= \frac{1}{T} \int_{-a \cdot \frac{T}{2}}^{a \cdot \frac{T}{2}}{V_0 \cdot e^{-j\omega_k t} dt} \\
+        &= - \frac{V_0}{T} \cdot \frac{1}{j\omega_k} e^{-j\omega_k t} \bigg\rvert_{-a \cdot \frac{T}{2}}^{a \cdot \frac{T}{2}} \\
+        &= \frac{V_0}{T \omega_k} \cdot \frac{1}{j}\left(e^{\frac{a \cdot j\omega_k T}{2}} - e^{\frac{-a \cdot j\omega_k T}{2}}\right) = \frac{V_0}{T \omega_k} \cdot 2\sin{\left(\frac{a \omega_k T}{2}\right)}
+\end{align*}
+
+Setter så inn for at $\omega_k = \frac{2\pi}{T} \cdot k$:
+\begin{align*}
+    c_k &= \frac{V_0}{T \omega_k} \cdot 2\sin{\left(\frac{a \omega_k T}{2}\right)} = \frac{V_0}{k \pi} \sin{\left(a \cdot k \pi\right)} \\
+        &= \underline{\underline{a \cdot V_0 \cdot \text{sinc}\:{\left(a \cdot k\right)}}}
+\end{align*}
+
+Vi får da følgende amplitudespekter:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Bilder/1a.png} 
+\end{figure}
+
+\subsection*{Eksperimentell del}
+Bruker vi spektrumsanalysatoren på et generert firkantpulstog med frekvens $f = \SI{1}{\kilo\hertz}$, duty cycle $a = 0.2$ og 
+$V_0 = \SI{1}{\volt}$ får vi følgende plott.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Bilder/1b.png} 
+\end{figure}
+
+
+Her er analysatoren stilt inn på å ta spektrumet til signalet fra $\SI{0}{\hertz}$ til $\SI{10}{\kilo\hertz}$. Vi observerer 
+at spektrumet ved $k \cdot \SI{1}{\kilo\hertz}$ for $k \in {0, 1, 2, \dots, 10}$ ser ut til å 
+matche godt med plottet over i den teoretiske delen, men med enhetene dBV.
+
+\section*{Oppgave 2.}
+\subsection*{Teoretisk del}
+Vi vet at følgende må holde for fourierkoeffisientene til utgangssignalet y
+\[
+    c_k^{y} = H(j \omega_k) \cdot c_k^{x}
+\]
+der $H(s)$ er systemfunksjonen til lavpassfilteret, og $s$ er et komplekst tall på formen $s = j \omega_k$.
+
+For lavpassfilteret får vi følgende systemfunksjon
+\[
+    H(j\omega_k) = \frac{y(t)}{x(t)} = \frac{1}{x(t)} \cdot \left(\frac{x(t) \cdot \frac{1}{j\omega_k C}}{R + \frac{1}{j\omega_k C}}\right) = \frac{1}{1 + j\omega_k RC}
+\]
+
+Får da at 
+\[
+    c_k^y = \left\lvert\frac{1}{1 + j\omega_k RC}\right\rvert \cdot c_k^x 
+\]
+
+Videre har vi at knekkfrekvensen er $f_0 = \frac{1}{T}$. Det gir at
+\begin{align*}
+    \left\lvert\left\lvert \frac{1}{1 + j \cdot 2\pi f_0 \cdot RC} \right\rvert\right\rvert = \frac{1}{\sqrt{2}}
+\end{align*}
+
+Løser for $f_0$ og får at
+\[
+    f_0 = \frac{1}{2\pi RC} \implies \omega_0 = \frac{1}{RC}
+\]
+
+Og vi har da at $\omega_k = k \cdot \omega_0 = \frac{k}{RC}$. Setter vi inn for $c_k^x$ fra (1) og $\omega_k$ får vi at 
+\begin{align*}
+    |c_k^y| = |c_k^x| \cdot \left\lvert\left\lvert\frac{1}{1 + jk}\right\rvert\right\rvert = |c_k^x| \cdot \frac{1}{\sqrt{1 + k^2}} = \frac{|a \cdot V_0 \cdot \text{sinc}\:{\left(a \cdot k\right)}|}{\sqrt{1 + k^2}}
+\end{align*}
+
+Vi får da følgende amplitudeplot:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Bilder/2a.png} 
+\end{figure}
+
+\subsection*{Eksperimentell del}
+Rakk ikke gjøre dette, men blir å velge komponentverdier for $R$ og $C$ s.a. knekkfrekvensen blir $f_c = \SI{1}{\kilo\hertz}$, og måle 
+dempningen i utgangssignalet gitt inngangssignalet, og vise at det stemmer overrens med den teoretiske utledningen
+
+\end{document}

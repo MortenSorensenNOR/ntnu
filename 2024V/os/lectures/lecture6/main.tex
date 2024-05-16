@@ -1,0 +1,187 @@
+\documentclass[a4paper,11pt,english]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Paging}
+\begin{itemize}
+    \item Segmentation allows \textbf{\color{blue} non-contiguous} memory assignments
+    \item Segmentation gets memory fragmented (\textbf{\color{red} external frament})
+        \begin{itemize}
+            \item Perfromance overhead (\textbf{\color{red} compaction})
+        \end{itemize}
+    \item Paging is another method that allows the physical address space of a process to be \textbf{\color{blue} non-contiguous}
+    \item Divide virtual memory into blocks of the same size called \textbf{\color{blue} page frames} (or simply \textbf{\color{blue} pages})
+    \item Flexible mapping pages to frames
+    \item Keep a track of all free frames
+    \item Set up a \textbf{\color{blue} page table} to translate
+    \item Nedd both OS and Hardware
+    \item No \textbf{\color{blue} external fragmentation}, but \textbf{\color{red} internal fragmentation} 
+
+    \item \textbf{Flexibility}: Supporting the abstraction of address space effectibely
+        \begin{itemize}
+            \item Don't need assumption of how heap and stack grow and are used
+        \end{itemize}
+    \item \textbf{Simplicity}: ease of free-space management
+        \begin{itemize}
+            \item The page address space and the page frame are the same size
+            \item Easy to allocate and keep a free list
+        \end{itemize}
+\end{itemize}
+
+\section*{Page Translation}
+\begin{itemize}
+    \item A virtual address is split into \textbf{\color{blue} two parts}
+        \begin{itemize}
+            \item \textbf{\color{blue} Virtual page number} (or \textbf{\color{blue} Page number}) - used as an index into a page table
+                which contains base address of each pag ein physical memory
+                \begin{itemize}
+                    \item High bits to indicate page number
+                \end{itemize}
+            \item \textbf{\color{blue} Offset} - combined with base address to define the physical memory address that is sent to the memory unit
+                \begin{itemize}
+                    \item Low bits to indicate offset
+                \end{itemize}
+        \end{itemize}
+    \item Given virutual address space $2^m$ and page size $2^n$, \textbf{\color{blue} n} bits for offset and $\color{blue}m-n$ bits for page number
+    \item Only need to translate the page number to determine where the physocal page is
+    \item Offset remains the same
+    \item \textbf{\color{blue} 32-bit} virtual address
+    \item Page size \textbf{\color{blue} 4KB}
+    \item Physical memory \textbf{\color{blue} 2GB}
+    \item Then $\log{2^{12}} = \text{12 bits}$ for the offset is needed
+    \item And for the page number $\color{blue} \text{2GB}/\text{4KB} = 2^{31-12} = 2^{19} = \text{19 bits}$ are needed
+\end{itemize}
+
+\section*{Page Table}
+\begin{itemize}
+    \item To keep track of the mapping of virtual to physical addresses
+    \item A \textbf{\color{blue} per-process} data structure
+    \item the page table data structure is kept in \textbf{\color{blue} main memory}
+    \item \textbf{\color{blue} Page-table base register} indicates the starting address of page table
+    \item The simples from a page table is a \textbf{\color{blue} linear page table}, an array
+    \item \textbf{\color{blue} Page Table Entry (PTE)} includes
+        \begin{itemize}
+            \item Translation information
+            \item Other information
+        \end{itemize}
+    \item \textbf{\color{blue} XV6 - 64 bits, each PTE consists of}
+        \begin{itemize}
+            \item \textbf{\color{blue} 44 bits (10 - 53) for physical page number}
+            \item \textbf{\color{blue} 10 bits (0 - 9) for flags, other information}
+        \end{itemize}
+\end{itemize}
+
+\section*{Address Translation}
+\begin{itemize}
+    \item XV6-Sv39
+        \begin{itemize}
+            \item \textbf{\color{blue} 39 bit} virtual address
+            \item \textbf{\color{blue} 27 bit} to index PTE
+            \item \textbf{\color{blue} 12 bit} to determine the address within a page frame
+            \item 39 bits $\rightarrow$ 512 GB sufficient for RISC-V
+        \end{itemize}
+    \item XV6-SV48
+        \begin{itemize}
+            \item 48 bit virtual address
+        \end{itemize}
+\end{itemize}
+
+\section*{Inverted Page TAbles}
+\begin{itemize}
+    \item Keeping a signle pag table that has an etry for \textbf{\color{blue} each physical page frame} of the system
+    \item The entry tells us which process is using this page, and which virtual page of that process maps to this physical page
+    \item \textbf{\color{blue} Pros: Memory saving}
+    \item \textbf{\color{red} Cons: Long searching time, page sharing}
+\end{itemize}
+
+\section*{Page Sharing}
+\begin{itemize}
+    \item For per-process page table, let two pages point to the same frame
+    \item For inverted page table, it is diffucult to implement page sharing
+\end{itemize}
+
+\section*{Address Translation}
+\begin{itemize}
+    \item The steps of each memory reference
+        \begin{enumerate}
+            \item Extract \textbf{\color{blue} virtual page number} from \textbf{\color{blue} virtual address} (\textbf{\color{red} memory access})
+            \item Calculate address of \textbf{\color{blue} page table entry}
+            \item Fetch \textbf{\color{blue} page table address}
+            \item Extract \textbf{\color{blue} physical page frame number}
+            \item Determine \textbf{\color{blue} physical address}
+            \item Fetch \textbf{\color{blue} physicall address to register} \textbf{\color{red} (memory access)}
+        \end{enumerate}
+\end{itemize}
+
+\section*{Probelms of Paging}
+\begin{itemize}
+    \item The issue of the ontroduced paging mechanism
+        \begin{itemize}
+            \item Page table in main memory
+            \item \textbf{\color{red} Fetch the translation} from in-memory page table
+            \item Explicit load/store access on a memory address
+        \end{itemize}
+    \item In this scheme every data/instruction access requires \textbf{\color{red} two} memory accesses
+        \begin{itemize}
+            \item One for page table
+            \item And one for the data/instruction
+        \end{itemize}
+    \item The performance is affected by \textbf{\color{red} a factor of 2}!
+\end{itemize}
+
+\section*{Table Lookaside Buffer (TLB)}
+\begin{itemize}
+    \item To speed up the paging translatio, hardware helps and builds a cache to store some popular translations
+    \item \textbf{\color{blue} Translation lookaside buffer (TLB)}
+        \begin{itemize}
+            \item Part of \textbf{\color{blue} Memory-management unit} (MMU)
+            \item Hardware Cache
+        \end{itemize}
+    \item Memory reference with TLB
+        \begin{itemize}
+            \item \textbf{\color{blue} TLB hit: Virtual page number (VPN)} is in TLB and can be quickly accessed
+            \item \textbf{\color{red} TLB miss}: VPN is \textbf{\color{red} not} in TLB. Access page table to get the translation, update the TLB entry with the translation
+        \end{itemize}
+    \item \textbf{\color{blue} Temporal Locality}
+        \begin{itemize}
+            \item An instruction or data item that has been recently accessed will likely be re-accessed soon in the future
+        \end{itemize}
+    \item \textbf{\color{blue} Spatial Locality}
+        \begin{itemize}
+            \item If a program accesses memory at address $\mathbf{x}$, it will likely soon access memory near $\mathbf{x}$
+        \end{itemize}
+    \item TLB is a \textbf{\color{blue} fully associative} cache
+        \begin{itemize}
+            \item Any given translation can be anywhere in the TLB
+            \item Hardware searches entire TLB in parallel to find the target
+        \end{itemize}
+    \item A typical TLB entry - \textbf{VPN | PFN | other bits}
+        \begin{itemize}
+            \item Valid bit
+            \item Protection bit
+            \item Dirty bit
+        \end{itemize}
+\end{itemize}
+
+\section*{TLB Issue: Context Switch}
+\begin{itemize}
+    \item GLB contains translations are only valid for \textbf{\color{blue} current running process}
+    \item Switching from one process to another requires OS or hardware to do more work
+    \item How to distinguish which process a TLB entry belongs to
+    \item Solution 1: \textbf{\color{blue} Flush}
+        \begin{itemize}
+            \item OS flushes the whole TLB on context switch
+            \item Flush operation sets all valid biti to 0
+            \item \textbf{\color{red} Problem}: the overhead is too high if OS switches processes too frequently
+        \end{itemize}
+    \item Solution 2: \textbf{\color{blue} Address space identifier (ASID)}
+        \begin{itemize}
+            \item Some hardware systems provide an address space identifier (ASID) field in the TLB
+            \item Think of ASID as a process identifier (PID)
+        \end{itemize}
+\end{itemize}
+
+\end{document}

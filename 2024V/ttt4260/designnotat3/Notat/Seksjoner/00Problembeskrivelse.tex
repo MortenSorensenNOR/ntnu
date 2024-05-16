@@ -1,0 +1,19 @@
+\section{Problembeskrivelse}
+\label{problemBeskrivelse}
+
+Ved innspilling av lyd kan forstyrrelser og ressonanser i utstyr føre til uønskede frekvenskomponenter i opptaket. 
+Dette designnotatet har defor som mål å designe et system som tar inn et lydsignal 
+\begin{align}
+    x(t) = s(t) + w(t)
+\end{align}
+der $s(t)$ er det opprinnelige signalet og $w(t)$ er en forstyrrelse av èn bestemt frekvens, filtrerer ut forstyrrelsen $w(t)$, 
+og sender ut et filtrert signal $\hat{s}(t) \sim s(t)$. Systemet er illustrert i figur 1.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.35\textwidth]{Bilder/system_tegning.png}
+    \caption{System for støyfjerning}
+\end{figure}
+
+Inngangen til systemt $x(t)$ er som beskrevet i (1), og utgangen $\hat{s}(t)$ skal være en best mulig tilnærming til det ønskede signalet $s(t)$, 
+dvs. et signal der mest mulig av forstyrrelsen $w(t)$ er fjernet.

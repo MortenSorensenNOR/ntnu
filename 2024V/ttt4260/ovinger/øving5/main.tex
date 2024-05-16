@@ -1,0 +1,96 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 0.}
+Forventet tidskonstant ved $R = \SI{1}{\kilo\ohm}$ og $L = \SI{100}{\milli\henry}$ er $\tau = \frac{\SI{100}{\milli\henry}}{\SI{1}{\kilo\ohm}} = \SI{0.1}{\milli\s}$.
+Målt tidskonstant $\tau \approx \SI{0.110}{\milli\s}$. Målt motstand er $R \approx \SI{0.981}{\kilo\ohm}$.
+Det betyr at den faktiske induktansen er $L = \tau \cdot R \approx \SI{0.110}{\milli\s} \cdot \SI{0.981}{\kilo\ohm} = \SI{107}{\milli\henry}$.
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Ved resonnansfrekvensen er den komplekse delen av den totale impedansen lik 0, og vi får da at 
+        \[
+            X_L = X_C \implies 2\pi f_0 L = \frac{1}{2\pi f_0 C}
+        \]
+        der $X_L$ er reaktansen til spolen, $X_C$ er reaktansen til kondensatoren og $f_0$ er resonnansfrekvensen til systemet.
+        Dette gir at 
+        \[
+            f_0 = \frac{1}{2\pi\sqrt{LC}} = \frac{1}{2\pi\sqrt{ \SI{100}{\milli\henry} \cdot \SI{100}{\nano\farad}}} \approx \SI{1592}{\hertz}
+        \]
+    \item Lavest dempning av inngangssignalet var ved $f = \SI{1.59}{\kilo\hertz}$, som er innen $\pm 1\%$ av forventet verdi, altså komfortabelt innenfor feilmarginer i 
+        målingen av tidskonstant og motstandsverdi.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/rlc_bode.png}
+            \caption{Bodeanalyse av RLC systemet. Utgangssignalet var målt over motstanden $R$}
+        \end{figure}
+    \item Når motstanden til potensiometeret synker, vil spenningen over spolen øke.
+\end{enumerate}
+
+\section*{Oppgave 2.}
+\begin{enumerate}
+    \item Krets (a) er et bådpassfilter, som vi så i oppgave 1b. Krets (b) er et høypassfilter fordi at ved lave frekvenser legger hele spenningsfallet seg over kondensatoren,
+        mens ved høye frekvenser kommer hele spenningsfallet over spolen. Krets (c) er et lavpassfilter, av motsatt argument som for krets (b).
+    \item Måling for krets (a) har vi gjort i oppgave 1b. Måling av krets (b) stemte overrens med at det er et høypassfilter (figur 2), og måling av krets (c) viser at det er et lavpassfilter (figur 3).
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/2b_highpass.png}
+            \caption{Krets (b). Et høypassfilter}
+        \end{figure}
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/2b_lowpass.png}
+            \caption{Krets (c). Et høypassfilter}
+        \end{figure}
+        \newpage
+    \item
+        \hphantom{Hei}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.35\textwidth]{Bilder/shrug.png}
+            \caption{:)}
+        \end{figure}
+    \item $\uparrow$ 
+    \item Skal finne et uttrykk for amplituderesponsen til filtrene a-c. \\
+        \textbf{Filter (a):} \\ 
+        \[
+            \left|H(\omega)\right| = \left|\frac{V_2}{V_1}\right| = \left|\frac{R}{R + j\omega L + \frac{1}{j\omega C}}\right| = \left|\frac{1}{1 + j\omega\tau -\frac{j}{\omega\tau}}\right|
+        \]
+        
+        \textbf{Filter (b):} \\ 
+        \[
+            \left|H(\omega)\right| = \left|\frac{j\omega L}{j\omega L + R + \frac{1}{j\omega C}}\right| = \left|\frac{j\omega\tau}{1 + j\omega\tau + \frac{1}{\omega\tau}}\right|
+        \]
+
+        \textbf{Filter (c):} \\ 
+        \[
+            \left|H(\omega)\right| = \left|\frac{\frac{1}{j\omega C}}{\frac{1}{j\omega C} + R + j\omega L}\right| = \left|\frac{1}{1 + j\omega\tau - CL\omega^2}\right|
+        \]
+
+
+\end{enumerate}
+
+\section*{Oppgave 3.}
+Vi ønsker at antennen skal få tilført størst mulig effekt når v(t) er et sinussignal på formen
+\[
+    v(t) = A\sin{\left(\frac{R}{L}t\right)}
+\]
+Starter med å finne thevininekvivalenten til motstanden R og spolen L. Vi får at thevinin impedansen blir
+\[
+    z_{th} = \frac{R j \omega L}{R + j \omega L}
+\]
+og at thevinin spenningen blir
+\[
+    v_{th} = V \frac{j \omega L}{R + j \omega L}
+\]
+For å få impedanstilpasning i systemet må $Z_L = \overline{Z_{th}}$. Det gir at  
+\[
+    Z_L = \overline{\left(\frac{R j \omega L}{R + j \omega L}\right)} =  \overline{\left(\frac{(R j \omega L) \cdot (R - j \omega L)}{R^2 + \omega^2 L^2}\right)} = \frac{R \omega^2 L^2}{R^2 + \omega^2 L^2} - \frac{j R^2 L^2 \omega^2}{R^2 + \omega^2 L^2}
+\]
+
+\end{document}

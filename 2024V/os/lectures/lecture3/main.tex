@@ -1,0 +1,146 @@
+\documentclass[a4paper,11pt,english]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Scheduling}
+\begin{itemize}
+    \item \textbf{\color{blue} Scheduling} is an important problem in many contexts, e.g. logistics, airports, game schedule, etc.
+    \item \textbf{\color{blue} Scheduling}: policies that the OS employs to determine the exectution order of ready processes
+    \item \textbf{\color{blue} Scheduling alorithms/schedulers} have diverse objectives and demonstrate different effects on the system performance.
+\end{itemize}
+
+\subsection*{Terminologies}
+\begin{itemize}
+    \item Scheduling metrics and goals:
+        \begin{itemize}
+            \item \textbf{\color{blue} CPU utilization}: percentage of time CPU is busy executing jobs
+            \item \textbf{\color{blue} Throughput}: the number of processes completed in a given amount of time
+            \item \textbf{\color{blue} Fairness}: all processes are likely to be executed
+            \item \textbf{\color{red} Turnaround time}: the time elapesed between the arrival and completion of a process
+                \[
+                    T_{turnaround} = T_{complete} - T_{arrival}
+                \]
+            \item \textbf{\color{red} Waiting time}: the time a process spends in the ready queue
+            \item \textbf{\color{red} Response time}: the time elapsed between the process' arrival and its first output
+        \end{itemize}
+    \item \textbf{\color{blue} Maximize: CPU utilization, throughput, fairness}
+    \item \textbf{\color{red} Minimize: Turnaround time, waiting time, and response time}
+\end{itemize}
+
+\subsection*{Assumptions For Workloads}
+\begin{itemize}
+    \item Each job runs for the same amount of time
+    \item All jobs arrive at the same time
+    \item All jobs only use the CPU (no I/O)
+    \item Run-time of each job is known
+    \item Once started, each job runs to completion (\textbf{\color{blue} Preemption})
+\end{itemize}
+
+\subsection*{First in First out (FIFO)}
+\begin{itemize}
+    \item A simple and basic scheduling algorithm
+    \item First Come First Served (FCFS)
+    \item Jobs are executed in \textbf{\color{blue} arrival time order}
+    \item How about in therms of \textbf{\color{blue} turnaround}?
+    \item $T_t = T_c - T_a$
+    \item Convoy effect
+        \begin{itemize}
+            \item A scheduling phenomonon in which a number of jobs wait for one job to get off a core, causing overall device and CPU utilization to be suboptimal. 
+        \end{itemize}
+    \item Order of jobs matter for turnaround time
+\end{itemize}
+
+\subsection*{Shortest Job First (SJF)}
+\begin{itemize}
+    \item Policy: The jobs with the shortest execution time is scheduled first
+    \item 
+        \begin{itemize}
+            \item All jobs arrive at the same time
+            \item All jobs only use the CPU (no I/O)
+            \item Run-time of each job is known
+            \item Once started, each job runs to completion (\textbf{\color{blue} Preemption})
+        \end{itemize}
+    \item If the 4 assumptions all hold, SJF is an \textbf{\color{blue} optimal} scheduling algorithm in terms of \textbf{\color{blue} average waiting time}
+    \newline
+    \item Now remove the assumption that all jobs arrive at the same time
+    \item How can we reduce the average turnaround time?
+    \item We also remove the assumption that each job runs to completion 
+\end{itemize}
+
+\subsection*{Shortest Time-to-Complete First (STCF)}
+\begin{tcolorbox}[colback=blue!15!white, colframe=white!50!blue]
+    \begin{center}
+        Once started, each job runs to completion (\textbf{\color{blue} Preemption})
+    \end{center}
+\end{tcolorbox}
+\begin{itemize}
+    \item This assumption indicates the concept of \textbf{\color{blue} preemption}
+    \item FIFO and SJF are bot \textbf{\color{blue} non-preemtive} schedulers
+    \item STCF policy: Always switch to jobs with the shortest completion time
+    \item STCF is a \textbf{\color{blue} preemptive} scheduler
+    \item STCF is optimal in terms of minimizing the average waitinig time, if the assumptions hold
+    \item STCF may cause \textbf{\color{red} starvation} 
+\end{itemize}
+
+\subsection*{Response Time}
+\begin{itemize}
+    \item \textbf{\color{blue} Response time} is another important performance metric, especially for interactive applications
+        \[
+            R = \frac{1}{N}\sum_{i=0}^{N}T_{wait}(i)
+        \]
+\end{itemize}
+
+\subsection*{Round-Robin (RR)}
+\begin{itemize}
+    \item A new concept of \textbf{\color{blue} time quantum/time slice/scheduling quantum}: a fixed and small amount of time units
+    \item Each process executes for \textbf{\color{blue} a time slice}
+    \item Switches to another one \textbf{\color{red} regardless whether it has completed its execution or not}
+    \item If the job has not yet completed its execution, the incomplete job is added to the tail of the ready queue, FIFO queue
+    \item If there are \textbf{\color{blue} n} processes in the ready queue and the time slice is \textbf{\color{blue} q}, no process waits more than \textbf{\color{blue} $(n-1) \cdot q$} time units
+    \item RR is a good scheduler in terms of \textbf{\color{blue} response time}
+    \item But poor in terms of \textbf{\color{red} turnaround time}
+    \item The selection of time slice size should be carefullly considered (Usually \textbf{\color{blue} 10-100 milliseconds})
+        \begin{itemize}
+            \item Switching between processes comes at some overhead, i.e., context switching
+            \item Turnaround time depends on the size of time slice
+        \end{itemize}
+    \item RR is a \textbf{\color{blue} starvation-free} scheduler
+        \begin{itemize}
+            \item Some processes never get scheduled, e.g., processes with long execution time in STCF
+        \end{itemize}
+    \item RR is fair, simple, and easy to implement and thus is used in modern OSs, such as Linux and MacOS
+    \item XV6 implements a simple RR
+\end{itemize}
+
+\subsection*{XV6 Scheduler}
+\begin{itemize}
+    \item Scheduler is implemented as an individual \textbf{\color{blue} kernel thread}
+        \begin{itemize}
+            \item \textbf{\color{blue} To schedule a new task, it needs to first switch the scheduler thread}
+        \end{itemize}
+    \item Two functions
+        \begin{itemize}
+            \item \textbf{\color{blue} sched()}
+                \begin{itemize}
+                    \item Check various conditions in \textbf{\color{blue} yield()},\textbf{\color{blue} exit()} and \textbf{\color{blue} sleep()} 
+                    \item Hand the control over to the scheduler function
+                \end{itemize}
+            \item \textbf{\color{blue} scheduler()}
+                \begin{itemize}
+                    \item Select a runnable process to execute
+                    \item Per-CPU core tread, i.e., each CPU has one scheduler
+                \end{itemize}
+        \end{itemize}
+    \item Context-switch
+        \begin{itemize}
+            \item \textbf{\color{blue} swtch(struct context\* old, struct context\* new)}
+                \begin{itemize}
+                    \item \textbf{\color{blue} Save the old context and load the new context}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\end{document}

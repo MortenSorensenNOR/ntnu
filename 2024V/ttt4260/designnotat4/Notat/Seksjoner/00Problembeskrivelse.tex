@@ -1,0 +1,26 @@
+\section{Problembeskrivelse}
+\label{problemBeskrivelse}
+
+Innen lydbehandling og trådløs kommunikasjon er det ofte ønskelig å kunne endre på frekvensen til 
+et signal. Det er derfor nyttig å ha et system som gjør nemmelig dette. 
+Dette designnotatet skal ta for seg et enkelt design som tar inn et sinus-formet signal med kjent frekvens, og fra dette kan 
+generere et nytt sinus-formet signal der frekvensen til signalet er dobbelt så stor som frekvensen til inngangssignalet. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Bilder/sys_diagram.png}
+    \caption{Overordnet illustrasjon av systemet}
+    \label{fig:top_level_sys}
+\end{figure}
+
+Det overordnede systemet er visualisert i figur \ref{fig:top_level_sys}.
+Et sinus-formet inngangssignal på formen 
+$$x_1(t) = A_1 \cos{\left(2\pi ft\right)}$$ 
+med kjent frekvens $f$ og amplitude $A_1$, sendes inn i frekvensdobleren.
+Utgangssignalet til systemet
+$$x_2(t) = A_2 \cos{\left(2\pi \cdot 2ft + \phi\right)}$$ 
+er et nytt sinus-formet signal med doblet frekvens $2f$, amplitude $A_2$ og faseledd $\phi$.
+Målet med designet av frekvensdobleren er at systemet skal kunne generere et utgangssignal $\hat{x}_2(t) \sim x_2(t)$, 
+på en slik måte at det genererte signalets SDR\footnote{\textbf{Engelsk} SDR \textit{signal-to-distorion ratio}}
+blir maksimert. Målsettingen for dette designet er en SDR på 30dB.
+Implementeringen stiller ingen krav til utgangsamplituden $A_2$ eller faseleddet $\phi$.

@@ -1,0 +1,253 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Vi har at vi kan uttrykke forventningsverdien til G som
+        \[
+            E[G] = \frac{2\mu_s}{(\mu_t)^2}
+        \]
+        og variansen til G som
+        \begin{align*}
+            \sigma_g^2 = \text{Var}[G] &= \left(\frac{\partial}{\partial s}g(\mu_s, \mu_t)\right)^2 \cdot \sigma_s^2 + \left(\frac{\partial}{\partial t}g(\mu_s, \mu_t)\right)^2 \cdot \sigma_t^2 \\
+                          &= \left(\frac{2}{\mu_t^2}\right)^2 \cdot \sigma_s^2 + \left(\frac{-4\mu_s}{\mu_t^3}\right)^2 \cdot \sigma_t^2 
+        \end{align*}
+
+        Med $\mu_s = \SI{241.3}{\meter}$ og $\mu_t = \SI{7.02}{\s}$ får vi at $\mu_g \approx  9.79$ og at $\sigma_g^2 \approx  7.79 \implies \sigma_g \approx 2.79$.
+
+    \item 
+        Vi kan bruke følgende python kode for å approksimere $\mu_g$ og $\sigma_g$ 
+\begin{pythoncode}
+import numpy as np
+import matplotlib.pyplot as plt
+
+mu_g = 9.7929
+sigma_g = 2.79
+mu_t = 7.02
+sigma_t = 1
+mu_s = 241.3
+sigma_s = 2
+g_vals, g_vals_sim = [], []
+
+for _ in range(10**5):
+    t = np.random.normal(loc=mu_t, scale=sigma_t) 
+    s = np.random.normal(loc=mu_s, scale=sigma_s) 
+    g_vals_sim.append((2 * s) / (t**2))
+    g = np.random.normal(loc=mu_g, scale=sigma_g)
+    g_vals.append(g)
+
+mu_sim = np.mean(g_vals_sim)
+var_sim = np.var(g_vals_sim, ddof=1)
+print(f"Simulert: mu = {mu_sim} og varians = {var_sim}")
+print(f"Normalfordeling: mu = {mu_g} og varians = {sigma_g**2}")
+\end{pythoncode}
+\end{enumerate}
+
+\section*{Oppgave 2.}
+\begin{enumerate}
+    \item Skal finne sannsynligheten $P(\frac{X + Y}{2} > 10.2)$. Vet at en lineærkombinasjon av normalfordelte stokastiske variabler er også normalfordelt. 
+        Dersom vi kaller kombinasjonen for $Z = \frac{X + Y}{2}$, så får vi at
+        \[
+            E[Z] = \frac{\left(E[X] + E[Y]\right)}{2} = \frac{\left(\mu + \mu\right)}{2} = \mu
+        \]
+        og at variansen til Z blir
+        \[
+            \text{Var}[Z] = \frac{\text{Var}[X] + \text{Var}[Y]}{4} = \frac{\sigma^2 + \sigma^2}{4} = \frac{\sigma^2}{2}
+        \]
+
+        Vi får da at $Z \sim N(\mu, \frac{\sigma^2}{2})$. For å finne sannsynligheten for at $Z > 10.2$ standariserer vi først 
+        Z. Vi har da at
+        \[
+            \text{SD}_Z = \frac{Z - \mu}{\sqrt{\frac{\sigma^2}{2}}} = \frac{10.2 - 10}{\sqrt{0.02}} \approx 1.414
+        \]
+        Vi får da at $\Phi(1.414) \approx 0.9207$, som gir at $P(Z > 10.2) \approx 1 - 0.9207 = \underline{\underline{0.0793}}$.
+    
+        For å finne sannsynligheten for at differansen mellom målingene er støre en 0.4 gram benytter vi at 
+        \[
+            P(|X - Y| > 0.4) = P(X - Y > 0.4) + P(X - Y < -0.4)
+        \]
+        Setter vi $Z = X - Y$ får vi at
+        \[
+            E[X - Y] = E[X] - E[Y] = 0
+        \]
+        og 
+        \[
+            \text{Var}[X - Y] = \text{Var}[X] + \text{Var}[-Y] = \sigma^2 + \sigma^2 = 2\sigma^2
+        \]
+        Standariserer vi Z får vi at 
+        \[
+            SD_Z = \frac{Z}{\sqrt{2\sigma^2}} = \frac{Z}{\sqrt{0.08}} = \frac{0.4}{\sqrt{0.08}} \approx 1.414
+        \]
+
+        Finner så sannsynlighetene $P(SD_Z < 1.414) = 0.9207$, altså er $P(Z > 0.4) = 1 - 0.9207 = 0.0793$. 
+        Siden vi er interrersert i både $Z > 0.4$ og $Z < -0.4$ dobbler vi resultatet og får at 
+        \[
+            P(|X - Y| > 0.4) \approx 2 \cdot 0.0793 = \underline{\underline{0.1586}}
+        \]
+        
+    \item Vi får følgende forventningsverdier for estimatorene \\
+        \textit{Alternativ 1:}
+        \[
+            E[\hat{\mu}_A] = E\left[\frac{1}{5} \sum_{i=1}^{5}{X_i}\right] = \frac{1}{5} \sum_{i=1}^{5}{E[X_i]} = \mu_A
+        \]
+
+        \[
+            E[\hat{\mu}_B] = E\left[\frac{1}{5} \sum_{i=1}^{5}{Y_i}\right] = \frac{1}{5} \sum_{i=1}^{5}{E[Y_i]} = \mu_B
+        \]
+
+        \textit{Alternativ 2:}
+        \begin{align*}
+            E[\tilde{\mu}_A] &= E\left[\frac{1}{2}\left(\overline{U} + \overline{V}\right)\right] = \frac{1}{2}\left(E[\overline{U}] + E[\overline{V}]\right) \\
+                             &= \frac{1}{2}\left(E\left[\frac{1}{5}\sum_{i=1}^{5}{V_i}\right] + E\left[\frac{1}{5}\sum_{i=1}^{5}{U_i}\right]\right) \\ 
+                             &= \frac{1}{10} \sum_{i=1}^{5}{\left(E[V_i] + E[U_i]\right)}
+        \end{align*}
+
+        Setter vi inn for $E[U] = \mu_A + \mu_B$ og $E[V] = \mu_A - \mu_B$ får vi at 
+        \[
+            E[\tilde{\mu}_A] = \frac{1}{10} \sum_{i=1}^{5}{\left((\mu_A + \mu_B) + (\mu_A - \mu_B)\right)} = \mu_A 
+        \]
+        Vi får et tilsvarende resultat for $\tilde{\mu}_B = \mu_B$.
+
+        \hphantom{Heisann}\\
+        Finner så variansen til estimatorene \\
+        \textit{Alternativ 1:}
+        \[
+            \text{Var}[\hat{\mu}_A] = \text{Var}\left[\frac{1}{5} \sum_{i=1}^{5}{X_i}\right] = \frac{1}{5^2} \sum_{i=1}^{5}{\text{Var}[X_i]} = \frac{\sigma^2}{5}
+        \]
+        Etter som at alle målingene har samme usikkerhet $\sigma$ vil $\text{Var}[\hat{\mu}_B] = \text{Var}[\hat{\mu}_A] = \frac{\sigma^2}{5}$.
+
+        \textit{Alternativ 2:}
+        \begin{align*}
+            \text{Var}[\tilde{\mu}_A] &= \text{Var}\left[\frac{1}{2}\left(\overline{U} + \overline{V}\right)\right] = \frac{1}{2^2} \left( \text{Var}\left[ \frac{1}{5} \sum_{i=1}^{5}{U_i}\right] + \text{Var}\left[ \frac{1}{5} \sum_{i=1}^{5}{V_i}\right] \right) \\
+                                      &= \frac{1}{2^2} \frac{1}{5^2} \sum_{i=1}^{5} \left( \text{Var}[U_i] + \text{Var}[V_i] \right) 
+        \end{align*}
+        Vi har da at 
+        \[
+            \text{Var}[U_i] = \text{Var}[A + B] = \text{Var}[A] + \text{Var}[B] = \sigma^2 + \sigma^2 = 2\sigma^2
+        \]
+        og 
+        \[
+            \text{Var}[V_i] = \text{Var}[A - B] = \text{Var}[A] + \text{Var}[-B] = \sigma^2 + \sigma^2 = 2\sigma^2
+        \]
+
+        Altså blir
+        \[
+            \text{Var}[\tilde{\mu}_A] = \frac{1}{2^2}\frac{1}{5^2} \cdot 5 \cdot (4 \sigma^2) = \frac{\sigma^2}{5}
+        \]
+        Vi har også at $\text{Var}[\tilde{\mu}_B] = \text{Var}[\tilde{\mu}_A]$.
+
+        Ifølge fasit skal variansen til $\tilde{\mu}_A$ være halvparten av utregningen over tilsier. Dersom det stemmer
+        hadde så klart metode 2 vært foretrukket over metode 1.
+\end{enumerate}
+
+\section*{Oppgave 3.}
+\begin{enumerate}
+    \item Kan få et estimat for $X_1, \dots, X_n$ ved å ta produktet av målingene, og etter ta logaritmen av produktet for å få log-rimelighetsfunksjonen.
+        Vi får da
+        \[
+            L(\lambda) = \Pi_{i=1}^{n} P(X_i = x) = \Pi_{i=1}^{n} f(x) = \Pi_{i=1}^{n} \frac{\lambda^{x_i}}{x_i!}e^{-\lambda} = \frac{\lambda^{\sum_{i=1}^{n}{x_i}}}{\Pi_{i=1}^{n} x_i!} e^{-\lambda n}
+        \]
+        Tar så logaritmen
+        \[
+            \ln{L(\lambda)} = \ln{\left(\frac{\lambda^{\sum_{i=1}^{n}{x_i}}}{\Pi_{i=1}^{n} x_i!} e^{-\lambda n}\right)} = \sum_{i=1}^{n}{x_i} \cdot \ln{(\lambda)} - \ln{(\Pi_{i=1}^{n} x_i!)} - \lambda n
+        \]
+
+        Deriverer så $L(\lambda)$ mhp. $\lambda$ og setter funksjonen lik 0
+        \[
+            \frac{\partial}{\partial \lambda} \ln{L(\lambda)} = -n + \sum_{i=1}^{n}{\frac{1}{\lambda}x_i} = 0 \implies \hat{\lambda} = \frac{1}{n}\sum_{i=1}^{n}{x_i}
+        \]
+
+        Vi har at forventningsverdien til en poissonprosses er lik parameteren $\lambda$, altså har vi at $\hat{\lambda} = E[\overline{X}] = \frac{1}{n} \cdot n \cdot E[X_1] = \lambda$. Altså 
+        er $\hat{\lambda}$ forventningsrett.
+    
+        Variansen til $\hat{\lambda}$ er 
+        \[
+            \text{Var}[\hat{\lambda}] = \text{Var}\left[\frac{1}{n} \sum_{i=1}^{n}x_i\right] = \frac{1}{n^2} \sum_{i=1}^{n}\text{Var}[X_i] = \frac{1}{n} \lambda t \xlongequal{t=1} \underline{\underline{\frac{\lambda}{n}}}
+        \]
+
+    \item Et kraf for estimatoren $\hat{\lambda}$ er at den er forventningsrett, altså at $E[\hat{\lambda}] = \lambda$. Vi har da at 
+        \begin{align*}
+            E[\hat{\lambda}] &= E[\alpha \overline{X} + \beta \overline{Y}] = \frac{\alpha}{n} \sum_{i=1}^{n} E[X_i] + \frac{\beta}{m} \sum_{i=1}^{m} E[Y_i] \\ 
+                             &= \frac{\alpha}{n} \cdot n \cdot \lambda + \frac{\beta}{m} \cdot m \cdot \frac{\lambda}{2} = \alpha \lambda + \beta \frac{\lambda}{2} = \left(\alpha + \frac{\beta}{2}\right) \lambda
+        \end{align*}
+        Vi har da at $E[\hat{\lambda}] = \lambda$ kunn for $\alpha + \frac{\beta}{2} = 1$.
+
+        Vi ønsker samtidig å minimere variansen til estimatoren. Finner derfor først variansen til estimatoren
+        \begin{align*}
+            \text{Var}[\hat{\lambda}] &= \text{Var}[\alpha \overline{X} + \beta \overline{Y}] = \alpha^2 \text{Var}[\overline{X}] + \beta^2 \text{Var}[\overline{Y}] \\ 
+                                      &= \frac{\alpha^2}{n^2} \sum_{i=1}^{2} \text{Var}[X_i] + \frac{\beta^2}{m^2} \sum_{i=1}^{m} \text{Var}[Y_i]
+        \end{align*}
+
+        Siden $t = 1$ har vi at $\text{Var}[X_i] = \lambda$ og $\text{Var}[Y_i] = \frac{\lambda}{2}$. Altså blir
+        \[
+            \text{Var}[\hat{\lambda}] = \frac{\alpha^2}{n}\lambda + \frac{\beta^2}{2m}\lambda = \left(\frac{\alpha^2}{n} + \frac{\beta^2}{2m}\right) \lambda
+        \]
+
+        Vi ønser å minimere, så vi deriverer variansen til estimatoren med hensyn på $\lambda$ og setter det lik 0.
+        \[
+            \frac{\alpha^2}{n} + \frac{\beta^2}{2m}\right = 0
+        \]
+
+        Løser vi likningssettet med hensyn på $\alpha$ og $\beta$ og tar den reelle delen av svaret (her har jeg sannsynligvis gjort noe feil, for svaret blir et imaginært tall),
+        får vi at 
+        \[
+            \alpha = \frac{2n}{2n + m},\:\:\:\:\:\: \beta = \frac{2m}{2n + m}
+        \]
+\end{enumerate}
+
+\section*{Oppgave 4.}
+\begin{enumerate}
+    \item Forventningsverdien $\mu$ blir den forventede menden koffein per desiliter cola, og standardavviket er en kombinasjon 
+        av målefeil/nøyaktigheten til måleinstrumentet og variansen i mengden koffein mellom hver flaske cola.
+
+    \item Vi har at 
+        \[
+            \hat{\mu} = \frac{1}{n} \sum_{i=1}^{n}{X_i} \sim N\left(\mu, \frac{\sigma^2}{n}\right)
+        \]
+        Standariserer vi normalfordelingen får 
+        \[
+            Z = \frac{\overline{X} - \mu}{\sqrt{\frac{\sigma^2}{n}}}
+        \]
+        Setter så kvantilene $z_{\frac{\alpha}{2}}$ og $z_{1-\frac{\alpha}{2}} \xlongequal{Z \sim N(0, 1)} -z_{\frac{\alpha}{2}}$ inn som sannsynlighetsgrenser til $Z$ 
+        \[
+            P(-z_{\frac{\alpha}{2}} \leq Z \leq z_{\frac{\alpha}{2}}) = P(-z_{\frac{\alpha}{2}} \leq \frac{\overline{X} - \mu}{\sqrt{\frac{\sigma^2}{n}}} \leq z_{\frac{\alpha}{2}})
+        \]
+
+        Vi har da at 
+        \[
+            \mu \leq \overline{x} + z_{\frac{\alpha}{2}} \sqrt{\frac{\sigma^2}{n}}
+        \]
+        og 
+        \[
+            \mu \geq \overline{x} - z_{\frac{\alpha}{2}} \sqrt{\frac{\sigma^2}{n}}
+        \]
+
+        Vi får da atlså at 
+        \[
+            P\left(\overline{x} - z_{\frac{\alpha}{2}} \sqrt{\frac{\sigma^2}{n}} \leq \mu \leq \overline{x} + z_{\frac{\alpha}{2}} \sqrt{\frac{\sigma^2}{n}}\right) = 1 - \alpha
+        \]
+    
+        Siden målingene for $x_i$ vil variere fra forsøk til forsøk vil også øvre og nedre grnse til konfidensintervallet variere hver gang forsøket gjentas.
+
+        For de 12 målingene får vi da at konfidensintervallet blir
+        \[
+            \mu \leq 8.2 + z_{0.025} \sqrt{\frac{0.19^2}{12}} \approx 8.3075
+        \]
+        og 
+        \[
+            \mu \geq 8.2 - z_{0.025} \sqrt{\frac{0.19^2}{12}} \approx 8.0925
+        \]
+        Altså er 95-prosent konfidensintervallet for $\mu$ i forsøket $\mu \in \left[8.0925, 8.3075\right]$.
+
+    \item Vi har at bredden for 95-prosnet konfidensintervallet til $\mu$ er gitt ved 
+        \[
+            \mathbb{L} = 2 \cdot 1.96 \cdot \frac{0.19}{\sqrt{n}}
+        \]
+        Løser vi for $\mathbb{L} \leq 0.1$ får vi at $n = 56$ målinger for en bredde på intervallet $\leq 0.1$.
+\end{enumerate}
+
+\end{document}

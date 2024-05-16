@@ -1,0 +1,298 @@
+\documentclass[a4paper,11pt,english]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Introduction to C}
+\subsection*{Why C?}
+\begin{itemize}
+    \item De-facto standard for Systems Programming
+    \item It's fast...
+    \item High-level low-level programming language
+    \item Avoid writing Assembly
+\end{itemize}
+
+\subsection*{From Code to Executable}
+\begin{itemize}
+    \item Pre-process $\rightarrow$ Compile $\rightarrow$ Link $\rightarrow$ Run
+\end{itemize}
+
+\subsection*{The Compiler is you Friend}
+\begin{itemize}
+    \item{Type Checking}
+    \item{Use -Wall flag}
+    \item{-O2 makes your code faster}
+\end{itemize}
+
+\subsection*{Compiling larger projects}
+\begin{itemize}
+    \item{Manually typing gcc file1.c file2.c file3.c ... is combursome}
+    \item{Use Makefile}
+    \item{Labs will also use Makefiles}
+\end{itemize}
+
+\newpage
+\subsection*{Data Types}
+\begin{itemize}
+    \item {Basic data types
+        \begin{itemize}
+            \item char
+            \item short
+            \item int
+            \item long
+            \item float
+            \item double
+        \end{itemize}
+    }
+    \item Data type sizes depend on the machine
+    \item Integers: Signed and Unsigned
+    \item Boolean does nto exist: use number (0 = False, otherwise True)
+    \item Strongly typed
+    \item Strings are null terminated char arrays
+    \item Arrays dont have a known length
+    \item Type Casting
+\end{itemize}
+
+\subsection*{Pointer Types in C}
+\begin{itemize}
+    \item Special Type: Reference to Memory Location
+    \item \&: "Adress of" operator
+    \item *: "Dereference" operator
+    \item int[] = int*
+    \item We can also do calculations with pointers - pointer arithmetic
+\end{itemize}
+
+\section*{Process}
+\subsection*{Overview}
+\begin{itemize}
+    \item Process concept
+    \item Process state
+    \item Process API (creation, wait)
+    \item Process tree
+    \item Limited directed execution
+\end{itemize}
+
+\subsection*{Process}
+\begin{itemize}
+    \item {Programs are a \textbf{\color{blue}static} entity stored on dist (\textbf{\color{blue}executable file}), process is \textbf{\color{blue}active}
+            \begin{itemize}
+                \item Program becomes a process when the executable file is loaded into memory
+            \end{itemize}
+        }
+    \item {Execution of program started via Graphic User Interface (GUI) mouse clicks, command line entry of its name, etc.
+            \begin{itemize}
+                \item cat hello.c 
+            \end{itemize}
+        }
+    \item Process is \textbf{\color{blue}an abstraction} of CPU
+
+    \item A program becomes a process when it is selected to execute and loaded into memory
+    \item A process has an \textbf{\color{blue}adress space}
+
+    \item \textbf{Consists of:}
+        \begin{itemize}
+            \item \textbf{\color{blue!60!white}Code:} Instructions
+            \item \textbf{\color{blue!60!white}Stack:} Temporary data, e.g., functions parameters, returned adresses, local variables
+            \item \textbf{\color{blue!60!white}Registers:} Program counter (PC), general purpose, stack pointer
+            \item \textbf{\color{blue!60!white}Data:} Global variables
+            \item \textbf{\color{blue!60!white}Heap:} Dynamically allocated
+        \end{itemize}
+    \item A process is represented by a \textbf{\color{blue}process control block (PCB)}
+    \item PCB usuallu stores \textbf{\color{blue}relevant information} of a single process
+        \begin{itemize}
+            \item Process ID (PID, unique)
+            \item State
+            \item Parent process
+            \item Opened files, etc.
+        \end{itemize}
+\end{itemize}
+
+\subsection*{Process State}
+\begin{itemize}
+    \item Process has different states
+        \begin{itemize}
+            \item \textbf{\color{blue}READY}
+                \begin{itemize}
+                    \item Ready to run and pending for running
+                \end{itemize}
+            \item \textbf{\color{blue}RUNNING}
+                \begin{itemize}
+                    \item Being executed by OS
+                \end{itemize}
+            \item \textbf{\color{blue}BLOCKED}
+                \begin{itemize}
+                    \item Suspended due to some other events
+                    \item Like I/O requests
+                \end{itemize}
+            \item \textbf{\color{blue}ZOMBIE}
+                \begin{itemize}
+                    \item Completed execution but still has an entry in the system 
+                \end{itemize}
+        \end{itemize}
+    \item Process API
+        \begin{itemize}
+            \item \textbf{\color{blue}CREATE}
+                \begin{itemize}
+                    \item Create new process, e.g., double click, a command in terminal
+                \end{itemize}
+            \item \textbf{\color{blue}WAIT}
+                \begin{itemize}
+                    \item Wait for a process to stop
+                    \item Like I/O request
+                \end{itemize}
+            \item \textbf{\color{blue}DESTROY}
+                \begin{itemize}
+                    \item Kill the process 
+                \end{itemize}
+            \item \textbf{\color{blue}STATUS}
+                \begin{itemize}
+                    \item Obtain information about the process 
+                \end{itemize}
+            \item \textbf{\color{blue}OTHERS}
+                \begin{itemize}
+                    \item Suspend and resume a process 
+                \end{itemize}
+        \end{itemize}
+    \item Process Creation
+        \begin{itemize}
+            \item In Unix-like OSs, a process is created by another process, \textbf{\color{blue}parent process} or \textbf{\color{blue}calling process}
+            \item In Unix-like OSs, process creation relies on two system calls
+                \begin{itemize}
+                    \item \textbf{\color{blue}fork()}
+                        \begin{itemize}
+                            \item Create a new process and \textbf{\color{blue}clone } 
+                        \end{itemize}
+                    \item \textbf{\color{blue}exec()}
+                        \begin{itemize}
+                            \item Overwrite the created process with a new program 
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+    \item fork()
+        \begin{itemize}
+            \item A function without any arguments
+                \begin{itemize}
+                    \item \textbf{\color{blue}pid = fork()} 
+                \end{itemize}
+            \item Both \textbf{\color{blue}parent process} and \textbf{\color{blue}child process} continue to execute \textbf{\color{red}the instruction following the fork()}
+            \item The return value indicates which process it is (\textbf{\color{blue}parent} or \textbf{\color{red}child})
+                \begin{itemize}
+                    \item \textbf{\color{blue}Non-zero pid} (pid of child process): return value of the \textbf{\color{blue}parent} process,
+                    \item \textbf{\color{red}Zero} : the return value of the new child process
+                    \item \textbf{-1} : an error or failure occurs when creating new process
+                \end{itemize}
+
+            \item The child process is a \textbf{\color{red}duplicate} of the parent process and has the same 
+                \begin{itemize}
+                    \item \textbf{\color{blue}Instructions}
+                    \item \textbf{\color{blue}Data}
+                    \item \textbf{\color{blue}stack}
+                \end{itemize}
+            \item Child and parents have \textbf{\color{red}different}
+                \begin{itemize}
+                    \item \textbf{\color{blue}PIDs}
+                    \item \textbf{\color{blue}memory adresses}
+                \end{itemize}
+        \end{itemize}
+    \item wait()
+        \begin{itemize}
+            \item Let the parent process wait for the completion of the child process
+                \begin{itemize}
+                    \item \textbf{\color{blue}pid = wait()}
+                \end{itemize}
+            \item \textbf{\color{blue}waitpid()} is an alternative of fork
+        \end{itemize}
+    \item exec()
+        \begin{itemize}
+            \item Replace current data and code with new in specified file, i.e., it loads a new program into the current process
+                \begin{itemize}
+                    \item \textbf{\color{blue}exec(cmd, argv)} 
+                \end{itemize}
+            \item \textbf{\color{blue}exec()} does not return. It starts to execute the new program. \textbf{\color{red}Return if erros.}
+            \item There is a family of \textbf{\color{blue}exec()}, e.g., \textbf{\color{blue}execl(), execvp()}, etc
+        \end{itemize}
+    \item Why fork() + exec()
+        \begin{itemize}
+            \item Why dont we directly create a new process instead of "fork+exec"?
+                \begin{itemize}
+                    \item \textbf{\color{blue}Simple} and \textbf{\color{blue}powerful}
+                    \item Import to build Unix Shell (an interface to the Unix system)
+                \end{itemize}
+            \item Via separating \textbf{\color{blue}fork()} and \textbf{\color{blue}exec()}, we can manipulate various settings just before executing a new program and \textbf{\underline{make the IO redirection and pipe possible}}
+                \begin{itemize}
+                    \item IO redirection: "cat w3.c > newfile.txt"
+                    \item pipe: "echo hello world | wc"
+                \end{itemize}
+        \end{itemize}
+    \item pipe
+        \begin{itemize}
+            \item A communication method between two processes 
+        \end{itemize}
+    \item Process Tree
+        \begin{itemize}
+            \item pstree (to show the process tree)
+            \item ps (to show all processes)
+        \end{itemize} 
+    \item Limited Direct Execution
+        \begin{itemize}
+            \item The most efficient way to execute a process
+                \begin{itemize}
+                    \item \textbf{\color{blue}Direct execution (DE)} on CPU
+                \end{itemize}
+            \item Problems with DE
+                \begin{itemize}
+                    \item \textbf{\color{red}Restricted Operation}
+                        \begin{itemize}
+                            \item Protection 
+                        \end{itemize}
+                    \item \textbf{\color{red}Switching between processes}
+                        \begin{itemize}
+                            \item Control 
+                        \end{itemize}
+                \end{itemize}
+            \item Solution to \textbf{\color{red}Restricted Operation}
+                \begin{itemize}
+                    \item Hardware support
+                    \item Different execution modes
+                \end{itemize}
+            \item \textbf{\color{blue}User mode:} restricted, limited operations
+                \begin{itemize}
+                    \item Process start in user mode
+                \end{itemize}
+            \item \textbf{\color{red}Kernel mode:} priviliged, not restricted
+                \begin{itemize}
+                    \item OS starts in kernel mode
+                \end{itemize}
+            \item What if a process wants to perform some restricted operations?
+                \begin{itemize}
+                    \item \textbf{\color{blue}System calls:} Allow the kernel services to provide some functionalities to user programs.
+                \end{itemize}
+            \item A process starts in \textbf{\color{blue}user mode}
+            \item If it needs to perform a restricted operation, it calls a system call by executing a \textbf{\color{blue}trap instruction}
+            \item The state and registers of the calling process are stored, the system enters \textbf{\color{red}kernel mode}, OS completes the syscal work
+            \item \textbf{\color{blue}Return from syscal}, restore the states and registers of the process, and resume the execution of the process
+            \item Solution to \textbf{\color{red}Switching Between Processes}
+                \begin{itemize}
+                    \item \textbf{\color{blue}Cooperative approach}
+                    \item \textbf{\color{blue}Non-cooperative approach}
+                \end{itemize}
+            \item \textbf{\color{blue}Cooperative approach}
+                \begin{itemize}
+                    \item \textbf{Trust process to relinquish CPU and OS through traps}
+                        \begin{itemize}
+                            \item \textbf{System calls}
+                            \item \textbf{\color{red}Illegal operations, e.g., divided by zero}
+                        \end{itemize} 
+                    \item \textbf{\color{red}Issue: if no system call}
+                \end{itemize}
+            \item \textbf{\color{blue}Non-cooperative approach}
+                \begin{itemize}
+                    \item \textbf{The OS takes control}
+                    \item \textbf{OS obtains control periodically, e.g., timer interrupter}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\end{document}

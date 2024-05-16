@@ -1,0 +1,150 @@
+\section{Realisering og test}
+\label{realiseringOgTest}
+For spektralanalysen har python blitt brukt. Følgende kode tar inn en .wav fil og kjører en fouriertransformasjon på lyd-dataen i filen. Programmet tar i bruk 
+scipy for analyse og datainnlastning.
+
+\begin{pythoncode}
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy
+
+def plot_frequency_spectrum(wav_file):
+    sample_rate, data = scipy.io.wavfile.read(wav_file)
+    if len(data.shape) > 1:
+        data = data[:,0]
+
+    n = len(data)
+    audio_fft = scipy.fft.fft(data)
+    frequencies = np.linspace(0, sample_rate, n)
+    magnitude = np.abs(audio_fft)[:n // 2] * 2 / n
+
+    # Begrenser spektrumet til [0, ~2600]
+    plt.figure(figsize=(12, 6))
+    plt.plot(frequencies[:n // 16], magnitude[:n//16]) 
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Magnitude')
+    plt.title('Frequency Spectrum')
+    plt.grid(True)
+    plt.plot()
+\end{pythoncode}
+
+Resultatet av å kjøre programmet over på lydfilen er plottet i figur 6.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Bilder/Lydsignal_82.png}
+    \caption{Spektralanalyse av lydsignalet over hele tidsperioden til signalet}
+\end{figure}
+
+Vi ser et kraftig sprik i spektrumet ved $f = \SI{1480}{\hertz}$, som trolig er frekvensen til forstyrrelsen $w(t)$.
+
+\subsection{RLC båndstopp}
+\subsubsection{Realisering}
+Når frekvensen er kjent kan vi regne ut komponentverdiene vi trenger for filteret. En spole med induktans målt til $\SI{107}{\milli\henry}$ er bitt valgt,
+og vi kan da løse for kapasitansen $C$.
+
+\[
+    C = \frac{1}{(2\pi f_w)^2 L} \approx \frac{1}{(2\pi \SI{1480}{\hertz})^2 \SI{107}{\milli\henry}} \approx \SI{108}{\nano\farad}
+\]
+
+Den faktiske komponentverdien valgt var $\SI{110}{\nano\farad}$, og ble realisert med en $\SI{100}{\nano\farad}$ i parallell med en $\SI{10}{\nano\farad}$ kondensator.
+Velger så et $\SI{10}{\kilo\ohm}$ potensiometer for $R$.
+
+For to RLC filtre i serie har en annen spole målt til $\SI{104}{\milli\henry}$ blitt brukt. Samme kapasitansverdier er blitt valgt for realiseringen. Det samme gjelder 
+$\SI{10}{\kilo\ohm}$ potensiometeret.
+
+Op-ampen brukt i bufferet er en Texas Instruments LF353P wide-bandwidth op-amp \cite{lf353_opamp} blitt brukt. LF353 op-apmen godtar forsyningsspenniger mellom 
+$3.3-18$V på $V_{CC+}$ og $-3.3-18$V på $V_{CC-}$. 5V og -5V fra en Analog Discovery 2 har blitt brukt.
+
+Både RLC filteret og kaskadefilteret er vist implementert i figur 7.
+
+\begin{figure}[H]
+    \begin{subfigure}[c]{.49\linewidth}
+        \includegraphics[width=\textwidth]{Bilder/filter_realisering1.jpg}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{.49\linewidth}
+        \includegraphics[width=\textwidth]{Bilder/filter_realisering2.jpg}
+    \end{subfigure}
+    \caption{Realisering av et RLC filter}
+\end{figure}
+
+\subsubsection{Test}
+For testing av filteret ble en Analog Discovery 2 brukt. Den har mulighet til både å måle frekvensresponsen til systemet og muligheten til å spille av en lydfil og 
+kjøre spektralanalyse på utgangen fra systemet.
+
+Responsen til systemet ble målt ved forskjellige motstandsverdier $R_{pot}$, ved lav, $\sim \SI{1}{\kilo\ohm}$, halv, $\sim \SI{5}{\kilo\ohm}$ og maks motstand, $\sim \SI{10}{\kilo\ohm}$.
+Kaskadefilteret ble så målt ved begge potensiometerene ved $R = \SI{5}{\kilo\ohm}$ for sammenligning med kunn et RLC filter.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Bilder/spectrum_filter_low.png}
+    \caption{Frekvensrespons for RLC filteret ved lav potensiometer verdi}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Bilder/spectrum_filter_half.png}
+    \caption{Frekvensrespons for RLC filteret ved halv potensiometer verdi, $\sim \SI{5}{\kilo\ohm}$}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Bilder/spectrum_filter_max.png}
+    \caption{Frekvensrespons for RLC filteret ved maks potensiometer verdi, $\sim \SI{10}{\kilo\ohm}$}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Bilder/spectrum_filter2.png}
+    \caption{Frekvensrespons for to RLC filtre i serie ved halv potensiometer verdi, hver $\sim \SI{5}{\kilo\ohm}$}
+\end{figure}
+
+Vi observerer at systemet oppnår maksimal amplituderespons ved $f_w$ som ønsket, men at filteret ved $R = \SI{10}{\kilo\ohm}$ har en båndbredde 
+på $\sim \SI{20}{\kilo\ohm}$, fra omlag $\SI{100}{\hertz}$ til $\SI{20}{\kilo\hertz}$, altså omtrent lik hele bredden på spekteret vi er interessert i.
+Dette er åpenbart ikke ideelt. Ved kaskadekobling av to RLC filtre ser vi at båndbredden blir mindre, altså er det tenkelig at å legge til flere 
+filtre i kaskadekoblingen vil føre til et bedre resulterende filter for vår applikasjon.
+
+Når vi observerer spektrumet til systemet når lydsignalet $x(t)$ blir sendt gjennom kan vi observere at systemet klarer å dempe forstyrrelsen $f_w$ ved $\SI{1480}{\hertz}$,
+og at kaskadekoblingen demper de omliggende frekvensen mindre enn det enestående RLC filteret gjør, altså at $\hat{s}(t)$ beholder mer av det opprinnelige signalet $s(t)$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Bilder/spectrum_analysis_no_filter.png}
+    \caption{Spektralanalyse av utgangssignalet $\hat{s}(t)$ i blått og inngangssignalet $x(t)$ i gult ved ingen filtrering}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Bilder/spectrum_analysis_filter1.png}
+    \caption{Spektralanalyse av utgangssignalet $\hat{s}(t)$ i blått og inngangssignalet $x(t)$ i gult filtrert gjennom et RLC filter}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Bilder/spectrum_analysis_filter2.png}
+    \caption{Spektralanalyse av utgangssignalet $\hat{s}(t)$ i blått og inngangssignalet $x(t)$ i gult filtrert gjennom to RLC filter i serie med buffer}
+\end{figure}
+
+En mulig løsning for å forhindre den store båndbredden er ved å enten kaskadekoble flere filtre, eller eventulet benytte et aktivt filter, ettersom at de kan kompansere 
+for uønsket dempning av de andre frekvensene i spekteret.
+
+\subsection{Python IIR filter}
+Det digitale IIR filteret har også blitt implementert ved hjelp av scipy sitt signals bibliotek. Følgende kode sette opp et IIR notch filter ved en gitt notch frekvens,
+kvalitetsfaktor og samplerate, og benytter lfilter funksjonen for å påføre notchfilteret på innputt signalet $x(t)$.
+\begin{pythoncode}
+import numpy as np
+from scipy.io import wavfile
+from scipy.signal import iirnotch, lfilter
+
+b, a = iirnotch(notch_freq, quality_factor, sample_rate)
+filtered_data = np.apply_along_axis( \ 
+                    lambda d: lfilter(b, a, d), axis=0, arr=data)
+\end{pythoncode}
+
+Spektralanalysen av det filtrerte signalet $\hat{s}(t)$ plottet viser 
+at magnituden til spektrumet ved $f = \SI{1480}{\hertz}$ er blitt satt til 0, og vi har derfor til en mye større grad enn de analoge filtrene oppnådd den ønskede filter, karakteristikken.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth]{Bilder/Filtered_spectrum.png}
+    \caption{Spektralanalyze av det filtrerte lydklippet}
+\end{figure}

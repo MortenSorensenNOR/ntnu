@@ -1,0 +1,262 @@
+\documentclass[a4paper,11pt,english]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problems of Paging}
+\begin{itemize}
+    \item Page table is \textbf{\color{red} too big}
+    \item A linear page table array for 32-bit address space ($2^{32}$ bytes) and 4KB page ($2^{12}$ bytes)
+        \begin{itemize}
+            \item How many pages: $2^{20}$ pages
+            \item How much memory: \textbf{\color{red} 4MB} assuming each page-table entry is 4 bytes
+                \[
+                    2^{log_{32}(\SI{4}{\kilo\byte})} \cdot 4 = \SI{4}{\mega\byte}
+                \]
+            \item One page table for one process:
+                \begin{itemize}
+                    \item 100 processes: \textbf{\color{red} 400MB}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\section*{Smaller Page Table}
+\begin{itemize}
+    \item Naiive solution:
+        \begin{itemize}
+            \item \textbf{\color{blue} Bigger page size} -> \textbf{\color{blue} smaller page table}
+            \item 32-bit address space: 4KB page size -> 16KB
+            \item We can reduce the size by \textbf{\color{blue} 4x} to 1MB per page table
+        \end{itemize}
+    \item Page size: $2^x$, \textbf{\color{blue} 4KB-1GB}
+        \begin{itemize}
+            \item getconf PAGESIZE
+            \item 16KB for MacOS, 4KB for Linux
+        \end{itemize}
+    \item \textbf{\color{red} Problem: Internal fragmentation}
+        \begin{itemize}
+            \item \textbf{Do not use up the whole page}
+        \end{itemize}
+\end{itemize}
+
+\section*{Variable Page Size}
+\begin{itemize}
+    \item TLB has \textbf{\color{blue} limited size}
+        \begin{itemize}
+            \item 16-512
+            \item Multiple-level implementation, like cache
+        \end{itemize}
+    \item Smaller page size -> more TLB entries
+        \begin{itemize}
+            \item A process of 64KB, \textbf{\color{blue} 4Kb page size}
+                \begin{itemize}
+                    \item \textbf{16 TLB entries}
+                \end{itemize}
+            \item \textbf{\color{blue} 1MB page size}
+                \begin{itemize}
+                    \item 1 TLB entry
+                \end{itemize}
+        \end{itemize}
+    \item Veriable page size
+        \begin{itemize}
+            \item This depends on hardware and OS
+            \item Windows 10 supports 4KB and 2MB
+            \item LInux has default page size (4KB) and huge page
+        \end{itemize}
+\end{itemize}
+
+\section*{Paging+Segmentation}
+\begin{itemize}
+    \item Hybrid Approach: Paging and Segments
+    \item Recall: \textbf{\color{blue} Segmentation}
+        \begin{itemize}
+            \item Different registers for each segment
+        \end{itemize}
+    \item Instead of one \textbf{\color{red} single} page table for one process, 
+        \textbf{\color{blue} one page table for each logical segment} 
+    \item \textbf{\color{blue} Base register} to point to \textbf{\color{blue} the physical address of the page table}
+    \item \textbf{\color{blue} Limit register} to determine \textbf{\color{blue} the size of the segment, i.e.,} how many valid pages the segment has
+    \item 32-bit virtual address space with 4KB pages
+        \begin{itemize}
+            \item 12-bit for offset
+        \end{itemize}
+    \item 3 segments: code, heap, stack 
+    \item \textbf{\color{red} Problems: page table waste for sparsely-used heap}
+    \item \textbf{\color{red} Probmels: external fragmentation}
+\end{itemize}
+
+\section*{Multi-Level paging}
+\begin{itemize}
+    \item Large page table is \textbf{\color{blue} contiguous} and may have some \textbf{\color{red} unused pages}
+    \item Allocate page table in a \textbf{\color{blue} non-contiguous manner}
+    \item Break the page table into pages, i.e., page the page tables
+    \item Create \textbf{\color{blue} multiple leves of page tables;} outer level "\textbf{\color{blue} page directory}"
+        \begin{itemize}
+            \item \textbf{\color{blue} Page directory} to track wheter a page of the page table is valid
+        \end{itemize}
+    \item If an entire page of page table entries is \textbf{\color{red} invalid}, \textbf{\color{red} no allocation}  
+    \item A virtual address of 32-bit with 4KB page size is divided into
+        \begin{itemize}
+            \item a page number consisting of 20 bits
+            \item a page offset consisting of 12 bits
+        \end{itemize}
+    \item A page table entry is 4 bytes
+    \item Since the page table is paged, the page number is further divided into
+        \[
+            \underbrace{[\:\:\:\:p_1\:\:\:\:][\:\:\:\:p_2\:\:\:\:][\:\:\:\:\:\:\:d\:\:\:\:\:\:\:]}_{\text{10 \hphantom{0.5cm} 10 \hphantom{0.55cm} 12 \hphantom{|}}}
+        \]
+        where $p_1$ is an index into the page directory, and $p_2$ is the apge table index
+    \item 16KB address space, 14-bit address
+    \item 64-byte ($2^6$) page size
+    \item page table entry 4 bytes
+    \item Problem with 2 levels: \textbf{\color{red} page directories may not fit in a page}
+    \item Split page directories into pieces
+    \item Multi-level page directories and each one can fit in a page
+    \item 30-bit address space, 512-byte page size, 4 byte PTE
+    \item XV6 uses 3 or 4 level MLP (depending on virtual address length)
+\end{itemize}
+
+\section*{Page Swapping}
+\begin{itemize}
+    \item Motivation:
+        \begin{itemize}
+            \item Processes spend the \textbf{\color{blue} majority of time} in \textbf{\color{blue} small portion of code}
+                \begin{itemize}
+                    \item The 90/10 rule: approximately \textbf{\color{blue} 90\%} of time is spent in \textbf{\color{blue} 10\%} of the code
+                \end{itemize}
+            \item Process only uses a \textbf{\color{blue} small amount} of the address space (pages) at any moment
+            \item Only small amount of address space (pages) need to be resident in physical memory
+        \end{itemize}
+    \item Hardware:
+        \begin{itemize}
+            \item \textbf{\color{blue} Memory: fast}, but \textbf{\color{red} small}, 2-100GB/s
+            \item \textbf{\color{red} Disk: slow}, but \textbf{\color{blue} large}, 80-160 MB/s (HDD) 500MB/s (SSD)
+        \end{itemize}
+    \item Idea:
+        \begin{itemize}
+            \item Process can run with \textbf{\color{blue} only some of its pages} in memory
+            \item Only keep \textbf{\color{blue} the actively used pages} in memory
+            \item Keep \textbf{\color{red} unreferenced pages} on disk
+        \end{itemize}
+    \item Swapping makes it possible for \textbf{\color{blue} the total physical address space of all processes to exceed} the real physical memory of the system
+    \item Reserve some space on the disk for moving pages back and forth --- \textbf{\color{blue} Swapping space}
+    \item OS keeps track of the swap space, in \textbf{\color{orange} page-sized unit} 
+    \item How to know where a page lives?
+        \begin{itemize}
+            \item \textbf{\color{blue} Present bit/Valid bit}
+            \item \textbf{\color{blue} 1 indicates in-memory}
+            \item \textbf{\color{red} 0 indicates in-disk}
+        \end{itemize}
+    \item \textbf{\color{red} Page fault:} if present bit in PTE is 0, when accessing a page
+\end{itemize}
+
+\section*{Page Swapping Policies}
+\begin{itemize}
+    \item The objective of page swapping policies: to minimize the number of \textbf{\color{red} page faults} (\textbf{\color{red} cache misses})
+    \item Two decisions:
+        \begin{itemize}
+            \item \textbf{\color{blue} Page selection}
+                \begin{itemize}
+                    \item \textbf{\color{blue} When} should a page on disk be brought into memory?
+                \end{itemize}
+            \item \textbf{\color{blue} Page replacement}
+                \begin{itemize}
+                    \item \textbf{\color{blue} When} in-memory pages should be evicted to disk?
+                \end{itemize}
+        \end{itemize}
+    \item \textbf{\color{blue} Demand paging:}
+        \begin{itemize}
+            \item Load page only when it is needed (\textbf{\color{blue} demand})
+            \item Less I/O, less memory
+            \item Problems: \textbf{\color{red} High page fault cost}
+        \end{itemize}
+    \item \textbf{\color{blue} Prefetch:}
+        \begin{itemize}
+            \item Load page before referenced
+            \item OS predicts future accessed pages (oracle) and brings them into memory early
+            \item Works well for some access patterns, like sequential pages
+        \end{itemize}
+\end{itemize}
+
+\section*{Copy-On-Write Paging}
+\begin{itemize}
+    \item \textbf{\color{blue} Copy the page} only if a process writes to it (\textbf{\color{blue} demand})
+        \begin{itemize}
+            \item Process creation \textbf{\color{blue} fork() + exec()}
+        \end{itemize}
+\end{itemize}
+
+\section*{Page Replacement}
+\begin{itemize}
+    \item When does page replacement happen?
+    \item \textbf{\color{blue} Lazy approach}
+        \begin{itemize}
+            \item If memory is \textbf{\color{red} entirely full}, the the OS repalces a page to make room for some other page
+            \item This is \textbf{\color{red} unrealistic}
+            \item The OS usually needs to \textbf{\color{blue} reserve some room} for the new pages
+        \end{itemize}
+    \item \textbf{\color{blue} Swap Daemon, Page Daemon}
+        \begin{itemize}
+            \item There are fewer than \textbf{\color{red} LW (low watermark)} pages available, a background thread that is responsible for freeing memory is activated 
+            \item The tread avicts page until there are \textbf{\color{blue} HW (high watermark)} pages available
+        \end{itemize}
+    \item 
+\end{itemize}
+
+\section*{Page Replacement Policies}
+\begin{itemize}
+    \item \textbf{\color{blue} Average memory access time (AMAT)}
+        \[
+            AMAT = P_{Hit} \times T_M + P_{Miss} \times T_D 
+        \]
+    where $P_{Hit} + P_{Miss} = 1$.
+    \item Optimal replacement:
+        \begin{itemize}
+            \item Replacement the page which is not used for the \textbf{\color{blue} longest time in the future}
+            \item \textbf{\color{blue} Pros: Minimal number of page faults}
+            \item \textbf{\color{red} Cons: impractical, need to predict the future}
+            \item \textbf{Can be used as a comparison baseline}
+        \end{itemize}
+    \item FIFO:
+        \begin{itemize}
+            \item Replace the page which is loaded into memory first
+            \item \textbf{\color{blue} Pros: Fair, easy to implement}
+            \item \textbf{\color{red} May evict useful pages}
+        \end{itemize}
+    \item Least-recently-used (LRU): (Predict using history)
+        \begin{itemize}
+            \item Replace the page which has not been used for the longest time
+            \item \textbf{\color{blue} Pros: Approximate optimal replacement}
+            \item \textbf{\color{red} Cons: Difficult to implement}
+        \end{itemize}
+    \item Other pilicies:
+        \begin{itemize}
+            \item \textbf{\color{blue} Random (RAND), Least-frequently used (LFU)}
+        \end{itemize}
+    \item The performance of replacement policies also depenfs on workloads
+        \begin{itemize}
+            \item mRandom workload: LRU, RAND and FIFO \textbf{\color{red} no difference}
+            \item 80-20 workload: \textbf{\color{blue} LRU} is better than RAND and FIFO
+            \item Looping sequential workload: \textbf{\color{blue} RAND} is better than LRU and FIFO
+        \end{itemize}
+    \item What happens to performance, if adding more physical memory
+        \begin{itemize}
+            \item LRU and RAND have frwer or same number of page faults
+            \item FIFO usually has fewer page faults, but Belady's anomaly -> \textbf{\color{red}more page faults}
+                \begin{itemize}
+                    \item \textbf{Sequence: ABCDABEABCDE}
+                    \item \textbf{\color{red} 3 frames vs. 4 frames}
+                    \item \textbf{\color{red} 9 misses vs. 10 misses}
+                \end{itemize}
+        \end{itemize}
+    \item How to implement LRU 
+        \begin{itemize}
+            \item \textbf{\color{red} Software Perfect LRU}: a data structure to track reference time of all pages
+            \item \textbf{\color{red} Hardware Perfection LRU}: add a timestamp register to each page
+            \item \textbf{\color{blue} Practical LRU}: approximate implementation, find an old page, but not necessarily the oldest one;
+        \end{itemize}
+\end{itemize}
+
+\end{document}

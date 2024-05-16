@@ -1,0 +1,491 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+\input{Header/innholdsfortegnelse.tex}
+\newpage
+
+\newpage
+\section{Tema 1.}
+\begin{question}
+    \textbf{Oppgave:}
+        Fortell om formål og virkemåte for dette systemet. Start gjerne med definisjon av arbeidspunkt
+        og hvorfor det er viktig.
+
+        \begin{figure}[H]
+            \centering 
+            \includegraphics[width=0.3\textwidth]{Bilder/1.png}
+        \end{figure}
+\end{question}
+
+\newpage
+\section{Tema 2.}
+\begin{question}
+    \textbf{Oppgave:}
+        Fortell om formål og virkemåte for dette systemet. Start gjerne med definisjon av arbeidspunkt
+        og hvorfor det er viktig.
+
+        \begin{figure}[H]
+            \centering 
+            \includegraphics[width=0.3\textwidth]{Bilder/2.png}
+        \end{figure}
+\end{question}
+
+\newpage
+\section{Tema 3.}
+\begin{question}
+    \textbf{Oppgave:}
+        Fortell om formål og virkemåte for dette systemet. Start gjerne med definisjon av arbeidspunkt
+        og hvorfor det er viktig.
+        
+        \begin{figure}[H]
+            \centering 
+            \includegraphics[width=0.3\textwidth]{Bilder/3.png}
+        \end{figure}
+\end{question}
+
+\newpage
+\section{Tema 4.}
+\begin{question}
+    \textbf{Oppgave:}
+        Hvordan vil du gå fram for å finne frekvensresponsen til dette systemet?
+        Om inngangssignalet er $x_1(t)$ eller $x_2(t)$, hvordan er de respektive
+        utgangssignalene i forhold til hverandre?
+        
+        \begin{figure}[H]
+            \centering 
+            \begin{minipage}{0.3\textwidth}
+                \includegraphics[width=\linewidth]{Bilder/4.png}
+            \end{minipage}
+            \begin{minipage}{0.3\textwidth}
+                \includegraphics[width=\linewidth]{Bilder/4_2.png}
+            \end{minipage}
+        \end{figure}
+\end{question}
+For å finne frekvensresponsen til systemet kan vi se på forholdet mellom inn 
+og utgangssignalet
+\[
+    H = \frac{v_2(t)}{v_1(t)}
+\]
+Bruker vi reglene for regning med impedanser får vi at
+\[
+    H(\omega) = \frac{1}{v_1(t)} \cdot \frac{v_1(t) \cdot \frac{1}{j\omega C}}{R + j\omega L + \frac{1}{j\omega C}} = \frac{\frac{1}{j\omega C}}{R + j\omega L + \frac{1}{j\omega C}}
+\]
+
+Forkorter uttrykket og får at
+\[
+    H(\omega) = \frac{1}{j\omega RC - \omega^2 LC + 1}
+\]
+
+Observerer at signalet $x_2(t)$ har tilsynelatende dobbel så stor frekvens som $x_1(t)$. 
+Ser fra uttrykket over (kan utledes) at amplituderesponsen til systemet for høyere frekvenser 
+vil gi svakere utslag, altså er systemet et lavpassfilter. Vi vet derfor at utgangsspenningen til systemet 
+når $x_2(t)$ blir sendt gjennom vil være lavere enn for $x_1(t)$.
+
+\newpage
+\section{Tema 5.}
+\begin{question}
+    \textbf{Oppgave:}
+        Hvordan vil du gå fram for å finne frekvensresponsen til dette systemet?
+        Om inngangssignalet er $x_1(t)$ eller $x_2(t)$, hvordan er de respektive
+        utgangssignalene i forhold til hverandre?
+                
+        \begin{figure}[H]
+            \centering 
+            \begin{minipage}{0.3\textwidth}
+                \includegraphics[width=\linewidth]{Bilder/5.png}
+            \end{minipage}
+            \begin{minipage}{0.3\textwidth}
+                \includegraphics[width=\linewidth]{Bilder/5_2.png}
+            \end{minipage}
+        \end{figure}
+\end{question}
+For å finne frekvensresponsen til systemet kan vi se på forholdet mellom inn 
+og utgangssignalet
+\[
+    H = \frac{v_2(t)}{v_1(t)}
+\]
+Bruker vi reglene for regning med impedanser får vi at
+\[
+    H(\omega) = \frac{1}{v_1(t)} \cdot \frac{v_1(t) \cdot R}{R + j\omega L + \frac{1}{j\omega C}} = \frac{R}{R + j\omega L + \frac{1}{j\omega C}}
+\]
+
+Ser fra uttrykket over at vi får en ressonans når vinkelfrekvensen $\omega$ er slik at 
+\[
+    j\omega L + \frac{1}{j\omega C} = 0
+\]
+Da vil amplituderesponsen til systemet være $H(\omega_0) = \frac{R}{R} = 1$, altså er dette 
+et båndpassfilter. Ressonansfrekvensen vil være avhengig av komponentverdiene R og C. Det er derfor 
+ikke mulig å avgjøre, uten kjente komponentverdier, hvordan amplituderesponsen vil oppføre seg for 
+inngangssignalene $x_1(t)$ og $x_2(t)$ i forhold til hverandre. 
+
+\newpage
+\section{Tema 6.}
+\begin{question}
+    \textbf{Oppgave:}
+        Hvordan vil du gå fram for å finne frekvensresponsen til dette systemet?
+        Om inngangssignalet er $x_1(t)$ eller $x_2(t)$, hvordan er de respektive
+        utgangssignalene i forhold til hverandre?
+                
+        \begin{figure}[H]
+            \centering 
+            \begin{minipage}{0.3\textwidth}
+                \includegraphics[width=\linewidth]{Bilder/6.png}
+            \end{minipage}
+            \begin{minipage}{0.3\textwidth}
+                \includegraphics[width=\linewidth]{Bilder/6_2.png}
+            \end{minipage}
+        \end{figure}
+\end{question}
+For å finne frekvensresponsen til systemet kan vi se på forholdet mellom inn 
+og utgangssignalet
+\[
+    H = \frac{v_2(t)}{v_1(t)}
+\]
+Bruker vi reglene for regning med impedanser får vi at
+\[
+    H(\omega) = \frac{1}{v_1(t)} \cdot \frac{v_1(t) \cdot (j\omega L + \frac{1}{j\omega C})}{R + j\omega L + \frac{1}{j\omega C}} = \frac{j\omega L + \frac{1}{j\omega C}}{R + j\omega L + \frac{1}{j\omega C}}
+\]
+
+Forkorter uttrykket og får at
+\[
+    H(\omega) = \frac{1 - \omega^2LC}{j\omega RC - \omega^2 LC + 1}
+\]
+
+Systemet er et båndstoppfilter grunnet ressonansfrekvens får utgangssignalet til å bli 0.
+Ukjente parameterverdier gjør det umulig å si hvordan de to inngangssignalene påvirker utgangssignalet.
+
+\newpage
+\section{Tema 7.}
+\begin{question}
+    \textbf{Oppgave:}
+        Hvordan vil du gå fram for å finne frekvensresponsen til dette systemet?
+        Om inngangssignalet er $x_1(t)$ eller $x_2(t)$, hvordan er de respektive
+        utgangssignalene i forhold til hverandre?
+                
+        \begin{figure}[H]
+            \centering 
+            \begin{minipage}{0.3\textwidth}
+                \includegraphics[width=\linewidth]{Bilder/7.png}
+            \end{minipage}
+            \begin{minipage}{0.3\textwidth}
+                \includegraphics[width=\linewidth]{Bilder/7_2.png}
+            \end{minipage}
+        \end{figure}
+\end{question}
+For å finne frekvensresponsen til systemet kan vi se på forholdet mellom inn 
+og utgangssignalet
+\[
+    H = \frac{v_2(t)}{v_1(t)}
+\]
+Bruker vi reglene for regning med impedanser får vi at
+\[
+H(\omega) = \frac{1}{v_1(t)} \cdot \frac{v_1(t) \cdot j\omega L}{R + j\omega L + \frac{1}{j\omega C}} = \frac{j\omega L}{R + j\omega L + \frac{1}{j\omega C}}
+\]
+
+Systemet vil oppføre seg som et høypassfilter ettersom at spolen vil oppføre seg som en ideell leder når inngangsfrekvensen 
+går mot uendelig. Derfor vil utgangssignalet ha større styrke for $x_2$ enn for $x_1$.
+
+\newpage
+\section{Tema 8.}
+\begin{question}
+    \textbf{Oppgave:}
+        Hvordan vil du gå fram for å finne frekvensresponsen til dette systemet?
+        Om inngangssignalet er $x_1(t)$ eller $x_2(t)$, hvordan er de respektive
+        utgangssignalene i forhold til hverandre?
+
+        \begin{figure}[H]
+            \centering 
+            \begin{minipage}{0.3\textwidth}
+                \includegraphics[width=\linewidth]{Bilder/8.png}
+            \end{minipage}
+            \begin{minipage}{0.3\textwidth}
+                \includegraphics[width=\linewidth]{Bilder/8_2.png}
+            \end{minipage}
+        \end{figure}
+\end{question}
+For å finne frekvensresponsen til systemet kan vi se på forholdet mellom inn 
+og utgangssignalet
+\[
+    H = \frac{v_2(t)}{v_1(t)}
+\]
+Bruker vi reglene for regning med impedanser får vi at
+\[
+    H(\omega) = \frac{1}{v_1(t)} \cdot v_1(t) \frac{\frac{L/C}{j\omega L + \frac{1}{j\omega C}}}{R + \frac{L/C}{j\omega L + \frac{1}{j\omega C}}} = \frac{1}{\frac{R(j\omega L + \frac{1}{j\omega C})}{L/C} + 1} = \frac{1}{R(j\omega C + \frac{1}{j\omega L}) + 1}
+\]
+
+Ser vi på uttrykket over får vi at uttrykket blir 
+\[
+    H(\omega) = \frac{1}{R \cdot 0 + 1}
+\]
+når $\omega$ er slik at
+\[
+    j\omega C + \frac{1}{j\omega L} = 0
+\]
+Dette er derfor et båndpassfilter. 
+
+\newpage
+\section{Tema 9.}
+\begin{question}
+    \textbf{Oppgave:}
+        Gi et eksempel på et båndpassfilter. Hvordan defineres Q-
+        verdien til dette, og hvordan kan du finne den?
+\end{question}
+
+\newpage
+\section{Tema 10.}
+\begin{question}
+    \textbf{Oppgave:}
+        Et signal er forstyrret av to pipetoner, hver med kjente
+        frekvenser $f_1$ og $f_2$. Forklar hvordan et system kan designes
+        som reduserer forstyrrelsen men beholder resten av
+        signalet så godt som mulig.
+\end{question}
+
+Vi kan designe et systemet som kaskadekobler to forholdvis skarpe, båndstoppfiltre, et med en senterfrekvens 
+på $f_1$ og den andre med senterfrekvens $f_2$. Dette kan oppnås ved å koble utgangen av det første filteret 
+gjennom et buffer, før det går inn i det neste filteret. Slik kan vi forsikre oss at inngangsimpedansen til filter 2 er 
+mye større enn utgangsimpedansen til filter 1.
+
+\newpage
+\section{Tema 11.}
+\begin{question}
+    \textbf{Oppgave:}
+        Et system har som inngang et sinusformet signal med
+        frekvens f. Forklar hvordan man kan konstruere systemet
+        slik at det har som utgang et tilnærmet sinusformet signal
+        med frekvens 3f.
+\end{question}
+
+Overordnet kan vi oppnå dette ved å først sende inngangssignalet med frekvens $f$ gjennom et ulineært system, slik som 
+en diode seriekoblet med en motstand til ground, og så sende spenningen målt over motstanden 
+gjennom et båndpassfilter med senterfrekvens $3f$ og båndbredde mindre enn $f$. Det ulineære systemet beskrevet 
+vil sende ut et signal med samme periode som inngangssignalet, $\frac{1}{f}$, men vil i tillegg inneholde overharmoniske frekvenskomponenter 
+ved $2f$, $3f$, $4f$, osv. Ved å ha et skarpt båndpassfilter som kunn slipper gjennom frekvenskomponenten ved $3f$, får vi det ønskede 
+sinusformede utgangssignalet med frekvens $3f$.
+
+\newpage
+\section{Tema 12.}
+\begin{question}
+    \textbf{Oppgave:}
+        Det skal designes et synkront digitalt system drevet av et klokkesignal CLK.
+        Utgangen av systemet skal være en sekvens av binære tall. Sekvensen
+        starter med verdi $N_1$ og forsetter så periodisk: $N_1, N_1 + D, N_1, + 2D, N_1, +
+        3D, \dots N_2$, hvorpå sekvensen repeteres uten stans.
+
+        Eksempel: $N_1 = 22, D = 3, N_2 = 34$ vil gi sekvensen
+        22, 25, 28, 31, 34, 22, 25, 28, 31, 34, 22, 25, ...
+        Størrelsene $N_1$ , $D$ og $N_2$ vil være forskjellig for hver kandidat, og blir
+        oppgitt på forberedelsen.
+        Kandidaten skal gi eksempel på hvordan et slikt system kan designes.
+\end{question}
+I verilog:
+\begin{tcolorbox}[colback=white, colframe=white!55!black]
+\begin{minted}{verilog}
+module COUNTER
+    #(paramter OUTPUT_WIDTH = log2(N))
+     (input CLK,
+      output [0:OUTPUT_WIDTH] o_num);
+
+  paramter N_1 = 22;
+  paramter D = 3;
+  paramter N_2 = 34;
+
+  reg [0:OUTPUT_WIDTH] num = N_1;
+
+  always @(posedge clk) begin
+    if (num >= N_2) begin
+      num <= N_1;
+    end else begin
+      num <= num + D;
+    end
+  end
+
+  assign o_num = num;
+endmodule
+\end{minted}
+\end{tcolorbox}
+
+\newpage
+\section{Tema 13.}
+\begin{question}
+    \textbf{Oppgave:}
+        Et 7 segment-display består av 7 strek-formede lysdioder hvert styrt av logiske
+        signal $A, B, C, D, E, F, G$. Slik at når for eksempel $A$ er høy, vil den tilhørende
+        lysdioden merket "A" lyse. Det skal designes et synkront digitalt system drevet av et
+        klokkesignal CLK som viser fra 0 til 9 i en repeterende sekvens, altså $0, 1, 2, 3, 4, 5,
+        6, 7, 8, 9, 0, 1, 2, \dots$
+
+        \begin{figure}[H]
+            \centering 
+            \includegraphics[width=0.3\textwidth]{Bilder/13.png}
+        \end{figure}
+\end{question}
+\begin{tcolorbox}[colback=white, colframe=white!55!black]
+\begin{minted}{verilog}
+module COUNTER
+     (input CLK,
+      output [0:OUTPUT_WIDTH] o_num);
+
+  always @(posedge clk) begin
+  end
+
+endmodule
+\end{minted}
+\end{tcolorbox}
+
+\newpage
+\section{Tema 14.}
+\begin{question}
+    \textbf{Oppgave:}
+        Vi vil regulere amplituden til et sinussignal ved hjelp av en nivåregulator. Vis og
+        forklar virkemåten til forskjellige systemer som kan gjøre dette.
+
+        \begin{figure}[H]
+            \centering 
+            \includegraphics[width=0.75\textwidth]{Bilder/14.png}
+        \end{figure}
+\end{question}
+
+\newpage
+\section{Tema 15.}
+\begin{question}
+    \textbf{Oppgave:}
+        Vi vil lage et elektronisk system som oppfører seg som en terning. Forklar hvordan
+        et slikt system kan designes.
+\end{question}
+
+\newpage
+\section{Tema 16.}
+\begin{question}
+    \textbf{Oppgave:}
+        Et forslag til et system som kan fungere som en frekvensmultiplikator er vist under.
+        Foreslå realiseringer for det ulineære systemet og til båndpassfilteret og forklar
+        virkemåten.
+
+        \begin{figure}[H]
+            \centering 
+            \includegraphics[width=0.75\textwidth]{Bilder/16.png}
+        \end{figure}
+\end{question}
+
+\newpage
+\section{Tema 17.}
+\begin{question}
+    \textbf{Oppgave:}
+        Under er en modell for en ideell forsterker koblet til en kilde og en last. Forklar
+        funksjonen og betydningen til de forskjellige elementene under.
+
+        \begin{figure}[H]
+            \centering 
+            \includegraphics[width=0.8\textwidth]{Bilder/17.png}
+        \end{figure}
+\end{question}
+
+\newpage
+\section{Tema 18.}
+\begin{question}
+    \textbf{Oppgave:}
+        Systemene i figurene under blir påtrykt sinussignal. Beskriv utgangssignalene for
+        hvert system.
+
+        \begin{figure}[H]
+            \centering 
+            \includegraphics[width=0.4\textwidth]{Bilder/18.png}
+        \end{figure}
+\end{question}
+
+Vi har at alle systemene kan forenkles til følgende form 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.35\textwidth]{Bilder/18_sol_1.png}
+\end{figure}
+
+Definerer så en formel for frekvensresponsen til alle systemene på formen
+\[
+    H = \frac{v_2(t)}{v_1(t)} = \frac{1}{v_1(t)} \cdot \frac{v_1(t)}{Z_1 + Z_2} \cdot Z_2 = \frac{Z_2}{Z_1 + Z_2}
+\]
+
+Vi kan så beskrive de tre systemene ved følgende frekvensresponser:
+\begin{enumerate}[label=\Roman*)]
+    \item 
+        \[
+            H(\omega) = \frac{j \omega L}{R + j \omega L}
+        \]
+    \item 
+        \[
+            H(\omega) = \frac{\frac{1}{j \omega C}}{R + \frac{1}{j \omega L}} = \frac{1}{j\tau\omega + 1}
+        \]
+    \item 
+        \[
+            H(\omega) = \frac{R}{R + \frac{1}{j \omega L}} = \frac{j\tau\omega}{j\tau\omega + 1}
+        \]
+\end{enumerate}
+
+Vi kan videre hente ut amplituderesponsen
+\usetagform{roman}
+\begin{equation}
+    \left|H(\omega)\right| = \left|\frac{j \omega L}{R + j \omega L}\right| = \frac{\omega L}{\sqrt{L^2\omega^2 + R^2}}
+\end{equation}
+
+\begin{equation}
+    \left|H(\omega)\right| = \left|\frac{1}{j\tau\omega + 1}\right| = \frac{1}{\sqrt{\tau^2\omega^2 + 1}}
+\end{equation}
+
+\begin{equation}
+    \left|H(\omega)\right| = \left|\frac{j\tau\omega}{j\tau\omega + 1}\right| = \frac{\tau\omega}{\sqrt{\tau^2\omega^2 + 1}}
+\end{equation}
+
+\setcounter{equation}{0} 
+og faseresponsen ved å først forkorte
+\begin{equation}
+    H(\omega) = \frac{j\omega L}{R + j\omega L} = \frac{(j\omega L)(R - j\omega L)}{R^2 + \omega^2L^2} = \frac{\omega^2L^2}{R^2+\omega^2L^2} + j\frac{R\omega L}{R^2 + \omega^2L^2}
+\end{equation}
+
+\begin{equation}
+    H(\omega) = \frac{1}{j\tau\omega + 1} = \frac{1-j\tau\omega}{1 + \tau^2\omega^2} = \frac{1}{1 + \tau^2\omega^2} - j\frac{\tau\omega}{1 + \tau^2\omega^2} 
+\end{equation}
+
+\begin{equation}
+    H(\omega) = \frac{j\tau\omega}{j\tau\omega + 1} = \frac{(j\tau\omega)(1-j\tau\omega)}{1 + \tau^2\omega^2} = \frac{\tau^2\omega^2}{1 + \tau^2\omega^2} + j\frac{\tau\omega}{1 + \tau^2\omega^2} 
+\end{equation}
+
+\setcounter{equation}{0} 
+og så få at 
+\begin{equation}
+    \angle H(\omega) = \tan^{-1}{\left(\frac{R \omega L}{\omega^2L^2}\right)} = \tan^{-1}{\left(\frac{R}{\omega L}\right)}
+\end{equation}
+
+\begin{equation}
+    \angle H(\omega) = \tan^{-1}{\left(-\frac{\tau\omega}{1}\right)} = \tan^{-1}{(-\tau\omega)}
+\end{equation}
+
+\begin{equation}
+    \angle H(\omega) = \tan^{-1}{\left(\frac{\tau\omega}{\tau^2\omega^2}\right)} = \tan^{-1}{\left(\frac{1}{\tau\omega}\right)}
+\end{equation}
+
+\newpage
+\section{Tema 19.}
+\begin{question}
+    \textbf{Oppgave:}
+        Ta utgangspunkt i transistorforsterkerkretsen med tilhørende transistorkarateristikk og
+        inngangssignal $v_1$. 
+        Velg en fornuftig lastlinje og tegn inn i transistorkarakteristikken. Velg også et fornuftig
+        arbeidspunkt. Bruk det som utgangspunkt for å forklare hvordan du kan finne
+        overføringskurven, forsterkerkarakteristikken og utgangssignalet.
+        Det er ikke nødvendig å gjøre utregninger.
+
+        \begin{figure}[H]
+            \centering 
+            \begin{minipage}{0.45\textwidth}
+                \includegraphics[width=\linewidth]{Bilder/19.png}
+            \end{minipage}
+            \begin{minipage}{0.45\textwidth}
+                \includegraphics[width=\linewidth]{Bilder/19_2.png}
+            \end{minipage}
+        \end{figure}
+\end{question}
+
+\end{document}

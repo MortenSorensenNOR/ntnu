@@ -1,0 +1,41 @@
+\section{Prinsipiell løsning}
+\label{prinsipiellLoesning}
+ 
+
+%Her kan du skrive om prinsipiell løsning
+Systemet kan representeres slik som i figur 1. En signalkilde
+med utgangsmotstand $R_k$ sender et signal $v_1(t)$ gjennom nivåregulatoren, som sender ut 
+et dempet/forsterket signal $v_2(t)$ gjennom en last med lastmotstand $R_L$. Rent matematisk 
+blir likningen til systemet
+\[
+    v_2(t) = Av_1(t)
+\]
+der $A > 1$ fører til en forsterkning av inngangssignalet $v_1$, 
+og $A < 1$ fører til en dempning av signalet. Siden dette designet utelukkende tar for seg demping 
+av signaler, er kunn $A < 1$ relevant.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.2\textwidth]{Bilder/spenningsdeler.png}
+    \caption{Variabel demping realisert med potensiometer \cite{teknot}}
+    \label{fig:spenningsdeler}
+\end{figure}
+
+En mulig prinsipiell løsning for nivåregulatoren er ved bruk av en variabel spenningsdeler med potensiometer (figur 2.).
+Ved å justere motstandsverdien $R$ til potensiometeret, endres spenningsfallet $v_2$ (likning 1), der $0V \leq |v_2| \leq |v_1|$.
+
+\begin{equation}
+    v_2 = \frac{R + R_2}{R + R_1 + R_2}v_1
+\end{equation}
+
+Fra likning 1. får vi at dempningsfaktoren
+\[
+    A = \frac{R + R_2}{R + R_1 + R_2}
+\]
+Designsesifikasjonen sier at dempningsfaktoren $A$ skal være slik at
+$A_{max} \leq A \leq A_{min}$, oppgitt i desibel. Det følger da for de to
+ekstremene at
+\begin{align}
+    &A = A_{min}: \hspace{2.25cm} A = 20 \cdot \lg{\left(\frac{R + R_2}{R + R_1 + R_2}\right)} \hspace{3.5cm}\\ 
+    &A = A_{max}: \hspace{2.25cm} A = 20 \cdot \lg{\left(\frac{R_2}{R_1 + R_2}\right)} \hspace{3.5cm} 
+\end{align}

@@ -1,0 +1,265 @@
+\documentclass[a4paper,11pt,english]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\textbf{\color{blue} }
+
+\section*{I/O Devices}
+\begin{itemize}
+    \item \textbf{\color{blue} IO} and \textbf{\color{blue} computing} are two 
+        components of a computer
+        \begin{itemize}
+            \item I/O is \textbf{\color{blue} an important part of computing systems}
+        \end{itemize}
+    \item I/O devices
+        \begin{itemize}
+            \item HW can easily let us plug in diverse devices
+            \item OS can efficiently manage and interact with different devices
+        \end{itemize}
+    \item Two trends:
+        \begin{itemize}
+            \item Standardization of software and hardware interfaces
+            \item New types of I/O devices
+        \end{itemize}
+    \item Diversity of I/O devices
+        \begin{itemize}
+            \item \textbf{\color{blue} Storage}: Disks, SSDs
+            \item \textbf{\color{blue} Transmission}: Network connections, Bluetooth
+            \item \textbf{\color{blue} Human-interface}: Screen, keyboard, mouse, mic, speaker
+        \end{itemize}
+\end{itemize}
+
+\section*{I/O Hardware}
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.45\textwidth]{Bilder/hardware.png}
+\end{figure}
+
+\begin{itemize}
+    \item A \textbf{\color{blue} hierarchical structure}
+    \item Memory bus:
+        \begin{itemize}
+            \item 60GB/s
+        \end{itemize}
+    \item PCI bus:
+        \begin{itemize}
+            \item 8-10GB/s
+        \end{itemize}
+    \item Peripheral I/O bus
+        \begin{itemize}
+            \item 100-500MB/s
+        \end{itemize}
+    \item \textbf{\color{blue} Port:} Connection point for devices
+        \begin{itemize}
+            \item USB, HDMI, DP
+        \end{itemize}
+    \item \textbf{\color{blue} Bus:} Shared direct access
+        \begin{itemize}
+            \item PCIe, expansion bus, SATA 
+        \end{itemize}
+    \item \textbf{\color{blue} Controller:} electronics that operate port, bus, device
+        \begin{itemize}
+            \item Contains processor, microcode, private memory, bus controller 
+        \end{itemize}
+    \item \textbf{\color{blue} Device driver:}
+        \begin{itemize}
+            \item Present uniform device-access interface to I/O subsystem 
+        \end{itemize}
+\end{itemize}
+
+\section*{I/O Interrupts}
+\begin{itemize}
+    \item Interrutps allow for overlap of computation and I/O
+    \item Interrupts are extensively used in modern OSs 
+\end{itemize}
+
+\section*{Interrupts VS. Polling}
+\begin{itemize}
+    \item \textbf{\color{blue} Fast device}: Better to spin than take interrupt overhead    
+        \begin{itemize}
+            \item Device time unknown? \textbf{\color{blue} Hybrid approach} (spin then use interrupts) 
+        \end{itemize}
+    \item \textbf{\color{red} Flood of interrupts arrive}
+        \begin{itemize}
+            \item Can lead to \textbf{\color{blue} livelock} (always handeling interrupts)
+            \item Better to ignore interrupts while makeing some progress handeling them
+        \end{itemize}
+    \item \textbf{\color{blue} Other improvements}
+        \begin{itemize}
+            \item \textbf{\color{blue} Interrupt coalescing} (batch together several interrupts) 
+        \end{itemize}
+\end{itemize}
+
+\section*{Programmed I/O (PIO)}
+\begin{itemize}
+    \item Programmed I/O 
+        \begin{itemize}
+            \item CPU directly tells device what the data is 
+        \end{itemize}
+    \item Data transfer can still be \textbf{\color{red} costly}
+\end{itemize}
+
+\section*{Direct Memory Access (DMA)}
+\begin{itemize}
+    \item Used to avoid PIO for large data movement 
+    \item Bypasses CPU to transfer data directly between I/O device and memory
+    \item DMA controller
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Bilder/dma.png}
+\end{figure}
+
+\section*{I/O Communication Methods}
+\begin{itemize}
+    \item \textbf{\color{blue} I/O instructions}
+        \begin{itemize}
+            \item Each device has a port 
+            \item \textbf{\color{blue} IN/OUT} instructions (x86) communicate with device
+                \begin{itemize}
+                    \item IN Reg port
+                    \item OUT Reg port
+                \end{itemize}
+        \end{itemize}
+    \item \textbf{\color{blue} Memory-Mapped I/O}
+        \begin{itemize}
+            \item H/W maps registers into address space
+            \item Loads/stores sent to device
+        \end{itemize}
+\end{itemize}
+
+\section*{Memory-Mapped I/O}
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.65\textwidth]{Bilder/memmap.png}
+\end{figure}
+
+\section*{Device Drivers}
+\begin{itemize}
+    \item Devices are diverse
+    \item Each has its own protocols
+    \item Abstraction - \textbf{\color{blue} Device Drivers}
+        \begin{itemize}
+            \item Hide the details and differences
+            \item Provide standard interfaces
+            \item Account for over 70\% of oS code in Linux
+        \end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.65\textwidth]{Bilder/device.png}
+\end{figure}
+
+\section*{Hard Disk Drives -- HDDs}
+\begin{itemize}
+    \item A magnetic disk has a \textbf{\color{blue} sector-addressable} address space 
+        \begin{itemize}
+            \item A disk has \textbf{\color{blue} an array of sectors}
+            \item Each sector (logic block) is the smallest unit of transfer
+        \end{itemize}
+    \item Sectors are typically 512 og 4096 bytes
+    \item Main operations
+        \begin{itemize}
+            \item \textbf{\color{blue} Read} from sectors (blocks)
+            \item \textbf{\color{blue} Write} to sectors (blocks)
+        \end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.45\textwidth]{Bilder/hdd.png}
+\end{figure}
+
+\begin{itemize}
+    \item Seek time $T_s$
+    \item Rotational delay $T_r$
+    \item Transfer latency $T_t$
+    \item The overall latency
+        \[
+            T = T_s + T_r + T_t
+        \]
+    \item At \textbf{\color{blue} millisecond} level
+    \item \textbf{\color{blue} Seek}: may take several milliseconds (ms)
+        \begin{itemize}
+            \item Function of cylinder distance
+            \item Entire seek often takes \textbf{\color{blue} 4-10ms}
+        \end{itemize}
+    \item \textbf{\color{blue} Rotate}: Depends on RPM
+        \begin{itemize}
+            \item 7200 RPM is common, 15000 RPM is high end
+            \item Old computers may have 5400 RMP disks
+            \item 1 min / 7200 RPM = 60 sec / 7200 RPM = \textbf{\color{blue} 8.3 ms / rotation}
+            \item On average it may take \textbf{\color{blue} 4.2ms)}
+        \end{itemize}
+    \item \textbf{\color{blue} Transfer}: Depends on RPM and sector density}
+        \begin{itemize}
+            \item Pretty fast
+            \item \textbf{\color{blue} 100+ MB/s} for SATA I (1.5Gb/s), up to \textbf{\color{blue} 600MB/s} for SATA III (6.0Gb/s)
+            \item 512-byte sector: 1s / 100MB = 10ms/MB = \textbf{\color{blue} 4.9 us/sector}
+        \end{itemize}
+    \item Performance
+        \begin{itemize}
+            \item \textbf{\color{blue} Read 4KB}
+                \[
+                    T_t = \frac{1s}{500 MB} \times \frac{1,000,000 us}{1s} \times 4KB = 8us
+                \]
+                \[
+                    T = \text{Avg Seek} + \text{Avg Rotate} + T_t = 4ms + 4.2ms + 8us = 8.308ms
+                \]
+        \end{itemize}
+    \item Effect of Workloads
+        \begin{itemize}
+            \item Seeks and rotations are \textbf{\color{red} slow} while transfer is relatively \textbf{\color{blue} fast} 
+            \item What kind of workload is \textbf{\color{blue} best} suited for disks?
+                \begin{itemize}
+                    \item Sequential I/O: access sectors in order 
+                    \item Most of the time is spent on transferring
+                \end{itemize}
+            \item Random workloads access sectors in a random order
+                \begin{itemize}
+                    \item Slow on disks
+                    \item \textbf{\color{blue} Seek+rotation dominate}
+                    \item Avoid random I/O if possible
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\section*{Solid-State Disk (SSD)}
+\begin{itemize}
+    \item HDD - \textbf{\color{red} Mechanical Disk}
+        \begin{itemize}
+            \item \textbf{\color{red} Slow (Seek, rotate, transfer)}
+            \item \textbf{\color{red} Poor performance for random I/O}
+            \item \textbf{\color{blue} \$ cheap}
+            \item \textbf{\color{blue} High capacity}
+        \end{itemize}
+    \item \textbf{\color{blue} Solid-state disk (SSD) - flash based disk}
+        \begin{itemize}
+            \item \textbf{\color{blue} Single or mulitple transitions for storage}
+            \item \textbf{\color{blue} Fast: no moving, no seek}
+            \item \textbf{\color{blue} Parallel}
+            \item \textbf{\color{red} \$\$ More expensive}
+            \item \textbf{\color{red} Wear out issue}
+        \end{itemize}
+    \item SSD devices are divided into \textbf{\color{blue} banks: 1024 to 4096}
+    \item Each bank consists of \textbf{\color{blue} many pages: 64-256 pages}
+    \item Banks can be accessed \textbf{\color{blue} in parallel \textbf{\color{blue} in parallel}}
+    \item \textbf{\color{blue} Pages is unit of read and write : 2-8 KB}
+    \item Writing to a page is \textbf{\color{red} strange} and \textbf{\color{red} costly}
+        \begin{itemize}
+            \item \textbf{\color{red} We cannot directly overwrite a used page}
+            \item \textbf{\color{red} We must erase the target page before writing}
+                \begin{itemize}
+                    \item \textbf{\color{red} Erase}
+                    \item \textbf{\color{red} Program}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,69 @@
+\documentclass{article}
+
+% Packages
+\usepackage{braket}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage[shortlabels]{enumitem}
+
+% Margins
+\topmargin=-2.5cm
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+% Commands
+\makeatletter
+\newcommand{\listintertext}{\@ifstar\listintertext@\listintertext@@}
+\newcommand{\listintertext@}[1]{% \listintertext*{#1}
+\hspace*{-\@totalleftmargin}#1}
+\newcommand{\listintertext@@}[1]{% \listintertext{#1}
+\hspace{-\leftmargin}#1}
+\makeatother
+
+\title{\huge{Øving 8\\ Diskret matematikk}}
+\author{Morten Sørensen}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\subsection*{Oppgave 1.}
+\begin{enumerate}[(a)]
+    \item {
+        Fra deMorgans lover kan vi skrive om $\varphi_1 = \forall x \neg E(x, x) = \neg \exists x E(x, x)$.
+        Dette tilsvarer at det eksisterer en verdi $x$ s.a. den ikke er i relasjon med seg selv. 
+        $\varphi_2$ på sin side er definisjonen på symmetri. Dersom vi har en modell $\mathcal{M}$ med domene 
+        $\mathcal{D}$ der $a_i^{\mathcal{M}} = i$ og relasjonen $E$ er relasjonen $\leq$ på 
+        heltall, så vil $\neg \varphi_1 \wedge \neg \varphi_2$ være tilfredstilt på $\mathcal{M}$, 
+        ettersom at relasjonen ikke er symmetrisk og at det eksister en $x$ s.a. $x \leq x$.        
+    }
+    \item {
+        $\neg (E(a_0, a_1) \rightarrow a_0 \neq a_1)$ tilsvarer at $E$ er en refleksiv relasjon.
+        At $\varphi_1 = \forall x \neg E(x, x)$ tilsvarer ikke-refleksivitet, medfører at $\neg \varphi_1$ 
+        refleksivitet. Siden både $\neg\varphi_1[x \setminus a_0]$ og $\neg\varphi_1[x \setminus a_1]$ evalueres sann, 
+        vill implikasjonen $\neg (E(a_0, a_1) \rightarrow a_0 \neq a_1) \implies \neg \varphi_1$ være sann.
+    }
+    \item {
+        Starter med å vise at $\varphi_1 \implies \forall x \forall y (E(x, y) \rightarrow x \neq y)$.
+        Vi kan skrive om $\varphi_1 = \neg \exists x E(x, x)$ med deMorgans lover. La $\mathcal{M}$ være 
+        en modell der $\varphi_1$ er sann. I denne modellem må derfor $\exists x E(x, x)$ være usann.
+        Vi har da at det finnes et element $a$ i domenet til $\mathcal{M}$, s.a. for det 
+        tilhørende konstantsymbolet $\overline{a}$ at $E(\overline{a}, \overline{a}) \notin E^{\mathcal{M}}$.
+        Dersom vi evaluerer $(\forall x \forall y (E(x, y) \rightarrow x \neq y))[x \setminus a]$, må 
+        vi ha at den er sann kunn for verdier der $y \neq a$.
+        Det er derfor slik at $\varphi_1$ kunn evalueres sann når $\forall x \forall y (E(x, y) \rightarrow x \neq y)$ også gjør det. \\
+        Skal så vise at $\forall x \forall y (E(x, y) \rightarrow x \neq y) \implies \varphi_1$.
+        La $\mathcal{N}$ være en modell der $\forall x \forall y (E(x, y) \rightarrow x \neq y)$ er sann.
+        Da eksisterer det en $a$ i domenet til $\mathcal{N}$ s.a. for det tilhørende konstantsymbolet $\overline{a}$
+        har at $\forall y (E(\overline{a}, y) \rightarrow \overline{a} \neq y)$ sann. 
+    }
+    \item {
+        Ja, fordi det er en relasjon $\left<1, 0\right> \in E^{\mathcal{M}}$. 
+    }
+\end{enumerate}
+\end{document}

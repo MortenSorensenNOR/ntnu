@@ -1,0 +1,206 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+a) Finner $P(X \leq 2)$
+\[
+    P(X \leq 2) = \sum_{x=0}^{2} f(x) = 0.4
+\]
+
+b) Resultat: $P(X \leq 2) \approx 0.3992$
+\begin{pythoncode}
+    n = 10000
+    simulert_X = simX(n)
+
+    P_X_le_2 = [x for x in simulert_X if x <= 2]
+    P_X_le_2 = len(P_X_le_2) / n
+
+    print("Approksimert sannsynlighet: ", P_X_le_2)
+\end{pythoncode}
+
+\section*{Oppgave 2.}
+a) Forventningsverdien $E[X]$ er gitt ved
+\[
+    E[X] = \sum_{x=0}^{5} x \cdot f(x) = 2.65
+\]
+
+b) Variansen $Var[X]$ er gitt ved
+\[
+    Var[X] = E[X^2] - E[X]^2 = 1.3275
+\]
+Følgelig er $SD[X] = \sqrt{Var[X]} \approx 1.142$
+
+c) De simulerte verdiene var henholdsvis $E[X] \approx 2.66$ og $SD[X] = 1.145$
+\begin{pythoncode}
+    # Simulert forventningsverdi og standardavvik
+    E_sim_X = sum(simulert_X) / n
+    print(f"Simulert E[X] = {E_sim_X}")
+
+    SD_sim_X = np.std(simulert_X)
+    print(f"Simulert SD[X] = {SD_sim_X}")
+\end{pythoncode}
+
+\section*{Oppgave 3.}
+a) Sannsynlighetstettheten 
+\[
+    f_{X}(x) = \frac{d}{dx}F_{X}(x) = \frac{2x \cdot e^{-\frac{x^2}{\alpha}}}{\alpha}
+\]
+
+b) Lar $U = F_X(x)$. Vi får da at
+\begin{align*}
+    &U = F_X(x) \\
+    &U = 1 - e^{-\frac{x^2}{\alpha}} \\
+    &e^{-\frac{x^2}{\alpha}} = 1 - U \\
+    &x^2 = -\alpha \cdot \ln{\left(1 - U\right)} \\
+    & x = \sqrt{-\alpha \cdot \ln{\left(1 - U\right)}}
+\end{align*}
+Ettersom at $U \text{ \textasciitilde } \text{ Unif}[0, 1]$ har vi at 
+\[
+    X = \sqrt{-\alpha \cdot \ln{\left(1 - U\right)}}
+\]
+\newpage
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Bilder/f_x.png}
+\end{figure}
+
+\begin{pythoncode}
+import numpy as np
+import matplotlib.pyplot as plt
+
+def generateX(n,alpha):
+    u = np.random.uniform(size=n) #array med n elementer.
+    x = np.sqrt(-alpha * np.log(1 - u))
+    return x
+
+# Sett antall realisasjoner og verdien til alpha
+n = 10000000
+alpha = 1
+
+# simuler realisasjoner av X
+simulerte_X = generateX(n, alpha)
+
+# Lag sannsynlighetshistogram for de simulerte verdiene,
+# vi spesifiserer antall intervaller ved å sette "bins=100"
+plt.hist(simulerte_X, density=True,bins=100, label="Simulert")
+
+# Angi navn på aksene
+plt.xlabel("Levetid")
+plt.ylabel("$f_X(x)$")
+
+# Regn ut og plott sannsynlighetstettheten til X på samme plott
+x = np.linspace(0, 4, 10000)
+f_x = 2 * x * np.exp(-x**2/alpha) / alpha
+plt.plot(x, f_x, label="Analytisk")
+
+plt.legend()
+
+# Avslutt med å generere alle elementene du har plottet
+plt.show()
+\end{pythoncode}
+
+c) 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Bilder/multi.png}
+\end{figure}
+
+\begin{pythoncode}
+ import matplotlib.pyplot as plt
+
+def generateX(n,alpha):
+    u = np.random.uniform(size=n) #array med n elementer.
+    x = np.sqrt(-alpha * np.log(1 - u))
+    return x
+
+def generateY(n):
+    x_vals = [generateX(n, 1), generateX(n, 1), \
+              generateX(n, 1.2), generateX(n, 1.2), \
+              generateX(n, 1.2)]
+    x = []
+    for i in range(n):
+        x.append([x_vals[0][i], x_vals[1][i], x_vals[2][i], x_vals[3][i], x_vals[4][i]])
+        
+    x_sorted = []
+    for i in range(n):
+        x_sorted.append(sorted(x[i]))
+
+    y = []
+    for i in range(n):
+        y.append(x[i][2])
+    return np.array(y)
+
+n = 100000
+
+simulerte_Y = generateY(n)
+plt.hist(simulerte_Y, density=True,bins=100, label="Simulert")
+
+# plt.show()
+plt.savefig("multi.png", dpi=500)
+\end{pythoncode}
+
+\section*{Oppgave 5.}
+a) $f_X = [\frac{1}{3}, \frac{1}{3}, \frac{1}{3}]$ og $f_{Y|X} = [[0.166, 0.5, 0.166, 0.166], [0.166, 0.166, 0.5, 0.166], [0.166, 0.166, 0.5]]$
+
+b)
+\[
+    E[X] = \sum_{x=0}^{2} x \cdot \sum_{y=0}^{3} f_{XY}(x, y) = 1
+\]
+\[
+    E[Y] = \sum_{y=0}^{3} y \cdot \sum_{x=0}^{2} f_{XY}(x, y) = \frac{5}{3}
+\]
+
+c) Nei, X og Y er ikke uavhengige stokastiske variabler, fordi $f_{YX}(x, y) \neq f_X(x) \cdot f_Y(y)$.
+Eksempelvis er $f_{XY}(0, 1) = \frac{1}{6} \neq f_X(0) \cdot f_Y(1) = 0.0925$. 
+
+d) Kovariansen $Cov[X, Y] = E[(X - 1) \cdot (Y - \frac{5}{3})] \approx 0.222$ 
+
+\begin{pythoncode}
+import numpy as np
+
+# f_XY[x][y]
+f_XY = [[1/18, 1/6, 1/18, 1/18],\ 
+       [1/18, 1/18, 1/6, 1/18], \
+       [1/18, 1/18, 1/18, 1/6]]
+
+# Oppgave a)
+print("\nOppgave a)")
+
+f_X = [sum(x) for x in f_XY]
+print(f_X, end="\n\n")
+
+f_Y_given_X = []
+for x in range(len(f_XY)):
+    f_Y_given_X.append([f_XY[x][y] / f_X[x] for y in range(len(f_XY[0]))])
+print(f_Y_given_X, end="\n\n")
+
+# Oppgave b)
+print("\nOppgave b)")
+
+E_X = sum([x * sum(y) for x, y in enumerate(f_XY)])
+print(E_X)
+
+E_Y = sum([y * sum(x) for y, x in enumerate(list(np.array(f_XY).T))]) 
+print(E_Y)
+
+f_Y = [sum(np.array(f_XY)[:, i]) for i in range(len(f_XY[0]))]
+print(f_X[0] * f_Y[1])
+
+Cov_XY = sum([sum([(x-E_X)*(y-E_Y)*f_XY[x][y] for y in range(4)]) \
+         for x in range(3)])
+print(Cov_XY)
+\end{pythoncode}
+
+\section*{Oppgave 6.}
+a) Forventet vekt av pappesken med ti plater er $10 \cdot 100 + 50 = 1050$. \\
+Standardavviket til vekten blir da
+\[
+    SD\left[\sum_{i=0}{10}X_i\right] = \sqrt{\sum_{i=0}^{10}Var[X_i]} = \sqrt{\sum_{i=0}^{10}SD[X_i]^2} \approx 2.53
+\]
+
+\end{document}

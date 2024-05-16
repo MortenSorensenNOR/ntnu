@@ -1,0 +1,39 @@
+\usepackage{tikz}
+\usepackage{babel}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{a4wide}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{pgfplots}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{tcolorbox}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[pdftex, pdfborderstyle={/S/U/W 0}]{hyperref}
+
+\setlength{\parindent}{0pt} 
+\setlength{\parskip}{1.2pt}
+
+\setlist[enumerate]{label=\bfseries\alph*), align=left, labelwidth=!, itemindent=0pt, leftmargin=0pt}
+\newtagform{roman}[\renewcommand{\theequation}{\Roman{equation}}]()
+
+\newtcolorbox{question}{
+  colback=white,     % Light gray background
+  colframe=blue!50!white,   % Dark gray frame
+  boxrule=0.5mm,            % Thickness of the frame
+  arc=2mm,                  % Radius of the corners
+  top=2mm, bottom=2mm,      % Padding above and below the text
+  left=5mm, right=5mm,      % Padding on the left and right of the text
+  boxsep=2mm                % Space between frame and content
+}
+
+\newenvironment{pythoncode}{\VerbatimEnvironment\begin{tcolorbox}[colback=white!16!black, colframe=white!75!black]\begin{minted}[style=monokai]{python}}{\end{minted}\end{tcolorbox}}
+\newenvironment{verilogcode}{\VerbatimEnvironment\begin{tcolorbox}[colback=white!16!black, colframe=white!75!black]\begin{minted}[style=monokai]{verilog}}{\end{minted}\end{tcolorbox}}

@@ -1,0 +1,14 @@
+\section{Konklusjon}
+\label{konklusjon}
+
+Dette designnotatet har tatt for seg et design av en frekvensdobler som 
+tar inn et sinus-formet signal $x_1(t)$ med kjent frekvens $f$, og produserer et utgangssignal 
+$x_2(t)$, der frekvensen til utgangssignalet er $2f$. Kvaliteten på systemet
+ble vurdert basert på utgangssignalets signal-til-distorsjonsforhold. Systemet som ble 
+presentert bestod av to deler; et ulineært system som produserer overharmoniske frekvenskomponenter ved 
+$k \cdot f$, og et båndpassfilter som skal isolere den første harmoniske ved $2f$. To 
+filtre ble presentert og implementert; et analogt RLC filter og et digitalt FIR filter.
+Gjennom testing av systemet ble det funnet at implementeringen av systemet med et RLC filter 
+oppnådde en SDR på 18dB, men at systemet trolig kan oppnå bedre resultater dersom realiserte 
+komponentverdier hadde hatt mindre avvik fra de ideelle verdiene, og dersom orderen på kaskadekoblingen 
+av filtre hadde vært større.

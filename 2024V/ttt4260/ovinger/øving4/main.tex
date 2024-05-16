@@ -1,0 +1,222 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item {
+        Inngangssignalet blir dempet med omtrent $20\log{\left(\frac{\SI{0.5}{\volt}}{\SI{1}{\volt}}\right)} \approx \SI{-6}{\decibel}$, og 
+        en faseforskyvning $\phi = -2\pi \cdot \SI{1}{\kilo\hertz} \cdot (-\SI{0.165}{\milli\s}) \approx 1.04[\text{rad}] = 59.59[\text{deg}]$.
+     
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/1a_dt.png}
+            \caption{Spenningsplott fra Analog Discovery 2 av $V_1$ (i gult) og $V_2$ (i blått).}
+        \end{figure}
+    }
+    \item {
+        Får følgende resultat fra å variere inngangsfrekvensen $f$
+        \begin{figure}[H]
+            \centering
+            \begin{tabular}{| l | c | c |}
+                \hline
+                Frekvens (Hz) & Forsterkning $A$ & Faseforskyvning $\phi$ \\
+                \hline
+                $\SI{10}{\hertz}$ & $\sim 0.006$ & $90^{\circ}$? \\ 
+                \hline
+                $\SI{100}{\hertz}$ & $\sim 0.061$ & $\SI{2.5}{\milli\s} \approx 89.95^{\circ}$\\ 
+                \hline
+                $\SI{1}{\kilo\hertz}$ & $\sim 0.5$ & $59.59^{\circ}$ \\ 
+                \hline
+                Osv.. & & \\
+                \hline
+            \end{tabular} 
+        \end{figure}
+
+        Vi ser at dempningen minker når frekvensen øker, mens faseforskyvningen minker når frekvensen øker.
+    }
+    \item {
+        Under er resultatet fra netverksanalysen.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.95\textwidth]{Bilder/network.png}
+            \caption{Netverksanalyse av kretsen, dempning (over) og faseforskyvning (under), som funksjon av frekvens.}
+        \end{figure} 
+        Systemet funker som et lavpassfilter. For frekvenser under $\sim \SI{10}{\kilo\hertz}$ blir utgangssignalet en dempet versjon av inngangssignalet,
+        og opplever en faseforskyvning på mellom 0 og 90 grader, mens over $\sim \SI{10}{\kilo\hertz}$ er utgangssignalet omtrent likt inngangssignalet.
+    }
+\end{enumerate}
+
+\section*{Oppgave 2.}
+\begin{enumerate}
+\item {
+    Systemet vil oppføre seg som et høypassfilter. For lave frekvenser vil kondensatoren oppføre seg som en åpen krets,
+    og hele spenningsfallet kommer da over utgangssignalet $V_2$. For høye frekvenser vil kondensatoren oppføre seg som 
+    en lukket krets, og vil derfor ha lavt spenningsfall over seg.
+    \newpage
+}
+\item {
+    Resultatet fra netverksanalysen:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.95\textwidth]{Bilder/network2.png}
+        \caption{Systemet fungerer som et høypassfilter.}
+    \end{figure}
+}
+\item {
+    For et inngangssignal på forment $5\cos{\left(4000 \pi t\right)}$ får vi at amplituden er $\SI{5}{\volt}$ og 
+    frekvensen $f = \SI{2}{\kilo\hertz}$. Leser vi av fra plottet over får vi at
+    \[
+        A = \SI{-3.85}{\decibel} \approx 0.64
+    \]
+    og
+    \[
+        \phi = -49.4^{\circ} = -0.87[\text{rad}]
+    \]
+
+    Vi får da at $v_2(t) = 5 \cdot 0.64 \cos{\left(4000 \pi t + (-0.87 + 2\pi)\right)} = 3.2 \cos{\left(4000 \pi t + 5.41\right)}$
+}
+\end{enumerate}
+
+\newpage
+\section*{Oppgave 3.}
+Vi har gitt kretsen i figur 4.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Bilder/impedance_cir.png}
+    \caption{Spenningsdeler med generelle impedanser}
+\end{figure}
+
+Ohms lov gir oss at 
+\[
+    V_2 = I \cdot Z_2 = \left(\frac{V}{Z_1 + Z_2}\right) \cdot  Z_2
+\]
+
+Finner vi frekvensresponsen til systemet får vi at 
+\[
+    H = \frac{V_2}{V} = \frac{1}{V} \cdot \left(\frac{V}{Z_1 + Z_2}\right) \cdot  Z_2 = \frac{Z_2}{Z_1 + Z_2} \:\:\: \blacksquare
+\]
+
+\section*{Oppgave 4.}
+\begin{enumerate}
+    \item Bruker formelen fra oppgave 3:
+        \begin{enumerate}[label=\Roman*)]
+            \item 
+                \[
+                    H(\omega) = \frac{j \omega L}{R + j \omega L}
+                \]
+            \item 
+                \[
+                    H(\omega) = \frac{\frac{1}{j \omega C}}{R + \frac{1}{j \omega L}} = \frac{1}{j\tau\omega + 1}
+                \]
+            \item 
+                \[
+                    H(\omega) = \frac{R}{R + \frac{1}{j \omega L}} = \frac{j\tau\omega}{j\tau\omega + 1}
+                \]
+        \end{enumerate}
+    \item Får følgende amplituderesponser
+        \usetagform{roman}
+        \begin{equation}
+            \left|H(\omega)\right| = \left|\frac{j \omega L}{R + j \omega L}\right| = \frac{\omega L}{\sqrt{L^2\omega^2 + R^2}}
+        \end{equation}
+
+        \begin{equation}
+            \left|H(\omega)\right| = \left|\frac{1}{j\tau\omega + 1}\right| = \frac{1}{\sqrt{\tau^2\omega^2 + 1}}
+        \end{equation}
+
+        \begin{equation}
+            \left|H(\omega)\right| = \left|\frac{j\tau\omega}{j\tau\omega + 1}\right| = \frac{\tau\omega}{\sqrt{\tau^2\omega^2 + 1}}
+        \end{equation}
+
+        \setcounter{equation}{0} 
+        For å finne faseresponsen omformer vi først uttrykkene til ren kompleks form
+        \begin{equation}
+            \frac{j\omega L}{R + j\omega L} = \frac{(j\omega L)(R - j\omega L)}{R^2 + \omega^2L^2} = \frac{\omega^2L^2}{R^2+\omega^2L^2} + j\frac{R\omega L}{R^2 + \omega^2L^2}
+        \end{equation}
+
+        \begin{equation}
+            \frac{1}{j\tau\omega + 1} = \frac{1-j\tau\omega}{1 + \tau^2\omega^2} = \frac{1}{1 + \tau^2\omega^2} - j\frac{\tau\omega}{1 + \tau^2\omega^2} 
+        \end{equation}
+
+        \begin{equation}
+            \frac{j\tau\omega}{j\tau\omega + 1} = \frac{(j\tau\omega)(1-j\tau\omega)}{1 + \tau^2\omega^2} = \frac{\tau^2\omega^2}{1 + \tau^2\omega^2} + j\frac{\tau\omega}{1 + \tau^2\omega^2} 
+        \end{equation}
+
+        \setcounter{equation}{0} 
+        Vi får da at 
+        \begin{equation}
+            \angle H(\omega) = \tan^{-1}{\left(\frac{R \omega L}{\omega^2L^2}\right)} = \tan^{-1}{\left(\frac{R}{\omega L}\right)}
+        \end{equation}
+
+        \begin{equation}
+            \angle H(\omega) = \tan^{-1}{\left(-\frac{\tau\omega}{1}\right)} = \tan^{-1}{(-\tau\omega)}
+        \end{equation}
+
+        \begin{equation}
+            \angle H(\omega) = \tan^{-1}{\left(\frac{\tau\omega}{\tau^2\omega^2}\right)} = \tan^{-1}{\left(\frac{1}{\tau\omega}\right)}
+        \end{equation}
+    \item Plotter vi funksjonene fra 4b får vi følgende plot for amplituderespons
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/amplituderespons.png}
+        \end{figure}
+        og følgende plot for faseresponss
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/faserespons.png}
+        \end{figure}
+
+        Vi ser at situasjon II samsvarer med høypassfilteret i oppgave 2 og situasjon III samsvarer med lavpassfilteret i
+        oppgave 1.
+\end{enumerate}
+
+
+\section*{Oppgave 5.}
+\begin{enumerate}
+    \item Ser på uttrykket for amlituderesponsen i situasjon II:
+        \[
+            |H(\omega)| = \frac{1}{\sqrt{\tau^2\omega^2 + 1}}
+        \]
+        Setter $|H(\omega)| = 0.5$ ved $\omega = 2\pi \cdot \SI{275}{\hertz}$ og får at 
+        $R \approx \SI{10}{\kilo\ohm}$.
+\end{enumerate}
+
+\section*{Oppgave 6.}
+\begin{enumerate}
+    \item For å få samme frekvens- og amplituderespons som systemet i oppgave 5 lager vi et 
+        system slik som system I i oppgave 4a, men der spolen og motstanden er byttet om.
+        Vi får da følgende uttrykk for frekvensresponsen til spenningen over motstanden
+        \[
+            H(\omega) = \frac{R}{R + j \omega L}
+        \]
+        Amplituderesponsen blir da
+        \[
+            |H(\omega)| = \left|\frac{R}{R + j \omega L}\right| = \frac{R}{\sqrt{L^2\omega^2 + R^2}} = \frac{1}{\sqrt{L^2\omega^2 + R^2}} \cdot \frac{1}{\sqrt{\left(\frac{1}{R}\right)^2}} = \frac{1}{\sqrt{\frac{1}{R^2}L^2\omega^2 + 1}}
+        \]
+        For å finne faseresponsen finner vi først uttrykket på rent komplekst form:
+        \[
+            \frac{R}{R + j \omega L} = \frac{R(R - j \omega L)}{R^2 + \omega^2L^2} = \frac{R^2}{R^2 + \omega^2L^2} - j \frac{R \omega L}{R^2 + \omega^2L^2}
+        \]
+        Finner så faseresponsen som
+        \[
+            \angle H(\omega) = \tan^{-1}{\left(-\frac{R \omega L}{R^2}\right)} = -\tan^{-1}{\left(-\frac{\omega L}{R}\right)}
+        \]
+
+        Vi ser da at for enkelte verdier av L og R vil systemet få samme respons som systemet i oppgave 5.
+    \item For at systemet skal ha samme respons som oppgave 5 når $L = \SI{100}{\milli\henry}$, så må
+        \[
+            |H(2\pi \cdot \SI{275}{\hertz})| = 0.5
+        \]
+        altså må
+        \[
+            \frac{1}{\sqrt{\frac{1}{R^2} \cdot \SI{100}{\milli\henry}^2 \cdot (2\pi \cdot \SI{275}{\hertz})^2 + 1}} = 0.5
+        \]
+        Det gir en motstandsverdi $R \approx \SI{100}{\ohm}$.
+    \item :)
+    \item Hadde nok valgt kondensatorkretsen i praksis.
+\end{enumerate}
+
+\end{document}

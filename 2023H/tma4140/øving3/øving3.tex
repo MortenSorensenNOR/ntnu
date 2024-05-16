@@ -1,0 +1,93 @@
+\documentclass{article}
+
+% Packages
+\usepackage{braket}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage[shortlabels]{enumitem}
+
+% Margins
+\topmargin=-2.5cm
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+% Commands
+\makeatletter
+\newcommand{\listintertext}{\@ifstar\listintertext@\listintertext@@}
+\newcommand{\listintertext@}[1]{% \listintertext*{#1}
+\hspace*{-\@totalleftmargin}#1}
+\newcommand{\listintertext@@}[1]{% \listintertext{#1}
+\hspace{-\leftmargin}#1}
+\makeatother
+
+\title{\huge{Øving 2\\ Diskret matematikk}}
+\author{Morten Sørensen}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\subsection*{Oppgave 1.}
+Skal vise ved induksjon at $\sum_{i=0}^{i=n} i^2 = 1^2 + 2^2 + 3^2 + \dots + n^2 = \frac{n(n + 1)(2n + 1)}{6} \:\:(^\star)$ for alle $n \in \mathbb{N}$. \\
+Starter med å teste for $n = 1$. \\
+$$\sum_{i=0}^{i = 1} i^2 = 1^2 = 1 = \frac{1(1 + 1)(2 + 1)}{6} = 1$$
+Antar at $(^\star)$ gjelder for $n \leq k$. Skal vise at det gjelder for $n = k + 1$.
+\begin{align*}
+    \sum_{i = 0}^{i = k + 1} i^2 &= \frac{(k + 1)(k + 2)(2k + 3)}{6} \\
+    &=  \frac{2k^3 + 9k^2+13k+6}{6} \\
+    &= \frac{(2k^3 + 3k^2 + k) + (6k^2 + 12k + 6)}{6} \\
+    &=  \sum_{i=0}^{i=k} (i^2) + (k + 1)^2  \\
+\end{align*}
+\\[-2\baselineskip]
+Vi har da vist at $(^\star)$ gjelder for alle $n \leq k + 1$, og vi har da vist at påstanden er korrekt. $\blacksquare$
+
+\subsection*{Oppgave 2.}
+Skal vise at $8 \mid a^2 - 1$ for alle oddetall $a$. Skriver først om uttrykket til 
+$$a^2 - 1 = 8n \:\:\:(^\star)$$
+for en $n \in \mathbb{N}$. Viser først at $(^\star)$ gjelder for $a = 1$.
+$$1^2 - 1 = 8n \implies n = 0$$
+Antar så at $(^\star)$ gjelder for $n = k$, der $k$ er et vilkårlig oddetall. Skal vise at det gjelder for $n = k + 2$.
+\begin{align*}
+    &(k+2)^2 - 1 = 8n \\
+    &k^2 + 4k + 4 - 1 = 8n \\
+    &(k^2 - 1) + 4k + 4 = 8n \\
+\end{align*}
+\\[-2\baselineskip]
+Dersom $4k + 4$ er delelig på 8, så har vi bevist $(^\star)$. Undersøker om $8 \mid 4k + 4$.
+$$4k + 4 = 8n$$
+Ettersom at $k$ er et oddetall, kan vi skrive om uttrykket til
+$$4((2p + 1) + 1) = 8n$$
+for en $p \in \mathbb{N}$. Vi har da at 
+$$2p + 2 = 2n \implies n = p + 1\text{.}$$
+Altså eksisterer det en $p \in \mathbb{N}$ s.a. $8 \mid 4k + 4$, og vi har da at 
+$$8 \mid (k + 1)^2 - 1$$
+og dermed at $8 \mid a^2 - 1$, der $a$ er et oddetall. $\blacksquare$
+
+
+\subsection*{Oppgave 3.}
+La $L$ være et alfabet med $l \leq 1$ elementer. Skal vise ved induksjon at det finnes $l^n$ strenger med lengde n over L.
+Viser først at det gjelder for $n = 0$:
+$$l^0 = 1$$
+Dette stemmer ettersom at det kun eksisterer 1 streng med lengde 0, nemmelig den tomme tuppelen $\Lambda$.
+Antar så at det eksisterer $l^k$ strenger med lengde $k$ på $L$, for en $k \in \mathbb{N}$. For hver streng $S$ av lengde $k$ 
+har vi at strengene $Sb_0, Sb_1, Sb_2, Sb_3, \dots, Sb_l$ der $b_i \in L$ er den eneste måten å skrive alle strengene av lengde $k + 1$ på $L$.
+Vi får da nøyaktig $l$ ganger så mange elementer av lengde $k + 1$ enn $k$. Da får vi fra induksjonshypotesen at antallet elementer av lengde $k + 1$
+er $l \cdot l^k = l^{k+1}$ som ønsket. $\blacksquare$
+
+\subsection*{Oppgave 4.}
+La $a_i$ være antallet bitstrenger av lengde $i$ hvor 11 ikek forekommer. Har da at $a_0 = 1$, $a_1 = 2$ og $a_2 = 3$.
+\begin{enumerate}[(a)]
+	\item {
+        Skal regne ut $a_4$. Da er mengden med alle bitstrenger av lengde 4 der 11 ikke forekommer \\
+        $\mathcal{B}_4 = \set{0000, 0001, 0010, 0100, 1000, 1001, 1010, 0101}$ som har lengde $\underline{\underline{a_4 = 8}}$.
+    }
+    \item {
+        Skal vise at $a_i = f_{i + 2}$ for alle $i \geq 0$, der $f_{i + 2}$ er det $i + 2$'te Fibonacci-tallet. Syk :/
+    }
+\end{enumerate}
+\end{document}

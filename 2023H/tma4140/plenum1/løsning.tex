@@ -1,0 +1,189 @@
+\documentclass{article}
+
+% Packages
+\usepackage{braket}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage[shortlabels]{enumitem}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+% Commands
+\makeatletter
+\newcommand{\listintertext}{\@ifstar\listintertext@\listintertext@@}
+\newcommand{\listintertext@}[1]{% \listintertext*{#1}
+  \hspace*{-\@totalleftmargin}#1}
+\newcommand{\listintertext@@}[1]{% \listintertext{#1}
+  \hspace{-\leftmargin}#1}
+\makeatother
+
+\title{Plenumsregning 1}
+\author{Morten Sørensen}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\subsection*{Oppgave 1.}
+La $A = \{1, 2, 3, 4\}$ og $B = \{2, 4, 6, 8\}$.
+\begin{enumerate}[(a)]
+    \item {
+        \begin{enumerate}[(1)]
+            \item $A \cup B = \{1, 2, 3, 4, 6, 8\}$.
+            \item $A \cap B = \{2, 4\}$.
+            \item $A \setminus B = \{1, 3\}$.
+        \end{enumerate} 
+    }
+    \item {
+        Gitt $\mathcal{U} = \mathbb{N}$ blir $A \cap \overline{B} = \{1, 3\}$.
+    } 
+    \item {
+        $\{1\} \subseteq A$ fordi $1 \in A$.
+    }
+    \item {
+        $\emptyset \subseteq A$ etter definisjon.
+    }
+    \item {
+        La $C = \{\{1\}, \{3, 4, 5\}, \{2, 3\}, 4, \emptyset, \{\{2, 3\}, A\}$.\\
+        Da er $\{S \in C \mid S \subseteq A\} = \{\{1\}, \{2, 3\}, \emptyset, A\}$
+    }
+    \item {
+        Hvor mange delmengder av A har 3 elementer? \\
+        Antallet delmengder er $n_3 = \binom{n(A)}{3} = 4$.
+    }
+    \item {
+        TLDW
+    }
+    \item {
+        $\mathcal{P}(A)$ er alle delmengder av A.
+    }
+    \item {
+        $A \times A$ er alle tupler på formen $\set{\langle x, y \rangle \mid x, y \in A}$.
+    }
+    \item {
+<<<<<<< HEAD
+        $\mathcal{P}(A \times A)$ har $2^{n(A \times A)} = 2^{4^2} = 2^{16}$ elementer.
+=======
+        $\mathcal{P}(A \times A)$ har $2^{n(A \times A)} = 2^{2^4} = 2^{16}$ elementer.
+>>>>>>> 72319ee (Initial commit)
+    }
+    \item {
+        Binærrelasjonene på A er nøyaktig elementene i $\mathcal{P}(A \times A)$, altså $2^{16}$.
+    }
+    \item {
+        $A \cap B = \set{2, 4} = X \implies X \times X = \set{\langle 2, 2 \rangle, \langle 2, 4 \rangle, \langle 4, 2 \rangle, \langle 4, 4 \rangle}$. \\
+        $\mathcal{P}(X \times X)$ har da veldig mange elementer, der hvert element er en delmengde av $X \times X$. TLDW
+    }
+\end{enumerate}
+
+\subsection*{Oppgave 2}
+\begin{enumerate}[(a)]
+    \item {
+        Skal bevise at $\overline{A \cup B} = \overline{A} \cap \overline{B}$. 
+        Begynner med å vise at $\overline{A \cup B} \subseteq \overline{A} \cap \overline{B}$. Lar $x \in \overline{A \cup B}$. Får da at $x \notin A \cup B$, altså er $x \notin A$ og $x \notin B$,
+        samtidig som at vi har at $x \in \overline{A}$ og $x \in \overline{B}$. Altså er er $x \in \overline{A} \cap \overline{B}$, som betyr at 
+        $\overline{A \cup B} \subseteq \overline{A} \cap \overline{B}$. \\
+        Ønsker så å vise at $\overline{A} \cap \overline{B} \subseteq \overline{A \cup B}$. Lar $x \in \overline{A} \cap \overline{B}$. Vi har da at både
+        $x \notin A$ og $x \notin B$, og som følge av det, at $x \notin A \cup B$. Det betyr at 
+        $x \in \overline{A \cup B}$, altså er $\overline{A} \cap \overline{B} \subseteq \overline{A \cup B}$. \\
+        Det betyr at $\overline{A \cup B} \subseteq \overline{A} \cap \overline{B}$ og $\overline{A} \cap \overline{B} \subseteq \overline{A \cup B}$, altså er 
+        $\overline{A \cup B} = \overline{A} \cap \overline{B}$. $\blacksquare$
+    }
+    \item {
+        Skal bevise at $\overline{A \cap B} = \overline{A} \cup \overline{B}$.
+        Begynner med å vise at $\overline{A \cap B} \subseteq \overline{A} \cup \overline{B}$. Lar $x \in \overline{A \cap B}$.
+        Vi har da at $x \notin A \cap B$. I tillegg må enten av påstandene $x \notin A$ eller $x \notin B$ være sanne.
+        Altså er enten $x \in \overline{A}$ eller $x \in \overline{B}$. Av dette må $x \in \overline{A} \cup \overline{B}$. Vi har da at 
+        $\overline{A \cap B} \subseteq \overline{A} \cup \overline{A}$. \\
+        Skal så bevise at $\overline{A} \cup \overline{B} \subseteq \overline{A \cap B}$. Lar $x \in \overline{A} \cup \overline{B}$.
+        Ser først på tillfellet der $x \in \overline{A}$. Vi har da at $x \notin A$, og derfor at $x \notin A \cap B$, noe som vil si at 
+        $x \in \overline{A \cap B}$. Av dette er $\overline{A} \cup \overline{B} \subseteq \overline{A \cap B}$ for $x \in \overline{A}$.
+        I tillfellet der $x \notin \overline{A}$, må $x \in \overline{B}$. Vi har da at $x \notin B$ og $x \notin A \cap B \implies x \in \overline{A \cap B}$. \\
+        Altså er $\overline{A} \cup \overline{B} \subseteq \overline{A \cap B}$ og $\overline{A \cap B} \subseteq \overline{A} \cup \overline{B}$ og
+        $\overline{A} \cup \overline{B} = \overline{A \cap B}$. $\blacksquare$
+    }
+    \item {
+        Har fra oppgave 2(a) at $\overline{A} \cap \overline{B} = \overline{A \cup B}$. Vi har at $A \cup B = \set{1, 2, 3, 4, 6, 8}$ (1a).
+        Dersom $\mathcal{U} = \mathbb{N}$ er $\overline{A} \cap \overline{B} = \overline{A \cup B} = \set{5, 7, 9, 10, 11, 12, 13, 14, 15, \ldots}$.
+    }
+    \item {
+        Skal vise at $A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$. \\
+        Lar $x \in A \cup (B \cap C)$. Dersom vi antar at $x \in A$ har vi at $x \in A \cup B$ og $x \in A \cup C$,
+        altså er $x \in (A \cup B) \cap (A \cup C)$. Dersom $x \notin A$ er $x \in B \cap C$, altså er $x \in B$ og $x \in C$. $x$ må derfor være et 
+        element i snittet mellom unionene $(A \cup B) \cap (A \cup C)$. Altså er $A \cup (B \cap C) \subseteq (A \cup B) \cap (A \cup C)$. \\
+        Lar så $x \in (A \cup B) \cap (A \cup C)$. Dersom $x \in A$ er simpelt nok $x \in (A \cup B) \cap (A \cup C)$ og $x \in A \cup (B \cap C)$. 
+        Dersom $x \notin A$ må $x \in B$ og $x \in C$. Fra dette følger det at $x \in B \cap C$ og at $x \in A \cup (B \cap C)$. Altså er 
+        $(A \cup B) \cap (A \cup C) \subseteq A \cup (B \cap C)$. \\
+        $A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$. $\blacksquare$
+    }
+    \item {
+        Skal vise at $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$. \\
+        Lar $x \in A \cap (B \cup C)$. Vi har da at $x \in A$ og $x \in B \cup C$. Dersom vi antar at 
+        $x \in B$, så har vi at $x \in A \cap B$, og dermed også at $x \in (A \cap B) \cup (A \cap C)$. 
+        Dersom $x \notin B$, så er $x \in C$, og vi har da at $x \in A \cap C$, og som følge $x \in (A \cap B) \cup (A \cap C)$.
+        Altså er $A \cap (B \cup C) \subseteq (A \cap B) \cup (A \cap C)$. \\
+        Lar så $x \in (A \cap B) \cup (A \cap C)$. Antar først at $x \in (A \cap B)$. Vi har da at $x \in A$ og $x \in B$.
+        Får da at $x \in B \cup C$, og dermed også at $x \in A \cap (B \cup C)$. Dersom $x \notin (A \cap B)$ må $x \in (A \cap C)$.
+        Av det har vi at $x \in A$ og $x \in C$, da fortsatt at $x \in B \cup C$ og $x \in A \cap (B \cup C)$.
+        Altså er $(A \cap B) \cup (A \cap C) \subseteq A \cap (B \cup C)$. \\
+        $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$. $\blacksquare$
+    }
+    \item {
+        Skal bevise at $A \cup (B \cap C) = (A \cap B) \cup (A \cap C)$ ikke er en gyldig likhet. \\
+        Lar $A = \emptyset$ og $B = C \neq \emptyset$. Har da at 
+        $B \cap B = (\emptyset \cap B) \cup (\emptyset \cap B) \implies B = \emptyset$. Vi har dermed en motsigelse 
+        $B = \emptyset$ og $B \neq \emptyset$, altså er $A \cup (B \cap C) \neq (A \cap B) \cup (A \cap C)$. $\blacksquare$
+    }
+\end{enumerate}
+
+\subsection*{Oppgave 3}
+$\mathcal{U} = \mathbb{N}$ for alle deloppgaver, samt at $A = \set{2x \mid x \in \mathbb{N}}$, $B = \set{3x \mid x \in \mathbb{N}}$ og $C = \set{7x \mid x \in \mathbb{N}}$. 
+\begin{enumerate}[(a)]
+    \item {
+        $\overline{A}$ beskriver de positive oddetallene.
+    }
+    \item {
+        Snittet $B \cap C$ beskriver mengden $X$ av naturlige tall delelig på 3 og 7, der \\ 
+        $X = \set{x \in \mathbb{N} \mid x \equiv 0\;(\bmod{\;21})}$, ettersom at 21 er minste felles multiplum av 3 og 7.
+    }
+    \item {
+        $\overline{A} \cap B$ beskriver mengden av naturlige oddetall delelig på 3, lik mengden $\set{3(2x + 1) \mid x \in \mathbb{N}}$.
+    }
+    \item {
+        Mengden av naturlige tall dobbelt delelig på 7, $X$, kan uttrykkes ved hjelp av $C$ som \\
+        $X = \set{x \in C \mid x/7 \in C}$. 
+    }
+    \item {
+        Skal vise at $\set{12x \mid x \in \mathbb{N}} \subseteq B$. \\
+        Lar $p \in \set{12x \mid x \in \mathbb{N}}$. Vi har da at $p = 12q$ for en vilkårlig $q \in \mathbb{N}$.
+        $p$ er da et multiplum av 3 ettersom at $p = 3(4q)$, altså er $p \in B$ og derav $\set{12x \mid x \in \mathbb{N}} \subseteq B$.
+    }
+    \item {
+        Skal definere mengden med alle primtall $P$. \\
+        Finner først mengden med alle sammensatte tall $S = \set{xy \mid x,y \in \mathbb{N}, x \geq 2, y \geq 2}$.
+        Vi har da at mengden med primtall $P = S \setminus \set{0, 1} = \set{2, 3, 5, 7, 11, 13, \ldots}$.
+    }
+\end{enumerate}
+
+\subsection*{Oppgave 4}
+La $M = \set{\emptyset, \set{1}, \set{2}, \set{1, 2}, 2, 3}$ for alle deloppgaver.
+\begin{enumerate}[(a)]
+    \item Sant
+    \item Usant
+    \item Usant
+    \item Sant
+    \item Sant
+    \item Usant
+    \item Usant
+    \item Sant
+\end{enumerate}
+
+\end{document}

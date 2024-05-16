@@ -1,0 +1,213 @@
+\documentclass[a4paper,11pt,english]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\textbf{\color{blue} }
+
+\section*{Memory}
+\begin{itemize}
+    \item RECALL: a program must be brought from disk into \textbf{\color{blue} memory} and becomes a process 
+\end{itemize}
+
+\section*{Adress Space}
+\begin{itemize}
+    \item \textbf{\color{red} Why do we need an abstraction for memory?}
+        \begin{itemize}
+            \item \textbf{\color{red} Early computers did not have memory abstraction}
+            \item \textbf{\color{red} Programs directly access physical memory}
+        \end{itemize}
+    \item \textbf{\color{blue} Uniprogramming}: Only one process runs at a time
+    \item \textbf{\color{blue} Multiprogramming} (Now):
+        \begin{itemize}
+            \item Processes share hardware resources, CPU, memory
+        \end{itemize}
+    \item Instead of having only one process \textbf{\color{blue} multiple processes} reside in the memory
+    \item Processes may \textbf{\color{red} interfere} with each other and suffer from access issues if \textbf{\color{blue} no memory abstraction (protection)}
+    \item One process can overwrite another process
+    \item It works with \textbf{\color{blue} Program Status Word (PSW)}, but has \textbf{\color{blue} relocation issue}
+    \item \textbf{\color{blue} Adress space}
+        \begin{itemize}
+            \item An easy-to-use abstraction of physical memory
+            \item The set of adresses that a process can use to address memory
+            \item The running program's view of memory in the system
+        \end{itemize}
+    \item \textbf{\color{blue} Adress space} consists of \textbf{\color{blue} static} and \textbf{\color{blue} dynamic} components
+        \begin{itemize}
+            \item \textbf{\color{blue} Static}: code and some global variables
+            \item \textbf{\color{blue} Dynamic}: stack and heap
+        \end{itemize}
+    \item 3 components (more than 3, but enough to get the idea)
+        \begin{itemize}
+            \item \textbf{\color{blue} Code}
+            \item \textbf{\color{blue} Heap}
+            \item \textbf{\color{blue} Stack}
+        \end{itemize}
+    \item Code will not be changed during execution, so it is static
+    \item \textbf{\color{blue} Stack}
+        \begin{itemize}
+            \item Local variables, pass parameters, return values
+            \item Last in first out
+            \item Simple and efficient implementation: stack pointer
+                \begin{itemize}
+                    \item Add/Push: increment pointer
+                    \item Free/Pop: decrement pointer
+                \end{itemize}
+        \end{itemize}
+    \item \textbf{\color{blue} Heap}
+        \begin{itemize}
+            \item Explicitly dynamically-allocated, user-managed memory, such as malloc() in C or \textbf{\color{blue} new} in C++ and Java
+            \item Shoudl be deallocated explicitly by programmers, free()
+        \end{itemize}
+    \item OS virtualizes memory by using \textbf{\color{blue} virtual adresses}
+    \item \textbf{\color{blue} Adress translation/mapping}: virtual to physical
+    \item Goals of virtual memory
+        \begin{itemize}
+            \item \textbf{\color{blue} Transparency}
+                \begin{itemize}
+                    \item Processes are unaware that memory is shared 
+                \end{itemize}
+            \item \textbf{\color{blue} Protection}
+                \begin{itemize}
+                    \item Cannot read data of other processes
+                    \item Cannot corrupt OS or other processes
+                \end{itemize}
+            \item \textbf{\color{blue} Efficiency}
+                \begin{itemize}
+                    \item Time
+                    \item Space
+                \end{itemize}
+        \end{itemize}
+    \item Any adress that the programmer can see is a \textbf{\color{blue} virtual adress}
+    \item Compiler/linker assumes that the process starts at \textbf{\color{blue} 0}
+    \item When the OS loads the process, it allocates a contiguous segment of memory where the process fits
+    \item How to relocate the adresses in a transparent way?
+    \item Address translation methods:
+        \begin{itemize}
+            \item \textbf{\color{blue} Static relocation (no HW requirement)}:
+                \begin{itemize}
+                    \item At load time, the OS adjusts the addresses in a process to reflect its position in memory
+                    \item Once a process is assigned a place in memory and starts executing it, the OS cannot move it
+                    \item \textbf{\color{red} Issue: inflexibility, rewrite}
+                \end{itemize}
+            \item \textbf{\color{blue} Dynamic relocation (HW supported):}
+                \begin{itemize}
+                    \item Two registers for each process
+                        \begin{itemize}
+                            \item \textbf{\color{blue} Base register} indicates the starting adress
+                            \item \textbf{\color{blue} Bound/limit register} determines the memory size
+                        \end{itemize}
+                    \item \textbf{\color{blue} Memory-Management Unit (MMU)}
+                        \begin{itemize}
+                            \item Translate virtual addresses to physical addresses
+                            \item Such translation happens for every memory reference
+                        \end{itemize}
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\section*{Dynamic Relocation}
+\begin{itemize}
+    \item Every memory reference has the following procedure
+        \begin{itemize}
+            \item When a program starts running, the OS decides where in physical memory a process should be loaded. Set the base register
+            \item Each memory reference is tranlated as follows
+                \[
+                    physical address = virtual adress + base
+                \]
+            \item Chech whether the adress is within the bound
+        \end{itemize}
+    \item Assume a process with its base register of 32KB and its size of 16KB
+    \item fetch instruction \textbf{\color{blue} ldr} at \textbf{\color{blue} virtual adress} 128
+    \item The physical adress of instruction \textbf{\color{blue} ldr} is $32896 = 128 + 32KB(base)$
+    \item The largets address this process can access is $47KB = 16KB + 32KB$
+    \item What is the \textbf{\color{red} problem} of dynamic relocation?
+        \begin{itemize}
+            \item \textbf{\color{red} Fragmentation (memory inefficiency)}
+            \item Internal or external
+        \end{itemize}
+\end{itemize}
+
+\section*{Memory Allocation}
+\begin{itemize}
+    \item Allocation \textbf{\color{blue} contiguous} memory spaces to different processes:
+        \begin{itemize}
+            \item Fixed partition
+                \begin{itemize}
+                    \item Physical memory is broken up into fixed partitions
+                    \item Only one \textbf{\color{blue} base register} is needed for each process
+                    \item \textbf{\color{blue} Advantage}: easy to implement and fast context switch
+                    \item \textbf{\color{red} Problem: internal fragmentation}
+                \end{itemize} 
+            \item Variable partition
+                \begin{itemize}
+                    \item \textbf{\color{blue} Base register} and \textbf{\color{blue} limit register} (dynamic relocation)
+                    \item \textbf{\color{blue} Advantage}: flexible
+                    \item \textbf{\color{red} Problem: external fragmentation} 
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\section*{Internal Fragmentation}
+\begin{itemize}
+    \item Each partition has the same size 
+\end{itemize}
+
+\section*{Variable Partition}
+\begin{itemize}
+    \item Each process is assigned a memory partition as it needs
+    \item OS maintains a table of available memory space, also called \textbf{\color{blue} hole; holes of various size are scattered throughout memory}
+    \item Allocation algorithms:
+        \begin{itemize}
+            \item \textbf{\color{blue} First-fit:} allocate the first hole that is big enough
+            \item \textbf{\color{blue} Best-fit:} allocate the smalles hole that is big enough
+            \item \textbf{\color{blue} Worst-fit:} allocate the largest hole
+        \end{itemize}
+    \item Each process is assigned a memory partition as it needs
+    \item As processes are loaded to memory and removed from memory, the memory freed are fragmented into small \textbf{\color{red} holes}
+    \item \textbf{\color{blue} Sufficient memory} to complete a request, but \textbf{\color{blue} not contigous}
+\end{itemize}
+
+\section*{External Fragmentation}
+\begin{itemize}
+    \item \textbf{\color{blue} Compaction} is a solution to external framentation
+        \begin{itemize}
+            \item Shuffle the memory contets to place all free memory together in one large block
+        \end{itemize}
+    \item \textbf{\color{blue} Concerns:} performance overhead
+        \begin{itemize}
+            \item Memory intensive
+        \end{itemize}
+\end{itemize}
+
+\section*{Segmentation}
+\begin{itemize}
+    \item Instead of having only one pair of registers, divide the contigous address space into several \textbf{\color{blue} logic segments}
+    \item If an \textbf{\color{red} illegal address} such as 7KB which is beyond the end of heap is referenced, the OS occurs \textbf{\color{red} segmentation fault}.
+        \begin{itemize}
+            \item The hardware detects that the address is \textbf{\color{red} out of bounds}
+        \end{itemize}
+    \item \textbf{Explicit approach}
+        \begin{itemize}
+            \item Break the address space into segments based on the \textbf{\color{blue} top few bits} of virtual address.
+        \end{itemize}
+    \item Stack grows \textbf{\color{blue} backward}
+    \item \textbf{\color{blue} Extra hardware support} is needed.
+        \begin{itemize}
+            \item The hardware checks which way the segment grows
+            \item 1: positive direction, 0: negative direction
+        \end{itemize}
+    \item Segment can be \textbf{\color{blue} shared} between address space
+        \begin{itemize}
+            \item \textbf{\color{blue} Code sharing} is still in use in systems today
+            \item Need extra hardware support
+        \end{itemize}
+    \item \textbf{Hardware support: protection bits}
+        \begin{itemize}
+            \item \textbf{A few more bits} per segment to indicate \textbf{permissions} of \textbf{read}, write and \textbf{execute}
+        \end{itemize}
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,152 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Vi får uttrykket
+        \[
+            v_D = V_{DD} - R_D \cdot i_D
+        \]
+    \item Får følgende krets
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.7\textwidth]{Bilder/1b.png}
+        \end{figure}
+    \item Resultatet blir
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.95\textwidth]{Bilder/1c.png}
+        \end{figure}
+        \newpage
+    \item Se oppgave e.
+    \item Vi kan observere at cutoff-området ligger omtrent rundt $\SI{1.66}{\volt}$, at triodeområdet ligger rundt 
+        $\sim\SI{1.9}{\volt}$ og at metningsområdet ligger omtrentlig mellom $\SI{1.8}{\volt}-\SI{1.9}{\volt}$.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/1e.png}
+            \caption{Metningsområdet og triodeområdet ble desverre forvekslet i avmerkingen.}
+        \end{figure}
+\end{enumerate}
+
+\section*{Oppgave 2.}
+\begin{enumerate}
+    \item Kretsen: 
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.67\textwidth]{Bilder/2a.png} 
+        \end{figure}
+    \item Måtte bytte ut motstandverdien for $R_{G2}$ ettersom at triodeområdet til transistoren lå under $\SI{2.5}{\volt}$, altså noe som ike var mulig å oppnå med 
+        denne spenningsdeleren med et potensiometer med verdi $\SI{10}{\kilo\ohm}$. Valgte derfor $R_{G2} \approx \SI{5.5}{\kilo\ohm}$, noe som viste seg å fungere bra.
+        Fikk ikke tid til å måle $v_G$ og $i_D$, men vil fra oppgave 1e forvente at $V_G \approx \SI{1.85}{\volt}$, som gir en strøm $I_D \approx \SI{1.85}{\milli\ampere}$.
+    \item Ved en et påtrykt sinus signal med amplitude på $\SI{100}{\milli\volt}$ får vi omtrent $\SI{1.77}{\volt}$ på utgangen ved maksimal amplitude (signalet blir ivertert, så denne målingen 
+        ble tatt da utgangssignalet var på sitt høyeste). Det gir er forsterkning på omtrent 17x, eller omtrent $4.96$dB.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.9\textwidth]{Bilder/2c.png}
+            \caption{Plot av inngangs- (gult) vs. utgangsssignalet (blått) til systemt ved $f = \SI{1}{\kilo\ohm}$}
+        \end{figure}
+\end{enumerate}
+
+\section*{Oppgave 3.}
+\begin{enumerate}
+    \item Starter med å finne spenningen over $R_{G2}$ når $V_1$ har vært 0 i lang tid.
+        \[
+            V_{G2} = V_{DD} \cdot \frac{R_{G2}}{R_{G1} + R_{G2}} \approx \SI{3}{\volt}
+        \]
+        Finner så strømmen $i_D$ når spenningen $v_{DS} = 0$ og spenningen $v_{DS}$ når $i_D = 0$.
+        \[
+            i_D = \frac{V_{DD} - v_{DS}}{R_D} = \SI{1}{\ampere} - \frac{1}{\SI{10}{\ohm}}v_{DS}
+        \]
+        Vi har dermed at $v_{DS} = 0$ gir $i_D = \SI{1}{\ampere}$ og $i_D = 0$ gir $v_{DS} = \SI{10}{\volt}$.
+        Får da følgende lastlinje
+        \begin{figure}[H]
+            \centering 
+            \includegraphics[width=0.47\textwidth]{Bilder/3a.png}
+        \end{figure}
+    \item Markerer vi av på grafen der lastlinjen krysser de forskjellige linjene for $v_{GS}$ får vi følgende overføringskurve.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.5\textwidth]{Bilder/3b.png}
+        \end{figure}
+    \item Signalet vil svinge om arbeidspunktet til transistorkretsen, som her er $V_{GS} = \SI{3}{\volt}$.
+    \item Utganssignalet vil få et stort negativt forsterket utslag når $V_1$ går høyt og et uendret (eller mulig dempet) positivt utslag når 
+        $V_1$ går lavt.
+    \item Dersom $R_{G1}$ blir valgt til å være en større motstand vil arbeidspunktet til kretsen flyttes nærmere 
+        midtpunktet av metningsområdet, og vil da oppleve en langt mer lineær oppførsel enn kretsen i figur 5. En motstandsverdi 
+        på $R_{G1} \approx \SI{6}{\kilo\ohm}$ burde fungere fint.
+\end{enumerate}
+
+\section*{Oppgave 4.}
+\begin{enumerate}
+    \item Skal finne arbeidspunktene til forsterkerene i figur 6, 7 og 8. \\
+        
+        \textbf{Figur 6:} \\
+        Starter med å finne $V_{GS}$. For å finne $V_{GS}$ antar vi først at vi er i metningsområdet og at $V_{sig}(t)$ har vært 0 i lang tid.
+        Vi får da at spenningen $v_{G}$ blir 
+        \[
+            v_{G} = V_{DD} \cdot \frac{\SI{1}{\mega\ohm}}{\SI{3}{\mega\ohm} + \SI{1}{\mega\ohm}} \approx \SI{3.5}{\volt}
+        \]
+        Vi vet så fra modellen for transistoren at 
+        \begin{align}
+            i_{D} = \frac{K}{2}\left(v_{GS} - V_T\right)^2
+        \end{align}
+        I tillegg har vi at 
+        \begin{align}
+            v_{GS} = v_{G} - R_S \cdot i_D
+        \end{align}
+        \newpage
+        Løser vi for $i_{D}$, og setter inn de gitte verdiene for $R_S$, $K$ og $v_{G}$ 
+        får vi to mulige løsninger for $i_{D}$:
+        \begin{center}
+            $i_D = \SI{4}{\milli\ampere}$ og $i_D = \SI{6.25}{\milli\ampere}$ 
+        \end{center}
+        Setter vi det inn i likningen for $v_{GS}$ får vi to løsninger
+        \begin{center}
+            $V_{GS} = \SI{1.5}{\volt}$ og $V_{GS} = \SI{0.375}{\volt}$ 
+        \end{center}
+        Velger så $V_{GS} = \underline{\underline{\SI{1.5}{\volt}}}$ siden den er over $V_T$.
+        Vi har da også allerede funnet $I_{DS} = i_D = \underline{\underline{\SI{4}{\milli\ampere}}}$. \\
+
+        Skal så finne $V_{DS}$. Starter med å først finne spenningen over $R_D$.
+        \[
+            V_{R_D} = \SI{4}{\milli\ampere} \cdot \SI{2}{\kilo\ohm} = \SI{8}{\volt}
+        \]
+        Finner så $V_S$
+        \[
+            V_S = \SI{4}{\milli\ampere} \cdot \SI{500}{\ohm} = \SI{2}{\volt}
+        \]
+        Vi har da at  
+        \[
+            V_{DS} = V_{DD} - V_{R_D} - V_S = \underline{\underline{\SI{4}{\volt}}}
+        \]
+
+        \textbf{Figur 7:} \\
+        Kjører samme strategi som for figur 6. Finner først spenningen $v_{G}$:
+        \[
+            v_{G} = \SI{12}{\volt} \cdot \frac{\SI{18}{\kilo\ohm}}{\SI{13}{\kilo\ohm} + \SI{18}{\kilo\ohm}} \approx \SI{6.97}{\volt}
+        \]
+        Bruker likning (1) og (2) og får at 
+        \begin{center}
+            $I_{DS} = \SI{7.95}{\milli\ampere}$ og $I_{DS} = \SI{17.9}{\milli\ampere}$ 
+        \end{center}
+        \begin{center}
+            $V_{GS} = \SI{3}{\volt}$ og $V_{GS} = \SI{-2}{\volt}$ 
+        \end{center}
+        Siden vi her vet at vi har positiv spenning (NMOS transistor) har vi at 
+            $V_{GS} = \underline{\underline{\SI{3}{\volt}}}$
+        og 
+            $I_{DS} = \underline{\underline{\SI{7.95}{\milli\ampere}}}$.
+        Til slutt har vi at 
+        \[
+            V_{DS} = V_{DD} - V_{R_D} = \SI{12}{\volt} - \SI{500}{\ohm} \cdot \SI{7.95}{\milli\ampere} = \underline{\underline{\SI{8}{\volt}}}
+        \]
+
+        \textbf{Figur 8:} \\
+        Rakk ikke gjøre den siste :)
+\end{enumerate}
+
+\end{document}

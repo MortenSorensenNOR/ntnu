@@ -1,0 +1,121 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{itemize}[label=\alph)]
+    \item[a)] {
+        \[
+            A_1 = 5 \:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\: A_2 = 38e^{j \cdot \pi/3} \:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\: A_3 = e^{2j}
+        \]
+    } 
+    \item[b)] {
+        \begin{itemize}
+            \item[i)] {
+                \[
+                    7 \cdot \cos{\left(\omega \cdot t + \pi\right)}
+                \]
+            }
+            \item[ii)] {
+                \[
+                    3 \cdot \cos{\left(\omega \cdot t + 4.3\pi\right)}
+                \]
+            }
+            \item[iii)] {
+                \[
+                    C \cdot \cos{\left(\omega \cdot t + \beta\right)}
+                \]
+            }
+            \item[iv)] {
+                \[
+                    4+4j = 4\sqrt(2) \cdot \left(\cos{\left(\frac{\pi}{4}\right) + j \cdot \sin{\left(\frac{\pi}{4}\right)}}\right) = 4\sqrt{2}e^{j \cdot \frac{\pi}{4}}
+                \]
+            }
+        \end{itemize}
+    }
+    \item[c)] {
+        \[
+            A = \frac{3}{2} \:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\: B = 2e^{j \cdot \frac{\pi}{2}} \:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\: C = \frac{1}{2}e^{-j \cdot \frac{\pi}{2}} \:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\:\: D = \frac{1}{2}e^{-j \cdot \pi}
+        \]
+    }
+\end{itemize}
+
+\section*{Oppgave 2.}
+Starter med å omgjøre $x(t)$ til det analytiske signalet $\tilde{x}(t)$
+\begin{align*}
+    \tilde{x}(t) &= \left(10e^{j \cdot 0.42} + 4.2e^{-j \cdot 1.3} - 6e^{j \cdot \left(0.38 - \frac{\pi}{2}\right)}\right) \cdot e^{j \omega t} \\ 
+                 &= \left(8.03 + 5.6j\right)e^{j \omega t} \\ 
+                 &= 9.79e^{0.61j} \cdot e^{j \omega t} = 9.79e^{j\left(\omega t + 0.61\right)} \\
+                 &= 9.79(\cos{\left(\omega t + 0.61\right)} + j \cdot \sin{\left(\omega t + 0.61\right)})
+\end{align*}
+Får da at $x(t)$ er lik den reelle delen av $\tilde{x}(t)$, altså
+\[
+    x(t) = \underline{\underline{9.79\cos{\left(\omega t + 0.61\right)}}}
+\]
+
+\newpage
+\section*{Oppgave 3.}
+\begin{itemize}
+    \item[a)] {
+        Gitt et signal $x(t) = a \cos{\left(\omega t\right)}$ og en tidsforsinkelse på $\Delta t$ får vi at det tidsforsinkede signalet
+        \[
+            a \cos{\left(\omega (t - \Delta t)\right)} = a \cos{\left(\omega t - \omega \Delta t\right)} = a \cos{\left(\omega t + \phi\right)}
+        \]
+        der $\phi = -\Delta t$.
+    }
+    \item[b)] {
+        Setter opp forsøket i falstad \cite{falstad}:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.875\textwidth]{Bilder/vplot.png}
+        \end{figure}
+        Måler så en tidsforsinkelse på $\SI{-0.53}{\milli\s}$ på R og en tidsforsinkelse på $\SI{0.715}{\milli\s}$ på
+        kondensatoren C, og maksamplituder på henholdsvis $\SI{0.392}{\volt}$ og $\SI{0.311}{\volt}$. 
+        
+        Det gir komplekse amplituder
+        \begin{align*}
+            &V_1 = 0.392e^{j \cdot (\SI{0.53}{\milli\s} \cdot 2\pi \cdot \SI{200}{\hertz})} \\
+            &V_2 =  0.392e^{-j \cdot (\SI{0.715}{\milli\s} \cdot 2\pi \cdot \SI{200}{\hertz})}
+        \end{align*}
+
+        Vi har fra Kirchoffs spenningslov at $V_0 = V_1 + V_2$. Legger vi resultatene ovenfra inn i GeoGebra får vi at 
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.55\textwidth]{Bilder/sol.png}
+        \end{figure}
+        Altså stemmer Kirchoffs spenningslov.
+    }
+\end{itemize}
+
+\section*{Oppgave 4.}
+\begin{itemize}
+    \item[a+b)] {
+        Vi har at $V_S = 5$, $Z_1 = 100$, $Z_2 = \frac{1}{j\omega C} = \frac{1}{j \cdot 2\pi 10^4 \cdot 100 \cdot 10^{-9}}$ og til slutt at 
+        $V_3 = j\omega L = j \cdot 2\pi 10^4 \cdot 10^{-3}$.
+
+        Bruker regler for impedans i parallelkobling, og får at 
+        \[
+            Z_p = \frac{Z_2 \cdot Z_3}{Z_2 + Z_3}
+        \]
+        og bruker så Ohms lov til å få at den komplekse amplituden til spenningen over parrallelkoblingen (som er lik $V_1$) blir lik
+        \[
+            V_1 = V_s \cdot \frac{Z_p}{Z_1 + Z_p} \approx \underline{\underline{2.59 + 2.5j}}
+        \]
+        Vi kan da finne at spenningen $v_1(t)$ er lik
+        \[
+            v_1(t) = 3.6e^{j \cdot 0.77} \cdot e^{j \cdot 2\pi 10^4t}
+        \]
+    }
+\end{itemize}
+
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{Referanser}
+\begin{thebibliography}{99}
+\input{Bibliografi/Bibliografi}
+\end{thebibliography}
+
+\end{document}

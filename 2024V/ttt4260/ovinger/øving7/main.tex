@@ -1,0 +1,67 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Starter med å sette opp småsignalskjema til systemet 
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{Bilder/1a.png}
+            \caption{Småsignalskjema til systemet} 
+        \end{figure}
+        Finner så $R_i$:
+        \begin{align*}
+            R_i &= R_{G1} \mid\mid R_{G2} \\
+                &= \frac{\SI{3}{\mega\ohm} \cdot \SI{1}{\mega\ohm}}{\SI{4}{\mega\ohm}} \\ 
+                &= \SI{0.75}{\mega\ohm}
+        \end{align*}
+        $R_o$ blir da 
+        \[
+            R_o = R_D = \SI{2}{\kilo\ohm}
+        \]
+        Vi får videre at 
+        \[
+            V_2 = -i_{d}R_D = -g_m v_1 R_D
+        \]
+        Får til slutt at 
+        \begin{align*}
+            A &= \frac{V_2}{V_1} = -g_m R_D = -k\left(V_{GS} - V_T\right)R_D \\ 
+              &= -32 \cdot \left(\SI{1.5}{\volt} - \SI{1}{\volt}\right) \cdot \SI{2}{\kilo\ohm} \\
+              &= -32
+        \end{align*}
+    \item 
+        Vi får at 
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{Bilder/1b.png}
+            \caption{Småsignalskjema til systemet} 
+        \end{figure}
+        \[
+            V_2 = A v_1 \frac{R_L}{R_o + R_L} = -32 v_1 \cdot \frac{\SI{2}{\kilo\ohm}}{\SI{4}{\kilo\ohm}} = -16 v_1
+        \]
+        Altså halveres forsterkningen når $R_L$ kobles på.
+        Øker vi lastmotstanden til 10 ganger original verdi får vi at
+        \[
+            V_2 = -32 v_1 \cdot \frac{\SI{20}{\kilo\ohm}}{\SI{22}{\kilo\ohm}} = -29 v_1
+        \]
+        altså er spenningsforsterkningen større med større lastmotstand.
+    \item Skal finne spenningsforsterkningen $A_s$. Finner først $V_1$:
+        \[
+            V_1 = v_{sig}\frac{R_i}{R_i + R_sig}
+        \]
+        Finner så $A_s$:
+        \begin{align*}
+            A_s &= \frac{V_2}{v_{sig}} = \frac{g_m V_1 R_o}{v_{sig}} \\
+                &= \frac{g_m R_i R_o}{R_i + R_o} \\
+                &= \frac{-k \cdot (V_{GS} - V_T) \cdot R_i \cdot R_o}{R_i + R_o} \\
+                &= \frac{-32 \cdot (\SI{1.5}{\volt} - \SI{1}{\volt}) \cdot \SI{0.75}{\mega\ohm} \cdot \SI{2}{\kilo\ohm}}{\SI{0.75}{\mega\ohm} + \SI{2}{\kilo\ohm}} \\
+                &\approx -31.9 
+        \end{align*}
+        $A_s$ er tilnærmet lik $A$. Det er fordi det aller meste av spenningsfallet fra $v_{sig}$ ligger over $R_i$, og ikke $R_{sig}$.
+\end{enumerate}
+
+\end{document}

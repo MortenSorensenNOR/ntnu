@@ -1,0 +1,210 @@
+\documentclass[a4paper,11pt,english]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Incorporating I/O}
+\begin{itemize}
+    \item Every program needs I/O
+    \item Process execution consists of
+        \begin{itemize}
+            \item CPU execution (\textbf{\color{blue} CPU burst})
+            \item I/O wait (\textbf{\color{blue} I/O burst})
+        \end{itemize}
+    \item Treating each CPU burst as a sub-job
+        \begin{itemize}
+            \item Schedule a CPU burst
+            \item Initialize the subsequent I/O burst, when the CPU burst completes
+            \item Switch to another process
+        \end{itemize}
+\end{itemize}
+
+\section*{Priority-based scheduling}
+\begin{itemize}
+    \item A \textbf{\color{blue} priority} level (integrer) is assigned to each process
+        \begin{itemize}
+            \item FIFO, SJF, STCF are \textbf{\color{red} special} priority-based scheduling algorithms 
+        \end{itemize}
+    \item The process with the \textbf{\color{blue} highest priority} is always scheduled
+    \item Priority-Based Scheduling:
+        \begin{itemize}
+            \item \textbf{\color{blue} Preemptive}
+            \item \textbf{\color{blue} Non-preemptive}
+        \end{itemize}
+    \item Different priority assignment methods
+        \begin{itemize}
+            \item Internal or external
+        \end{itemize}
+    \item The smaller number, the higher priority (usually)
+    \item Priority-based scheduling may suffer form \textbf{\color{red} starvation}
+\end{itemize}
+
+\section*{Multi-Level Feedback Queue}
+\begin{itemize}
+    \item SJF and STCF are \textbf{\color{blue} good} for \textbf{\color{blue} turnaround time}, but \textbf{\color{red} poor} for \textbf{\color{red} respinse time}
+    \item In contrast, RR is \textbf{\color{blue} good} for \textbf{\color{blue} response time}, but \textbf{\color{red} terrible} for \textbf{\color{red} turnaround time}
+    \item We need ta scheduling algorithm
+        \begin{itemize}
+            \item Optimize \textbf{\color{blue} turnaround time} for \textbf{\color{blue} computation-intensive programs}
+            \item Minimize \textbf{\color{blue} response time} for \textbf{\color{blue} interactive programs}
+        \end{itemize}
+    \item Multi-level Feedback Queue (MLFQ) combines
+        \begin{itemize}
+            \item \textbf{\color{blue} Priority-based scheduling}
+            \item \textbf{\color{blue} RR}
+        \end{itemize}
+    \item MLFQ maintains a number of \textbf{\color{blue} queues (multi-level queue)}
+        \begin{itemize}
+            \item Each queue has a different \textbf{\color{blue} priority level}
+            \item Jobs on the same queue have the same priority
+        \end{itemize}
+    \item Jobs are assigned to a queue
+    \item Rules for scheduling in MLFQ:
+        \begin{itemize}
+            \item \textbf{\color{blue} Rule 1.} if priority(A) > priority(B), A runs
+            \item \textbf{\color{blue} Rule 2.} if priority(A) == priority (B), RR
+            \item \textbf{\color{blue} Rule 3.} When a job enters the system, it is placed at the highest priority
+            \item \textbf{\color{blue} Rule 4.}
+                \begin{itemize}
+                    \item \textbf{\color{blue} A)} If a job uses up an entire time slice while running, its priority is reduced (i.e. it moves down on queue)
+                    \item \textbf{\color{blue} B)} If a job gives up the CPU before the time slice is up, it stays at the same priority level
+                \end{itemize}
+        \end{itemize}
+    \item MLFQ \textbf{\color{blue} varies} the priority of a job instead of having a fixed priority
+    \item MLFQ \textbf{\color{blue} varies} the priority of a job based on \textbf{\color{blue} its observed begavior}
+    \item What are the problems with the current MLFQ?
+        \begin{itemize}
+            \item Starvation
+            \item Game the scheduler
+                \begin{itemize}
+                \item Some sneaky tricks to get more resources
+                \end{itemize}
+            \item Changed behavoir over time
+        \end{itemize}
+    \item Starvation:
+        \begin{itemize}
+            \item \textbf{Rule 5.} After some time period $S$, move all the jobs in the system to the topmost queue.
+        \end{itemize} 
+    \item Game the scheduler:
+        \begin{itemize}
+            \item \textbf{Rule 4.} Once a job uses its \textbf{\color{red} time allotment} at a given level (regardless of how many times it has given up the CPU), its priority is reduced (i.e., it moves down one queue)
+        \end{itemize} 
+    \item The refined set of MLFQ rules:
+        \begin{itemize}
+            \item \textbf{Rule 1.} if priority(A) > priority(B), A runs (B doesn't)
+            \item \textbf{Rule 2.} if priority(A) == priority(B), A \& B runs RR
+            \item \textbf{Rule 3.} When a job enters the system, it is placed at the highest priority
+            \item \textbf{Rule 4.} Once a job uses up tis time alotment at a given level (regardless of how may times it has given up the CPU), its priority is reduced (i.e., it moves down on queue)
+            \item \textbf{Rule 5.} After some time period S, move all jobs in the system to the topmost queue.
+        \end{itemize}
+    \item MLFQ scheduler is defined by the following parameters
+        \begin{itemize}
+            \item Number of queues
+            \item Time slice of each queue
+            \item Boosting period
+            \item Scheduling algorithms for each queue
+            \item etc.
+        \end{itemize}
+    \item High priority queue:
+        \begin{itemize}
+            \item Interactive process
+            \textbf{\color{blue} Response time}
+        \end{itemize}
+    \item Low priority queue:
+        \begin{itemize}
+            \item Batch process (CPU-itensive)
+            \item \textbf{\color{blue} Turnaround time}
+        \end{itemize}
+\end{itemize}
+
+\section*{Proportional Share Scheduling}
+\begin{itemize}
+    \item \textbf{\color{blue} Fair-share} scheduler
+        \begin{itemize}
+            \item Guarantee that each job obtais a \textit{a certain percentage} of CPU time
+            \item Not optimized for turnaround or response time 
+        \end{itemize}
+    \item \textbf{\color{blue} Lottery scheduling}
+        \begin{itemize}
+            \item Based on the concept of \textbf{\color{blue} tickets}
+                \begin{itemize}
+                    \item The percentage of tickets denotes the share of a resource for a process
+                \end{itemize}
+        \end{itemize}
+    \item A \textbf{\color{blue} probabilistic} way to implement \textbf{\color{blue} lottery scheduling}
+        \begin{itemize}
+            \item Time slice (like in RR)
+            \item Scheduler knows how many tickets exist
+            \item Scheduler picks a winning ticket from the ticket pool for each time slice
+        \end{itemize}
+    \item \textbf{\color{blue} Ticket Currency}: Allocate tickets among the tasks of a user group
+        \begin{itemize}
+            \item \textbf{\color{blue} Global currency}
+            \item \textbf{\color{blue} Ticket currency}
+        \end{itemize}
+    \item \textbf{\color{blue} Ticket Transfer}: Temporarily held off tickets to another task
+        \begin{itemize}
+            \item Boos the execution of the task that recieves tickets
+        \end{itemize}
+    \item \textbf{\color{blue} Ticket Inflation}: Dynamically change the number of tickets/
+\end{itemize}
+
+\section*{Completely Fair Scheduling}
+\begin{itemize}
+    \item Completely Fair Scheduling (CFS)
+        \begin{itemize}
+            \item The current CPU scheduler in Linux
+            \item Choose the process with lowest execution time: \textbf{\color{blue} vruntime}
+            \item Run the process for a \textbf{\color{blue} time slice}
+            \item Non-fixed time slice
+                \begin{itemize}
+                    \item CFS assigns time slice based on \textbf{\color{blue} sched\_latency} and \textbf{\color{blue} the number of processes}
+                \end{itemize}
+            \item \textbf{\color{blue} Priority}
+                \begin{itemize}
+                    \item Enables control over priority by using \textbf{\color{blue} nice value}, user-space value.
+                    \item -20-19, default 0, positive lower priority, negative higher priority
+                \end{itemize}
+            \item Efficient data structure
+                \begin{itemize}
+                    \item Use \textbf{\color{blue} red-black} tree for efficient search, insertion and deletion of a process
+                \end{itemize}
+        \end{itemize}
+    \item \textbf{\color{blue} Virtual runtime}
+        \begin{itemize}
+            \item Denotes how long the process has executed
+            \item Per-process veriable
+            \item Inceases in \textbf{proportion with physical (real) time} when it runs
+            \item CFS will pick the process with the \textbf{lowest vruntime} to run next
+        \end{itemize}
+    \item \textbf{\color{red} sched\_latency}
+        \begin{itemize}
+            \item Uses to determine the \textbf{\color{blue} time slice}
+            \item A typical value is 48 milliseconds
+            \item process time slice = sched\_latency / the number of process
+        \end{itemize}
+    \item CFS deploys a red-black tree
+        \begin{itemize}
+            \item Balanced binary search tree
+            \item Ordered by \textbf{\color{blue} vruntime} as key
+            \item \textbf{\color{blue} Complexity:}
+                \begin{itemize}
+                    \item Insertion, deletion, update -> \textbf{\color{blue} O(LogN)}
+                    \item find min -> \textbf{\color{blue} O(1)}
+                \end{itemize}
+        \end{itemize}
+    \item How does CFS deal with I/O and sleep
+        \begin{itemize}
+            \item When a process issues an I/O, it turns into sleep state. Then it will \textbf{\color{red} not} accumulate \textbf{\color{blue} vruntime}  
+            \item As soon as the long-sleep process is waked up, it has a small vruntime, i.e., a high priority. As a result, it is likely to monopolize CPU for a long time
+            \item \textbf{\color{blue} Solution}: Set the vruntime of a wake-up process to the minimum value found in the RB-tree
+        \end{itemize}
+    \item How CFS boosts interactivity:
+        \begin{itemize}
+            \item I/O-bound (Interactive) processes typically have shorter CPU bursts and this have a low vruntime - higher priority
+        \end{itemize}
+\end{itemize}
+
+\end{document}

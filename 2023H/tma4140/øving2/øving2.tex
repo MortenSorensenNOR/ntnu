@@ -1,0 +1,205 @@
+\documentclass{article}
+
+% Packages
+\usepackage{braket}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage[shortlabels]{enumitem}
+
+% Margins
+\topmargin=-2.5cm
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+% Commands
+\makeatletter
+\newcommand{\listintertext}{\@ifstar\listintertext@\listintertext@@}
+\newcommand{\listintertext@}[1]{% \listintertext*{#1}
+\hspace*{-\@totalleftmargin}#1}
+\newcommand{\listintertext@@}[1]{% \listintertext{#1}
+\hspace{-\leftmargin}#1}
+\makeatother
+
+\title{\huge{Øving 2\\ Diskret matematikk}}
+\author{Morten Sørensen}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\subsection*{Oppgave 1.}
+Lar $A = \set{1, 2, 3, 4}$, og betrakter relasjonen $R = \set{\langle 1, 2 \rangle, \langle 1, 3 \rangle, \langle 1, 4 \rangle}$. 
+Skal finne alle egenskapene til relasjonen $R$.
+
+\begin{enumerate}[(a)]
+	\item $R$ er ikke refleksiv, ettersom at vi ikke har at ingen $\langle a, a \rangle \in R$ for noen $a \in R$. 
+	\item $R$ er heller ikke symmetrisk siden vi ikke har at $\langle a, b \rangle \in R \implies \langle b, a \rangle \in R$ for noen $a, b \in A$.
+	\item $R$ er ikke transitiv siden det ikke eksisterer $\langle a, b \rangle, \langle b, c \rangle \in R$.
+	\item $R$ er ikke antisymmetrisk siden det ikke finnes noen $\langle a, b \rangle, \langle b, a \rangle \in R$.
+	\item $R$ er irrefleksiv siden det ikke eksisterer noen $\langle a, a \rangle$ for alle $a \in A$.
+\end{enumerate}
+
+\subsection*{Oppgave 2.}
+Lar $A = \set{1, 2, 3, 4}$.
+\begin{enumerate}[(a)]
+	\item {
+		Skal finne egenskapene til relasjonen $R = \set{\langle x, y \rangle \mid x, y \in A \text{ \& } 2 \mid (x + y)}$. Vi har at $\langle x, y \rangle \in R$ dersom 
+		$x, y$ enten er begge oddetall eller begge partall.
+		\begin{enumerate} [1.]
+		\item {
+			$R$ er refleksiv. Hvis $a \in A$ er er et oddetall, vil $a + a$ være et partall, og hvis $a$ er et partall er også $a + a$ et partall. Altså er 
+			$\langle a, a \rangle \in R$ for alle $a \in A$.
+		}
+		\item {
+			$R$ er symmetrisk. Addisjon er kommutativt, og alle $\langle a, b \rangle \in R \implies \langle b, a \rangle \in R$.
+		}
+		\item {
+			$R$ er ikke transitiv. Det er ikke nok partalls- eller oddetallselementer for å danne en transitiv relasjon på $A$.
+		}
+		\item {
+			$R$ er ikke anti-symmetrisk. Vi har at $\langle 1, 3 \rangle, \langle 3, 1 \rangle \in R$, men $1 \neq 3$.
+		}
+		\item {
+			$R$ er ikke irrefleksiv. Vi har at $R$ er refleksiv.
+		}
+		\end{enumerate}
+	}
+	\item {
+		Skal finne egenskapene til relasjonen $R = \set{\langle x, y \rangle \mid x, y \in A \text{ \& } 2 \mid (x \cdot y)}$. Vi har at $\langle x, y \rangle \in R$ dersom 
+		enten $x$ eller $y$ er partall, eller dersom både $x$ og $y$ er partall.
+		\begin{enumerate} [1.]
+		\item {
+			$R$ er ikke refleksiv. $\langle 1, 1 \rangle \notin R$.
+		}
+		\item {
+			$R$ er symmetrisk. Multiplikasjon er kommutativt, så $\langle x, y \rangle \in R \implies \langle y, x \rangle \in R$.
+		}
+		\item {
+			$R$ er ikke transitiv. $\langle 1, 2 \rangle, \langle 2, 3 \rangle \in R$, men $\langle 1, 3 \rangle \notin R$.
+		}
+		\item {
+			$R$ er ikke anti-symmetrisk. $\langle 1, 2 \rangle, \langle 2, 1 \rangle \in R$, men $1 \neq 2$.
+		}
+		\item {
+			$R$ er ikke irrefleksiv. $\langle 2, 2 \rangle \in R$.
+		}
+		\end{enumerate}
+	}
+\end{enumerate}
+
+\subsection*{Oppgave 3.}
+\begin{enumerate}[(a)]
+	\item {
+		$f$ er injektiv, ettersom at to verdier $x_1, x_2 \in \mathbb{N}$ der $f(x_1) = f(x_2)$ gir 
+		$x_1 + 2 = x_2 + 2 \implies x_1 = x_2$. \\
+		$f$ er ikke surjektiv ettersom at det ikke $\exists a \in \mathbb{N}$ s.a. $\langle a, 1 \rangle \in f$.
+	}
+	\item {
+		$f$ er injektiv. Hvis vi har at to elementer $x_1, x_2 \in \mathbb{N}$ oppfyller $f(x_1) = f(x_2)$, har vi følgende 
+		scenarioer:
+		\begin{enumerate}[1.]
+			\item {
+				Både $x_1$ og $x_2$ er partall. Da er $x_1 + 1 = x_2 + 1 \implies x_1 = x_2$.
+			}
+			\item {
+				Både $x_1$ og $x_2$ er oddetall. Da er $x_1 - 1 = x_2 - 1 \implies x_1 = x_2$.
+			}
+			\item {
+				$x_1$ er partall og $x_2$ er oddetall. Da er $x_1 + 1 = x_2 - 1$, altså 
+				$x_1 - x_2 = 2$, noe som ikke er mulig, ettersom at differansen mellom et partall og et oddetall 
+				aldri kan være et partall.
+			}
+		Altså har vi at $f(x_1) = f(x_2) \implies x_1 = x_2$, og $f$ er injektiv.
+		\end{enumerate}
+		$f$ er surjektiv. La $y = f(x)$ for en vilkårlig $x$. Da er $y \in \mathbb{N}$. Dersom $x$ er et partall 
+		vil $y = x + 1$ være et oddetall, og dersom $x$ er et oddetall vil $y = x - 1$ være et partall. Altså, hvis 
+		$y \in \mathbb{N}$ så er $x \in \mathbb{N}$, og funksjonen er derfor surjektiv.
+	}
+	\item {
+		Injektivitet: \\
+		For to vilkårlige $x_1, x_2 \in \mathbb{N}$ der $f(x_1) = f(x_2)$ har vi følgende scenarioer
+		\begin{enumerate}[1.]
+			\item {
+				Både $x_1$ og $x_2$ er partall. Da har vi at $x_1/2 = x_2/2 \implies x_1 = x_2$.
+			}
+			\item {
+				Både $x_1$ og $x_2$ er oddetall. Da har vi at $(x_1-1)/2 = (x_2-1)/2 \implies x_1 = x_2$.
+			}
+			\item {
+				$x_1$ er partall og $x_2$ er oddetall. Da har vi at 
+				$$\frac{x_1}{2} = \frac{(x_2-1)}{2} \implies x_2 - x_1 = 1$$
+				Altså er $x_1 \neq x_2$, og $f$ er derfor ikke injektiv.
+			}
+		\end{enumerate}
+		Surjektivitet: Fikk ikke tid :(
+		
+	}
+\end{enumerate}
+
+\subsection*{Oppgave 4.}
+\begin{enumerate}[(a)]
+	\item {
+		Ettersom at $g$ er surjektiv eksisterer det for enhver $c \in C$ en $b \in B$ s.a. $g(b) = c$,
+		og ettersom at $f$ er surjektiv, eksisterer det for enhver $b \in B$ en $a \in A$ s.a. $f(a) = b$.
+		Kan derfor vise at det eksisterer en $a \in A$ for enhver $c \in C$ s.a. $g(f(a)) = g(b) = c$.
+		Altså må $g \circ f$ være surjektiv hvis både $g$ og $f$ er det.
+	}
+	\item {
+		Skal bevise at dersom $g \circ f$ er injektiv, så må $f$ også være injektiv. Dersom vi først antar at 
+		$f$ ikke er injektiv, så har vi at det eksisterer to elementer $x, y \in A$ s.a. $f(a) = f(b)$ uten at 
+		$a = b$. Vi har da at $g \circ f(x) = g \circ f(y)$ uten at $a = b$, noe som er en motsigelse med at komposisjonen
+		$g \circ f$ er injektiv. Altså må $f$ også være injektiv.
+	}
+	\item {
+		Skal motbevise at injektivitet på $g \circ f$ impliserer injektivitet på $g$. Dersom vi lar 
+		$g : \mathbb{Z} \to \mathbb{N}$ der 
+		$$g(x) = x^2$$
+		og $f : \mathbb{N} \to \mathbb{N}$ der 
+		$$f(x) = x\text{,}$$
+		så vil komposisjonen $g \circ f$ være injektiv, men funksjonen $g$ i seg selv vil ikke være det.
+	}
+\end{enumerate}
+
+\subsection*{Oppgave 5.}
+\begin{enumerate}[(a)]
+	\item {
+		Siden $M$ er en tellbar mengde finnes det en bijektiv funksjon $f : M \to \mathbb{N}$. Kan definere 
+		en ny bijektiv funksjon $g : M \cup \set{42} \to \mathbb{N}$ der $g(42) = 0$ og $g(e) = f(e) + 1$ for $e \in M$.
+	}
+	\item {
+		Ettersom at både $M$ og $N$ er tellbare mengder, eksisterer det to bijektive funksjoner $f : M \to \mathbb{N}$ og 
+		$g : N \to \mathbb{N}$. Kan definere en ny funksjon $h : M \cup N \to \mathbb{N}$ s.a.
+		$$h(e) = 
+		\begin{cases}
+			2 \cdot f(e) & e \in M \\
+			2 \cdot g(e) + 1 & e \in N \\	
+		\end{cases}$$
+		Skal da vise at $h$ er injektiv. For to vilkårlige elementer $a, b \in M \cup N$,
+		så har vi at hvis
+		\begin{enumerate}[1.]
+			\item {
+				$a \in M$ og $b \in M$ så har vi at $h(a) = h(b)$ medfører at $2 \cdot f(a) = 2 \cdot f(b)$, og siden 
+				$f$ er bijektiv, medfører dette at $a = b$.
+			}
+			\item {
+				$a \in N$ og $b \in N$ så har vi at $h(a) = h(b)$ medfører at $2 \cdot g(a) + 1 = 2 \cdot g(b) + 1$, og siden 
+				$g$ er bijektiv, medfører dette at $a = b$.
+			}
+			\item {
+				$a \in M$ og $b \in N$ så har vi at $h(a) = h(b)$ medfører $2 \cdot f(a) = 2 \cdot g(b) + 1$, altså at 
+				$f(a) - g(b)= \frac{1}{2}$, noe som er en motsigelse med at $f(a), g(b) \in \mathbb{N}$.
+			}
+			\item {
+				$a \in N$ og $b \in M$ så har vi at $h(a) = h(b)$ medfører $2 \cdot f(b) = 2 \cdot g(a) + 1$, altså at 
+				$f(b) - g(a)= \frac{1}{2}$, noe som er en motsigelse med at $f(b), g(a) \in \mathbb{N}$.
+			}
+		\end{enumerate}
+		Vi har da at $h(a) = h(b)$ kunn hvis $a = b$, altså er $h$ injektiv og $A \cup B$ er tellbar.
+	}
+\end{enumerate}
+\end{document}

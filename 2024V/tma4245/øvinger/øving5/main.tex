@@ -1,0 +1,189 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Ettersom at hver sekvens av DNA-sturkturen er uavhengig, kan 
+        undersøkelsen av om et hvert par av sekvenser modeleres som en 
+        Bernoulli forsøksrekke av 5 forsøk, som gir en binomisk fordeling
+        der sannsynligheten for at et par sekvenser er like er $p = 0.15$.
+
+        Vi får følgende sannsynligheter
+        \[
+            P(X = 3) = 0.0244
+        \]
+        og
+        \[
+            P(X \geq 3) = 0.0266 
+        \]
+        og
+        \[
+            P(X = 3 \mid X \geq 2) = \frac{P(x \geq 2 \mid X = 3) \cdot P(X = 3)}{P(X \geq 2)} \approx 0.1481
+        \]
+    \item Gitt følgende null- og alternativhypoteser
+        \begin{center}
+            $H_0: p = 0.15$ (ikke far) mot $H_1: p = 1$ (far)
+        \end{center}
+        Finner så sannsynligheten for type-I og type-II feil. Dersom vi lar vår 
+        beslutningsregel være at vi forkaster $H_0$ dersom 
+        \[
+            X = n
+        \]
+        finner vi sannsynligheten for type-I feil ved å finne sannsynligheten
+        \[
+            P(X = n \mid H_0) = (0.15)^{5} \approx \underline{\underline{7.59375 \cdot 10^{-5}}}
+        \]
+        
+        Finner så sannsynligheten for type-II feil. Dersom $H_1$ er riktig vil alltid 
+        beslutningsregelen være møtt ut ifra sannsynligheten definert. Det er altså 
+        ingen sannsynlighet for type-II feil.
+        \[
+            P(X < n \mid H_1) = \underline{\underline{0}}
+        \]
+\end{enumerate}
+
+\section*{Oppgave 2.}
+\begin{enumerate}
+    \item For å kunne betrakte X som negativt binomisk fordelt må vi anta
+        at hver fangst er uavhengig, at hver fangst har lik sannsynlighet for å
+        fange en markert fisk og at vi tilnærmer m til å være en uendelig populasjon.
+    \item Skal finne SME for $m$, $\hat{m}$. Vi lar 
+        \[
+            L(m) = \binom{x-1}{k-1}\left(\frac{r}{m}\right)^k \left(1 - \left(\frac{r}{m}\right)\right)^{x-k}
+        \]
+        Tar så logaritmen
+        \[
+            l(m) = \ln{\binom{x-1}{k-1}} + k(\ln{(r)} - \ln{(m)}) + (x - k)\ln{\left(1 - \left(\frac{r}{m}\right)\right)}
+        \]
+        og deriverer med hensyn på $m$
+        \[
+            \frac{d}{dm}l(m) = -\frac{k}{m} + \frac{x - k}{1 - \frac{r}{m}}
+        \]
+        Setter dette lik 0
+        \begin{align*}
+            -\frac{k}{m} + \frac{(x - k)r}{m(m-r)} &= 0 \implies 
+            \hat{m} = \frac{Xr}{k}
+        \end{align*}
+
+        Finner så forventningsverdien til $\hat{m}$.
+        \[
+            E[\hat{m}] = \frac{r}{k} E[X] = \frac{r}{k} \cdot \frac{k}{\frac{r}{m}} = m
+        \]
+        Altså er $\hat{m}$ forventningsrett.
+        
+        Finner til slutt variansen til $\hat{m}$.
+        \[
+            \text{Var}[\hat{m}] = \frac{r^2}{k^2} \text{Var}[X] = \frac{r^2}{k^2} \cdot \frac{\left(1 - \frac{r}{m}\right)k}{\left(\frac{r}{m}\right)^2} = \frac{m^2 - rm}{k}
+        \]
+    \item Velger å formulere nullhypotesen slik
+        \[
+            H_0: m = 50000
+        \]
+        altså at ingen laks har rømt, og alternativ hypotesen slik
+        \[
+            H_1: m < 50000
+        \]
+        Estimatet for $m$ etter stormen blir gitt SME for $m$ i forrige oppgave 
+        \[
+            \hat{m} = \frac{Xr}{k} = \frac{728 \cdot 1000}{20} = 36400
+        \]
+        Kan så formulere en testobservator der vi antar at $X$ er tilnærmet 
+        normalfordelt, grunnet sentralgrenseteoremet. Vi kan formulere 
+        beslutningsregelen slik at vi forkaster nullhypotesen dersom 
+        z-scoren til testobservatoren er større enn den kritiske verdien 
+        for et 5\% signifikantnivå.
+
+        For testobservatoren benytter vi en proporsjonstest
+        $Z$ der $\hat{p} = \frac{k}{X}$ er den observerte proposjonen av markerte fiks til 
+        fanget fisk, og $p_0 = \frac{r}{m_0}$ er den forventede proporsjonen forventet under 
+        $H_0$. Vi har da at testobservatoren
+        \[
+            Z = \frac{\hat{p} - p_0}{\sqrt{\frac{p_0(1 - p_0)}{X}}} \approx 1.44
+        \]
+        Vi har så at kritisk verdi for $\alpha =$ 5\% er 1.645. Vi har derfor 
+        at vi ikke skal forkaste nullhypotesen gitt observerte verdier og de bestemte 
+        observatorene og beslutningsreglene.
+\end{enumerate}
+
+\section*{Oppgave 3.}
+\begin{enumerate}
+    \item Finner først forventningsverdien og variansen til estimatoren $\hat{r}$.
+        \[
+            E[\hat{r}] = \frac{1}{n} \cdot E\left[\sum_{i=1}^{n}{X}\right] = \frac{1}{n} \cdot n \cdot E[X] = r
+        \]
+        Variansen blir så
+        \[
+            \text{Var}[\hat{r}] = \frac{1}{n^2} \cdot \text{Var}\left[\sum_{i=1}^{n}{X}\right] = \frac{1}{n} \cdot \text{Var}[X] = \frac{r^2}{na}
+        \]
+
+        Benytter vi sentralgrenseteoremet gitt en tilstrekkelig stor $n$ får vi at 
+        \[
+            Z = \frac{\overline{X} - E[X]}{\sqrt{\frac{\text{Var}[X]}{n}}} = \frac{\hat{r} - r}{\sqrt{\frac{r^2}{n^2a}}} = \frac{\hat{r} - r}{r} \sqrt{n^2a}
+        \]
+        der $Z \sim N(0, 1)$. Ser at løsningsforslaget sier $\sqrt{na}$, så bruker dette fremmover.
+    \item 
+        Får følgende histogram fra måledataen
+        \begin{figure}[H]
+            \centering 
+            \includegraphics[width=0.45\textwidth]{Bilder/histogram.png}
+        \end{figure}
+        Og følgende boksplott
+        \begin{figure}[H]
+            \centering 
+            \includegraphics[width=0.45\textwidth]{Bilder/boksplot.png}
+        \end{figure}
+
+        Ut ifra plottene er det grunn til å tro at den målte verdien for refleksjonsparameteren er høyere 
+        i år enn i fjord, da både medianen og første kvantil ligger over fjordårets målte verdi.
+
+    \item Kan formulere null- og alternativhypotesen som følgende
+        \begin{center}
+            $H_0: r = r_0$ \hspace{1cm} og \hspace{1cm} $H_1: r > r_0$
+        \end{center}
+    
+        Velger testobservatoren til å være følgende
+        \[
+            Z = \frac{\hat{r} - r_0}{r_0} \sqrt{na} \sim N(0, 1)
+        \]
+
+        Velger så en beslutninsregel der z-scoren til testobservatoren er høyere enn den kritiske verdien
+        for et 10\% signifikantnivå.
+
+        For å konkludere om den målte refleksjonsparemteren er høyere enn i fjord finner vi verdien for 
+        testobservatoren, og skjekker den opp mot beslutningsregelen.
+        
+        Regner derfor først ut estimatoren $\hat{r}$ for måledataen:
+        \[
+            \hat{r} = \overline{X} = 16.9895
+        \]
+
+        Den kritiske verdien til en standard normalfordeling med $\alpha = 0.1$ er $1.282$.
+        Finner så $Z$:
+        \[
+            Z = \frac{\hat{r} - r_0}{r_0} \sqrt{na} = \frac{16.9895 - 12.5}{12.5} \sqrt{20 \cdot 5} \approx 2.64
+        \]
+        Beslutningen blir derfor å forkaste nullhypotesen, altså er den målte verdien for i år større enn den målte verdien i fjord.
+
+    \item Skal finne en $n$ s.a. 
+        \[
+            P(Z < z_{\alpha} \mid r \geq 15) <= 0.2
+        \]
+        Det gir følgende utledning
+        \begin{align*}
+            &P\left(\frac{\hat{r} - r_0}{r_0} \sqrt{na} < z_{\alpha} \mid r \geq 15\right) \leq 0.2 \\  
+            &P\left(\hat{r} < \frac{z_{\alpha} r_0}{\sqrt{na}} + r_0 \mid r \geq 15\right) \leq 0.2 \\
+            &P\left(\frac{\hat{r} - r}{r}\sqrt{na} < \frac{\frac{z_{\alpha} r_0}{\sqrt{na}} + r_0 - r}{r} \sqrt{na} \mid r \geq 15\right) \leq 0.2 \\
+            &P\left(\frac{\hat{r} - r}{r}\sqrt{na} < \frac{z_{\alpha}r_0 + r_0\sqrt{na} - r\sqrt{na}}{r} \mid r \geq 15\right) \leq 0.2 \\
+        \end{align*}
+        Vi har da at følgende må holde
+        \begin{align*}
+            \frac{z_{\alpha}r_0 + r_0\sqrt{na} - r\sqrt{na}}{r} \leq - z_{\beta} \implies n \approx 26.28
+        \end{align*}
+        Altså må vi ha minst $n = 27$ målinger for at sannsynligheten for type-II feil skal være mindre enn 0.2.
+\end{enumerate}
+
+\end{document}

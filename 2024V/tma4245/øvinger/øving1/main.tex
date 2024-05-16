@@ -1,0 +1,214 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+Skal vise at
+\begin{align*}
+    P\left((A \cup B)'\right) &= P\left(A' \cap B'\right) \\
+    P\left((A \cap B)'\right) &= P\left(A' \cup B'\right)
+\end{align*}
+
+Vet at hvis mengdene $X = Y \implies P(X) = P(Y)$. Bruker DeMorgans lover og får at 
+\begin{align*}
+    (A \cup B)^c &= A^c \cap B^c \\ 
+    (A \cap B)^c &= A^c \cup B^c
+\end{align*}
+Altså må likhetene være sanne. $\blacksquare$
+
+\section*{Oppgave 2.}
+Har gitt en urne med 34 kuler, der 7 er røde og 27 er blå. Trekker så tilfeldig 7 kuler, uten tilbakelegging.
+
+\hphantom{newline}\\
+a) Dersom vi kaller hendelsen der alle de 7 kulene som blir trukket er røde for $A$, kan vi uttrykke sannsynligheten for at $A$ 
+inntreffer ved
+\[P(A) = \frac{g}{m}\]
+der $m = \binom{34}{7}$ er antall måter å trekke 7 kuler fra en populasjon av 34 kuler, og $g = \binom{7}{7} \cdot \binom{27}{0} = 1$ 
+er antall måter man kan trekke 7 røde og 0 blå kuler. Sannsynligheten blir da 
+\[
+    P(A) = \frac{1}{\binom{34}{7}} = \frac{1}{10\:295\:472} \approx 1 \cdot \underline{\underline{10^{-7}}} 
+\]
+
+\hphantom{newline}\\
+b) Dersom vi lar hendelsen $B$ representere at 4 av de 7 kulene er røde og at resten er blå får vi at 
+sannsynligheten for $B$ er gitt ved
+\[
+    P(B) = \frac{\binom{7}{4} \cdot \binom{27}{3}}{\binom{34}{7}} = \frac{35 \cdot 2925}{10\:295\:472} \approx \underline{\underline{0.019}}
+\]
+
+\hphantom{newline}\\
+c) Dersom hendelsen $C$ betegner at 6 av de 7 kulene som ble trukket var røde, og hendelsen $D$ betegner at ekstrakulen er rød,
+så får vi følgende sannsynlighet for at både $C$ og $D$ inntreffer
+\[
+    P(C \cap D) = P(C) \cdot P(D \mid C) = \frac{\binom{7}{6} \cdot \binom{27}{1}}{\binom{34}{7}} \cdot \frac{1}{27} \approx \underline{\underline{1.3 \cdot 10^{-6}}}
+\]
+
+\section*{Oppgave 3.}
+a) Sannsynligheten for at Ola får nøyaktig 1 gevinst av type A er gitt ved den hypergeometriske fordelingen evaluert for $X = 1$
+\[
+    P(X = 1) = \frac{\binom{3}{1} \cdot \binom{297}{4}}{\binom{300}{5}} \approx \underline{\underline{0.0487}} 
+\]
+
+b) Sannsynligheten for at Ola vinner minst en gevinst av type A er lik summen av de hypergeometriske fordelingene for $X \in {1, 2, 3}$:
+\[
+    P(\text{minst èn A}) = P(X = 1) + P(X = 2) + P(X = 3) \approx \underline{\underline{0.04933}} 
+\]
+
+c) Sannsynligheten for at Ola vinner minst en gevinst er lik den hypergeometriske fordelingen for både A og B der $Y \geq 1$, der 
+$Y$ representerer antall gevister (både A og B):
+\[
+    P(\text{minst èn}) = P(Y = 1) + P(Y = 2) + \dots + P(Y = 5) \approx \underline{\underline{0.0967}} 
+\]
+
+\section*{Oppgave 4.}
+a) Vi har at
+\[
+    P(A \cap B) = P(A) + P(B) - P(A \cup B) = 0.4 + 0.3 - 0.6 = \underline{\underline{0.1}}
+\]
+
+For å finne $P(A \cap B \cap C)$ så vi først ut $P(A \cap C)$ og $P(B \cap C)$
+\begin{align*}
+    &P(A \cap C) = P(A) + P(C) - P(A \cup C) = 0.4 + 0.3 - 0.5 = 0.2 \\
+    &P(B \cap C) = P(B) + P(C) - P(B \cup C) = 0.3 + 0.3 - 0.6 = 0
+\end{align*}
+
+Vi har at arealet av hele unionen er gitt ved
+\[
+    P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)
+\]
+Løser så for snittet av A, B og C og får at
+\begin{align*}
+    P(A \cap B \cap C) &= P(A \cap B) + P(A \cap C) + P(B \cap C) - P(A) - P(B) - P(C) + P(A \cup B \cup C) \\
+                       &= 0.1 + 0.2 + 0 - 0.4 - 0.3 -0.3 + 0.7 = \underline{\underline{0}} 
+\end{align*}
+
+Til slutt har vi at
+\[
+    P(A \mid B) = \frac{P(A \cap B)}{P(B)} = \frac{0.1}{0.3} = \frac{1}{3}
+\]
+
+b) Hendelsene A og B er ikke uavhengige fordi $P(A \mid B) \neq P(A)$. \\ 
+
+c) Hendelsene A og B er heller ikke disjunkte fordi $P(A \cap B) \neq 0$.
+
+\section*{Oppgave 5.}
+Har fått gitt at $P(F \mid M) = 0.08$ og $P(F \mid D) = 0.003$ der hendelsen F betegner fargeblind,
+M betegner mann og D betegner dame. Har også fått opplyst at det er dobbelt så mange kvinner som menn, så
+$P(D) = 2/3$ og $P(M) = 1/3$. Regner først ut sannsynligheten for at en person er fargeblind med setningen 
+om total sannsynlighet og multiplikasjonssetningen
+
+\[
+    P(F) = P(F \mid M) \cdot P(M) + P(F \mid D) \cdot P(D) = 0.08 \cdot 1/3 + 0.003 \cdot 2/3 \approx 0.0287
+\]
+
+Kan så regne ut sannsynligheten for at den fargeblinde som har blitt trukket er en dame med Bayes setning
+
+\[
+    P(D \mid F) = \frac{P(F \mid D) \cdot P(D)}{P(F)} = \frac{0.003 \cdot 2/3}{0.0287} \approx \underline{\underline{0.0698}}
+\]
+
+\section*{Oppgave 6.}
+a) Kjører følgende kode for å regne ut $P(X \leq 2)$, $P(X \leq 2 \mid X < 4)$ og $P(X \leq 2 \mid X \geq 1)$
+\begin{align*}
+    &P(X \leq 2) = \sum_{i=0}^{2}f(x_i) = 0.4 \\
+    &P(X \leq 2 \mid X < 4) = \frac{P(X \leq 2)}{P(X < 4)} = \frac{0.4}{0.8} = 0.5 \\ 
+    &P(X \leq 2 \mid X \geq 1) = \frac{\sum_{i=1}^{2}f(x_i)}{\sum_{j=1}^{5}f(x_j)} = 0.368 
+\end{align*}
+
+b) 
+\[
+    F(x) = P(X \leq x) \sum_{z=0}^{x}f(z)
+\]
+
+
+\section*{Oppgave 7.}
+a) Vi har fått gitt den kumulative fordelingsfunksjonen
+\[
+    F_{X}(x) = 1 - e^{-\frac{x^2}{\alpha}}
+\]
+der $x \geq 0$. Fra definisjonen av sannsynlighetstetthet har vi at gitt den stokastiske variabelen $X$, så er 
+sannsynlighetstettheten for $X$ gitt ved
+\[
+    P(a < X \leq b) = \int_{a}^{b}{f(x)dx}
+\]
+Setter vi dette sammen med definisjonen for kumulativ fordeling som sier at 
+så har vi at 
+\[
+    F_{X}(x) = P(X \leq x) = P(0 \leq X \leq x) = \int_{0}^{x}{f(x)dx}
+\]
+som medfører at 
+\[
+    f_{X}(x) = \frac{d}{dx}F_{X}(x) = -\frac{2x}{\alpha} \cdot e^{-\frac{x^2}{\alpha}}
+\]
+
+\textbf{\large{Sannsynlighetstetthetsfunksjonene plottet med matplotlib i python:}}
+\begin{pythoncode}
+    import numpy as np
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    x = np.linspace(0,5,100)
+    alpha = 1
+
+    # Beregn så sannsynlighetstettheten og plott opp funksjonen
+    def f_X(x):
+        global alpha
+        return 2*x/alpha * np.exp(-x**2 / alpha)
+
+    def f_Z(z):
+        global alpha
+        return (-4*x*(np.exp(-x**2/alpha))**2 + 4*x*np.exp(-x**2/alpha))/(alpha)
+
+    plt.plot(x, f_X(x), color="blue", label="f_X")
+    plt.plot(x, f_Z(x), color="orange", label="f_Z")
+    plt.xlabel("x")
+    plt.ylabel("Sannsynlighetstetthet")
+    plt.legend()
+    plt.show()
+\end{pythoncode}
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=0.775\textwidth]{Bilder/plot.png}
+    \caption{\label{fig:The-caption}Plot av sannsynlighetstettheten til $f_{X}$ og $f_{Z}$}
+\end{figure}
+
+\newpage
+b) La de stokastiske variablene X og Y henholdsvis representere at en av de to komponentene slutter å fungere.
+Sannsynligheten for at begge komponentene slutter å funke innenfor $z$ er gitt som produktet av at de slutter å funke individuelt. 
+Siden komponentene er identiske blir 
+\[
+    P(Z \leq z) = P(X \leq z) \cdot P(Y \leq z) = (1 - e^{-\frac{x^2}{\alpha}})^2
+\]
+Sannsynligheten for at instrumentet fungerer etter tiden $z$ er da
+\[
+    P(Z > z) = 1 - P(Z \leq z) = \underline{\underline{1 - (1 - e^{-\frac{x^2}{\alpha}})^2}}
+\]
+
+Sannsynlighetstettheten $f_{Z}(z)$ blir da den deriverte av $F_{Z}(z)$
+\[
+    f_{Z}(z) = \frac{d}{dz}\left(1 - e^{-\frac{x^2}{\alpha}}\right) = \underline{\underline{\frac{-4x\left(e^{-\frac{x^2}{\alpha}}\right)^2 + 4xe^{-\frac{x^2}{\alpha}}}{\alpha}}}
+\]
+
+
+\section*{Oppgave 8.}
+a) Definerer punktsannsynligheten $f_{X}(x)$ som det hypergeometriske forsøket
+\[
+    f_{X}(x) = \frac{\binom{3}{x} \cdot \binom{297}{5-x}}{\binom{300}{5}}
+\]
+
+b) Bruker samme fremgangsmåte for $f_{XY}(x, y)$:
+\[
+    f_{XY}(x, y) = \frac{\binom{3}{x} \cdot \binom{3}{y} \cdot \binom{294}{5-(x+y)}}{\binom{300}{5}}
+\]
+
+c) Bruker vandermonds identitet på (b) og får at
+\[
+    f_{X}(x) = \sum_{y=0}^{3}{\frac{\binom{3}{x} \cdot \binom{3}{y} \cdot \binom{294}{5-(x+y)}}{\binom{300}{5}}} = \frac{\binom{3}{x} \cdot \binom{297}{5-x}}{\binom{300}{5}} = f_{X}(x)
+\]
+
+
+\end{document}
