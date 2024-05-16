@@ -7,13 +7,6 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, getDoc } from 'firebase/firestore'
 
 const firebaseConfig = {
-apiKey: "AIzaSyAeYsU_L8iFSLoLEvZClcqXzo1KR5Ng5tI",
-authDomain: "elsysgkgruppe15.firebaseapp.com",
-projectId: "elsysgkgruppe15",
-storageBucket: "elsysgkgruppe15.appspot.com",
-messagingSenderId: "634176965179",
-appId: "1:634176965179:web:b9242c8e8038501b9e6a1e",
-measurementId: "G-K3YRMXSZNL"
 };
 
 const app = initializeApp(firebaseConfig);
