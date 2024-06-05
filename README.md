@@ -1,3 +1,4 @@
+# NTNU
 Files, tasks and resources pertaining to subjects I have taken at NTNU.
 
 **2023H**:
@@ -8,8 +9,8 @@ Files, tasks and resources pertaining to subjects I have taken at NTNU.
 - Informasjonsteknologi, grunnkurs **-** *tdt4110*
 
 **2024V**:
-- Prosedyre- og objektorientert programmering **-** *tdt4102*
-- Matematikk 2 **-** *tma4106*
-- Statistikk **-** *tma4245*
-- Elektronisk systemdesign og -analyse I **-** *ttt4260*
-# ntnu
+- Prosedyre- og objektorientert programmering **-** *TDT4102*
+- Matematikk 2 **-** *TMA4106*
+- Statistikk **-** *TMA4245*
+- Elektronisk systemdesign og -analyse I **-** *TTT4260*
+- Operativsystemer **-** *TDT4186*
