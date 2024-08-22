@@ -1,9 +1,10 @@
+\newpage
 \section{Konklusjon}
 \label{konklusjon}
 
-Dette designnotatet har tatt for seg et design av en frekvensdobler som 
+Dette designnotatet har tatt for seg to design av en frekvensdobler som 
 tar inn et sinus-formet signal $x_1(t)$ med kjent frekvens $f$, og produserer et utgangssignal 
-$x_2(t)$, der frekvensen til utgangssignalet er $2f$. Kvaliteten på systemet
+$\hat{x}_2(t)$, der frekvensen til utgangssignalet er $2f$. Kvaliteten på systemet
 ble vurdert basert på utgangssignalets signal-til-distorsjonsforhold. Systemet som ble 
 presentert bestod av to deler; et ulineært system som produserer overharmoniske frekvenskomponenter ved 
 $k \cdot f$, og et båndpassfilter som skal isolere den første harmoniske ved $2f$. To 
@@ -11,4 +12,8 @@ filtre ble presentert og implementert; et analogt RLC filter og et digitalt FIR 
 Gjennom testing av systemet ble det funnet at implementeringen av systemet med et RLC filter 
 oppnådde en SDR på 18dB, men at systemet trolig kan oppnå bedre resultater dersom realiserte 
 komponentverdier hadde hatt mindre avvik fra de ideelle verdiene, og dersom orderen på kaskadekoblingen 
-av filtre hadde vært større.
+av filtre hadde vært større. Videre ble det digitale FIR filteret undersøkt. Den oppnådde en SDR 
+verdi på 44.60dB, en omtrentlig 457 ganger større enn det analoge filteret. Designnotates mål om å oppnå
+er SDR på over 30dB ble dermed nådd ved bruk av et digitalt FIR filter. Filteret ble implementert både 
+i python og på en Xilinx XC7Z020 FPGA, men ble kunn testet på python implementeringen grunnet tilgang på 
+en digital til analog omformer som kunne omforme til både negative og positive spenningssignal.

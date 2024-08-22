@@ -18,12 +18,12 @@ ettersom at målt strømforbruk av LED-ene var mellom 20-30 milliampere, som er 
 
 
 For realiseringen av systemet har Verilog blitt valgt for implementeringen på FPGA-en. Overordnet består implementeringen av tre komponenter:
-en Dice modul, en Debounce modul og en Number\_to\_LED modul. Vi får da inndelingen som i figur 4.
+en Dice modul, en Debounce modul og en Number\_to\_LED modul. Vi får da inndelingen som er vist i figur 4.
 Koden ble kompilert i programmet Lattice iCECube2 med de medfølgende constraint 
 filene til Go Board (se appendix A.1 og A.2).
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.45\textwidth]{Bilder/esda_flow_mod.png}
+    \includegraphics[width=0.65\textwidth]{Bilder/esda_flow_mod.jpg}
     \caption{Flytdiagram representasjon av systemet inndelt i moduler.}
 \end{figure}
 
@@ -140,6 +140,7 @@ output registeret til lysene, samt registeret for outputverdien av Debounce modu
    
 \end{verilogcode}
 
+\newpage
 Modulen instansierer så Debounce modulen for å forhindre bounce på 
 inngangssignalet fra knappen. 
 \begin{verilogcode}

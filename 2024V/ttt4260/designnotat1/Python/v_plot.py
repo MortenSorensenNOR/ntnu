@@ -32,11 +32,11 @@ def read_csv(filename):
 
 def plot_voltage(ax, time, ch1, ch2, title, label):
     # # Spennings plot
-    ax.plot(time,ch1, label = 'ch1')
-    ax.plot(time,ch2, label = 'ch2')
+    ax.plot(time,ch1, label = '$v_1(t)$')
+    ax.plot(time,ch2, label = '$v_2(t)$')
 
     # Tittel og aksenavn
-    ax.set_title(label)
+    ax.set_title(title)
     ax.set_xlabel('Tid (s)')
     ax.set_ylabel('Spenning (V)')
 
@@ -55,33 +55,36 @@ def plot_gain(ax, time, ch1, ch2, title, label="$A_{max}$"):
     
     ax.set_title(title)
     ax.set_xlabel('Tid (s)')
-    ax.set_ylabel('Gain/Loss')
+    ax.set_ylabel('Demping')
 
     ax.legend(loc='upper right')
 
 def plot_gain_gausian(ax, time, ch1, ch2, title, label=""):
     Amp_val = ch2/ch1
-    Amp_val = sorted([val for val in Amp_val if val >= 0], reverse=True)
+    Amp_val = sorted([val for val in Amp_val if val >= 0 and val <= 1], reverse=True)
+    print(max(Amp_val), 20*np.log10(max(Amp_val)))
     Amp_val = [20*np.log10(val) for val in Amp_val]
     weights = np.ones_like(Amp_val)/len(Amp_val)
 
     mu, std = norm.fit(Amp_val)
+    print(mu, std)
 
     ax.hist(Amp_val, bins=250, density=True, alpha=0.7, color="blue", edgecolor="black", label="Histogram")
     
     x = np.linspace(np.min(Amp_val), np.max(Amp_val), 1000)
-    ax.plot(x, norm.pdf(x, mu, std), label="Gaussian plot", color="orange")
+    ax.plot(x, norm.pdf(x, mu, std), label="Tilpasset gausisk fordeling", color="orange")
 
-    ax.axvline(mu, color='red', linestyle='dashed', linewidth=2, label=f'Mean = {mu:.2f}')
-    ax.axvline(mu + std, color='turquoise', linestyle='dashed', linewidth=2, label=f'Standard Deviation = {std:.2f}')
+    ax.axvline(mu, color='red', linestyle='dashed', linewidth=2, label=f'Gjennomsnitt = {mu:.2f}')
+    ax.axvline(mu + std, color='turquoise', linestyle='dashed', linewidth=2, label=f'Standard avvik = {std:.2f}')
     ax.axvline(mu - std, color='turquoise', linestyle='dashed', linewidth=2)
 
     ax.set_title(title)
-    ax.set_xlabel('gain/loss [db]')
+    ax.set_xlabel('Demping [db]')
     ax.set_ylabel('')
 
-    ax.set_xticks(np.arange(0, int(mu-5*std), -1))
-    ax.set_xlim(int(mu - 5*std), int(mu + 5*std))
+    half = 1 if abs(round(mu - 6*std) - round(mu + 6*std)) < 8 else 0
+    ax.set_xticks(np.arange(round(mu + 6*std), round(mu - 6*std), -0.5 if half else -1))
+    ax.set_xlim(round(mu - 6*std), round(mu + 6*std))
     ax.legend(loc='upper right')
 
 def desibel_plot(ax, time, ch1, ch2, title, label=""):
@@ -91,8 +94,8 @@ def desibel_plot(ax, time, ch1, ch2, title, label=""):
     ax.plot(time, Amp_val, label=label)
     
     ax.set_title(title)
-    ax.set_xlabel('Time [s]')
-    ax.set_ylabel('Gain/Loss [dB]')
+    ax.set_xlabel('Tid [s]')
+    ax.set_ylabel('Demping [dB]')
 
     ax.legend(loc='upper right')
 
@@ -112,16 +115,14 @@ Amp_val_2 = ch2_2/ch1_2
 Amp_val_2 = [val for val in Amp_val_2 if val >= 0]
 Amp_val_2 = [20*np.log10(val) for val in Amp_val_2]
 
-print(np.median(Amp_val_1) + 5, np.median(Amp_val_2) + 22)
+# Plotting
+fig, ax = plt.subplots(2,1, figsize=(10,6))
+fig.tight_layout(pad=2.5)
+fig.set_figheight(6.5)
+fig.set_figwidth(7.5)
 
-# # Plotting
-# fig, ax = plt.subplots(2,1)
-# fig.tight_layout(pad=2.5)
-# fig.set_figheight(6.5)
-# fig.set_figwidth(7.5)
-#
-# plot_gain_gausian(ax[0], time1, ch1_1, ch2_1, "$A_{min}$", "$v_2/v_1$")
-# plot_gain_gausian(ax[1], time2, ch1_2, ch2_2, "$A_{max}$", "$v_2/v_1$")
-#
-# # plt.show()
-# plt.savefig("gauss_plot.png", dpi=500)
+plot_voltage(ax[0], time1, ch1_1, ch2_1, "$A_{min}$", "$v_2/v_1$")
+plot_voltage(ax[1], time2, ch1_2, ch2_2, "$A_{max}$", "$v_2/v_1$")
+
+# plt.show()
+plt.savefig("../Notat/Bilder/voltage_plot.png", dpi=500)

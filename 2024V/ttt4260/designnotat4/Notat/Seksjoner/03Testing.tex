@@ -12,7 +12,7 @@ vi har klart å produsere overtoner ved $2f$, $3f$, $4f$, osv.
     \label{fig:test_ulin_sys}
 \end{figure}
 
-Det er verdt å merke at magnituden av utgangssignalet er sterkt svekket i.fht. inngangssignalet, fra $\sim 5$dBV
+Det er verdt å merke at magnituden av utgangssignalet er sterkt svekket i.fht. inngangssignalet, fra omtrent $-5$dBV
 til omlag $-15$dBV. Ettersom at båndpassfilteret kunn vil dempe styrken på signalet videre, er det tenkelig 
 at en forsterker på utgangen av systemet hadde vært gunstig for praktiske applikasjoner av frekvensdobleren.
 
@@ -77,15 +77,41 @@ og i desibel
 Altså oppnår ikke implementeringen av det analoge RLC filteret den ønskede SDR verdien på 30dB.
 
 \subsubsection{FIR båndpass}
-\begin{tcolorbox}[colback=white, colframe=white!55!black]
-    \textbf{TODO:}
-    \begin{enumerate}
-        \item Kjøre python FIR filter på målt signal fra ulineært system
-            \begin{itemize}
-                \item Plotte resultat
-                \item Regne ut SDR
-                \item Sammenligne SDR ved forskjellige filter ordner
-            \end{itemize}
-    \end{enumerate}
-\end{tcolorbox}
+For testingen av FIR båndpassfilteret ble pythonprogrammet i \ref{code:fir_bandpass_python} kjørt med filterkoeffisientene 
+funnet og måledata fra det ulineære systemet gjennom RC lavpassfilteret med cutoff frekvens på omlag $\SI{24}{\kilo\hertz}$. 
+Signalet ble samplet med samplingfrekvens $f_s = \SI{96}{\kilo\hertz}$ av Analog Discovery-en.
+Dette er fordi en 12-bit bipolar DAC ikke var tilgjengelig, og fordi det gir et mer direkte innblikk i hvorvidt filteret 
+var godt nok tilpasset reell data. Trolig ville implementeringen på FPGA hatt noe lavere presisjon grunnet fikspunktmultiplikasjon 
+versus floatingpoint og høyere antall bits per filterkoeffisient, i tillegg til at DAC trolig ville introdusert noe forstyrrelser i systemet, og 
+dermed også utenfor dette designets kontroll.
+
+Ser vi på resultatet av å kjøre python koden får vi følgende spenningsplott for inn og utgangssignalet:
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.95\textwidth]{Bilder/fir_result_signal.png}
+    \caption{Plot av utgangssignalet $\hat{x}_2(t)$ ved FIR filter med $f_s = \SI{96}{\kilo\hertz}$}
+    \label{fig:fir_result_signal}
+\end{figure}
+
+Vi ser tydelig at utgangssignalet $\hat{x}_2(t)$ har dobbelt så stor frekvens som inngangssignalet, og vi kan
+observere at utgangssignalet ser ut til å være tilnærmet lik et rent sinussignal.
+For å få imperisk data på dette kan vi se på frekvensspektrumet til signalet i figur \ref{fig:fir_result_spectrum}.
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.95\textwidth]{Bilder/fir_result_spectrum.png}
+    \caption{Frekvensspektrumet til utgangssignalet $\hat{x}_2(t)$ ved FIR filter med $f_s = \SI{96}{\kilo\hertz}$}
+    \label{fig:fir_result_spectrum}
+\end{figure}
+
+Vi ser her at frekvenskomponenten ved $f$ er blitt dempet til -96.5dB, en stor forbedring over det det andre ordens 
+analoge RLC båndpassfilteret klarte, som var på -56.3dB. Vi ser også at frekvenskomponenten ved $2f$ har blitt nærmest 
+urørt av filteret sammenlignet med dBV verdien fra utgangen av det ulineære systemet.
+
+Til slutt har vi at $\text{SDR}_{[\text{dB}]}$ verdien til utgangssignalet ble målt til
+\[
+    \text{SDR}_{[\text{dB}]} = 44.60\text{dB}
+\]
+altså godt over ønsket verdi på 30dB. Dette munner ut i et utgangssignal $\hat{x}_2(t)$ som har 26.4dB høyere 
+SDR i forhold til det analoge filteret, noe som tilsvarer en økning på omlag 457 ganger høyere SDR.
+
 

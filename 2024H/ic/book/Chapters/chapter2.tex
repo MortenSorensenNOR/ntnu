@@ -1,0 +1,41 @@
+\section{Devices}
+\subsection{Introduction}
+
+\subsection{Long-Channel I-V Characteristics}
+MOS transistors have three regions of operation:
+\begin{itemize}
+    \item Cutoff or subthreashold region
+    \item Linear region
+    \item Saturation region
+\end{itemize}
+
+A model can be derived relating the current and voltage (I-V) for an nMOS transistor in each of these regions. The model assumes that the 
+channel length is long enough that the lateral electric field (the field between source and drain) is reletively weak, which is no longer the case in nanometer devices.
+This model is variously known as the \textit{long-channel}, \textit{ideal}, \textit{first-order}, or \textit{Shockley} model.  
+
+The long-channel model assumes that the current through an OFF transistor is 0.
+When a transistor turns ON ($V_{gs} > V_t$), the gate attracts carriers (electrons) to form a channel. The electrons drift from source 
+to drain at a rate proportional to the electric field between these regions. This, we can compute currents if we know the amount of charge in the channel and 
+the rate at which it moves. We know that the charge on each plate of a capacitor is $Q = CV$. Thus, the charge in the channel $Q_{\text{channel}}$ is 
+\begin{equation}
+    Q_{\text{channel}} = C_g \left(V_{gc} - V_t\right)
+\end{equation}
+
+where $C_g$ is the capacitance of the gate to the channel and $V_{cg} - V_t$ is the amount of voltage attracting charge to the channel beyond the minimum 
+required to invert from p to n. The gate voltage is referenced to the channel, which is not grounded. If the source is at $V_s$ and the drain is at $V_d$, 
+the average is $V_c = (V_s + V_d)/2 = V_s + V_{ds} / 2$. Therefore, the mean difference between the gate and channel potentials $V_{gc}$ is $V_g - V_t = V_{gs} - V_{ds}/2$.
+
+We can model the gate as a parallel plate capacitor with capacitance proportional to area over thickness. If the gate has length $L$ and width $W$ and the 
+oxide thickness is $t_{ox}$, the capacitance is 
+\begin{equation}
+    C_g = k_{ox} \epsilon_{0} \frac{WL}{t_{ox}} = \epsilon_{ox} \frac{WL}{t_{ox}} = C_{ox} WL
+\end{equation}
+
+where $\epsilon_{0}$ is the permittivity of free space, $8.85 \times 10^{-14}$ F/cm, and the permittivity of SiO$_2$ is $k_{ox} = 3.9$ times as great. Often, the 
+$\epsilon_{ox}/t_{ox}$ term is called $C_{ox}$, the capacitance per unit area of the gate oxide.
+
+\subsection{C-V Characteristics}
+
+\subsection{Nonideal I-V Effects}
+
+\subsection{DC Transfer Characteristics}

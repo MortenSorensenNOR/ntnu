@@ -1,0 +1,43 @@
+\usepackage{tikz}
+\usepackage{babel}
+\usepackage{minted}
+\usepackage{xcolor}
+\usepackage{a4wide}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{pgfplots}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[pdftex, pdfborderstyle={/S/U/W 0}]{hyperref}
+\usepackage{titlesec}
+
+\setlength{\parindent}{0pt} 
+\setlength{\parskip}{2.5pt}
+
+\setlist[enumerate]{label=\bfseries\alph*), align=left, labelwidth=!, itemindent=0pt, leftmargin=0pt}
+
+\newenvironment{pythoncode}{\VerbatimEnvironment\begin{tcolorbox}[colback=white!16!black, colframe=white!75!black]\begin{minted}[style=monokai]{python}}{\end{minted}\end{tcolorbox}}
+
+% A nice blue color with a hint of green, almost turquoise, though not as dark and as much green
+\definecolor{subsubsectioncolor}{RGB}{0, 128, 215}
+
+\titleformat{\section}
+  {\bfseries\huge}{\thesection}{1em}{}
+
+% Redefine subsection titles to be bold
+\titleformat{\subsection}
+  {\bfseries\Large}{\color{subsubsectioncolor}\thesubsection}{1em}{\color{black}}
+
+% Redefine subsubsection titles to be bold and colored
+\titleformat{\subsubsection}
+  {\large\bfseries}{\thesubsubsection}{1em}{\color{subsubsectioncolor}}
+    
+\numberwithin{equation}{section}

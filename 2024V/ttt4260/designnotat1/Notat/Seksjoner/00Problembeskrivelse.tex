@@ -2,20 +2,33 @@
 \label{problemBeskrivelse}
 
 %Her kan du skrive om din problembeskrivelse
-Vi skal her ta for oss et design av en variabel nivåregulator utelukkende for demping av signaler.
-Dette designet skal gi en variabel demping av et vilkårlig signal i området $[-A_{min}, -A_{max}]$dB,
-der dempestyrken $A$ skal kunne reguleres gjennom dreibar kontroll. Signalkilden er antatt å være 
-et signussignal med frekvens $f = 1000$ Hz med utgangsmotstand $R_k \approx 0\Omega$, og utgangen 
-er tiltenkt å ha utgangsmotstand $R_L \approx \infty\Omega$. 
+Innen signalbehandling og kretsdesign er det ofte nyttig å kunne regulere spenningsnivået til et signal, og å kunne
+variere reguleringen etter behov. Dette designnotatet skal derfor ta for seg et design av en variabel nivåregulator utelukkende 
+for demping av signaler.
 
-Realiserte $A_{max}$ og $A_{min}$ skal ha et 
-avvik $\leq 0.1$ dB fra spesifisert verdi.
-
-Systemet er illustrert i figur 1.
+Det overordnede systemet er illustrert i figur 1.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.65\textwidth]{Bilder/nivaaregulator.png}
+    \includegraphics[width=0.85\textwidth]{Bilder/nivaaregulator.png}
     \caption{Generell nivåregulator \cite{teknot}}
     \label{fig:nivaaregulator}
 \end{figure}
+
+En spenningskilde med utgangsmotstand $R_k$ sender et signal $v_1(t)$ gjennom nivåregulatoren.
+Nivåregulatoren leverer så et signal $v_2(t)$ til lastmotstanden $R_L$, der signalet $v_2(t)$ er på formen
+\[
+    v_2(t) = Av_1(t)
+\]
+Forholdstalet $A$ blir dermed den avgjørende faktoren for hvor mye utgangssignalet blir endret. For en $A > 1$ blir 
+utgangssignalet forsterket, og for $A < 1$ blir signalet dempet. For evalueringen av hvorvidt $A$ følger kravspesifikasjonene 
+blir desibel brukt:
+\[
+    A_\text{[dB]} = 20\lg{(A)}
+\]
+
+Designet skal gi en variabel demping av et vilkårlig signal etter kravspesifikasjner om 
+maksimal og minimal demping, $[-A_{min}, -A_{max}]$dB,
+der dempestyrken $A$ skal kunne reguleres gjennom dreibar kontroll. Signalkilden er antatt å være 
+et signussignal med frekvens $f = 1000$ Hz med utgangsmotstand $R_k \approx 0\Omega$, og lasten på systemet tiltenkt ideell, altså 
+$R_L \approx \infty\Omega$. Målet for realiseringen av designet er et avvik fra kravspesifikasjonene på under $0.1$ dB.

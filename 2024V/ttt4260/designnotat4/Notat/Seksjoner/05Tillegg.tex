@@ -4,3 +4,65 @@
 \section{Tillegg}
 \label{ekstraGreier}
 
+\subsection{FIR båndpåass python kode}
+\label{code:fir_bandpass_python}
+\begin{pythoncode}
+import numpy as np
+
+def fir_convolve(signal, kernel):
+    kernel_size = len(kernel)
+    output = np.zeros_like(signal)
+    shift = np.zeros(kernel_size) 
+
+    for i in range(len(signal)):
+        shift = np.concatenate((np.array([signal[i]]), \
+                    np.array(shift[0:kernel_size-1])))
+        products = shift * kernel
+        output[i] = np.sum(products)
+
+    return output
+\end{pythoncode}
+
+\subsection{FIR båndpass systemverilog kode}
+\label{code:fir_bandpass_sysverilog}
+\begin{verilogcode}
+module FIR_FILTER (
+    input                   clk,
+    input   signed  [11:0]  data_in,
+    input                   drdy,
+    input                   rst,
+    output  signed  [11:0]  data_out);
+
+    parameter N;
+    integer i, j, k;
+    reg signed [23:0] coeff [0:N] = { b0, b1, ..., bN, };
+    reg signed [11:0] shift_register [0:N];
+    reg signed [35:0] product [0:N];
+    reg signed [35:0] accumulate;
+
+    always @(posedge clk) begin // Shift register
+        if (rst) begin
+            for (i = 0; i < N; i = i + 1) begin
+                shift_register[i] <= 0;
+            end
+            accumulate <= 36'd0;
+        end else if (drdy) begin
+            shift_register[0] <= data;
+
+            for (j = 1; j < N; j = j + 1) begin
+                shift_register[i] <= shift_register[i-1];
+            end
+        end
+    end
+    always @(posedge clk) begin // Multiply
+        for (k = 0; k < N; k = k + 1) begin
+            product[k] <= shift_register[k] * coeff[k];
+        end
+    end
+    always @(posedge clk) begin // Accumulate
+        accumulate <= product[0] + product[1] + product[2] + ...
+                      product[N-2]  + product[N-1]  + product[N];
+    end
+    assign data_out = $signed(accumulate[35:24]);
+endmodule
+\end{verilogcode}

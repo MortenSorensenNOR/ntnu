@@ -14,8 +14,8 @@ f5200_index = np.argmin(np.abs(np.array([frekvens]) - 5200))
 fig, ax = plt.subplots(figsize=(10, 6))
 
 ax.plot(frekvens, respons, label='Spektrum av utgangssignal $\hat{x}_2(t)$')
-ax.scatter(2600, respons[f2600_index], color='brown', label="Demping av frekvenskomponent ved f i $\hat{x}_2(t)$:" + f" {respons[f2600_index]:.2f}dB")
-ax.scatter(5200, respons[f5200_index], color='green', label="Demping av frekvenskomponent ved 2f i $\hat{x}_2(t)$:" + f" {respons[f5200_index]:.2f}dB")   
+ax.scatter(2600, respons[f2600_index], color='brown', label="Demping av frekvenskomponent ved f i $\hat{x}_2(t)$:" + f" {respons[f2600_index]:.2f}dBV")
+ax.scatter(5200, respons[f5200_index], color='green', label="Demping av frekvenskomponent ved 2f i $\hat{x}_2(t)$:" + f" {respons[f5200_index]:.2f}dBV")   
 
 ax.set_title('Frekvensspektrum til utgangen av systemet $\hat{x}_2(t)$ ved inngangsfrekvens $f = 2600$Hz')
 ax.set_xlabel('Frekvens (Hz)')

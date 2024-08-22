@@ -7,7 +7,7 @@ Signalet ble generert av an Analog Discovery 2 \cite{analog_discovery}.
 
 For evalueringen av hele systemet ble Analog Discovery-ens to oscilloskop brukt. Den første, Channel 1,
 ble koblet til inngangssignalet $x_1(t)$. Den andre, Channel 2, ble koblet 
-til utgangssignalet $x_2(t)$.
+til utgangssignalet $\hat{x}_2(t)$.
 For hvert av de underliggende systemene - det ulineære systemet og båndpassfilteret - ble 
 Channel 1 koblet til inngangssignalet og Channel 2 koblet til utgangssignalet av systemet.
 
@@ -39,9 +39,11 @@ Dette gir en effektiv senterfrekvens til realiseringen av filteret på $f_c = \S
 \end{figure}
 
 Til slutt er et $\SI{10}{\kilo\ohm}$ potensiometer valgt for $R_2$ for å kunne justere kvalitetsfaktoren
-til filteret. 
+til filteret. Opampen valgt for implementeringen er en LM358P \cite{lf353_opamp} med et operasjonsområde på 
+$\pm \SI{15}{\volt}$. Den ble gitt +$\SI{5}{volt}$ på den positive supply inngangen og -$\SI{5}{volt}$ på den negative.
+Begge kildene ble supplert fra Analog Discovery-en.
 
-Det endelige systemet ble valgt til å ha et andre ordens filter der et identisk filter til filteret i figur \ref{fig:impl_rcl_sys} ble 
+Det endelige systemet ble valgt til å ha et andre ordens filter der to identisk filter til filteret i figur \ref{fig:impl_rcl_sys} 
 kaskadekoblet med en buffer i mellom. Implementeringen av systemet er vist i figur \ref{fig:impl_rcl_sys_img}.
 
 \begin{figure}[H]
@@ -52,20 +54,62 @@ kaskadekoblet med en buffer i mellom. Implementeringen av systemet er vist i fig
 \end{figure}
 
 \subsubsection{FIR båndpass}
-\begin{tcolorbox}[colback=white, colframe=white!55!black]
-    \textbf{TODO:}
-    \begin{enumerate}
-        \item Lage testbench for HDL kode
-        \item Forklare utregning av filterkoeffisienter - Matlab
-            \begin{itemize}
-                \item FIR bandstop 
-                \item Sample frequency $\SI{50}{\kilo\hertz}$
-                \item Equaripple
-                \item Variere filter orden N
-            \end{itemize}
-    \end{enumerate}
-\end{tcolorbox}
+For realiseringen ble filterkoeffisientene regnet ut med MatLab koden fra pinsippiel løsning,
+med følgende parametre: 
+\begin{figure}[H]
+    \label{fig:fir_filter_params}
+    \centering
+    \begin{tabular}{|l|r|}
+        \hline
+        \textbf{Parameter} & \textbf{Verdi} \\
+        \hline
+        $f_s$ & $\SI{96}{\kilo\hertz}$ \\
+        \hline
+        $A_\text{stopp}$ & $-80$dB \\
+        \hline
+        $A_\text{pass}$ & $-0.5$dB \\
+        \hline
+        $F_\text{stopp1}$ & $\SI{3}{\kilo\hertz}$ \\
+        \hline
+        $F_\text{pass1}$ & $\SI{4.5}{\kilo\hertz}$ \\
+        \hline
+        $F_\text{pass2}$ & $\SI{5.5}{\kilo\hertz}$ \\
+        \hline
+        $F_\text{stopp2}$ & $\SI{7}{\kilo\hertz}$ \\
+        \hline
+    \end{tabular} 
+\end{figure}
 
+Det genererte et filter med orden 323 med amplituderespons plottet i figur \ref{fig:fir_filter_perf}.
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.85\textwidth]{Bilder/fir_filter_perf.png}
+    \caption{Amplituderesponsen til det implementerte FIR filteret}
+    \label{fig:fir_filter_perf}
+\end{figure}
+
+Vi ser altså at vi klarte å oppnå den ønskede dempningen i både båndpass- og båndstoppområdet. Filterkoeffisientene 
+ble så eksportert til en fil, slik at den kunne importeres inn i python programmet.
+
+FPGA-en valgt for implementering på hardware var en Xilinx XC7Z020 FPGA på et MYIR Z-Turn V2 kretskort.
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.5\textwidth]{Bilder/Zturn.jpg}
+    \caption{MYIR Z-Turn V2 kretskort med en Xilinx XC7Z020 FPGA}
+    \label{fig:zturn}
+\end{figure}
+
+Ettersom at Xilinx FPGA-en har en innebygd balansert analog til digital omformer, har implementeringen 
+valgt å benytte den istedenfor en ekstern ADC. Den har en pressisjon på 12-bit, har en maksimal samplingfrekvens på
+$\SI{1}{\mega\hertz}$, og godtar innputspenninger fra $-\SI{0.5}{\volt}$ til $\SI{0.5}{\volt}$. Vi må derfor senke 
+amplituden til det originale signalet til $\SI{0.5}{\volt}$, eller sende den målte spenningen gjennom en enkel spenningsdeler.
+Denne implementeringen har valgt å endre spenningen til $x_1(t)$, men dette er så klart applikasjonsspesifikt.
+
+Under er kretstegningen for systemet \ref{fig:fir_sys}. Signalet fra bufferen etter det ulineære systemet sendes gjennom et lavpassfilter med 
+knekkfrekvens lik $f_s / 2 = \SI{48}{\kilo\hertz}$, og signalet måles differensielt i forhold til et felles ground nivå, s.a. FPGA-ens eget 
+groundnivå ikke endrer signalet. Til slutt blir det digitale, filtrerte signalet sendt ut fra Z-Turn V2 kortets GPIO porter til en 
+12-bit bipolar - altså at den kan sende ut både negative og positive spenninger - digital til analog omformer. Dessverre var ikke en slik 
+DAC tilgjengelig for implementeringen, så hele systemet ble ikke testet.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Bilder/Digital_sys.png}
@@ -73,37 +117,15 @@ kaskadekoblet med en buffer i mellom. Implementeringen av systemet er vist i fig
     \label{fig:fir_sys}
 \end{figure}
 
+Til slutt ble klokkefrekvensen til systemet valgt til å være $\SI{100}{\kilo\hertz}$, altså større enn samplingfrekvensen til den interne ADC-en.
+I figur \ref{fig:vivado_fir_block_diagram} er et blokkdiagram av systemet vist fra Vivado, som er programvaren som ble brukt for syntetisering og 
+ruting av RTL koden.
 \begin{figure}[H]
     \centering 
-    \includegraphics[width=0.9\textwidth]{Bilder/fir_filter_perf.png}
-    \caption{Sammenlikning av første og andre ordens RLC båndpassfilter med senterfrekvens $f_c = \SI{5.2}{\kilo\hertz}$}
-    \label{fig:test_fir_filter_perf}
-\end{figure}
-
-\begin{figure}[H]
-    \centering 
-    \includegraphics[width=0.9\textwidth]{Bilder/fir_filter_perf_250.png}
-    \caption{Sammenlikning av første og andre ordens RLC båndpassfilter med senterfrekvens $f_c = \SI{5.2}{\kilo\hertz}$}
-    \label{fig:test_fir_filter_perf_250}
-\end{figure}
-
-\begin{figure}[H]
-    \centering 
-    \includegraphics[width=0.9\textwidth]{Bilder/fir_filter_perf_175.png}
-    \caption{Sammenlikning av første og andre ordens RLC båndpassfilter med senterfrekvens $f_c = \SI{5.2}{\kilo\hertz}$}
-    \label{fig:test_fir_filter_perf_175}
-\end{figure}
-
-\begin{figure}[H]
-    \centering 
-    \includegraphics[width=0.5\textwidth]{Bilder/Zturn.jpg}
-    \caption{Z-Turn V2 7Z020 FPGA board \cite{zturn}}
-    \label{fig:zturn}
-\end{figure}
-
-\begin{figure}[H]
-    \centering 
-    \includegraphics[width=0.9\textwidth]{Bilder/Vivado_fir_filter.png}
-    \caption{Blokk diagram fra Vivado; System implementering av FIR på FPGA}
+    \includegraphics[width=0.7\textwidth]{Bilder/Vivado_fir_filter.png}
+    \caption{Blokk diagram fra Vivado; System implementering av FIR og ADC på Xilinx XC7Z020 FPGA}
     \label{fig:vivado_fir_block_diagram}
 \end{figure}
+
+Dette designet vil trolig benytte alle de 220 Digital Signal Processing blokkene på XC7Z020 FPGA-en i tillegg til en større andel
+av dens 50,000 LUTs.

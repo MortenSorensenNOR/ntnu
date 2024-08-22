@@ -24,64 +24,67 @@ def plot_signal_spectrum_from_file(file_path, sampling_frequency):
     # Frequency axis
     freq = np.fft.fftfreq(N, d=1/sampling_frequency)[:N//2]
 
-    single_sided_spectrum = single_sided_spectrum[:len(single_sided_spectrum)//4]
-    freq = freq[:len(freq)//4]
-
     # Compute power spectrum (power at each frequency)
     power_spectrum = single_sided_spectrum ** 2
     
-    # Define frequency bins of 100 Hz each
-    bin_width = 2600
-    freq_bins = np.arange(-1300, freq[-1], bin_width)
-    power_bin_sums, bin_edges = np.histogram(freq, bins=freq_bins, weights=power_spectrum)
-    
-    # Adjust frequency labels to the center of each bin
-    bin_centers = 0.5 * (bin_edges[:-1] + bin_edges[1:])
-    
     # Identify the fundamental frequency index
-    # Assuming the fundamental frequency is the highest peak in the binned spectrum
-    fundamental_index = np.argmax(power_bin_sums)
-    fundamental_frequency = bin_centers[fundamental_index]
-    fundamental_power = power_bin_sums[fundamental_index]
+    # Assuming the fundamental frequency is the highest peak in the spectrum
+    fundamental_index = np.argmax(power_spectrum)
+    fundamental_frequency = freq[fundamental_index]
+    fundamental_power = power_spectrum[fundamental_index]
     
     # Total power excluding the fundamental frequency
-    total_power = np.sum(power_bin_sums)
+    total_power = np.sum(power_spectrum)
     distortion_power = total_power - fundamental_power
     
     # Calculate Signal to Distortion Ratio (SDR)
     SDR = 10 * np.log10(fundamental_power / distortion_power)
     
     print(f"Fundamental Frequency: {fundamental_frequency} Hz")
-    print(f"Fundamental frequency power: {fundamental_power} Total power: {total_power}")
     print(f"Signal to Distortion Ratio (SDR): {SDR:.2f} dB")
 
+    single_sided_spectrum = single_sided_spectrum[:int(len(single_sided_spectrum)//4)]
+    freq = freq[:int(len(freq)//4)]
+
+    f2600_index = np.argmin(np.abs(np.array([freq]) - 2600))
+    f5200_index = np.argmin(np.abs(np.array([freq]) - 5200))
+
+    # Convert to dBV (20*log10(Vrms/1V))
+    spectrum_dBV = 20 * np.log10(single_sided_spectrum / np.sqrt(2))
+    
+    # Convert to Vrms (already in Vrms because we use the single-sided spectrum)
+    spectrum_Vrms = single_sided_spectrum / np.sqrt(2)
+    
     # Plotting
-    plt.figure(figsize=(14, 6))
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 6))
     
-    plt.subplot(1, 2, 1)
-    plt.bar(bin_centers, 20 * np.log10(power_bin_sums / np.sqrt(2)), width=bin_width)
-    plt.title('Spectrum in dBV (Binned)')
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Magnitude (dBV)')
-    plt.grid(True)
+    ax1.plot(freq, spectrum_dBV)
+    ax1.set_title('Spektrum i dBV')
+    ax1.set_xlabel('Frekvens [Hz]')
+    ax1.set_ylabel('Magnitude [dBV]')
+    ax1.grid(True)
+    ax1.scatter(2600, spectrum_dBV[f2600_index], color='brown', label="Frekvenskomponent ved f i $\hat{x}_2(t)$:" + f"  {spectrum_dBV[f2600_index]:.2f}dBV")
+    ax1.scatter(5200, spectrum_dBV[f5200_index], color='green', label="Frekvenskomponent ved 2f i $\hat{x}_2(t)$:" + f" {spectrum_dBV[f5200_index]:.2f}dBV")   
+    
+    ax1.set_xticks(np.arange(0, freq[-1], 2600))
+    ax1.legend(loc="upper right")
+    
+    ax2.plot(freq, spectrum_Vrms)
+    ax2.set_title('Spektrum i V-RMS')
+    ax2.set_xlabel('Frekvens [Hz]')
+    ax2.set_ylabel('Magnitude [Vrms]')
+    ax2.grid(True)
+    
+    ax2.set_xticks(np.arange(0, freq[-1], 2600))
+    ax2.legend(loc="upper right")
+    
+    fig.tight_layout()
+    plt.savefig("../Notat/Bilder/fir_result_spectrum.png")
+    # plt.show()
 
-    plt.xticks(np.arange(0, freq[-1], 2600))
-    
-    plt.subplot(1, 2, 2)
-    plt.bar(bin_centers, power_bin_sums / np.sqrt(2), width=bin_width)
-    plt.title('Spectrum in V-RMS (Binned)')
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Magnitude (Vrms)')
-    plt.grid(True)
-
-    plt.xticks(np.arange(0, freq[-1], 2600))
-    
-    plt.tight_layout()
-    plt.show()
-    
 # Specify the file path and sampling frequency
 file_path = './output.txt'
-sampling_frequency = 500000  # Sampling frequency in Hz
+sampling_frequency = 96000  # Sampling frequency in Hz
 
 # Call the function
 plot_signal_spectrum_from_file(file_path, sampling_frequency)

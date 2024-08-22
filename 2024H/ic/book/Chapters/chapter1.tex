@@ -1,0 +1,121 @@
+\section{Welcome to VLSI}
+
+\subsection{MOS Transistors}
+Silicon in its pure form creates a three dimensional lattice of atoms. In this form, all its valence electrons are 
+involved in chemical covalent bonds, making it a poor conductor. However, impurities can be introduced into pure
+silicon crystals, called \textit{doping} the silicon, with materials such as arsenic which gives the lattice 
+structure a free electron, making the material a better conductor at room temperature. This forms an \textit{n-type}
+semiconductor, because the free carriers are negatively charged electrons. 
+
+Similarly, a material such as boron can be introduced into the silicon, a material which has only three valence electrons.
+This creates a "hole" in the lattice structure, and consequently "borrows" an electron from a neighboring silicon atom, 
+propagating the deficiency. The hole acts as a positive carrier, so this type of semiconductor is called a \textit{p-type} 
+semiconductor. 
+
+A junction between n-type and p-type silicon creates a \textit{diode}. When voltage is applied to the p-type \textit{anode}, 
+and is raised above the n-type \textit{cathode}, the diode is said to be \textit{forward-biased} and current flows.
+When the anode voltage is less than or equal to the cathode voltage, the diode is \textit{reverse-biased} 
+and very little current flows.
+
+A \textit{MOS} or Metal-Oxide-Semiconductor can be created by superinposing several layers of conducting and insulating materials 
+to form a sandwich-like structure. The manifacture of such MOS structures can be done by a series of chemical processing steps 
+involving oxidation, selective introduction of dopants, and position and etching of metal wires and contacts.
+
+CMOS technology provides two types of transistors: n-type transistors (\textit{nMOS}) and p-type transistors (\textit{pMOS}).
+The operation of the transistors is controlled by electric fields so the devices are also called 
+Metal Oxide Semiconductor Field Effect Transistors (MOSFETs). A crossection of these transistors are shown in figure \ref{fig:nmos_pmos}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Bilder/chapter1/nmos_pmos.jpg}
+    \caption{Cross-section of nMOS (left) and pMOS (right) transistors}
+    \label{fig:nmos_pmos}
+\end{figure}
+
+Each transistor consists of a stack of a conducting \textit{gate}, an insulating layer of silicon dioxide, and the silicon wafer, called the \textit{substrate}, 
+\textit{body} or \textit{bulk}. The gates in early transistors were made of metal, i.e. the name metal-oxide-semiconductor, however, sice the 1970s these gates have been 
+made from a \textit{polysilicon}.
+
+An nMOS transistor is built with a p-type body and has regions of n-type silicon adjecent to the gate called the \textit{source} and \textit{drain}. These are physically
+identical and will be regarded as interchangeable. The body of the transistor is typically grounded. The pMOS is the exact opposite, 
+consisting of p-type source and drain regions with an n-type body. In a CMOS technology with both glavors of transistors, the substrate is either 
+n-type or p-type silocon. The other flavor of transistor must be built in a special \textit{well} in which dopant atoms have been added to form the body of the 
+opposite type.
+
+The gate is a control input: It affects the flow of electrical current between the source and drain. Consider an nMOS transistor. The body is generally grounded so the p-n 
+junctions of the source and drain to body are reverse-biased. If the gate is also grounded, no current flows through the reverse-biased junctions. Hence, we say that the
+transistor is OFF. If the gate voltage is raised, it creates an electric field that starts to attract free electrons to the underside of the Si-SiO$_2$ interface. If the voltage 
+is raised enough, the electrons outnumber the holes and a thin region under the gate called the \textit{channel} is inverted to act as an n-type semiconductor.
+Hence, a conducting path of electron carriers is formed from source to drain and current can flow. We then say that the transistor is ON.
+
+For a pMOS transistor, the situation is reversed. The body is held at a positive voltage. When the gate is also at a positive voltage, the source and drain
+junctions are reverse-biased and no current flows, so the transistor is OFF. When the gate voltage is lowered, positive charges are attracted to the underside of the Si-SiO$_2$ 
+interface. A sufficiently low gate volgate invertes the channel and a conducting path of positive carriers is formed from source to drain, so the transistor is ON. 
+Notice that the symbol for the nMOS transistor yas a bubble on the gate, indicating that the transistor behavior is the opposite of the nMOS.
+
+The positive voltage is usually called $V_{DD}$ or POWER and represents a logic 1 value in digital circuits. In popular logic families of the 1970s and 1980s, $V_{DD}$
+was set to 5 volts. Smaller, more recent transistors are unable to withstand such high voltages and have used supplies of 3.3 V, 2.5 V, 1.8 V, 1.5 V, 1.2 V, 1.0 V, and so forth.
+The low voltage is called GROUND (GND) or $V_{SS}$ and represents a logic 0 value. It is normally 0 volts.
+
+\subsection{CMOS Logic}
+
+\subsubsection{The Inverter}
+
+Figure \ref{fig:cmos_inverter} shows the schematic and symbol for a CMOS inverter or NOT gate using one nMOS transistor and one pMOS transistor. When 
+$A$ is 0, the nMOS transistor is OFF and the pMOS transistor is ON, so the output $Q$ is pulled up to a 1 because it is connected to $V_{DD}$ but not GND ($V_{SS}$).
+Conversely, when $A$ is 1, the nMOS transistor is ON and the pMOS is OFF, resulting in the output $Q$ being pulled down to 0. This is 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Bilder/chapter1/cmos_inverter.jpg}
+    \caption{Inverter symbol and truth table (left) and schematic (right)}
+    \label{fig:cmos_inverter}
+\end{figure}
+
+\subsection{CMOS Fabrication and Layout}
+
+\subsection{Design Partitioning}
+
+\subsection{Example: A Simple MIPS Microprocessor}
+
+\subsection{Logic Design}
+
+\subsection{Circuit Design}
+Circuit design is concerned with arranging transistors to perform a particular logic function. Given a circuit design, we can estimate the delay and power. The circuit
+can be represented as a scematic, or in textual form as a netlist. Common transistor level netlist formats include Verilog and SPICE. Verilog netlists are used for functional
+verification, while SPICE netlists have more detail necessary for delay and power simulations. Because a transistor gate is a good insulator, it can be modeled as a capacitor,
+$C$. When the transistor is ON, some current flow $I$ flows between source and drain. Both the current and capacitence are proportional to the transistor width.
+
+The delay of a logic gate is determined by the current that it can deliver and the capacitance that it is driving, as shown in figure \ref{tbd} (FIGURE OF INVERTER DRIVING 
+ANOTHER IDENTICAL INVERTER). The capacitance is carged or discharged according to the constitutive equation
+\[
+    I = C \frac{dV}{dt}
+\]
+
+If an average current $I$ is applied, the time $t$ to switch between 0 and $V_{DD}$ is 
+\[
+    t = \frac{C}{I}V_{DD}
+\]
+
+Hence, the delay increases with the load capacitance and decreases with the drive current. To make these calculations, we will have to delve below the switch-level moel of a 
+transistor. Chapter 2 develops more detailed models of transistors accounting for the current and capacitance. One of the goals of circuit design is to choose transistor 
+widths to meet delay requirements. Methods for doing so are discussed in chapter 3.
+
+Energy is required to charge and discharge the load capacitance. This is called the dynamic power because it is consumed only when the circuit is actively switching. The 
+dynamic power consumed when a capacitor is charged and discharged at a frequency of $f$ is 
+\[
+    P_{\text{dynamic}} = CV^2_{DD}f
+\]
+
+Even when the gate is not switching, it draws some static power. Because an OFF transistor is leaky, a small amount of current $I_{\text{static}}$ flows between power and
+ground, resulting in a static power disipation of
+\[
+    P_{\text{static}} = I_{\text{static}}V_{DD}
+\]
+
+Factors such as the fan-in and fan-out of each gate in a function, the gates used and the width of each transistor influences the capacitance and current, and 
+hence the speed and power of the circuit, as well as area and cost.
+
+\subsection{Physical Design}
+
+\subsection{Design Verification}

@@ -24,7 +24,7 @@
 \setlength{\parindent}{0pt} 
 \setlength{\parskip}{0pt}
 
-\newenvironment{pythoncode}{\begin{minted}[style=monokai]{python}}{\end{minted}}
+\newenvironment{pythoncode}{\VerbatimEnvironment\begin{tcolorbox}[colback=white, colframe=white!55!black]\begin{minted}{python}}{\end{minted}\end{tcolorbox}}
 \newenvironment{verilogcode}{\VerbatimEnvironment\begin{tcolorbox}[colback=white, colframe=white!55!black]\begin{minted}{verilog}}{\end{minted}\end{tcolorbox}}
 
 \captionsetup{compatibility=false}

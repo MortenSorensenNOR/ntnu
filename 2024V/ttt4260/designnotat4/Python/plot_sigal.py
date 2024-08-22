@@ -5,7 +5,7 @@ import csv
 
 header = []
 data = []
-filename = "../Data/ulin_signal_250kHz.csv"
+filename = "../Data/ulin_signal_96khz.csv"
 
 with open(filename) as csvfile:
     csvreader = csv.reader(csvfile)
@@ -14,7 +14,7 @@ with open(filename) as csvfile:
         values = [float(value) for value in datapoint]
         data.append(values)
 
-data = data[len(data)//2:int(2.5 * len(data)//4)]
+data = data[len(data)//2:int(2.2 * len(data)//4)]
 
 time = [(p[0]) for p in data]
 ch1 = [(p[1]) for p in data]

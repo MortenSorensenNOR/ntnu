@@ -20,13 +20,13 @@
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage[pdftex, pdfborderstyle={/S/U/W 0}]{hyperref}
 \usepackage[europeanresistors]{circuitikz}
-\usepackage[top=3cm, bottom=3cm, right=2.25cm, left=2.25cm]{geometry}
+\usepackage[top=3cm, bottom=3cm]{geometry}
 
 \setlength{\parindent}{0pt} 
-\setlength{\parskip}{0pt}
 
-\newenvironment{pythoncode}{\begin{minted}[style=monokai]{python}}{\end{minted}}
-\newenvironment{verilogcode}{\VerbatimEnvironment\begin{tcolorbox}[colback=white!16!black, colframe=white!75!black]\begin{minted}[style=monokai]{verilog}}{\end{minted}\end{tcolorbox}}
+\newenvironment{pythoncode}{\VerbatimEnvironment\begin{tcolorbox}[colback=white, colframe=white!55!black]\begin{minted}{python}}{\end{minted}\end{tcolorbox}}
+\newenvironment{matlabcode}{\VerbatimEnvironment\begin{tcolorbox}[colback=white, colframe=white!55!black]\begin{minted}{matlab}}{\end{minted}\end{tcolorbox}}
+\newenvironment{verilogcode}{\VerbatimEnvironment\begin{tcolorbox}[colback=white, colframe=white!55!black]\begin{minted}{verilog}}{\end{minted}\end{tcolorbox}}
 
 \captionsetup{compatibility=false}
 
