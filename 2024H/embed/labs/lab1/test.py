@@ -41,6 +41,12 @@ def hex_to_float(hex_str):
     return float_value
 
 # Example usage
-hex_str = "440c0000"
+hex_str = "c01a8277"
+print(hex_to_float(hex_str))
+
+hex_str = "3e4d013b"
+print(hex_to_float(hex_str))
+
+hex_str = "c140f1b0"
 print(hex_to_float(hex_str))
 
