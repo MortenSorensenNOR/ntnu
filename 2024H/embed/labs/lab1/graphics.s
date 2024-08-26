@@ -132,22 +132,87 @@ _bresenham_end:
     pop {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9}
     bx lr
 
-_start:
+matmul4:
+    // Save the registers
+    push {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
+
+    # Outer loop: i (row of matrixA)
+    mov r3, #0                  // i = 0
+matmul4_outer_loop:
+    cmp r3, #4                  // if (i >= 4) break;
+    bge matmul4_done
+
+    # Inner loop: j (column of matrixB)
+    mov r4, #0                  // j = 0
+matmul4_inner_loop:
+    cmp r4, #4                  // if (j >= 4) break;
+    bge matmul4_next_row
+
+    # Initialize sum (C[i][j] = 0)
+    ldr r6, =.float_zero_val    // Load address of zero_val into R6
+    vldr s0, [r6]               // Load zero value from address in R6 into S0
+
+    # Compute the dot product of the i-th row of matrixA and j-th column of matrixB
+    mov r5, #0                  // k = 0
+matmul4_dot_product:
+    cmp r5, #4                  // if (k >= 4) break;
+    bge matmul4_store_result
+
+    # Calculate addresses
+    mov r7, r3                  // Save row index i into R7
+    mov r8, r5                  // Save index k into R8
+    mov r9, r4                  // Save column index j into R9
+
+    # Load A[i][k] into S1
+    lsl r10, r7, #4             // R10 = i * 16 (size of a row in bytes)
+    add r10, r10, r8, lsl #2    // R10 = address of A[i][k]
+    ldr r11, =matrixA
+    add r12, r11, r10           // R12 = &matrixA[i][k]
+    vldr s1, [r12]              // Load matrixA[i][k] into S1
+
+    # Load B[k][j] into S2
+    lsl r10, r8, #4             // R10 = k * 16 (size of a row in bytes)
+    add r10, r10, r9, lsl #2    // R10 = address of B[k][j]
+    ldr r11, =matrixB
+    add r12, r11, r10           // R12 = &matrixB[k][j]
+    vldr s2, [r12]              // Load matrixB[k][j] into S2
+
+    # Multiply and accumulate
+    vmul.f32 s1, s1, s2         // s1 = s1 * s2
+    vadd.f32 s0, s0, s1         // s0 = s0 + s1
+
+    add r5, r5, #1              // K++
+    b matmul4_dot_product
+
+matmul4_store_result:
+    # Store the result in matrixC[i][j]
+    lsl r10, r3, #4             // r10 = i * 16 (size of a row in bytes)
+    add r10, r10, r4, lsl #2    // r10 = address of C[i][j]
+    ldr r11, =matrixC
+    add r12, r11, r10           // r12 = &matrixC[i][j]
+    vstr s0, [r12]              // Store result in matrixC[i][j]
+
+    add r4, r4, #1              // j++
+    b matmul4_inner_loop
+
+matmul4_next_row:
+    add r3, r3, #1              // i++
+    b matmul4_outer_loop
+
+matmul4_done:
+    // Save the link register
+    pop {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, LR}          
+    bx LR
+
+main_graphics_loop:
     ldr r3, =0x0000
     bl _clear_screen
-    
-    ldr r0, =0
-    ldr r1, =0
-    ldr r2, =120
-    ldr r3, =100
 
-    // ldr r4, =VGA_WIDTH
-    // ldr r2, [r4]
-    // sub r2, r2, #1
-    // ldr r4, =VGA_HEIGHT
-    // ldr r3, [r4]
-    // sub r3, r3, #1
-    bl bresenham
+_main_graphics_loop_end:
+    bx lr
+
+_start:
+    bl main_graphics_loop
 
     b .
 
@@ -155,4 +220,73 @@ _start:
 .align
     VGA_WIDTH: .word 320
     VGA_HEIGHT: .word 240
+
+    .float_zero_val: .float 0.0         // Used to null out float registers because fmov.fp32 s0, #0.0 gives "immediate out of range" error
+
+    .rotation_matrix:
+        .float 1.0, 0.0, 0.0, 0.0
+        .float 0.0, 1.0, 0.0, 0.0
+        .float 0.0, 0.0, 1.0, 0.0
+        .float 0.0, 0.0, 0.0, 1.0
+
+    .translation_matrix:
+        .float 1.0, 0.0, 0.0, 0.0
+        .float 0.0, 1.0, 0.0, 0.0
+        .float 0.0, 0.0, 1.0, 0.0
+        .float 0.0, 0.0, 0.0, 1.0
+
+    .view_matrix:
+        .float 1.0, 0.0, 0.0, 0.0
+        .float 0.0, 1.0, 0.0, 0.0
+        .float 0.0, 0.0, 1.0, 0.0
+        .float 0.0, 0.0, 0.0, 1.0
+
+    .projection_matrix:
+        .float 1.0, 0.0, 0.0, 0.0
+        .float 0.0, 1.0, 0.0, 0.0
+        .float 0.0, 0.0, 1.0, 0.0
+        .float 0.0, 0.0, 0.0, 1.0
+
+    .model_matrix:
+        .float 1.0, 0.0, 0.0, 0.0
+        .float 0.0, 1.0, 0.0, 0.0
+        .float 0.0, 0.0, 1.0, 0.0
+        .float 0.0, 0.0, 0.0, 1.0
+
+    .model_view_matrix:
+        .float 1.0, 0.0, 0.0, 0.0
+        .float 0.0, 1.0, 0.0, 0.0
+        .float 0.0, 0.0, 1.0, 0.0
+        .float 0.0, 0.0, 0.0, 1.0
+
+    .model_view_projection_matrix:
+        .float 1.0, 0.0, 0.0, 0.0
+        .float 0.0, 1.0, 0.0, 0.0
+        .float 0.0, 0.0, 1.0, 0.0
+        .float 0.0, 0.0, 0.0, 1.0
+
+    .vertex_data_cube:
+        .float 0.0, 0.0, 0.0
+        .float 1.0, 0.0, 0.0
+        .float 1.0, 1.0, 0.0
+        .float 0.0, 1.0, 0.0
+        .float 0.0, 0.0, 1.0
+        .float 1.0, 0.0, 1.0
+        .float 1.0, 1.0, 1.0
+        .float 0.0, 1.0, 1.0 
+
+    .index_data_cube:
+        .word 0, 1, 2
+        .word 0, 2, 3
+        .word 1, 5, 6
+        .word 1, 6, 2
+        .word 5, 4, 7
+        .word 5, 7, 6
+        .word 4, 0, 3
+        .word 4, 3, 7
+        .word 3, 2, 6
+        .word 3, 6, 7
+        .word 4, 5, 1
+        .word 4, 1, 0
+
 .end
