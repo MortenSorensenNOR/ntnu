@@ -116,7 +116,7 @@ bresenham:
     ldrge r7, =-1
 
     // err = dx + dy
-    add r8, r5, r6
+    add r8, r4, r5
 
 _bresenham_loop:
     // Color pixel at (x0, y0)
@@ -129,7 +129,7 @@ _bresenham_loop:
 
     // if (x0 == x1 && y0 == y1) break;
     cmp r0, r2
-    beq _bresenham_end
+    bne .+12
     cmp r1, r3
     beq _bresenham_end
 
@@ -302,9 +302,9 @@ mat4xvec4_done:
     bx lr
 
 main_graphics_loop:
-    ldr r3, =0x0000
     push {r0, r1, r2, r3, lr}
-    bl _clear_screen
+    ldr r3, =0x0000
+    //bl _clear_screen
     pop {r0, r1, r2, r3, lr}
 
     // Calculate model matrix
@@ -534,12 +534,12 @@ _main_graphics_draw_cube_loop:
     bl bresenham
     pop {r0, r1, r2, r3, lr}
 
-    add r4, r4, #4  // i++
+    add r4, r4, #1  // i++
     b _main_graphics_draw_cube_loop
 
 _main_graphics_draw_cube_loop_end:
 
-    // b main_graphics_loop
+    b main_graphics_loop
 
 _main_graphics_loop_end:
     bx lr
@@ -584,9 +584,9 @@ _start:
         .float 0.000000, 0.000000, -1.000000,  0.000000
 
     .model_matrix:
-        .float  0.707107, -0.707107, 0.000000, 0.000000
-        .float  0.707107,  0.707107, 0.000000, 0.000000
-        .float  0.000000,  0.000000, 1.000000, -2.000000
+        .float  0.707107, -0.000000, 0.707107, 0.000000
+        .float  0.000000,  1.000000, 0.000000, 0.000000
+        .float -0.707107,  0.000000, 0.707107, -2.000000
         .float  0.000000,  0.000000, 0.000000, 1.000000
 
     .model_view_matrix:
