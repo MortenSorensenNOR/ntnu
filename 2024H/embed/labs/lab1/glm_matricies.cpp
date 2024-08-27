@@ -19,10 +19,23 @@ int main() {
     glm::mat4 identity = glm::mat4(1.0f);
     printMatrix(identity);
 
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), // Field of view
-                                            320.0f / 240.0f,     // Aspect ratio
-                                            0.1f,                // Near plane
-                                            100.0f);              // Far plane
+    glm::mat4 view = glm::mat4(1.0f); // Identity matrix as a starting point
+    view = glm::lookAt(
+            glm::vec3(0.0f, 0.0f, -3.0f), // Camera position in world space
+            glm::vec3(0.0f, 0.0f, 1.0f), // Looking at the origin
+            glm::vec3(0.0f, 1.0f, 0.0f)  // Up vector
+    );
+
+    // Define the projection matrix (perspective projection)
+    glm::mat4 projection = glm::mat4(1.0f); // Identity matrix as a starting point
+    projection = glm::perspective(
+            glm::radians(45.0f), // Field of view in radians
+            320.0f / 240.0f,         // Aspect ratio
+            0.1f,                // Near clipping plane
+            100.0f               // Far clipping plane
+    );
+
+    printMatrix(view);
     printMatrix(projection);
 
     return 0;

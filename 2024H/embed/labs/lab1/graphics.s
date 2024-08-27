@@ -303,7 +303,9 @@ mat4xvec4_done:
 
 main_graphics_loop:
     ldr r3, =0x0000
+    push {r0, r1, r2, r3, lr}
     bl _clear_screen
+    pop {r0, r1, r2, r3, lr}
 
     // Calculate model matrix
     push {lr}
@@ -436,7 +438,7 @@ _main_graphics_screen_space_loop:
     vmul.f32 s0, s0, s5     // x = x * 0.5
 
     // Calculate screenY
-    vsub.f32 s1, s6, s1     // y = 1 - y
+    vadd.f32 s1, s6, s1     // y = 1 + y
     vmul.f32 s1, s1, s4     // y = y * screenHeight
     vmul.f32 s1, s1, s5     // y = y + 0.5
 
@@ -487,25 +489,30 @@ _main_graphics_draw_cube_loop:
     lsl r12, r9, #3     // r12 = index3 * 8 (2 * 4 bytes)
     add r12, r1, r12    // r12 = &screen_space_vertex_data[index3]
 
-    // Draw the lines
+    // Draw the line from r10 to r11
     push {r0, r1, r2, r3, lr}
-    mov r0, r10
-    mov r1, r11
-    ldr r2, =0xffff     // color = white
+    ldr r0, [r10]
+    ldr r1, [r10, #4]
+    ldr r2, [r11]
+    ldr r3, [r11, #4]
     bl bresenham
     pop {r0, r1, r2, r3, lr}
 
+    // Draw line from r11 to r12
     push {r0, r1, r2, r3, lr}
-    mov r0, r11
-    mov r1, r12
-    ldr r2, =0xffff     // color = white
+    ldr r0, [r11]
+    ldr r1, [r11, #4]
+    ldr r2, [r12]
+    ldr r3, [r12, #4]
     bl bresenham
     pop {r0, r1, r2, r3, lr}
 
+    // Draw line from r12 to r10
     push {r0, r1, r2, r3, lr}
-    mov r0, r12
-    mov r1, r10
-    ldr r2, =0xffff     // color = white
+    ldr r0, [r12]
+    ldr r1, [r12, #4]
+    ldr r2, [r10]
+    ldr r3, [r10, #4]
     bl bresenham
     pop {r0, r1, r2, r3, lr}
 
@@ -514,13 +521,15 @@ _main_graphics_draw_cube_loop:
 
 _main_graphics_draw_cube_loop_end:
 
-    b main_graphics_loop
+    // b main_graphics_loop
 
 _main_graphics_loop_end:
     bx lr
 
 _start:
+    push {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
     bl main_graphics_loop
+    pop {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
     b .
 
 .data
@@ -539,16 +548,16 @@ _start:
         .float 0.0, 0.0, 0.0, 1.0
 
     .translation_matrix:
-        .float 1.0, 0.0,  0.0, 0.0                                                                                                                                                  
-        .float 0.0, 1.0,  0.0, 0.0                                                                                                                                                  
-        .float 0.0, 0.0,  1.0, 0.0                                                                                                                                                  
-        .float 0.0, 0.0, -5.0, 1.0
+        .float 1.0, 0.0,   0.0, 0.0                                                                                                                                                  
+        .float 0.0, 1.0,   0.0, 0.0                                                                                                                                                  
+        .float 0.0, 0.0,   1.0, 0.0                                                                                                                                                  
+        .float 0.0, 0.0,   0.0, 1.0
 
     .view_matrix:
-        .float  1.0,  0.0, -0.0, 0.0
-        .float -0.0,  1.0, -0.0, 0.0                                                                                                                                                
-        .float  0.0,  0.0,  1.0, 0.0                                                                                                                                                  
-        .float -0.0, -0.0, -3.0, 1.0
+        .float  1.0,  0.0,  0.0, 4.0
+        .float  0.0,  1.0,  0.0, 0.0                                                                                                                                                
+        .float  0.0,  0.0, -1.0, 0.0                                                                                                                                                  
+        .float  0.0,  0.0,  0.0, 1.0
 
     .projection_matrix:
         .float 1.810660, 0.000000,  0.000000,  0.000000                                                                                                                                                  
@@ -575,17 +584,18 @@ _start:
         .float 0.0, 0.0, 0.0, 1.0
 
     .vertex_data_size: .word 8
-    .index_data_size: .word 36
+    .index_data_size: .word 12
 
     .vertex_data:
-        .float -1.0, -1.0, -1.0, 1.0
-        .float -1.0, -1.0,  1.0, 1.0
-        .float -1.0,  1.0, -1.0, 1.0
-        .float -1.0,  1.0,  1.0, 1.0
         .float  1.0, -1.0, -1.0, 1.0
         .float  1.0, -1.0,  1.0, 1.0
+        .float -1.0, -1.0,  1.0, 1.0
+        .float -1.0, -1.0, -1.0, 1.0
         .float  1.0,  1.0, -1.0, 1.0
         .float  1.0,  1.0,  1.0, 1.0
+        .float -1.0,  1.0,  1.0, 1.0
+        .float -1.0,  1.0, -1.0, 1.0
+
 
     .ndc_vertex_data:
         .float 1.0, 1.0, 1.0, 1.0
@@ -609,17 +619,18 @@ _start:
 
 
     .index_data:
-        .word 0, 1, 3, 0        // Last value is for padding to make it memory alligned
-        .word 0, 2, 3, 0
-        .word 1, 5, 6, 0
-        .word 1, 6, 2, 0
-        .word 5, 4, 7, 0
-        .word 5, 7, 6, 0
-        .word 4, 0, 3, 0
-        .word 4, 3, 7, 0
-        .word 3, 2, 6, 0
-        .word 3, 6, 7, 0
-        .word 4, 5, 1, 0
+        .word 1, 3, 0, 0    // Last value is for padding to make it memory alligned
+        .word 7, 5, 4, 0
         .word 4, 1, 0, 0
+        .word 5, 2, 1, 0
+        .word 2, 7, 3, 0
+        .word 0, 7, 4, 0
+        .word 1, 2, 3, 0
+        .word 7, 6, 5, 0
+        .word 4, 5, 1, 0
+        .word 5, 6, 2, 0
+        .word 2, 6, 7, 0
+        .word 0, 3, 7, 0
 
 .end
+
