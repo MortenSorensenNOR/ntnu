@@ -308,12 +308,12 @@ main_graphics_loop:
     pop {r0, r1, r2, r3, lr}
 
     // Calculate model matrix
-    push {lr}
-    ldr r0, =.rotation_matrix
-    ldr r1, =.translation_matrix
-    ldr r2, =.model_matrix
-    bl matmul4
-    pop {lr}
+    // push {lr}
+    // ldr r0, =.rotation_matrix
+    // ldr r1, =.translation_matrix
+    // ldr r2, =.model_matrix
+    // bl matmul4
+    // pop {lr}
 
     // Calculate model-view matrix
     push {lr}
@@ -339,6 +339,24 @@ main_graphics_loop:
     ldr r0, =.vertex_data
     ldr r1, =.ndc_vertex_data
     ldr r2, =.model_view_projection_matrix
+
+    // For sanity, load all the values of the mvp matrix into s-registers
+    vldr s0,  [r2]
+    vldr s1,  [r2, #4]
+    vldr s2,  [r2, #8]
+    vldr s3,  [r2, #12]
+    vldr s4,  [r2, #16]
+    vldr s5,  [r2, #20]
+    vldr s6,  [r2, #24]
+    vldr s7,  [r2, #28]
+    vldr s8,  [r2, #32]
+    vldr s9,  [r2, #36]
+    vldr s10, [r2, #40]
+    vldr s11, [r2, #44]
+    vldr s12, [r2, #48]
+    vldr s13, [r2, #52]
+    vldr s14, [r2, #56]
+    vldr s15, [r2, #60]
 
     // Loop over all vertices
     ldr r3, =0      // i = 0
@@ -548,28 +566,28 @@ _start:
         .float 0.0, 0.0, 0.0, 1.0
 
     .translation_matrix:
-        .float 1.0, 0.0,   0.0, 0.0                                                                                                                                                  
-        .float 0.0, 1.0,   0.0, 0.0                                                                                                                                                  
-        .float 0.0, 0.0,   1.0, 0.0                                                                                                                                                  
-        .float 0.0, 0.0,   0.0, 1.0
+        .float -0.000000, -1.000000, 0.000000, 0.000000
+        .float  1.000000, -0.000000, 0.000000, 0.000000
+        .float  0.000000,  0.000000, 1.000000, -2.000000
+        .float  0.000000,  0.000000, 0.000000, 1.000000
 
     .view_matrix:
-        .float  1.0,  0.0,  0.0, 4.0
-        .float  0.0,  1.0,  0.0, 0.0                                                                                                                                                
-        .float  0.0,  0.0, -1.0, 0.0                                                                                                                                                  
-        .float  0.0,  0.0,  0.0, 1.0
+        .float  1.000000, -0.000000, 0.000000, -0.000000
+        .float  0.000000,  1.000000, 0.000000, -0.000000
+        .float -0.000000, -0.000000, 1.000000, -6.500000
+        .float  0.000000,  0.000000, 0.000000,  1.000000
 
     .projection_matrix:
-        .float 1.810660, 0.000000,  0.000000,  0.000000                                                                                                                                                  
-        .float 0.000000, 2.414213,  0.000000,  0.000000                                                                                                                                                  
-        .float 0.000000, 0.000000, -1.002002, -1.000000                                                                                                                                                
-        .float 0.000000, 0.000000, -0.200200,  0.000000
+        .float 1.810660, 0.000000,  0.000000,  0.000000
+        .float 0.000000, 2.414213,  0.000000,  0.000000
+        .float 0.000000, 0.000000, -1.002002, -0.200200
+        .float 0.000000, 0.000000, -1.000000,  0.000000
 
     .model_matrix:
-        .float 1.0, 0.0, 0.0, 0.0
-        .float 0.0, 1.0, 0.0, 0.0
-        .float 0.0, 0.0, 1.0, 0.0
-        .float 0.0, 0.0, 0.0, 1.0
+        .float  0.707107, -0.707107, 0.000000, 0.000000
+        .float  0.707107,  0.707107, 0.000000, 0.000000
+        .float  0.000000,  0.000000, 1.000000, -2.000000
+        .float  0.000000,  0.000000, 0.000000, 1.000000
 
     .model_view_matrix:
         .float 1.0, 0.0, 0.0, 0.0
@@ -619,18 +637,17 @@ _start:
 
 
     .index_data:
-        .word 1, 3, 0, 0    // Last value is for padding to make it memory alligned
-        .word 7, 5, 4, 0
-        .word 4, 1, 0, 0
-        .word 5, 2, 1, 0
-        .word 2, 7, 3, 0
-        .word 0, 7, 4, 0
-        .word 1, 2, 3, 0
-        .word 7, 6, 5, 0
-        .word 4, 5, 1, 0
-        .word 5, 6, 2, 0
-        .word 2, 6, 7, 0
-        .word 0, 3, 7, 0
-
+        .word 1,3,0, 0    // Last value is for padding to make it memory alligned
+        .word 7,5,4, 0
+        .word 4,1,0, 0
+        .word 5,2,1, 0
+        .word 2,7,3, 0
+        .word 0,7,4, 0
+        .word 1,2,3, 0
+        .word 7,6,5, 0
+        .word 4,5,1, 0
+        .word 5,6,2, 0
+        .word 2,6,7, 0
+        .word 0,3,7, 0
 .end
 
