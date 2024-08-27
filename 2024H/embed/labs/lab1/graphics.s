@@ -61,6 +61,9 @@ bresenham:
     // Clip start_x and start_y to screen size
     ldr r4, =VGA_WIDTH
     ldr r5, =VGA_HEIGHT
+    ldr r4, [r4]
+    ldr r5, [r5]
+
     sub r4, r4, #1
     sub r5, r5, #1
 
@@ -349,7 +352,7 @@ _main_graphics_vertex_projection_loop:
     add r4, r0, r4  // r4 = &vertex_data[i]
     
     // Get address of ndc_vertex_data[i]
-    lsl r5, r3, #4  // r5 = i * 4
+    lsl r5, r3, #4  // r5 = i * 16 (4 * 4 bytes)
     add r5, r1, r5  // r5 = &ndc_vertex_data[i]
 
     // Multiply the vertex with the model-view-projection matrix
@@ -387,14 +390,16 @@ _main_graphics_vertex_projection_loop_end:
     ldr r1, =.screen_space_vertex_data
     ldr r2, =VGA_WIDTH
     ldr r3, =VGA_HEIGHT
+    ldr r2, [r2]
+    ldr r3, [r3]
 
     // Loop over all vertices
     ldr r4, =0      // i = 0
 
 _main_graphics_screen_space_loop:
-    ldr r3, =.vertex_data_size
-    ldr r3, [r3]
-    cmp r4, r3
+    ldr r5, =.vertex_data_size
+    ldr r5, [r5]
+    cmp r4, r5
     bge _main_graphics_screen_space_loop_end
 
     // Get address of ndc_vertex_data[i]
@@ -410,20 +415,30 @@ _main_graphics_screen_space_loop:
     vldr s1, [r5, #4]   // Load y into S1
     vldr s2, [r5, #8]   // Load z into S2
 
-    // int screenX = (ndcPos.x * 0.5f + 0.5f) * screenWidth;
-    // int screenY = (ndcPos.y * 0.5f + 0.5f) * screenHeight;
+    vmov s3, r2       // Load screenWidth into S3
+    vmov s4, r3       // Load screenHeight into S4
+    
+    // Convert screen width and height from integer to float
+    vcvt.f32.s32 s3, s3
+    vcvt.f32.s32 s4, s4
+
+    // int screenX = (ndc.x + 1.0) * in->s_width * 0.5
+    // int screenY = (1.0 - ndc.y) * in->s_height * 0.5
 
     // Calculate screenX 
-    vldr s3, =.float_half
-    vmul.f32 s0, s0, s3 // x = x * 0.5
-    vadd.f32 s0, s0, s3 // x = x + 0.5
-    vmul.f32 s0, s0, s2 // x = x * screenWidth
+    ldr r7, =.float_half
+    vldr s5, [r7]           // Load 0.5 into S5
+    ldr r7, =.float_one
+    vldr s6, [r7]           // Load 1.0 into S6
+
+    vadd.f32 s0, s0, s6     // x = x + 1.0
+    vmul.f32 s0, s0, s3     // x = x * screenWidth
+    vmul.f32 s0, s0, s5     // x = x * 0.5
 
     // Calculate screenY
-    vldr s3, =.float_half
-    vmul.f32 s1, s1, s3 // y = y * 0.5
-    vadd.f32 s1, s1, s3 // y = y + 0.5
-    vmul.f32 s1, s1, s3 // y = y * screenHeight
+    vsub.f32 s1, s6, s1     // y = 1 - y
+    vmul.f32 s1, s1, s4     // y = y * screenHeight
+    vmul.f32 s1, s1, s5     // y = y + 0.5
 
     // Convert to integer
     vcvt.s32.f32 s0, s0
@@ -515,6 +530,7 @@ _start:
 
     .float_zero_val: .float 0.0         // Used to null out float registers because fmov.fp32 s0, #0.0 gives "immediate out of range" error
     .float_half:     .float 0.5         // Same as above, but for 0.5
+    .float_one:      .float 1.0         // Same as above, but for 1.0
 
     .rotation_matrix:
         .float 1.0, 0.0, 0.0, 0.0
@@ -523,7 +539,7 @@ _start:
         .float 0.0, 0.0, 0.0, 1.0
 
     .translation_matrix:
-        .float 0.0, 0.0,  0.0, 0.0                                                                                                                                                  
+        .float 1.0, 0.0,  0.0, 0.0                                                                                                                                                  
         .float 0.0, 1.0,  0.0, 0.0                                                                                                                                                  
         .float 0.0, 0.0,  1.0, 0.0                                                                                                                                                  
         .float 0.0, 0.0, -5.0, 1.0

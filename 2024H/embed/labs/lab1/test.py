@@ -1,27 +1,6 @@
 import numpy as np
 import struct
 
-# Define matrices A and B
-A = np.array([
-    [1.0, 2.0, 3.0, 4.0],
-    [5.0, 6.0, 7.0, 8.0],
-    [9.0, 10.0, 11.0, 12.0],
-    [13.0, 14.0, 15.0, 16.0]
-])
-
-B = np.array([
-    [16.0, 15.0, 14.0, 13.0],
-    [12.0, 11.0, 10.0, 9.0],
-    [8.0, 7.0, 6.0, 5.0],
-    [4.0, 3.0, 2.0, 1.0]
-])
-
-# Compute the matrix product
-C = np.dot(A, B)
-
-# Print the result
-print(C)
-
 def hex_to_float(hex_str):
     # Ensure the hex string has exactly 8 characters
     if len(hex_str) != 8:
@@ -40,13 +19,19 @@ def hex_to_float(hex_str):
     
     return float_value
 
-# Example usage
-hex_str = "c01a8277"
-print(hex_to_float(hex_str))
+registers = """
+bfe7c3b5
+c01a8277
+c0ffef9a
+3e4d013b
 
-hex_str = "3e4d013b"
-print(hex_to_float(hex_str))
+c110b545
+c140f1b0
+c21fccd7
+"""
 
-hex_str = "c140f1b0"
-print(hex_to_float(hex_str))
+registers = registers.split("\n")
+for register in registers:
+    if register != "":
+        print(hex_to_float(register))
 
