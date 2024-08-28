@@ -89,3 +89,6 @@ plt.ylim([0, display_height])
 separator = np.full((1, model_matrix.shape[1]), np.nan)
 combined = np.vstack((model_matrix, separator, view_matrix, separator, projection_matrix, separator, mvp_matrix))
 np.savetxt('matrices.txt', combined, fmt='%f')
+
+identity = glm.mat4(1.0)
+print(glm.rotate(identity, glm.radians(45), glm.vec3(0, 1, 0)))

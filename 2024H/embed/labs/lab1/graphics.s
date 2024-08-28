@@ -327,12 +327,12 @@ rotation_matrix_y:
     push {r0, r1, r2, r3, r4, lr}
 
     // First, get the corresponding sine and cosine values into s0 and s1
-    bl cosine_lookup
-    vmov s1, s0
     bl sine_lookup
+    vmov s1, s0
+    bl cosine_lookup
 
     // Get -sinθ into s2
-    vmov s2, s0
+    vmov s2, s1
     vneg.f32 s2, s2
 
     // s0:      cosθ
@@ -348,26 +348,44 @@ rotation_matrix_y:
     vldr s4, [r2]
     
     // Fill in the rotation matrix
-    // [cosθ,  0, sinθ, 0]
-    // [0,     1, 0,    0]
-    // [−sinθ, 0, cosθ, 0]
-    // [0,     0, 0,    1]
+    // result.m[0] = c;
+    // result.m[2] = -s;
+    // result.m[8] = s;
+    // result.m[10] = c;
+
     vstr s0, [r1]       // cosθ
     vstr s3, [r1, #4]   // 0
-    vstr s1, [r1, #8]   // sinθ
+    vstr s2, [r1, #8]   // -sinθ
     vstr s3, [r1, #12]  // 0
     vstr s3, [r1, #16]  // 0
     vstr s4, [r1, #20]  // 1
     vstr s3, [r1, #24]  // 0
     vstr s3, [r1, #28]  // 0
-    vstr s2, [r1, #32]  // −sinθ
+    vstr s1, [r1, #32]  // sinθ
     vstr s3, [r1, #36]  // 0
-    vstr s1, [r1, #40]  // cosθ
+    vstr s0, [r1, #40]  // cosθ
     vstr s3, [r1, #44]  // 0
     vstr s3, [r1, #48]  // 0
     vstr s3, [r1, #52]  // 0
     vstr s3, [r1, #56]  // 0
     vstr s4, [r1, #60]  // 1
+	
+	vldr s0, [r1]
+	vldr s1, [r1, #4]
+	vldr s2, [r1, #8]
+	vldr s3, [r1, #12]
+	vldr s4, [r1, #16]
+	vldr s5, [r1, #20]
+	vldr s6, [r1, #24]
+	vldr s7, [r1, #28]
+	vldr s8, [r1, #32]
+	vldr s9, [r1, #36]
+	vldr s10, [r1, #40]
+	vldr s11, [r1, #44]
+	vldr s12, [r1, #48]
+	vldr s13, [r1, #52]
+	vldr s14, [r1, #56]
+	vldr s15, [r1, #60]
 
     pop {r0, r1, r2, r3, r4, lr}
     bx lr
@@ -390,11 +408,11 @@ main_graphics_loop:
     strge r0, [r12]
 
     // TODO: Fix rotation matrix
-    // push {r0, lr}
-    // mov r0, r12     // Index for trig table lookup
-    // ldr r1, =.rotation_matrix
-    // bl rotation_matrix_y
-    // pop {r0, lr}
+    push {r0, lr}
+    mov r0, r0     // Index for trig table lookup
+    ldr r1, =.rotation_matrix
+    bl rotation_matrix_y
+    pop {r0, lr}
 
     // Calculate model matrix
     push {lr}
@@ -610,7 +628,7 @@ _main_graphics_draw_cube_loop:
 
 _main_graphics_draw_cube_loop_end:
     ldr r12, =.graphics_loop_count
-    ldr r0, [r0]
+    ldr r0, [r12]
     add r0, r0, #1
     str r0, [r12]
     b main_graphics_loop
@@ -725,22 +743,63 @@ _start:
         .word 2,6,7, 0
         .word 0,3,7, 0
 
-    .trig_table_size: .word 20
+    .trig_table_size: .word 100
     .cosine_table: 
-        .float  1.00,  0.95,  0.79,  0.55
-        .float  0.25, -0.08, -0.40, -0.68
-        .float -0.88, -0.99, -0.99, -0.88
-        .float -0.68, -0.40, -0.08,  0.25
-        .float  0.55,  0.79,  0.95,  1.00
+        .float 1.00, 1.00, 0.99, 0.98
+        .float 0.97, 0.95, 0.93, 0.90
+        .float 0.87, 0.84, 0.81, 0.77
+        .float 0.72, 0.68, 0.63, 0.58
+        .float 0.53, 0.47, 0.42, 0.36
+        .float 0.30, 0.24, 0.17, 0.11
+        .float 0.05, -0.02, -0.08, -0.14
+        .float -0.20, -0.27, -0.33, -0.39
+        .float -0.44, -0.50, -0.55, -0.61
+        .float -0.65, -0.70, -0.75, -0.79
+        .float -0.82, -0.86, -0.89, -0.92
+        .float -0.94, -0.96, -0.98, -0.99
+        .float -1.00, -1.00, -1.00, -1.00
+        .float -0.99, -0.98, -0.96, -0.94
+        .float -0.92, -0.89, -0.86, -0.82
+        .float -0.79, -0.75, -0.70, -0.65
+        .float -0.61, -0.55, -0.50, -0.44
+        .float -0.39, -0.33, -0.27, -0.20
+        .float -0.14, -0.08, -0.02, 0.05
+        .float 0.11, 0.17, 0.24, 0.30
+        .float 0.36, 0.42, 0.47, 0.53
+        .float 0.58, 0.63, 0.68, 0.72
+        .float 0.77, 0.81, 0.84, 0.87
+        .float 0.90, 0.93, 0.95, 0.97
+        .float 0.98, 0.99, 1.00, 1.00
 
     .sine_table:
-        .float  0.00,  0.32,  0.61,  0.84
-        .float  0.97,  1.00,  0.92,  0.74
-        .float  0.48,  0.16, -0.16, -0.48
-        .float -0.74, -0.92, -1.00, -0.97
-        .float -0.84, -0.61, -0.32, -0.00
+        .float 0.00, 0.06, 0.13, 0.19
+        .float 0.25, 0.31, 0.37, 0.43
+        .float 0.49, 0.54, 0.59, 0.64
+        .float 0.69, 0.73, 0.78, 0.81
+        .float 0.85, 0.88, 0.91, 0.93
+        .float 0.95, 0.97, 0.98, 0.99
+        .float 1.00, 1.00, 1.00, 0.99
+        .float 0.98, 0.96, 0.95, 0.92
+        .float 0.90, 0.87, 0.83, 0.80
+        .float 0.76, 0.71, 0.67, 0.62
+        .float 0.57, 0.51, 0.46, 0.40
+        .float 0.34, 0.28, 0.22, 0.16
+        .float 0.10, 0.03, -0.03, -0.10
+        .float -0.16, -0.22, -0.28, -0.34
+        .float -0.40, -0.46, -0.51, -0.57
+        .float -0.62, -0.67, -0.71, -0.76
+        .float -0.80, -0.83, -0.87, -0.90
+        .float -0.92, -0.95, -0.96, -0.98
+        .float -0.99, -1.00, -1.00, -1.00
+        .float -0.99, -0.98, -0.97, -0.95
+        .float -0.93, -0.91, -0.88, -0.85
+        .float -0.81, -0.78, -0.73, -0.69
+        .float -0.64, -0.59, -0.54, -0.49
+        .float -0.43, -0.37, -0.31, -0.25
+        .float -0.19, -0.13, -0.06, -0.00
 
-    .graphics_loop_count: .word 0
+    .graphics_loop_count: .word 25
 .end
+
 
 
