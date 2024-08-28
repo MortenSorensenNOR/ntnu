@@ -301,19 +301,108 @@ mat4xvec4_done:
     pop {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
     bx lr
 
+cosine_lookup:
+    push {r0, r1, lr}
+    lsl r0, r0, #2
+    ldr r1, =.cosine_table
+    add r1, r1, r0
+    vldr s0, [r1]
+
+    pop {r0, r1, lr}
+    bx lr
+
+sine_lookup:
+    push {r0, r1, lr}
+    lsl r0, r0, #2
+    ldr r1, =.sine_table
+    add r1, r1, r0
+    vldr s0, [r1]
+
+    pop {r0, r1, lr}
+    bx lr
+
+rotation_matrix_y:
+    // r0:      Index for trig table lookup
+    // r1:      Address of return matrix
+    push {r0, r1, r2, r3, r4, lr}
+
+    // First, get the corresponding sine and cosine values into s0 and s1
+    bl cosine_lookup
+    vmov s1, s0
+    bl sine_lookup
+
+    // Get -sinθ into s2
+    vmov s2, s0
+    vneg.f32 s2, s2
+
+    // s0:      cosθ
+    // s1:      sinθ
+    // s2:     -sinθ
+    // s3:      0.0
+    // s4:      1.0
+    
+    // Load 1.0 into s2 and 0.0 into s3
+    ldr r2, =.float_zero_val
+    vldr s3, [r2]
+    ldr r2, =.float_one
+    vldr s4, [r2]
+    
+    // Fill in the rotation matrix
+    // [cosθ,  0, sinθ, 0]
+    // [0,     1, 0,    0]
+    // [−sinθ, 0, cosθ, 0]
+    // [0,     0, 0,    1]
+    vstr s0, [r1]       // cosθ
+    vstr s3, [r1, #4]   // 0
+    vstr s1, [r1, #8]   // sinθ
+    vstr s3, [r1, #12]  // 0
+    vstr s3, [r1, #16]  // 0
+    vstr s4, [r1, #20]  // 1
+    vstr s3, [r1, #24]  // 0
+    vstr s3, [r1, #28]  // 0
+    vstr s2, [r1, #32]  // −sinθ
+    vstr s3, [r1, #36]  // 0
+    vstr s1, [r1, #40]  // cosθ
+    vstr s3, [r1, #44]  // 0
+    vstr s3, [r1, #48]  // 0
+    vstr s3, [r1, #52]  // 0
+    vstr s3, [r1, #56]  // 0
+    vstr s4, [r1, #60]  // 1
+
+    pop {r0, r1, r2, r3, r4, lr}
+    bx lr
+
+main_graphics_start:
+
 main_graphics_loop:
     push {r0, r1, r2, r3, lr}
     ldr r3, =0x0000
-    //bl _clear_screen
+    bl _clear_screen
     pop {r0, r1, r2, r3, lr}
 
+    // Rotate the cube
+    ldr r4, =.trig_table_size
+    ldr r4, [r4]
+    ldr r12, =.graphics_loop_count
+    ldr r0, [r12]
+    cmp r0, r4
+    ldrge r0, =0
+    strge r0, [r12]
+
+    // TODO: Fix rotation matrix
+    // push {r0, lr}
+    // mov r0, r12     // Index for trig table lookup
+    // ldr r1, =.rotation_matrix
+    // bl rotation_matrix_y
+    // pop {r0, lr}
+
     // Calculate model matrix
-    // push {lr}
-    // ldr r0, =.rotation_matrix
-    // ldr r1, =.translation_matrix
-    // ldr r2, =.model_matrix
-    // bl matmul4
-    // pop {lr}
+    push {lr}
+    ldr r0, =.translation_matrix
+    ldr r1, =.rotation_matrix
+    ldr r2, =.model_matrix
+    bl matmul4
+    pop {lr}
 
     // Calculate model-view matrix
     push {lr}
@@ -339,24 +428,6 @@ main_graphics_loop:
     ldr r0, =.vertex_data
     ldr r1, =.ndc_vertex_data
     ldr r2, =.model_view_projection_matrix
-
-    // For sanity, load all the values of the mvp matrix into s-registers
-    vldr s0,  [r2]
-    vldr s1,  [r2, #4]
-    vldr s2,  [r2, #8]
-    vldr s3,  [r2, #12]
-    vldr s4,  [r2, #16]
-    vldr s5,  [r2, #20]
-    vldr s6,  [r2, #24]
-    vldr s7,  [r2, #28]
-    vldr s8,  [r2, #32]
-    vldr s9,  [r2, #36]
-    vldr s10, [r2, #40]
-    vldr s11, [r2, #44]
-    vldr s12, [r2, #48]
-    vldr s13, [r2, #52]
-    vldr s14, [r2, #56]
-    vldr s15, [r2, #60]
 
     // Loop over all vertices
     ldr r3, =0      // i = 0
@@ -538,7 +609,10 @@ _main_graphics_draw_cube_loop:
     b _main_graphics_draw_cube_loop
 
 _main_graphics_draw_cube_loop_end:
-
+    ldr r12, =.graphics_loop_count
+    ldr r0, [r0]
+    add r0, r0, #1
+    str r0, [r12]
     b main_graphics_loop
 
 _main_graphics_loop_end:
@@ -546,8 +620,9 @@ _main_graphics_loop_end:
 
 _start:
     push {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
-    bl main_graphics_loop
+    bl main_graphics_start
     pop {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
+
     b .
 
 .data
@@ -566,9 +641,9 @@ _start:
         .float 0.0, 0.0, 0.0, 1.0
 
     .translation_matrix:
-        .float -0.000000, -1.000000, 0.000000, 0.000000
-        .float  1.000000, -0.000000, 0.000000, 0.000000
-        .float  0.000000,  0.000000, 1.000000, -2.000000
+        .float  0.707107, -0.000000, 0.707107, 0.000000
+        .float  0.000000,  1.000000, 0.000000, 0.000000
+        .float -0.707107,  0.000000, 0.707107, -2.000000
         .float  0.000000,  0.000000, 0.000000, 1.000000
 
     .view_matrix:
@@ -649,5 +724,23 @@ _start:
         .word 5,6,2, 0
         .word 2,6,7, 0
         .word 0,3,7, 0
+
+    .trig_table_size: .word 20
+    .cosine_table: 
+        .float  1.00,  0.95,  0.79,  0.55
+        .float  0.25, -0.08, -0.40, -0.68
+        .float -0.88, -0.99, -0.99, -0.88
+        .float -0.68, -0.40, -0.08,  0.25
+        .float  0.55,  0.79,  0.95,  1.00
+
+    .sine_table:
+        .float  0.00,  0.32,  0.61,  0.84
+        .float  0.97,  1.00,  0.92,  0.74
+        .float  0.48,  0.16, -0.16, -0.48
+        .float -0.74, -0.92, -1.00, -0.97
+        .float -0.84, -0.61, -0.32, -0.00
+
+    .graphics_loop_count: .word 0
 .end
+
 

@@ -20,7 +20,26 @@ def hex_to_float(hex_str):
     return float_value
 
 registers = """
-fffffaf9
+3f800000
+3f733333
+3f4a3d71
+3f0ccccd
+3e800000
+bda3d70a
+becccccd
+bf2e147b
+bf6147ae
+bf7d70a4
+bf7d70a4
+bf6147ae
+bf2e147b
+becccccd
+bda3d70a
+3e800000
+3f0ccccd
+3f4a3d71
+3f733333
+3f800000
 """
 
 registers = registers.split("\n")
