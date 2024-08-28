@@ -13,7 +13,15 @@ _set_pixel:
     add r2, r1 // r2 IS NOW CORRECT OFFSET
     strh r3, [r0,r2]  // sTORE HALF-WORD, LOWER 16 BITS AT ADDRESS r0 + OFFSET r2
     bx lr
-
+	
+_set_pixel_double:
+	ldr r0, =VGA_BASE_ADDR
+	lsl r2, r2, #10
+	lsl r1, r1, #2
+	add r2, r1
+	str r3, [r0, r2]
+	bx lr
+	
 _clear_screen:
     push {r1, r2, r3, r4, r5, lr}
     ldr r5, =0
@@ -21,13 +29,13 @@ _clear_screen:
 _clear_screen_loop:
     ldr r4, =0
 
-_clear_screen_line: 
+_clear_screen_line:
     mov r1, r4
     mov r2, r5
-    bl _set_pixel
+    bl _set_pixel_double
 
     add r4, r4, #1
-    cmp r4, #320
+    cmp r4, #160
     blt _clear_screen_line
 
     // Line cleared, continue loop
@@ -369,23 +377,6 @@ rotation_matrix_y:
     vstr s3, [r1, #52]  // 0
     vstr s3, [r1, #56]  // 0
     vstr s4, [r1, #60]  // 1
-	
-	vldr s0, [r1]
-	vldr s1, [r1, #4]
-	vldr s2, [r1, #8]
-	vldr s3, [r1, #12]
-	vldr s4, [r1, #16]
-	vldr s5, [r1, #20]
-	vldr s6, [r1, #24]
-	vldr s7, [r1, #28]
-	vldr s8, [r1, #32]
-	vldr s9, [r1, #36]
-	vldr s10, [r1, #40]
-	vldr s11, [r1, #44]
-	vldr s12, [r1, #48]
-	vldr s13, [r1, #52]
-	vldr s14, [r1, #56]
-	vldr s15, [r1, #60]
 
     pop {r0, r1, r2, r3, r4, lr}
     bx lr
@@ -800,6 +791,3 @@ _start:
 
     .graphics_loop_count: .word 25
 .end
-
-
-
