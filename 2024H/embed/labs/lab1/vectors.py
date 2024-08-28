@@ -13,7 +13,7 @@ model_matrix = glm.mat4(1.0)
 model_matrix = glm.translate(model_matrix, glm.vec3(0, 0, -2.0))
 model_matrix = glm.rotate(model_matrix, glm.radians(45), glm.vec3(0, 1, 0))
 
-view_matrix = glm.lookAt(glm.vec3(0, 0, 6.5), glm.vec3(0, 0, 0), glm.vec3(0, 1, 0))
+view_matrix = glm.lookAt(glm.vec3(0, 2.0, 6.5), glm.vec3(0, 0, 0), glm.vec3(0, 1, 0))
 projection_matrix = glm.perspective(glm.radians(fov), display_width / display_height, near, far)
 
 model_matrix = np.array(model_matrix)
