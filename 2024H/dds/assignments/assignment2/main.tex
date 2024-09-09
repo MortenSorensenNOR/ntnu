@@ -1,0 +1,108 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1}
+\begin{enumerate}
+    \item In each simulation cycle the right-hand side of all expressions 
+        (unless they are in a process which does not include it in its sensitivity list) are 
+        evaluated. For each expression, if it results in a new output value, the new value is 
+        updated after one delta-delay, and if the expression has a delay, the new value assigned will be placed in the 
+        event queue. The event queue is then processed in the next delta-cycle, and (if the expression had a delay, and the 
+        delay has passed) the new value is assigned to the signal.
+    \item If a signal is not assigned explicit delays, the value will be updated after a delta-delay, typically a femtosecond.
+        If it is assigned an explicit delay, the new value is placed in the event queue, and assigned to the signal when the event 
+        queue has reached the point where that delay has passed.
+\end{enumerate}
+
+\section*{Task 2}
+\begin{enumerate}
+\item The following is a timing diagram for A, B, Q and QN:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|}
+        \hline
+        Time & \textbf{A} & \textbf{B} & \textbf{Q} & \textbf{QN} \\
+        \hline
+        \textbf{0}          & U     & U     & U     & U     \\
+        0 + $\Delta$        & 1     & 0     &       &       \\
+        0 + $2\Delta$       &       &       & 0     & X     \\
+        0 + $3\Delta$       &       &       & 0     & 1     \\
+        0 + $4\Delta$       &       &       &       &       \\
+        \textbf{10}         &       &       &       &       \\
+        10 + $\Delta$       & 0     & 0     &       &       \\
+        10 + $2\Delta$      &       &       & 0     & 1     \\
+        \textbf{20}         &       &       &       &       \\
+        20 + $\Delta$       & 0     & 1     &       &       \\
+        20 + $2\Delta$      &       &       & 0     & 0     \\
+        20 + $3\Delta$      &       &       & 1     & (0)   \\
+        \textbf{30}         &       &       &       &       \\
+        30 + $\Delta$       & 0     & 0     &       &       \\
+        30 + $2\Delta$      &       &       & 1     & 0     \\
+        \textbf{40}         &       &       &       &       \\
+        40 + $\Delta$       & 1     & 1     &       &       \\
+        40 + $2\Delta$      &       &       & 0     & 0     \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\item A process will continue until all changes relating to the signals in the sensitivity list are completed. No osillations occured after the last stimuli, 
+    so the process will stop after the second delta delay after the last stimuli.
+
+\item The following is an implementation of the process \textbf{Q} and \textbf{QN} with an entity and architecture.
+\begin{vhdlcode}
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity TestCircuit is 
+    port(
+        A, B : in std_ulogic;
+        Q, QN : out std_ulogic
+    );
+end entity TestCircuit;
+
+architecture Behavioral of TestCircuit is
+    signal q_internal, qn_internal : std_ulogic;
+begin
+    q_internal <= A nor qn_internal;
+    Q <= A nor qn_internal;
+    qn_internal <= B nor q_internal;
+    QN <= B nor q_internal;
+end architecture Behavioral;
+\end{vhdlcode}
+In the above code two new signals \textbf{q\_internal} and \textbf{qn\_internal} had to be created 
+because one gets an error if one tries to read the value from a declared output port. Another 
+solution would be to change the \textbf{Q} and \textbf{QN} ports to inout ports, but I prefer to 
+do it this way.
+
+\begin{vhdlcode}
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity TestCircuit_tb is
+end entity TestCircuit_tb;
+
+architecture Behavioral of TestCircuit_tb is
+    signal A, B, Q, QN : std_ulogic;
+begin
+    DUT : entity work.TestCircuit port map(A, B, Q, QN);
+    process begin
+        A <= '1'; B <= '0';
+        wait for 10 ns;
+        A <= '0';
+        wait for 10 ns;
+        B <= '1';
+        wait for 10 ns;
+        B <= '0';
+        wait for 10 ns;
+        B <= '1'; A <= '1';
+        wait;
+    end process;
+end architecture Behavioral;
+\end{vhdlcode}
+\end{enumerate}
+
+\end{document}

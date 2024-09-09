@@ -189,8 +189,8 @@ _exit:
 	// This is the input you are supposed to check for a palindrom
 	// You can modify the string during development, however you
 	// are not allowed to change the name 'input'!
-	input: .asciz "l ev el"
-    
+	input: .asciz "Grav ned den varg"
+   
     palindrom_text: .asciz "Palindrome detected"
     not_palindrom_text: .asciz "Not a palindrom"
 .end

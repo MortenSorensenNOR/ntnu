@@ -1,0 +1,35 @@
+\section{Realisering}
+\label{realisering}
+
+For realiseringen, og senere testing av systemet, har en $V_{cc} = \SI{6}{\volt}$, 
+$R_K = \SI{1.2}{\kilo\ohm}$ og $R_L = \SI{220}{\ohm}$ blitt valgt. Transistoren valgt for 
+realiseringen av bufferen er en BC547B BJT transistor \cite{bjt}.
+
+Arbeidspunktet til bufferen blir da 
+\begin{center}
+    $V_B = \frac{V_{CC}}{2} = \SI{3}{\volt}\:\:\:\:$ $\:\:\:\:V_E = V_B - \SI{0.7}{\volt} = \SI{2.3}{\volt}$
+\end{center}
+og valgte arbeidspunktet til emitterstrømmen til å være 
+\[
+    I_E = \SI{30}{\milli\ampere}
+\]
+da dette virket rimelig fra databladet og ettersom at det gir en lav emittermotstand
+\[
+    R_E = \frac{\SI{2.3}{\volt}}{\SI{30}{\milli\ampere}} = \SI{76.6}{\ohm}
+\]
+En høyere emitterstrøm er trolig mulig, men det kan påvirke egenskapene til bufferen ved høyere 
+amplituder $A_0$ for kildesignalet $v_0$.
+For å oppnå arbeidspunktet $V_B$ ble $R_{B1}$ og $R_{B2}$ begge valgt til en verdi på $\SI{100}{\kilo\ohm}$.
+Til slutt ble $C_1 = C_2 = \SI{41}{\micro\farad}$ valgt, hver realisert ved å koble to 
+polariserte $\SI{82}{\micro\farad}$ kodensatorer i serie med de negative polene koblet sammen, da dette 
+ville produsere en mindre, upolarisert kodensator. Verdien på kodensatorene var trolig langt større enn 
+nødvendig, men gav ikke store problemer under testingen av kretsen.
+
+Den realiserte kretsen er fremstilt med komponentverdier i figur \ref{fig:buffer_realisering}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Bilder/bjt_buffer_realisering.png}
+    \caption{Realisering av bufferen med komponentverdier}
+    \label{fig:buffer_realisering}
+\end{figure}

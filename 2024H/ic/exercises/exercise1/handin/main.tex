@@ -1,0 +1,130 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1}
+We find the built-in junction potential $\Phi_{0}$ as 
+\[
+    \Phi_0 = \frac{kT}{q} \ln{\left(\frac{N_A \cdot N_D}{n_i^2}\right)}
+\]
+That gives 
+\[
+    \Phi_0 = \frac{1.38 \cdot 10^{-23} \cdot 300}{1.602 \cdot 10^{-19}} \ln{\left(\frac{4 \cdot 10^{25} \cdot 2 \cdot 10^{21}}{(1.1 \cdot 10^{16})^2}\right)} \approx \SI{0.88}{\volt}
+\]
+
+\section*{Task 2}
+\begin{enumerate}
+\item Doping the silicon with arsenic would make it an n-type material as arsenic has 1 extra valence electron.
+\item As the doped material is an n-type material, the number of negative carriers is practically equal to 
+    the doping concentration, i.e., $n_n = N_D = 4 \cdot 10^{23}$ $\text{electrons}/m^3$. The positive carrier 
+    concentration $p_n$ will then equal $p_n = n_i^2/N_D$, where $n_i$ is the intrinsic carrier concentration. We
+    therefore get $p_n = \frac{(1.1 \cdot 10^{16})^2}{4 \cdot 10^{23}} \approx 0.303 \cdot 10^9$ positive carriers per 
+    meter cubed.
+\item We know that the number of intrinsic carriers $n_i$ doubles for every $\SI{11}{\celsius}$ increase in temperature.
+    We therefore have that the $\SI{33}{\kelvin}$ increase in temperature equates to a $2^3 = 8$ fold increase in 
+    intrinsic carriers per meter cubed. We consequently get a positive carrier consentration of 
+    $p_n = \frac{(8 \cdot 1.1 \cdot 10^{16})^2}{4 \cdot 10^{23}} \approx 19.36 \cdot 10^9$ holes per cubic meter.
+    Since the formula for the number of electrons per cube meter in an n-type material does not depend upon the 
+    intrinsic carrier concentration, the electron concentration stays the same.
+\item \hphantom{hei}
+    \begin{itemize}
+        \item Yes, as stated previosly $n_i$ increases with temperature.
+        \item Also yes, but is less significant as the doping levels will likely contribute to the conductivity of the material to a much greater degree than the higher mobility of 
+            higher energy bound electrons in the silicon.
+    \end{itemize}
+\end{enumerate}
+
+\section*{Task 3}
+\begin{enumerate}
+\item The reverse leakage current will be equal to the number of electron-hole pairs generated per second in the depletion region of the diode multiplied by the charge of each electron, giving
+\[
+    I_{\text{leak}} = q \cdot n = 1.602 \cdot 10^{-19} \cdot 2.7 \cdot 10^{7} \approx \SI{4.325}{\pico\ampere}
+\]
+\item No?
+\item This current will likely increase with temperature, as the number of free carriers in the intrinsic silicon $n_i$ is exponentially proportional with temperature (the number of carriers doubles for every 
+    $\SI{11}{\celsius}$ increase in temperature).
+\end{enumerate}
+
+\section*{Task 4}
+\begin{enumerate}
+\item The following circuit description can be used to model the reverse biased diode from task 3 in Aim Spice
+\begin{pythoncode}
+.include C:\Users\morte\Downloads\DBSBdiode.mod
+
+Vdd v+ 0 DC 4.8V
+D1 anode cathode DSUB
+.connect cathode v+
+.connect anode 0
+
+.plot I(Vdd)
+\end{pythoncode}
+\item The following is the produced I-V plot when sweeping the voltage from 0 to 4.8V:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.95\textwidth]{Bilder/leakage_current.png}
+    \end{figure}
+    It shows that there is a linear relationship between the bias voltage and leakage current for 
+    bias voltages over, roughtly, the built in juction voltage of the diode of around 0.89V.
+\item Using the DC Operating Point function gave a leakage current of $\SI{-9.857}{\pico\ampere}$ at 4.8V.
+\item Because the area of the 50x50um diode is $(50/100)^2 = 1/4$ the area, the following code can be used to model the smaller diode 
+\begin{pythoncode}
+.include C:\Users\morte\Downloads\DBSBdiode.mod
+
+Vdd v+ 0 DC 4.8V
+D1 anode cathode DSUB 0.25
+.connect cathode v+
+.connect anode 0
+
+.plot I(Vdd)
+\end{pythoncode}
+    This gives a leakage current of -6.06 pA at 4.8V. The relationship between size and leakage current is not quite linear. A quarter of 
+    diode size did not give a quarter of the leakage current.
+\item The built-in junction voltage would be the "VJ" parameter, which is set to 0.89V.
+\item The following is a plot for the forward bias of the modeled diode. It is simulated from 0 to 1.2V
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.95\textwidth]{Bilder/forward_bias.png}
+    \end{figure}
+    There does seem to be some correspondance between the found built-in junction voltage and 
+    the voltage at which the current seems to start going exponential and increasing way above the leakage current.
+\end{enumerate}
+
+\section*{Task 5}
+We can observe that the donor concentration $N_D$ is much greater than the acceptor concentration $N_A$, so we can use the 
+following approximate formulas to find the depletion region depths:
+\[
+    x_n \approx \left[\frac{2K_s \epsilon_0 (\Phi_0 + V_R)N_A}{qN_D^2}\right]^{\frac{1}{2}}
+\]
+and
+\[
+    x_p \approx \left[\frac{2K_s \epsilon_0 (\Phi_0 + V_R)}{qN_A}\right]^{\frac{1}{2}}
+\]
+
+Looking at the values given and the resulting depletion region depths ($\SI{19.4}{\nano\meter}$ and $\SI{9.3}{\centi\meter}$) I assume that the units for the acceptor and donor concentrations are 
+mistakenly given in $\text{cm}^{-3}$ instead of $\text{m}^{-3}$. I'm therefore going to interpret the values as concentration per meters cubed.
+
+This gives the following values for the depletion region depths
+\begin{center}
+    $x_n \approx \underline{\underline{\SI{19.4}{\pico\meter}}}\:\:\:\:$ and $\:\:\:\:x_p \approx \underline{\underline{\SI{93.1}{\micro\meter}}}$
+\end{center}
+
+These values make more sense than the previous ones. Though, the difference in doping levels means that the depths are extremely different in scale, which I find somewhat odd.
+
+\section*{Task 6}
+\begin{enumerate}
+\item  
+\item Assuming the temperature of the diode is at room temperature (around $\SI{300}{\kelvin}$) we get the following equations for the 
+small-signal resitance and capacitance:
+\[
+    r_d = \frac{V_T}{I_D} = \frac{kT}{q \cdot I_D} = \frac{1.38 \cdot 10^{-23} \text{ JK}^{-1} \cdot \SI{300}{\kelvin}}{1.602 \cdot 10^{-19} \text{ C } \cdot \SI{3}{\milli\ampere}} \approx \underline{\underline{\SI{8.6}{\ohm}}}
+\]
+and
+\[
+    C_d = \frac{\tau_T}{r_d} = \frac{\SI{40}{\pico\s}}{\SI{8.6}{\ohm}} \approx \underline{\underline{\SI{4.64}{\pico\farad}}}
+\]
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,33 @@
+\section{Problembeskrivelse}
+\label{problemBeskrivelse}
+
+Innen analog elektronikk er det ofte at en signalkilde ikke klarer å levere nok effekt, og dermed strøm til 
+lasten den forsøker å drive. I slike tilfeller kan en \textit{buffer} benyttes, der utgangsspenningen fra 
+bufferen $v_2$ er omtrent lik inngangsspennigen $v_1$, og utgangseffekten er langt større enn inngangseffekten.
+Bruken av en slik buffer er visualisert i figur \ref{fig:buffer_bruk}, der $v_0$ er spenningen kilden 
+leverer uten last.
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.85\textwidth]{Bilder/buffer_bruk.png}
+    \caption{Kilde, buffer og last \cite{problem_stilling}}
+    \label{fig:buffer_bruk}
+\end{figure}
+
+Vi ønsker altså at bufferen skal ha den egenskapen at
+\[
+    v_2 \approx v_1 \approx v_0
+\]
+
+I tillegg ønsker vi at bufferens egenskaper skal være mest mulig uavhengig av kildens utgangsmotstand 
+$R_K$ og lastmotstanden $R_L$. For å kunne levere tilstrekkelig effekt er det ønskelig å designe 
+en buffer ved hjelp av diskrete komponenter, altså transistorer, motstander og kondensatorer. 
+Dette designet skal basere seg på BC547 BJT transistoren, og skal vurdere designet utifra:
+\begin{enumerate}
+    \item Avviket i amplituden $A_2$ til $v_2$ når $v_0$ er et sinussignal med frekvens $f = \SI{1000}{\hertz}$ og 
+        amplitude $A_0 = \SI{500}{\milli\volt}$
+    \item Maksimal amplitude til $v_0$ før forvrengningen til $v_2$ blit synlig
+    \item Frekvensresponsen til bufferen, samt nedre $3$ dB knekkfrekvens
+    \item Inn- og utgangsmotstanden til det realiserte systemet.
+\end{enumerate}
+\newpage

@@ -1,0 +1,4 @@
+v_i: 329 mV rms
+v_o: 309.8 mV rms
+v_s: 350 mV rms
+R_prime = 1kOhm

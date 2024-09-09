@@ -1,0 +1,147 @@
+\section{Testing}
+
+Testing av systemet ble utført ved hjelp av en Analog Discovery 2 \cite{analog_discovery} oscilloskop og 
+signalgenerator. Kilden $v_0$ ble generert som et sinussignal fra ett av oscilloskopets signalgeneratorer 
+og ble satt til en frekvens $f = \SI{1.0}{\kilo\hertz}$ og en amplitude på $A_0 = \SI{500}{\milli\volt}$.
+
+\subsection{Test av ideelt system}
+Systemet ble først testet med ideelle verdier for kilde- og lastmotstanden. I figur \ref{fig:buffer_no_load_plot}
+er kildespenningen $v_0$ plottet sammen med utgangsspenningen til bufferen $v_2$.
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.7\textwidth]{Bilder/buffer_no_load_plot.png}
+    \caption{Buffer test med ideell lastmotstand $R_L = \infty$ og kildemotstand $R_K = 0$}
+    \label{fig:buffer_no_load_plot}
+\end{figure}
+Plottet viser tydelig at $v_0 \approx v_2$. De målte VRMS verdiene til de to signalene for denne testen var 
+\begin{center}
+    $v_0 = \SI{346.9}{\milli\volt}\:\:\:\:$ og $\:\:\:\:v_2 = \SI{333.3}{\milli\volt}$ 
+\end{center}
+
+Det gir en dempning på
+\[
+    A_\text{[dB]} = 20 \cdot \log{\left(\frac{v_2}{v_0}\right)} \approx -0.349 \text{dB}
+\]
+
+\subsection{Test med realistiske last- og kildemotstander}
+Videre er systemet testet med lastmotstand (figur \ref{fig:buffer_load_no_res_plot}) og med last- 
+og kildemotstand (figur \ref{fig:buffer_load_source_res_plot}).
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.625\textwidth]{Bilder/buffer_load_no_res_plot.png}
+    \caption{System test med lastmotstand $R_L = \SI{220}{\ohm}$ og ideell kildemotstand $R_K = \SI{0}{\ohm}$}
+    \label{fig:buffer_load_no_res_plot}
+\end{figure}
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.625\textwidth]{Bilder/buffer_load_source_res.png}
+    \caption{System test med lastmotstand $R_L = \SI{220}{\ohm}$ og kildemotstand $R_K = \SI{1.2}{\kilo\ohm}$}
+    \label{fig:buffer_load_source_res_plot}
+\end{figure}
+
+Vi ser nå at vi får et større avvik mellom $v_2$ og den ønskede spenningen $v_0$. 
+
+For systemtesten med kunn lastmotstand $R_L = \SI{220}{\ohm}$ oppnådde systemet følgende VRMS verdier:
+\begin{center}
+    $v_0 = \SI{346.2}{\milli\volt}\:\:\:\:$ og $\:\:\:\:v_2 = \SI{326.8}{\milli\volt}$ 
+\end{center}
+
+og følgende for systemtesten med både kildemotstanden $R_K = \SI{1.2}{\kilo\ohm}$ og
+lastmotstanden $R_L = \SI{220}{\ohm}$
+
+\begin{center}
+    $v_0 = \SI{346.8}{\milli\volt}\:\:\:\:$ og $\:\:\:\:v_2 = \SI{303.2}{\milli\volt}$ 
+\end{center}
+
+Når kunn lastmotstanden er tilkoblet oppnår bufferen en demping på 
+\[
+    A_\text{[dB]} = 20 \cdot \log{\left(\frac{v_2}{v_0}\right)} \approx -0.500 \text{dB}
+\]
+
+og for både lastmotstanden og kildemotstanden oppnår bufferen en demping på
+\[
+    A_\text{[dB]} = 20 \cdot \log{\left(\frac{v_2}{v_0}\right)} \approx -1.166 \text{dB}
+\]
+
+Vi ser derfor at bufferen er langt mer sensitiv for endring i kildemotstanden $R_K$ enn lastmotstanden
+$R_L$ når vi sammenligner dempningen i de to tilfellene med dempningen uten last og kildemotstand. 
+Dette kan tyde på at inngangsmotstanden til bufferen ikke er tilstrekkelig. Høyere verdier for 
+$R_{B1}$ og $R_{B2}$ ble testet men resulterte ikke i bedre bufferkarakteristikk, mulig fordi det har 
+negative innvirkninger på transistorens karakteristikk.
+
+Vi ser derimot som nevnt at introduksjonen av en lastmotstand ikke hadde store konsekvenser for 
+bufferkarakteristikken, da dempningen kunn økte med $0.150$ dB, noe som tyder på at vi har valgt en 
+god verdi for emittermotstanden $R_E$, og som konsekvens, et godt arbeidspunkt for emitterstrømmen.
+
+Bedre bufferkarakteristikk kan trolig oppnås dersom flere stadier, og dermed også flere BJT-transistorer,
+hadde blitt tatt i bruk i en mer avansert kretstopologi.
+
+\subsection{Test av maksimal kildeamplitude $A_0$}
+Maksimal kildeamplitude $A_0$ ble også testet. Amplituden til sinussignalet generert ble gradvis økt frem til 
+forvrengninger i utgangssignalet ble tydelige. For den realiserte bufferkretsen gav amplituder omlag $\SI{850}{\milli\volt}$ 
+tydlige forvrengninger, som vist i figur \ref{fig:buffer_disturb_850mv_plot}.
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.625\textwidth]{Bilder/buffer_disturb_850mv_plot.png}
+    \caption{Utgangsspenning $v_2(t)$ ved inngangsspenning $v_i(t)$ lik $\SI{850}{\milli\volt}$}
+    \label{fig:buffer_disturb_850mv_plot}
+\end{figure}
+
+\subsection{Test av frekvensrespons}
+Bufferens frekvensrespons ble også testet. Network Analyser funksjonen i 
+Analog Discoveryens \textit{Waveforms} applikasjon ble benyttet for spektrumsanalysen. Frekvenser mellom
+$\SI{10}{\hertz}$ og $\SI{4}{\mega\hertz}$ ble testet. Frekvensresponsen til systemet er vist i figur \ref{fig:buffer_frekvens_respons}.
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.625\textwidth]{Bilder/buffer_frekvens_respons.png}
+    \caption{Frekvensresponsen til buffer systemet}
+    \label{fig:buffer_frekvens_respons}
+\end{figure}
+
+Systemet oppnådde en -3dB knekkfrekvens $f_0 = \SI{23.6}{\hertz}$. Dette er langt under den forventede 
+frekvensen til kildesignalet $f = \SI{1000}{\hertz}$.
+
+\subsection{Inn- og utgangsmotstand til bufferkretsen}
+Til slutt ble inn- og utgangsmotstanden til bufferkretsen målt. Oppsettet for måling av inn og utgangsmotstand 
+er vist i figur \ref{fig:in_out_res_measure_setup}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Bilder/in_out_res_setup.png}
+    \caption{Oppsett for måling av inn- og utgangsmotstand til bufferen}
+    \label{fig:in_out_res_measure_setup}
+\end{figure}
+
+Fra figuren over finner vi at vi kan måle inngangsmotstanden $R_{inn}$ ved å se på spenningsdelingen 
+over den kjente motstanden $R'$. Vi får da følgende formel for inngangsmotstanden
+\[
+    R_{inn} = \frac{v_i}{v_{0} - v_i} \cdot R'
+\]
+
+Vi måler spenningene $v_i$ og $v_0$ i VRMS og får følgende verdier
+\begin{center}
+    $v_i = 329$ mVRMS $\:\:\:\:v_s = 350$ mVRMS $\:\:\:\:R' = \SI{1.0}{\kilo\ohm}$
+\end{center}
+
+Det gir da en inngangsmotstand til bufferen på
+\[
+    R_{inn} = \frac{\SI{329}{\milli\volt}}{\SI{350}{\milli\volt} - \SI{329}{\milli\volt}} \cdot \SI{1.0}{\kilo\ohm} \approx \SI{15.6}{\kilo\ohm}
+\]
+
+Vi ser her at vi til tross for at $R_{B1} = R_{B2} = \SI{100}{\kilo\ohm}$ at det realiserte kretsens 
+inngansmotstand kunn er omlag 13x større en kildemotstanden $R_K$. Dette forklarer hvorfor kildemotstanden
+hadde stor påvirkning på bufferens dempning.
+
+Videre kan vi finne et uttrykk for bufferkretsens utgangsmotstand $R_{ut}$
+\[
+    R_{ut} = \frac{v_E - v_2}{v_2} \cdot R_L
+\]
+der $v_E$ er emitter spenningen.
+
+Får følgende verdier etter måling
+\begin{center}
+    $v_E = 0.0$ mVRMS $\:\:\:\:v_2 = 335.6$ mVRMS $\:\:\:\:R_L = \SI{1.0}{\kilo\ohm}$
+\end{center}

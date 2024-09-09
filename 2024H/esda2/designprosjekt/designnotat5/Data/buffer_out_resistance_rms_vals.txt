@@ -1,0 +1,3 @@
+v_i: 350.9mV rms
+v_o: 335.6mV rms
+R_prime: 1.0kOhm
