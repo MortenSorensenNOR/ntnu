@@ -1,0 +1,84 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1}
+\begin{enumerate}
+\item Given that $V_{DS} = V_{eff}$ we can say that the region of operation is 
+    in the active region.
+\item Increasing $V_{DS}$ beyond $V_{eff}$ shortens the effective channel length, so the following 
+    model can be used to calculate the incraesed drain source current
+    \begin{align*}
+        I_{DS} &= \frac{\mu_n C_{ox}}{2} \frac{W}{L} V_{eff}^2 \cdot (1 + \frac{\lambda \cdot L}{L} (V_{DS} - V_{eff})) \\
+               &= \frac{\SI{270}{\micro\ampere\per\volt\squared}}{2} \frac{0.5}{0.2} \cdot (\SI{0.2}{\volt})^2 \cdot \left(1 + \frac{\SI{0.08}{\micro\meter\per\volt}}{\SI{0.2}{\micro\meter}} \cdot \SI{50}{\milli\volt}\right) \\
+               &= \underline{\underline{\SI{13.77}{\micro\ampere}}}
+    \end{align*}
+\item Mobility degradation happens when $V_{eff} > \frac{1}{2\theta}$, so for the given transistor, that would 
+    occur at 
+    \[
+        V_{eff} > \frac{1}{2 \cdot \SI{1.7}{\per\volt}} \approx \SI{0.294}{\volt}
+    \]
+\item The small signal output resistance $r_{ds}$ in the active region is given by the following relationship
+    \[
+        \frac{1}{r_{ds}} = \lambda \cdot \left(\frac{\mu_n C_{ox}}{2}\right)\left(\frac{W}{L}\right) V_{eff}^2
+    \]
+    That gives 
+    \[
+    \frac{1}{r_{ds}} = 5.4 \cdot 10^{-6} \left(\frac{1}{\Omega}\right) \implies r_{ds} = \underline{\underline{\SI{185.2}{\kilo\ohm}}}
+    \]
+\item If the ration between the width and the length were to be kept the same, but the length to be 3 times as long, the 
+    small signal output resistance would be
+    \[
+        \frac{1}{r_{ds}} = 1.8 \cdot 10^{-6} \left(\frac{1}{\Omega}\right) \implies r_{ds} = \underline{\underline{\SI{555.6}{\kilo\ohm}}}
+    \]
+\item The small signal transconductance in the active region is given by
+    \[
+        g_m = \frac{2 I_D}{V_{eff}} = \frac{2 \cdot \SI{13.77}{\micro\ampere}}{\SI{0.2}{\volt}} \approx \underline{\underline{137.7 \cdot 10^{-6}}}
+    \]
+\item 
+\item 
+\item 
+\item 
+\item 
+\item 
+\end{enumerate}
+
+\section*{Task 2}
+
+\section*{Task 3}
+In order to reduce the the $V_t$ mismatch to 25\% we would have the following:
+\[
+    \sigma_{t}' = 0.25 \sigma_t
+\]
+
+That means that from the model for the variance given that the distance is negligible we have that
+\begin{align*}
+    \sigma_{t}' &= 0.25 \cdot \sqrt{\sigma_t^2} \\
+                &= 0.25 \cdot A_p \cdot \sqrt{\frac{1}{WL}}
+\end{align*}
+
+This gives 
+\[
+    \sqrt{\frac{1}{W' L'}} = 0.25 \cdot \sqrt{\frac{1}{WL}} \implies W'L' = \frac{WL}{0.25^2} \approx \frac{WL}{0.0625}
+\]
+
+Which is the same as
+\[
+    \frac{W'L'}{WL} = \frac{1}{0.0625} = 16
+\]
+
+In other words increasing the width length product by 16 would yield a $V_t$ mismatch of 25\% of the original standard deviation.
+
+\section*{Task 4}
+The following is what I believe to be a valid transistor schematic for the circuit
+the layout illustrated in Figure 2.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Bilder/task4.png}
+\end{figure}
+The schematic represents a 4-input OR-Gate.
+
+\end{document}
