@@ -38,5 +38,7 @@ int main() {
     printMatrix(view);
     printMatrix(proj);
 
+    printMatrix(glm::rotate(identity, glm::radians(45.f), glm::vec3(0, 1, 0)));
+
     return 0;
 }
