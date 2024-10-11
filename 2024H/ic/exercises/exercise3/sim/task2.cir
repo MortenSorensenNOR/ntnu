@@ -1,0 +1,29 @@
+[aimspice]
+[description]
+156
+.include p18_cmos_models_tt.inc
+
+vdd2 3 0 dc 1.8
+vdd 2 0 dc 1.8
+
+
+r1 2 1 122k
+
+m1 1 1 0 0 NMOS l=1u w=5u
+m2 3 1 0 0 NMOS l=1u w=5u
+
+.plot rds(m2)
+[ac]
+0
+X
+X
+X
+[dc]
+1
+vdd2
+1.7
+1.9
+0.001
+[ana]
+1 0
+[end]

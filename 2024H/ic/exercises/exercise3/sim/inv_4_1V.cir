@@ -1,0 +1,15 @@
+.subckt inv_4_1V in out vdd vss
+.param ln = 0.1u
+.param lp = 0.1u
+.param wn = 0.1u
+.param wp = 0.36u
+*.param ld = 280n
+*.param ld = 0.08u
+
+
+
+xmp1 p1d in vdd vdd pmos1v l=lp w=wp 
+xmp2 out in p1d vdd pmos1v l=ln w=wp 
+xmn1 out in n1s vss nmos1v l=ln w=wn 
+xmn2 n1s in vss vss nmos1v l=ln w=wn 
+.ends

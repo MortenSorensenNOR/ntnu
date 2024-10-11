@@ -1,0 +1,8 @@
+# tt
+rds = 365K
+
+# ff
+rds = 280K
+
+# ss
+rds = 480K

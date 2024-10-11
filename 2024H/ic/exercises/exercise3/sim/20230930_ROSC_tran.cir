@@ -1,0 +1,21 @@
+*RING OSC
+VDD1 vdd 0 1.0
+VDD2 vss 0 0
+* SETTING INITIAL CONDITION FOR QUICKER START OF OSC.:
+.ic V(n1) = 0.01
+
+.include c:\AIMSpice2022\gpdk090_subcircuits_1V\inv_4_1V.cir
+
+
+* inv_4_lV nodes, and order: in out vdd vss
+x1 n3 n1 vdd vss inv_4_1V
+x2 n1 n2 vdd vss inv_4_1V
+x3 n2 n3 vdd vss inv_4_1V
+
+.plot V(n1) V(n2) V(n3) ! 1.05
+
+
+* To simulate different corners, choose among "tt","ss","ff","sf" or "fs" 
+* for the 2 signs before .cir, below:
+.include c:\AIMSpice2022\gpdk090\gpdk90nm_tt.cir
+
