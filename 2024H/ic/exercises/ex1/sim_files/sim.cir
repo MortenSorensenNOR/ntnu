@@ -1,0 +1,9 @@
+.include ~/ntnu/2024H/ic/exercises/exercise1/DBSBdiode.mod
+
+Vdd v+ 0 DC 4.8V
+D1 anode cathode DSUB
+.connect cathode v+
+.connect anode 0
+
+.plot I(Vdd)
+

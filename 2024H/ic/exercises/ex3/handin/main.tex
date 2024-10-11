@@ -1,0 +1,57 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1}
+\begin{enumerate}
+    \item The circuit in the layout in figure 1 is a simple common drain amplifier. 
+        We can observe the two NMOS transistors at the bottom constituting a simple current mirror, used as an active load with a biasing current of $I_{\text{bias}}$.
+        We can also observe the PMOS transistor having the input signal $V_{\text{in}}$ connected to it's gate and the output signal $V_{\text{out}}$ connected to it's 
+        source together with the current mirror output.
+    \item In this circuit, if the transistors in the current mirror are not matched, the buffer will no longer work as intended, 
+        and the desired property $v_{out} \approx v_{in}$ is no longer met.
+    \item The circuit in figure 2 is a common source amplifier. The name comes from the source being connected to a "common" reference voltage for both the input and output voltage to the amplifier.
+    \item The circuit in figure 2 is most commonly used to increase the signal strength due to it's relatively high gain.
+    \item The gain of the common-source amplifier is given by
+        \[
+            A_v = \frac{v_{\text{out}}}{v_{\text{in}}} = -g_{m1} \cdot (r_{ds1} \:\:||\:\: r_{ds2})
+        \]
+        This can be found from the small-signal model:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\textwidth]{Bilder/common_source_small_signal.png}
+            \caption{Small-signal model from CJM}
+        \end{figure}
+        Where we observe that the output voltage is only dependent on the current $g_{m1}v_{gs1}$ and the 
+        output resitance $r_{out} = r_{ds1} \:\:||\:\: r_{ds2}$.
+    \item 'Matching' in the context of integrated circuits refers to trying to make two or more transistors,
+        such as the PMOS transistors in a current mirror, as identical with resprect to their electrical properties as possible.
+        This is desireable, because if the transistors are not matched, the current on the output will differ from the input. This may cause 
+        the gain of for instance the common-source amplifier to be off, or for the common-drain amplifier, for the 
+        amplification to no longer be unity.
+\end{enumerate}
+
+\section*{Task 2}
+\begin{enumerate}
+    \item 
+    \item 
+    \item 
+    \item
+    \item 
+    \item 
+    \item
+\end{enumerate}
+
+\section*{Task 3}
+\begin{enumerate}
+    \item 
+    \item
+    \item 
+    \item 
+    \item
+\end{enumerate}
+
+\end{document}

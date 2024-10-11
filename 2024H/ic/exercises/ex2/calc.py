@@ -16,4 +16,4 @@ import numpy as np
 # r_ds = 1 / g_ds
 # print(r_ds)
 
-print(2 * 13.77e-6 / 0.2)
+print(2 * 137.7e-6)

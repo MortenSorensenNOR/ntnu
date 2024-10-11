@@ -38,15 +38,24 @@
     \[
         g_m = \frac{2 I_D}{V_{eff}} = \frac{2 \cdot \SI{13.77}{\micro\ampere}}{\SI{0.2}{\volt}} \approx \underline{\underline{137.7 \cdot 10^{-6}}}
     \]
+\item $g_s$ will be roughly twice the value of $g_m$ since the transconductance is given by the following relationship
+    \[
+        g_s = 2 g_m
+    \]
+    That gives 
+    \[
+        g_s = 2 \cdot 137.7 \cdot 10^{-6} = \underline{\underline{275.4 \cdot 10^{-6}}}
+    \]
+\item A lot of current.
+\item Can easily be found in CJM, but the paracitic capacitances include the Gate-Drain, Gate-Source and Source-Bulk capacitances.
 \item 
 \item 
-\item 
-\item 
-\item 
-\item 
+\item Subthreshold operation may be usefull for analog and digital designers for instance in the case of low power applications, where 
+    power efficiency is important, including high gain to power consumption ratio which is useful to analog designers.
 \end{enumerate}
 
 \section*{Task 2}
+I could not get aimspice or ngspice to cooporate with the model files provided. This may be my fault.
 
 \section*{Task 3}
 In order to reduce the the $V_t$ mismatch to 25\% we would have the following:
