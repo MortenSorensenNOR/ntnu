@@ -1,0 +1,69 @@
+\section{Realisering}
+\label{realisering}
+
+For realiseringen, og senere testing av systemet, har en $V_{cc} = \SI{6}{\volt}$, 
+$R_K = \SI{1.2}{\kilo\ohm}$ og $R_L = \SI{220}{\ohm}$ blitt valgt. 
+Transistoren valgt for realiseringen av bufferen er en BC547B BJT transistor \cite{bjt}.
+
+Vi velger så arbeidspunktet til bufferen.
+Vi får fra likningene i seksjon \ref{prinsipiellLoesning} at 
+\begin{center}
+    $V_B = \frac{V_{CC}}{2} = \SI{3}{\volt}\:\:\:\:$ $\:\:\:\:V_E = V_B - \SI{0.7}{\volt} = \SI{2.3}{\volt}$
+\end{center}
+
+Fra databladet til BC547B transistoren velger vi et passende arbeidspunkt for emitterstrømmen
+\[
+    I_E = \SI{30}{\milli\ampere}
+\]
+
+Det gir da en lav emittermotstand på omtrent 
+\[
+    R_E = \frac{\SI{2.3}{\volt}}{\SI{30}{\milli\ampere}} = \SI{76.6}{\ohm}
+\]
+
+En høyere emitterstrøm er trolig mulig, men det kan påvirke egenskapene til bufferen ved høyere 
+amplituder $A_0$ for kildesignalet $v_0$.
+
+Kondensatorene $C_1$ og $C_2$ ble så valgt til $\SI{10}{\micro\farad}$, men ble realisert ved å koble to
+polariserte $\SI{22}{\micro\farad}$ kondensatorer med de negative polene koblet sammen, som vist i figur 
+\ref{fig:polarized_capacitor}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Bilder/polarized_capacitors.png}
+    \caption{Oppkobling av to polariserte kondensatorer for å danne en upolarisert kondensator med kapasitans $C/2$}
+    \label{fig:polarized_capacitor}
+\end{figure}
+
+Til slutt ble motstandene $R_{B1}$ og $R_{B2}$ valgt. En initial verdi på $R_{B1} = R_{B2} = \SI{100}{\kilo\ohm}$ 
+ble valgt. Kretsen er fremstilt i figur \ref{fig:buffer_realisering}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Bilder/bjt_buffer_realisering.png}
+    \caption{Realisering av bufferen med komponentverdier}
+    \label{fig:buffer_realisering}
+\end{figure}
+
+Under testing ble den realiserte kretsens arbeidspunkt for base-spenningen $V_B$ målt til $\SI{1.1}{\volt}$. Dette 
+var langt under det ønskede arbeidspunktet. Motstandene $R_{B1}$, $R_{B2}$ og $R_E$ ble derfor justert intil 
+et arbeidspunkt $V_B = \SI{3}{\volt}$ ble oppnådd. Det gav følgende realiserte verdier for motstandene 
+\begin{center}
+    $R_{B1} = \SI{67}{\kilo\ohm}\:\:\:\:$ $\:\:\:\:R_{B2} = \SI{2}{\mega\ohm}\:\:\:\:$ $\:\:\:\:R_E = \SI{150}{\ohm}$
+\end{center}
+
+Den forbedrede kretsen er fremstilt i figur \ref{fig:buffer_realisering_forbedret}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Bilder/bjt_buffer_realisering_improved.png}
+    \caption{Realisering av bufferen med komponentverdier}
+    \label{fig:buffer_realisering_forbedret}
+\end{figure}
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.5\textwidth]{Bilder/buffer_image.jpg}
+    \caption{Bilde av realisert krets}
+    \label{fig:buffer_image}
+\end{figure}

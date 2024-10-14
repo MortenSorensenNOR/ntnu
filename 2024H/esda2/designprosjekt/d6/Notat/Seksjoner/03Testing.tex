@@ -1,0 +1,138 @@
+\section{Testing}
+
+For testing ble en Analog Discovery 2 benyttet \cite{analog_discovery}, som ble brukt både til å
+generere inngangs- sinussignalet med frekvens $\SI{1}{\kilo\hertz}$ og amplitude $\SI{0.03}{\volt}$, og 
+til å måle utgangssignalet fra operasjonsforsterkeren.
+
+Operasjonsforsterkeren ble først testet i åpen-løkke konfigurasjonen, og deretter som en inverterende forsterker.
+
+\subsection{Åpen-løkke forsterkning}
+Operasjonsforsterkeren ble først testet med en lastmotstand $R_L = \SI{100}{\kilo\ohm}$, og 
+er plottet i figur \ref{fig:open_loop_100k_signal}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Bilder/open_loop_100k_signal.png}
+    \caption{Åpen-løkke forsterkning ved $f=\SI{1}{\kilo\hertz}$ og $R_L = \SI{100}{\kilo\ohm}$}
+    \label{fig:open_loop_100k_signal}
+\end{figure}
+
+For åpen-løkke konfigurasjonen av opampen med lastmotstand $R_L = \SI{100}{\kilo\ohm}$
+var målte AC VRMS verdier for inn og utgangssignalene 
+\begin{align*}
+    (v^+ - v^-) &= \SI{0.02}{\volt} \\
+    V_{out} &= \SI{1.30}{\volt}
+\end{align*}
+
+Det gir en åpen-løkke forsterkning på
+\begin{align*}
+    A_{ol} &= \frac{V_{out}}{v^+ - v^-} = 83.33
+\end{align*}
+som er en god forsterkning og stemmer godt overrens med tidligere utregnet verdi i forrige seksjon.
+
+Videre ser vi på frekvensspekteret til signalene at operasjonsforsterkeren gir en god forsterkning 
+for $f = \SI{1}{\kilo\hertz}$ uten at høyere harmoniske komponenter blir for store.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Bilder/open_loop_100k_freq.png}
+    \caption{Åpen-løkke forsterkning frekvensspekter ved $f=\SI{1}{\kilo\hertz}$ og $R_L = \SI{100}{\kilo\ohm}$}
+    \label{fig:open_loop_100k_freq}
+\end{figure}
+
+Videre ble $R_L = \SI{100}{\ohm}$ testet.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Bilder/open_loop_100_signal.png}
+    \caption{Åpen-løkke forsterkning ved $f=\SI{1}{\kilo\hertz}$ og $R_L = \SI{100}{\ohm}$}
+    \label{fig:open_loop_100_signal}
+\end{figure}
+
+Vi ser i figur \ref{fig:open_loop_100_signal} at forsterkningen er en del lavere enn for $R_L = \SI{100}{\kilo\ohm}$,
+og det vises også i måledataene:
+\begin{align*}
+    (v^+ - v^-) &= \SI{0.02}{\volt} \\
+    V_{out} &= \SI{0.41}{\volt}
+\end{align*}
+
+som gir en åpen-løkke forsterkning på
+\begin{align*}
+    A_{ol} &= \frac{V_{out}}{v^+ - v^-} = 24.59
+\end{align*}
+
+Altså ser vi en forventet reduksjon i forsterkning for lavere lastmotstand.
+På frekvensspekteret til signalet ser vi også noe tegn til større harmoniske komponenter, 
+men forsatt $\approx 20$dB under hovedfrekvensen.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Bilder/open_loop_100_freq.png}
+    \caption{Åpen-løkke forsterkning frekvensspekter ved $f=\SI{1}{\kilo\hertz}$ og $R_L = \SI{100}{\ohm}$}
+    \label{fig:open_loop_100_freq}
+\end{figure}
+
+\subsection{Inverterende forsterkning}
+Operasjonsforsterkeren ble så testet i inverterende forsterker konfigurasjonen med forsterkning $A = 10$.
+Først ble testen gjort med lastmotstand $R_L = \infty$, vist i figur \ref{fig:inverting_no_load_signal}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Bilder/inverting_no_load_signal.png}
+    \caption{Inverterende forsterkning $A = 10$ ved $f=\SI{1}{\kilo\hertz}$ og $R_L = \infty$}
+    \label{fig:inverting_no_load_signal}
+\end{figure}
+
+For inverterende forsterkning $A = 10$ og lastmotstand $R_L = \infty$ var målte AC VRMS verdier for inn og utgangssignalene
+\begin{align*}
+    (v^+ - v^-) &= \SI{0.02}{\volt} \\
+    V_{out} &= \SI{0.19}{\volt}
+\end{align*}
+
+Det gir en inverterende forsterkning på
+\begin{align*}
+    A &= \frac{V_{out}}{v^+ - v^-} = 8.86
+\end{align*}
+
+Altså er forsterkningen noe lavere enn ønsket, og dette skyldes trolig både på grunn av 
+operasjonsforsterkerens inngangsmotstand er endelig og at bufferens ut- og inngangsmotstand er uideelle.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Bilder/inverting_no_load_freq.png}
+    \caption{Inverterende forsterkning $A = 10$ frekvensspekter ved $f=\SI{1}{\kilo\hertz}$ og $R_L = \infty$}
+    \label{fig:inverting_no_load_freq}
+\end{figure}
+
+Videre ble $R_L = \SI{100}{\kilo\ohm}$ testet. Her ser vi at operasjonsforsterkeren ikke fungerer som ønsket, da 
+utgangssignalet har lavere amplitude enn inngangssignalet.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Bilder/inverting_100k_signal.png}
+    \caption{Inverterende forsterkning $A = 10$ ved $f=\SI{1}{\kilo\hertz}$ og $R_L = \SI{100}{\kilo\ohm}$}
+    \label{fig:inverting_100k_signal}
+\end{figure}
+
+For samme konfigurasjon og lastmotstand $R_L = \SI{100}{\kilo\ohm}$ var målte AC VRMS verdier for inn og utgangssignalene
+\begin{align*}
+    (v^+ - v^-) &= \SI{0.02}{\volt} \\
+    V_{out} &= \SI{0.01}{\volt}
+\end{align*}
+
+Det gir en inverterende forsterkning på
+\begin{align*}
+    A &= \frac{V_{out}}{v^+ - v^-} = 0.49
+\end{align*}
+noe som er langt under ønsket forsterkning.
+
+Vi ser videre på frekvensspekteret (fig \ref{fig:inverting_100k_freq}) at store deler støy har blitt introdusert i signalet ved høyere harmoniske, som blant 
+annet kan skydels påvirkning mellom signalledninger til og fra Analog Discovery-en og 
+forstyrrelser internt i operasjonsforsterkeren.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Bilder/inverting_100k_freq.png}
+    \caption{Inverterende forsterkning $A = 10$ frekvensspekter ved $f=\SI{1}{\kilo\hertz}$ og $R_L = \SI{100}{\kilo\ohm}$}
+    \label{fig:inverting_100k_freq}
+\end{figure}

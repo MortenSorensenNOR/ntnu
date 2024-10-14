@@ -1,0 +1,162 @@
+\section{Testing}
+
+Testing av systemet ble utført ved hjelp av en Analog Discovery 2 \cite{analog_discovery} oscilloskop og 
+signalgenerator. Kilden $v_0$ ble generert som et sinussignal fra ett av oscilloskopets signalgeneratorer 
+og ble satt til en frekvens $f = \SI{1.0}{\kilo\hertz}$ og en amplitude på $A_0 = \SI{500}{\milli\volt}$.
+
+\subsection{Test av ideelt system}
+Systemet ble først testet med ideelle verdier for kilde- og lastmotstanden, altså
+$R_K = 0$ og $R_L = \infty$. I figur \ref{fig:buffer_no_load_plot} er kildespenningen 
+$v_0$ plottet sammen med utgangsspenningen til bufferen $v_2$.
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.7\textwidth]{Bilder/buffer_no_load.png}
+    \caption{Buffer test med ideell lastmotstand $R_L = \infty$ og kildemotstand $R_K = 0$}
+    \label{fig:buffer_no_load_plot}
+\end{figure}
+
+Plottet viser tydelig at $v_0 \approx v_2$. De målte VRMS verdiene til de to signalene for denne testen var 
+\begin{center}
+    $v_0 = \SI{354.7}{\milli\volt}\:\:\:\:$ og $\:\:\:\:v_2 = \SI{349.2}{\milli\volt}$ 
+\end{center}
+
+Det gir en dempning på
+\[
+    A_\text{[dB]} = 20 \cdot \log{\left(\frac{v_2}{v_0}\right)} \approx -0.135 \text{ dB}
+\]
+
+Altså fungerer bufferen svært godt under ideelle forhold.
+
+\subsection{Test med realistiske last- og kildemotstander}
+Videre er systemet testet med lastmotstand (figur \ref{fig:buffer_load_no_res_plot}) og med last- 
+og kildemotstand (figur \ref{fig:buffer_load_source_res_plot}).
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.625\textwidth]{Bilder/buffer_load.png}
+    \caption{System test med lastmotstand $R_L = \SI{220}{\ohm}$ og ideell kildemotstand $R_K = \SI{0}{\ohm}$}
+    \label{fig:buffer_load_no_res_plot}
+\end{figure}
+
+Vi ser nå at vi får et større avvik mellom $v_2$ og den ønskede spenningen $v_0$. 
+
+For systemtesten med kunn lastmotstand $R_L = \SI{220}{\ohm}$ oppnådde systemet følgende VRMS verdier:
+\begin{center}
+    $v_0 = \SI{353.9}{\milli\volt}\:\:\:\:$ og $\:\:\:\:v_2 = \SI{334.8}{\milli\volt}$ 
+\end{center}
+
+Bufferen oppnår da en demping på 
+\[
+    A_\text{[dB]} = 20 \cdot \log{\left(\frac{v_2}{v_0}\right)} \approx -0.482 \text{ dB}
+\]
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.7\textwidth]{Bilder/buffer_load_source.png}
+    \caption{System test med lastmotstand $R_L = \SI{220}{\ohm}$ og kildemotstand $R_K = \SI{1.2}{\kilo\ohm}$}
+    \label{fig:buffer_load_source_res_plot}
+\end{figure}
+
+For systemtesten med både kildemotstanden $R_K = \SI{1.2}{\kilo\ohm}$ og
+lastmotstanden $R_L = \SI{220}{\ohm}$
+
+\begin{center}
+    $v_0 = \SI{354.0}{\milli\volt}\:\:\:\:$ og $\:\:\:\:v_2 = \SI{316.8}{\milli\volt}$ 
+\end{center}
+
+Det gir en demping på
+\[
+    A_\text{[dB]} = 20 \cdot \log{\left(\frac{v_2}{v_0}\right)} \approx -0.964 \text{ dB}
+\]
+
+Vi ser nå at vi taper en del signalstyrke når vi introduserer last- og kildemotstanden. Bedre 
+bufferkarakteristikk kan trolig oppnås dersom inngangsmotstanden hadde økt og utgangsmotstanden hadde 
+minsket. Dette er trolig mulig, men kan nå begrensninger grunnet karakteristikken til transistoren.
+Det er derfor trolig bedre å heller introdusere flere stadier, og dermed også flere BJT-transistorer, noe som 
+hadde gitt en mer avansert kretstopologi, slik som en Darlington Emitter Follower \cite{darlington}.
+
+\subsection{Test av maksimal kildeamplitude $A_0$}
+Maksimal kildeamplitude $A_0$ ble også testet. Amplituden til sinussignalet generert ble gradvis økt frem til 
+forvrengninger i utgangssignalet ble tydelige. For den realiserte bufferkretsen gav amplituder omlag $\SI{1.6}{\volt}$ 
+tydlige forvrengninger, som vist i figur \ref{fig:buffer_disturb_850mv_plot}.
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.7\textwidth]{Bilder/buffer_distort_1V6.png}
+    \caption{Utgangsspenning $v_2(t)$ ved inngangsspenning $v_0(t)$ lik $\SI{1.6}{\volt}$}
+    \label{fig:buffer_disturb_850mv_plot}
+\end{figure}
+
+\subsection{Test av frekvensrespons}
+Bufferens frekvensrespons ble også testet. Network Analyser funksjonen i 
+Analog Discoveryens \textit{Waveforms} applikasjon ble benyttet for spektrumsanalysen. Frekvenser mellom
+$\SI{10}{\hertz}$ og $\SI{4}{\mega\hertz}$ ble testet. Frekvensresponsen til systemet er vist i figur \ref{fig:buffer_frekvens_respons}.
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.7\textwidth]{Bilder/buffer_frekvens_respons.png}
+    \caption{Frekvensresponsen til buffer systemet}
+    \label{fig:buffer_frekvens_respons}
+\end{figure}
+
+Systemet oppnådde en -3dB knekkfrekvens $f_0 = \SI{82.2}{\hertz}$. Dette er langt under den forventede 
+frekvensen til kildesignalet $f = \SI{1000}{\hertz}$.
+
+\subsection{Inn- og utgangsmotstand til bufferkretsen}
+Til slutt ble inn- og utgangsmotstanden til bufferkretsen målt. Oppsettet for måling av inn og utgangsmotstand 
+er vist i figur \ref{fig:in_out_res_measure_setup}.
+
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.6\textwidth]{Bilder/in_out_res_setup.png}
+    \caption{Oppsett for måling av inn- og utgangsmotstand til bufferen}
+    \label{fig:in_out_res_measure_setup}
+\end{figure}
+
+For å finne inngangsmotstanden ser vi i figur \ref{fig:in_out_res_measure_setup} at vi ved spenningsdeling
+får at 
+\[
+    v_1 = v_0 \cdot \frac{R_{inn}}{R_{inn} + R_K}
+\]
+
+Løser vi for $R_{inn}$ får vi at 
+\[
+    R_{inn} = R_K \cdot \frac{v_1}{v_0 - v_1}
+\]
+
+Ved måling har vi at
+\begin{center}
+    $R_K = \SI{1.208}{\kilo\ohm}\:\:\:\:$ $\:\:\:\:v_0 = \SI{354.0}{\milli\volt}\:\:\:\:$ $\:\:\:\:v_1 = \SI{334.6}{\milli\volt}$
+\end{center}
+
+Det gir at inngangsmotstanden blir
+\[
+    R_{inn} = \SI{1.2}{\kilo\ohm} \cdot \frac{\SI{334.6}{\milli\volt}}{\SI{354.0}{\milli\volt} - \SI{334.6}{\milli\volt}} \approx \SI{20.9}{\kilo\ohm}
+\]
+
+Følgelig kan vi finne utgangsmotstanden også fra figur \ref{fig:in_out_res_measure_setup} ved spenningsdeling 
+da 
+\[
+    v_2 = v_{ut} \cdot \frac{R_L}{R_{ut} + R_L}
+\]
+
+Løser for $R_{ut}$ og får at 
+\[
+    R_{ut} = R_L \cdot \left(\frac{v_{ut}}{v_2} - 1\right)
+\]
+
+De målte verdiene fra tidligere test for $v_2$ med og uten last gav at 
+\begin{center}
+    $v_{ut} = \SI{349.2}{\milli\volt}\:\:\:\:$ $\:\:\:\:v_{2} = \SI{334.8}{\milli\volt}\:\:\:\:$ $\:\:\:\:R_L = \SI{220}{\ohm}$
+\end{center}
+
+Det gir at utgangsmotstanden er lik 
+\[
+    R_{ut} = 220 \cdot \left(\frac{349.2}{334.8} - 1\right) \approx \SI{9.5}{\ohm}
+\]
+
+Vi ser altså at implementeringen har oppnådd en svært god utgangsmotstand, men at inngangsmotstanden 
+ikke er helt så ideell som vi skulle ønske. Det skyldes trolig endringene som ble gjort på $R_{B1}$ 
+for å kunne oppnå det ønskede arbeidspunktet for basespenningen. Som nevnt tidligere 
+ville dette trolig vært et mindre problem dersom transistorene hadde blitt kaskadekoblet eller dersom 
+kretstopologien hadde vært mer avansert, slik som for Darlington emitter følgeren.

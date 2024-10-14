@@ -1,0 +1,23 @@
+\newpage
+\section{Konklusjon}
+\label{konklusjon}
+
+Dette designnotatet har tatt for seg et design av en buffer fra diskrete komponenter for å kunne 
+øke strømleveransen fra et kildesignal til en last. Designet baserte seg på en BJT emitter følger,
+og ble realisert ved bruk av en BC547B BJT transistor. 
+
+Deisgnet ble så testet der det ble funnet at at bufferen oppnådde en maksimal dempning på 
+utgangssignalet ifht. inngangssignalet på omlag -1 dB for realistiske verdier for kildemotstand 
+$R_K = \SI{1.2}{\kilo\ohm}$ og lastmotstand $R_L = \SI{220}{\ohm}$.
+
+Maksimal amplitude for inngangssignalet ble også testet, og det ble funnet at bufferen oppererte ideelt frem til
+en inngangsamplitude $A_0$ på omlag $\SI{1.6}{\volt}$, da tydlige forvrengninger i utgangssignalet ble tydelig.
+Bufferens frekvensrespons ble så testet, da det ble funnet at bufferen oppfører seg som et høypassfilter med en 
+knekkfrekvens på omlag 82 Hz. Til slutt ble inn- og utgangsmotstanden til bufferen testet, da det ble funnet 
+at den realiserte kretsen oppnådde en inngangsmotstand på $\SI{20.9}{\kilo\ohm}$ og en utgangsmotstand på 
+$\SI{9.5}{\ohm}$.
+
+Mulige forbedringer av kretsen ble diskutert, blant annet en mer avansert kretstopologi kjent som en
+Darlington Emitter Follower, som trolig vil gi bedre bufferkarakteristikk enn designet realisert i dette notatet.
+Det er altså tydelig at dette designet av en buffer har fungert, men at den er langt dårligere enn 
+de ferdigstilte buffer IC-ene som er mulig å ta i bruk.

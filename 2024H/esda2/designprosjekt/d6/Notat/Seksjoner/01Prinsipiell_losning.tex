@@ -1,0 +1,98 @@
+\section{Prinsipiell løsning}
+\label{prinsipiellLoesning}
+
+Prinsipiell løsning baserer seg på en enkel differensial forsterker med aktiv last,
+som vist i figur \ref{fig:differensiell_forsterker}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Bilder/differensiell_forsterker.png}
+    \caption{Differensiell forsterker med aktiv last}
+    \label{fig:differensiell_forsterker}
+\end{figure}
+
+Virkemåten til kretsen over (figur \ref{fig:differensiell_forsterker}) er som følger:
+\begin{enumerate}
+    \item Current-mirror-et dannet Q5 og Q6 tilfører en bias-strøm $I_{bias}$ til differensial forsterkeren.
+    \item Transistorene Q3 og Q4 er også koblet som en current-mirror, og gir en aktiv last til differensial forsterkeren.
+        Det baserer seg på at småsignal utgangsmotstanden til en BJT transistor er høy, og storsignal motstanden er lav. Dette følger 
+        umiddelbart fra I-V karakteristikken til transistoren, der arbeidspunktet til transistoren i aktivt område gir 
+        lav endring i strøm ved endring i spenning, mens arbeidspunktet i metningsområdet gir høy endring i strøm ved endring i spenning.
+    \item Ettersom at bias-strømmen $I_{bias}$ er konstant, vil en endring i $v^+$ føre til en endring i collector-emitter spenningen til Q2 (liksides for endring i $v^-$ for Q1).
+        Dette vil føre til en endring i fordelingen av bias-strømmen $I_{bias}$ mellom Q1 og Q2. Når $v^+$ øker vil $v_{out}$ øke, og
+        når $v^-$ øker vil $v_{out}$ synke.
+    \item Forsterkningen $A$ til differensial forsterkeren er gitt ved
+        \[
+            A = \frac{v_{out}}{v^+ - v^-}
+        \]
+        og kan vises å være
+        \[
+            A = g_m \cdot r_o
+        \]
+        der $g_m$ er transkonduktansen til Q3/Q4 transistoren og $r_o$ er småsignal utgangsmotstanden til Q4..
+    \item Transkonduktansen til Q4 kan finnes ved
+        \[
+            g_m = \frac{I_{Q_4}}{V_T}
+        \]
+        der $V_T$ er termisk spenning som er $\approx \SI{25}{\milli\volt}$ ved romtemperatur.
+    \item Småsignal utgangsmotstanden til Q4 kan finnes ved
+        \[
+            r_o = \frac{1}{h_{oe}}
+        \]
+        der $h_{oe}$ kan finnes i databladet til transistoren.
+\end{enumerate}
+
+I differensial forsterkeren over er bias-strømmen $I_{bias}$ implementert ved hjelp av
+et current-mirror. Et current-mirror vil gi en god en stabil bias-strøm som oppnår god 
+uavhengighet fra drain-source spenningen til Q6 transistoren. Dette er viktig for å sikre 
+lineæritet i operasjonsforsterkeren oppførsel. Her velges verdien til motstanden 
+$R$ s.a. strømmen som går gjennom gir ønsket bias-strøm $I_{bias}$, og følgelig ønsket 
+forsterkningsfaktor $A$.
+
+
+Til slutt er det foreslått å koble på en buffer på utgangen for å redusere utgangsmotstanden 
+til operasjonsforsterkeren, samt å gjøre forsterkningen til differensialforsterkeren mer uavhengig av 
+lastmotstanden $R_L$. Figur \ref{fig:bjt_buffer} viser en enkel bufferkrets ved bruk av en NPN BJT transistor.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Bilder/bjt_buffer.png}
+    \caption{En enkel BJT-basert buffer \cite{bjt_buffer}}
+    \label{fig:bjt_buffer}
+\end{figure}
+
+Det kan vises \cite{bjt_buffer} at bufferens forsterkning $A_{buff}$ er
+\[
+    A_{buff} \approx 1
+\]
+
+Vi setter sammen systemene ved å koble $v_o$ fra differensial forsterkeren på bufferens $v_1$ inngang og 
+lar $v_2$ utgangen på bufferen være utgangen på operasjonsforsterkeren $v_{out}$.
+Vi får altså følgende krets
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Bilder/opamp_circuit.png}
+    \caption{TODO}
+    \label{fig:opamp_circuit.png}
+\end{figure}
+
+Operasjonsforsterkeren over kan så brukes i en inverterende forsterker kobling som vist i 
+figur \ref{fig:invertering_forsterker}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Bilder/inverterende_forsterker.png}
+    \caption{Inverterende forsterker \cite{invert_forsterker_img}}
+    \label{fig:invertering_forsterker}
+\end{figure}
+
+Dersom man antar at operasjonsforsterkeren er ideell vil ingen strøm gå inn i inngangen til operasjonsforsterkeren,
+og KCL gir da at 
+\[
+    I_{f} = I_{in} \Rightarrow \frac{v_{in}}{R_{in}} = \frac{v_{out}}{R_{f}}
+\]
+altså kan vi velge verdiene for $R_{in}$ og $R_f$ s.a. $A = 10$ slik ønsket, og vi har da at 
+\[
+    A = -\frac{R_f}{R_{in}} \Rightarrow R_f = 10R_{in}
+\]
+Altså kan en inverterende forsterkning på $A = -10$ åppnås ved å velge $R_f = 10R_{in}$.

@@ -1,0 +1,43 @@
+\section{Problembeskrivelse}
+\label{problemBeskrivelse}
+
+Operasjonsforsterkere er en sentral komponent innen analog og digital elektronikk,
+blant annet i forbindelse med signalbehandling og regulering. Et symbol og en overordnet 
+modell av en operasjonsforsterker er vist i figur \ref{fig:opamp}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Bilder/opamp_figur.png}
+    \caption{Operasjonsforsterker: (a) Symbol og (b) modell \cite{problem_stilling}}
+    \label{fig:opamp}
+\end{figure}
+
+En \textit{ideell} operasjonsforsterker har følgende egenskaper:
+\begin{enumerate}
+    \item inngangsmotstand $R_{i} = \infty$
+    \item utgangsmotstand $R_{o} = 0$
+    \item og en utgangsspenning $v_{o}$ på formen
+        \begin{equation}
+            v_{o} = f(v^{+}, v^{-}) = 
+            \begin{cases}
+                \min{\left\{V, A(v^{+} - v^{-})\right\}} & \text{for } v^{+} - v^{-} > 0 \\
+                \max{\left\{-V, A(v^{+} - v^{-})\right\}} & \text{for } v^{+} - v^{-} < 0 \\
+            \end{cases}
+        \end{equation}
+\end{enumerate}
+
+Konstanten $A$ er operasjonsforsterkerens forsterkning under åpen løkke-forsterkning.
+I praksis vil en operasjonsforsterker gjerne ha en endelig inngangsmotstand, en endelig utgangsmotstand og 
+vil ha en begrenset forsterkning.
+
+Dette designnotatet skal ta for seg et design og realisering av en operasjonsforsterker 
+med differensiell inngang. Operasjonsforsterkeren skal operere på $\pm \SI{5}{\volt}$,
+og skal evalueres ved 
+\begin{itemize}
+    \item Forsterkning $A$ ved sinuspåtrykk med frekves $\SI{1}{\kilo\hertz}$
+    \item Total harmonisk distorsjon ved sinuspåtrykk med frekvens $\SI{1}{\kilo\hertz}$
+\end{itemize}
+under forskjellige lastmotstander: $R_L = \SI{100}{\kilo\ohm}$ og $R_L = \SI{100}{\ohm}$.
+
+Designet skal så testes både som en inverterende forsterker med forsterkning $A = 10$,
+og under åpen løkke-forsterkning.

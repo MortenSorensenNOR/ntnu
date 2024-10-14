@@ -36,22 +36,116 @@
 
 \section*{Task 2}
 \begin{enumerate}
-    \item 
-    \item 
-    \item 
-    \item
-    \item 
-    \item 
-    \item
-\end{enumerate}
+\item 
+Assuming that both transistors are working in the active reagion, we have that 
+\[
+    V_{eff} = V_{GS,M1} - V_{tn} = V_{eff} = V_x - V_{tn} \implies V_{x} = V_{eff} + V_{tn}
+\]    
 
-\section*{Task 3}
-\begin{enumerate}
-    \item 
-    \item
-    \item 
-    \item 
-    \item
-\end{enumerate}
+\item 
+Assuming both transistors are in the active reagion we have that
+\[
+    I_D = \frac{1}{2} \mu_n C_{ox} \frac{W}{L} (V_x - V_{tn})^2
+\]
 
+Exchanging in the known values we get that
+\[
+    \SI{10}{\micro\ampere} = \frac{1}{2} \SI{250}{\micro\ampere\per\volt^2} \cdot 5 \cdot (V_x - \SI{0.45}{\volt})^2
+\]
+
+Which gives 
+\[
+    V_x \approx \SI{0.577}{\volt}
+\]
+
+\item 
+We want $I_D \approx \SI{10}{\micro\ampere}$. We have the following expression for the current 
+\[
+    I_D = \frac{V_{DD} - V_x}{R} \implies R = \frac{V_{DD} - V_x}{I_D}
+\]
+
+Which gives
+\[
+    R \approx \SI{122}{\kilo\ohm}
+\]
+
+The following AimSpice circuit file can be used to simulate the operating point of the
+current mirror:
+\begin{tcolorbox}[colback=white!95!blue, title= AimSpice circuit file, colframe=gray!85!black]
+\begin{minted}{python}
+.include p18_cmos_models_tt.inc
+
+vdd2 3 0 dc 1.8
+vdd 2 0 dc 1.8
+
+r1 2 1 122k
+
+m1 1 1 0 0 NMOS l=1u w=5u
+m2 3 1 0 0 NMOS l=1u w=5u
+\end{minted}
+\end{tcolorbox}
+The simulation gave 
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Corner} & \textbf{$I_{D,M1}$} \\
+        \hline
+        TT & $\SI{10.2}{\micro\ampere}$ \\
+        FF & $\SI{11.1}{\micro\ampere}$ \\
+        SS & $\SI{9.43}{\micro\ampere}$ \\
+        \hline
+    \end{tabular}
+\end{figure}
+
+\item
+The process corners TT, FF, SS, SF and FS describe the variations in transistor characteristics 
+during fabrication. The reason to simulate these different corners is to get an image of how 
+the performance of a circuit may variate as a function of changes in fabrication, and to make sure that 
+the circuit still operates as it should even if the transistors operate below their typical performance, 
+such as the SS corner.
+
+\item
+Using the same simulation file as in 2c we get
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Corner} & \textbf{$I_{D,M2}$} \\
+        \hline
+        TT & $\SI{11.7}{\micro\ampere}$ \\
+        FF & $\SI{12.9}{\micro\ampere}$ \\
+        SS & $\SI{10.06}{\micro\ampere}$ \\
+        \hline
+    \end{tabular}
+\end{figure}
+
+\item 
+In order to get the output impedance $r_{ds,M2}$ we add the folliwng line to the AimSpice file:
+\begin{tcolorbox}[colback=white!95!blue, title= AimSpice circuit file, colframe=gray!85!black]
+\begin{minted}{python}
+.plot rds(m2)
+\end{minted}
+\end{tcolorbox}
+Doing a DC sweep from $\SI{1.7}{\volt}$ to $\SI{1.9}{\volt}$ we get 
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Corner} & \textbf{$r_{ds,M2}$} \\
+        \hline
+        TT & $\sim\SI{365}{\kilo\ohm}$ \\
+        FF & $\sim\SI{280}{\kilo\ohm}$ \\
+        SS & $\sim\SI{480}{\kilo\ohm}$ \\
+        \hline
+    \end{tabular}
+\end{figure}
+
+\item
+Process variations affecting the output impedance may alter the gain of an amplifier as 
+\[
+    A = g_m \cdot r_{out} = g_m \cdot r_{ds}
+\]
+
+\end{enumerate}
 \end{document}

@@ -1,0 +1,87 @@
+\section{Prinsipiell løsning}
+\label{prinsipiellLoesning}
+
+For å oppnå at designets mål at $v_2 \approx v_1 \approx v_0$ må bufferen designes på en sånn måte
+at påvirkningen fra kildemotstanden $R_K$ og lastmotstanden $R_L$ blir minst mulig. Vi ønsker altså at mest 
+mulig av spenningen $v_0$ skal ligge over inngangen på bufferen, og at minst mulig av det genererte 
+spenningsnivået internt i bufferen skal ligge over bufferens utgangsmotstand. Dette er mulig dersom 
+vi gjør inngangsmotstanden til bufferen stor, og utgangsmotstanden til bufferen liten.
+
+For å oppnå at $v_2 \approx v_1$ kan en bufferkrets basert op en BJT Emitter follower krets benyttes. 
+Kretsens oppbygning er vist i figur \ref{fig:bjt_voltage_follower}.
+
+\begin{figure}[H]
+    \centering 
+    \includegraphics[width=0.7\textwidth]{Bilder/bjt_follower.png}
+    \caption{BJT Emitter Follower}
+    \label{fig:bjt_voltage_follower}
+\end{figure}
+
+Fra småsignalskjemaet i figur \ref{fig:small_signal} kan vi utlede et uttrykk for bufferens forsterkning/dempning.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Bilder/small_signal_model_buffer.png}
+    \caption{Et småsignalskjema for bufferkretsen \cite{hambley}}
+    \label{fig:small_signal}
+\end{figure}
+
+Vi ser fra småsignalskjemaet at 
+\[
+    i_e = (1 + \beta) \cdot i_b
+\]
+
+Vi kan så skrive om motstandene $R_{B1}$ og $R_{B2}$ til en felles motstand 
+\[
+    R_B = R_{B1 || B2}
+\]
+
+og emitter- og lastmotstanden til en felles motstand
+\[
+    R'_L = R_{E || L}
+\]
+
+Vi kan så finne et uttrykk for inn- og utgangsspenningen til bufferen.
+\[
+    v_{inn} = r_{\pi} i_b + (1 + \beta)i_b R'_L
+\]
+og
+\[
+    v_{ut} = R'_L (1 + \beta)i_b
+\]
+
+Det gir følgende forsterkning til bufferen
+\[
+    A_v = \frac{(1 + \beta)R'_L}{r_{\pi} + (1 + \beta)R'_L} \approx 1
+\]
+
+Altså er spenningsforsterkningen til bufferen omtrentlig 1, men noe under grunnet 
+base-motstanden $r_{\pi}$. Siden spenningsforstekningen også er positiv, vil bufferen fungere 
+som en ikke-inverterende forsterker. Vi kan derfor benytte dette designet som en buffer for systemet 
+vi ønsker å implementere.
+
+For at bufferen skal kunne opperere som den skal må et arbeidspunkt bestemmes.
+Arbeidspunktet til kretsen er gitt ved verdiene $V_B$, $V_E$ og $I_E$. Vi ønsker å velge et arbeidspunkt 
+$V_B$ s.a. bufferen git størst mulighet for inngangssignalet $v_1$ å varriere uten å oppleve at bufferen 
+går i mettning. Vi kan derfor velge at $V_B = \frac{V_{CC}}{2}$. Ettersom at en BJT transistor er brukt i kretsen 
+vil det være naturlig å anta at emitterspenningen $V_E$ vil ligge omlag $\SI{0.7}{\volt}$ under basespenningen.
+Vi har da at $V_E = V_B - \SI{0.7}{\volt}$. 
+
+Til slutt kan en emitterstrøm $I_E$ velges. Emmitterstrømmen må velges utifra databladet til transistoren 
+og ønsket emittermotstand. Siden emittermotstanden har stor påvirkining på utgangsmotstanden til 
+bufferen $R_{ut}$ er det naturlig å velge en så høy strøm som mulig, da dette vil gi en lavere 
+verdi for $R_E$ og dermed også lav utgangsmotstand. Verdiene til motstandene $R_{B1}$ og $R_{B2}$ må velges 
+slik at arbeidspunktet til $V_B$ blir oppnådd. Verdiene på de to motstandene vil basere seg blant annet 
+på base-motstanden $R_{\pi}$ til transistoren og emittermotstanden $R_E$. Et godt startpunkt for valg 
+av motstandsverdier er å sette $R_{B1} = R_{B2}$. Dette vil trolig gi et arbeidspunkt godt under den ønskede 
+verdien. Det er da mulig å øke $R_{B2}$ helt til $V_B = V_{CC}/2$ blir oppnådd, evt. også øke 
+utgangsmotstanden $R_E$, men dette vil også øke utgangsmotstanden, så små endringer på $R_E$ er ønskelig om
+mulig. Størrelsen på $R_{B1}$ og $R_{B2}$ må velges til å være store verdier slik at påvirkningen fra 
+kildemotstanden $R_K$ blir liten. Verdier omlag $\SI{100}{\kilo\ohm}$ til $\SI{1}{\mega\ohm}$ er ønskelig.
+
+\newpage
+Til slutt kan kondensatorverdiene $C_1$ og $C_2$ velges. Ettersom at kondensatoren i lag med 
+inngangsmotstanden $R_{inn}$ danner et høypassfilter, er det naturlig å velge en kondensatorverdi som 
+er slik at knekkfrekvensen $f_0 << f$, der $f$ er den forventede frekvensen til inngangssignalet $v_0$.
+Større kodensatorverdier har liten negativ påvirkning annet enn at de tar lenger tid å lade opp, og derfor 
+forlenger tiden før kretsen oppnår de ønskede egenskapene fra kretsen først blir aktivert.

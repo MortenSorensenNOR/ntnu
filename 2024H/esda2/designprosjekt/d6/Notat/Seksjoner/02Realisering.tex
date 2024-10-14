@@ -1,0 +1,41 @@
+\section{Realisering}
+\label{realisering}
+
+For realiseringen av kretsen har vi valgt å benytte følgende transistorer:
+\begin{figure}[H]
+    \centering
+    \begin{tabularx}{0.5\textwidth}{|X|X|}
+        \hline
+        \textbf{Transistor} & \textbf{Type}\\
+        \hline
+        Q1 & BC547 \\
+        Q2 & BC547 \\
+        Q3 & BC557 \\
+        Q4 & BC557 \\
+        Q5 & BC547 \\
+        Q6 & BC547 \\
+        Q7 & BC547 \\
+        \hline
+    \end{tabularx}
+\end{figure}
+
+For bias-strøm motstanden $R$ ble en verdi $R = \SI{67}{\kilo\ohm}$ valgt. Det gir en bias-strøm
+på 
+\[
+    I_{bias} = \frac{\SI{5}{\volt} - \SI{-5}{\volt}}{\SI{67}{\kilo\ohm}} = \SI{149.25}{\micro\ampere}
+\]
+
+Det gir en forsterkning $A$ på (dersom det er ingen signal på inngangen)
+\[
+    A = g_m \cdot r_o = \frac{I_{bias}}{V_T} \cdot \frac{1}{h_{oe}} \approx 96
+\]
+der $h_{oe}$ er gitt fra databladet til transistoren \cite{bc557}
+
+For bufferen ble kondensatorverdien $C = \SI{1}{\micro\farad}$ valgt for begge kondensatorene, og 
+arbeidspunktet til transistoren valgt til $V_{B} = \SI{0}{\volt}$ og følgelig $V_{E} = \SI{-0.7}{\volt}$.
+Dette ble ugunstig nok realisert ved å sette $R_{B_1} = \SI{67}{\kilo\ohm}$, $R_{B_2} = \SI{10}{\mega\ohm}$
+og $R_{E} = \SI{1}{\kilo\ohm}$. Dette er noe ugunstig grunnet at det gir en uønskelig lav 
+inngangsmotstand og en høyere enn ønsket utgangsmotstand. En bedre bufferkrets vil gi bedre resultater og 
+vil føre til at operasjonsforsterkeren oppfører seg mer ideelt.
+
+For testing av inverterende opamp med forsterkning $A = 10$ ble $R_{in} = \SI{1}{\kilo\ohm}$ og $R_{f} = \SI{10}{\kilo\ohm}$ valgt.

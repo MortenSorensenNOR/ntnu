@@ -1,0 +1,63 @@
+[aimspice]
+[description]
+3065
+Example circuit for TFE4152
+
+* This is how you write a comment in AIMSpice.
+* The following code is an example to show some relevant AIMSpice syntax.
+
+**********************************************************************************************
+* Include the relevant file(s). NB! Avoid norwegian letters (∆ÿ≈) and spaces in the filepath *
+* We use the subckts nmos1v d g s b og pmos1v d g s b from this file                         *
+* Unless you specify w and l, the default values (which you can find in the file) are used.  *
+**********************************************************************************************
+.include C:\Documents\TFE4152\gpdk90nm\gpdk90nm_tt.cir
+
+**************************************************************************
+* Using parameters makes your code easier to manage, as you only have    *
+* one place you need to change something to update your circuit values.  *
+* You can define parameters (variables) like this:                       *
+**************************************************************************
+.param yourParamName = 42n
+.param myWidthParam = 0.1u 
+.param vdd_value = 0.9
+
+
+******************************************************************************
+* Creating an instance of my main circuit to test on                         *
+* (the .subckt-parts below are just recipes for AIMSpice to follow)          *
+* I use the node numbers as inputs (1 for VDD, 2 for VA, 0 for gnd, 3 for VC *
+******************************************************************************
+* Creating a dc voltage source with VDD=0.8V. 0 is the ground node.
+VDD 1 0 dc vdd_value 
+VA 2 0 dc 0
+VC 3 0 dc 0.4
+xTest 2 1 3 Out1 Out2 Out3 1 0 myMainCircuit
+
+
+*********************************************************************************************************
+* You can create your main circuit using subcircuits (see bottom of file for the subcircuit definition) *
+* The name of your subcircuit instance/object must start with x (so AIMSpice knows it is a subcircuit)  *
+*********************************************************************************************************
+.subckt myMainCircuit A B C Out1 Out2 Out3 VDD VSS
+* Using the subcircuit I've implemented below.
+xdragon1 A B temp Out1 VDD VSS myCoolDragon     
+xdragon2 temp C Out2 Out3 VDD VSS myCoolDragon
+.ends
+
+
+*****************************************************************************
+* The syntax for a subcircuit is as follows:                                *
+*.subckt nameForSubckt FirstInput SecondInput ThirdInput FourthInput Etc    *
+*.ends											    *
+* Below is an example of a subcircuit. Note that this is just randomly      *
+* connected to illustrate AIMSpice syntax                                   *
+*****************************************************************************
+.subckt myCoolDragon A B Out1 Out2 VDD VSS
+xmn1 temp A VSS VSS nmos1v l=yourParamName w=myWidthParam
+xmn2 Out1 B temp VSS nmos1v    
+xmp1 Out1 B Out2 Out2 pmos1v
+xmp2 Out2 A VDD VDD pmos1v
+.ends
+
+[end]

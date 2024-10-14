@@ -1,6 +1,7 @@
 // Breakout game
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 // Colors are defined in RGB565 format
 
@@ -28,6 +29,13 @@ char font8x8[128][8];        // DON'T TOUCH THIS - this is a forward declaration
  * TODO: Define your variables below this comment
  */
 
+// Test framebuffer with memcpy
+// Framebuffer is from 0xc8000000 to 0xc803FFFF
+unsigned int framebuffer_size = 0x3FFFF;
+unsigned char __attribute__((used))* framebuffer;
+
+unsigned int __attribute__((used)) white_double = 0xFFFFFFFF;
+
 // Block colors 
 unsigned int num_colors = 14;
 unsigned int __attribute__((used)) colors[14] = {
@@ -48,28 +56,19 @@ unsigned int __attribute__((used)) colors[14] = {
 };
 
 
-unsigned int bar_x = 0;
-unsigned int bar_y = 0;
+int bar_x = 0;
+int bar_y = 0;
 unsigned int bar_width = 7;
 unsigned int bar_height = 45;
 
-// 360 degrees:
-// 0/360: Up
-// 45: Up-Right
-// 90: Right
-// 135: Down-Right
-// 180: Down
-// 225: Down-Left
-// 270: Left
-// 315: Up-Left
-unsigned int ball_angle = 0;        
-unsigned int ball_active = 0;
+unsigned int ball_dx = 1;
+unsigned int ball_dy = 0;
 unsigned int ball_x = 0;
 unsigned int ball_y = 0;
 unsigned int ball_width = 7;
 unsigned int ball_height = 7;
 
-unsigned int block_spacing = 2;
+unsigned int block_spacing = 0;
 unsigned int block_width = 0;
 unsigned int block_height = 0;
 
@@ -104,11 +103,16 @@ Block* blocks;
 
 // TODO: Add a C declaration for the ClearScreen assembly procedure
 void ClearScreen();
+void ClearScreenFast();
 void SetPixel(unsigned int x_coord, unsigned int y_coord, unsigned int color);
+void SetPixelDouble(unsigned int x_coord, unsigned int y_coord, unsigned int color);
 void DrawBlock(unsigned int x, unsigned int y, unsigned int width, unsigned int height, unsigned int color);
 void DrawBar(unsigned int y);
 int ReadUart();
 void WriteUart(char c);
+
+void CopyFramebufferToVGA();    // Copy framebuffer to VGA address
+                                // effectively double buffering the screen
 
 /***
  * Now follow the assembly implementations
@@ -137,15 +141,50 @@ asm("ClearScreen: \n\t"
     "    POP {LR} \n\t"
     "    BX LR");
 
+asm("ClearScreenFast: \n\t"
+    "    PUSH {LR} \n\t"
+    "    PUSH {R4, R5, R6} \n\t"
+    "    LDR R6, =white_double\n\t"
+    "    LDR R5, =0\n\t"
+    "    LDR R2, =0\n\t"
+    "    _ClearScreen_loop_fast:\n\t"
+    "    LDR R4, =0\n\t"
+    "    _ClearScreen_line_fast:\n\t"
+    // Fill screen with white
+    "    MOV R0, R4\n\t"
+    "    MOV R1, R5\n\t"
+    "    LDR R2, [R6]\n\t"
+    "    BL SetPixelDouble\n\t"
+    "    ADD R4, R4, #1\n\t"
+    "    CMP R4, #160\n\t"
+    "    BLT _ClearScreen_line_fast\n\t"
+    "    ADD R5, R5, #1\n\t"
+    "    CMP R5, #240\n\t"
+    "    BLT _ClearScreen_loop_fast\n\t"
+    "    POP {R4,R5,R6}\n\t"
+    "    POP {LR} \n\t"
+    "    BX LR");
+
 // assumes R0 = x-coord, R1 = y-coord, R2 = colorvalue
 asm("SetPixel: \n\t"
-    "LDR R3, =VGAaddress \n\t"
+    "LDR R3, =framebuffer \n\t"
     "LDR R3, [R3] \n\t"
     "LSL R1, R1, #10 \n\t"
     "LSL R0, R0, #1 \n\t"
     "ADD R1, R0 \n\t"
     "STRH R2, [R3,R1] \n\t"
     "BX LR");
+
+// Set two pixels at a time
+asm("SetPixelDouble: \n\t"
+    "ldr r3, =framebuffer   \n\t"
+    "LDR R3, [R3]          \n\t"
+    "lsl r1, r1, #10       \n\t"
+    "lsl r0, r0, #2        \n\t"
+    "add r1, r0            \n\t"
+    "str r2, [r3, r1]      \n\t"
+    "bx lr                 \n\t"
+);
 
 // TODO: Implement the DrawBlock function in assembly. You need to accept 5 parameters, as outlined in the c declaration above (unsigned int x, unsigned int y, unsigned int width, unsigned int height, unsigned int color)
 asm("DrawBlock: \n\t"
@@ -178,7 +217,33 @@ asm("DrawBlock: \n\t"
     "BX LR");
 
 // TODO: Impelement the DrawBar function in assembly. You need to accept the parameter as outlined in the c declaration above (unsigned int y)
+// First argument is y position of the bar, passed to R0
+// Get the bar width from the global variable bar_width
+// Get the bar height from the global variable bar_height
+// Get the bar color from the global variable black
+// Call DrawBlock with the correct parameters
 asm("DrawBar: \n\t"
+    "PUSH {LR} \n\t"
+    "PUSH {R0, R1, R2, R3, R4} \n\t"
+
+    "MOV R1, R0 \n\t"
+    "LDR R0, =bar_x \n\t"
+    "LDR R0, [R0] \n\t"
+
+    "LDR R2, =bar_width \n\t"
+    "LDR R2, [R2] \n\t"
+    "LDR R3, =bar_height \n\t"
+    "LDR R3, [R3] \n\t"
+
+    "LDR R4, =black \n\t"
+    "LDR R4, [R4] \n\t"
+    "PUSH {R4}\n\t"
+
+    "BL DrawBlock \n\t"
+    "ADD sp, sp, #4 \n\t"
+
+    "POP {R0, R1, R2, R3, R4} \n\t"
+    "POP {LR} \n\t"
     "BX LR");
 
 asm("ReadUart:\n\t"
@@ -193,6 +258,12 @@ asm("WriteUart: \n\t"
     "BX LR");
 
 // TODO: Implement the C functions below
+
+void CopyFramebufferToVGA()
+{
+    memcpy((void *)VGAaddress, framebuffer, framebuffer_size);
+}
+
 void draw_ball() {
     DrawBlock(ball_x, ball_y, ball_width, ball_height, black);
 }
@@ -221,196 +292,106 @@ void update_game_state()
     }
 
     // TODO: Check: game won? game lost?
-    if (ball_active == 1) {
-        if (ball_x < 0) {
-            currentState = Lost;
-            return;
-        } else if (ball_x > width) {
-            currentState = Won;
-            return;
-        }
+    if (ball_x <= 0) {
+        currentState = Lost;
+        return;
+    } else if (ball_x >= width) {
+        currentState = Won;
+        return;
     }
 
-    // TODO: Update balls position and direction
-    if (ball_active) {
-        switch (ball_angle) {
-            case 0:
-                ball_y -= 1;
-                break;
-            case 45:
-                ball_x += 1;
-                ball_y -= 1;
-                break;
-            case 90:
-                ball_x += 1;
-                break;
-            case 135:
-                ball_x += 1;
-                ball_y += 1;
-                break;
-            case 180:
-                ball_y += 1;
-                break;
-            case 225:
-                ball_x -= 1;
-                ball_y += 1;
-                break;
-            case 270:
-                ball_x -= 1;
-                break;
-            case 315:
-                ball_x -= 1;
-                ball_y -= 1;
-                break;
-            case 360:
-                ball_y -= 1;
-                break;
-        }
-    }
-
-    // Check hit with walls
-    if (ball_active) {
-        if (ball_y <= 0 || ball_y >= height - ball_height) {
-            if (ball_angle == 0) {
-                ball_angle = 180;
-            } else if (ball_angle == 45) {
-                ball_angle = 135;
-            } else if (ball_angle == 135) {
-                ball_angle = 45;
-            } else if (ball_angle == 180) {
-                ball_angle = 0;
-            } else if (ball_angle == 225) {
-                ball_angle = 315;
-            } else if (ball_angle == 315) {
-                ball_angle = 225;
-            }
-        }
-    }
-
-    // Check hit with bar
-    if (ball_active) {
-        // Check if ball hits the bar in x direction
-        if (ball_x >= bar_x && ball_x <= bar_x + bar_width) {
-            // Check hit with centermost 15 pixels
-            if (ball_y >= bar_y + 15 && ball_y <= bar_y + bar_height - 15) {
-                ball_angle = 90;
-            }
-
-            // Check hit with uppermost 15 pixels
-            if (ball_y >= bar_y && ball_y <= bar_y + 15) {
-                ball_angle = 45;
-            }
-
-            // Check hit with lowermost 15 pixels
-            if (ball_y >= bar_y + bar_height - 15 && ball_y <= bar_y + bar_height) {
-                ball_angle = 135;
-            }
-        }
-    }
-
-    // TODO: Hit Check with Blocks
-    // HINT: try to only do this check when we potentially have a hit, as it is relatively expensive and can slow down game play a lot
-    if (ball_active) {
-        for (int i = 0; i < n_cols; i++)
-        {
-            for (int j = 0; j < n_cols; j++)
-            {
-                int index = i + j * n_cols;
-                if (blocks[index].destroyed == 0)
-                {
-                    // Check if the ball hitting the block
-                    // and from which direction it hits
-
-                    // 1. Top center pixel hits a block, hit from below
-                    if (ball_x >= blocks[index].pos_x && ball_x <= blocks[index].pos_x + block_width && ball_y == blocks[index].pos_y + block_height)
-                    {
+    // Hit Check with blocks
+    // Check for collision on the left, upper and lower edge of the block
+    for (int i = 0; i < n_cols; i++) {
+        for (int j = 0; j < n_cols; j++) {
+            int index = i + j * n_cols;
+            if (blocks[index].destroyed == 0) {
+                // Hit from left
+                if (ball_x + ball_width >= blocks[index].pos_x && ball_x <= blocks[index].pos_x + block_width) {
+                    if (ball_y + ball_height >= blocks[index].pos_y && ball_y <= blocks[index].pos_y + block_height) {
                         blocks[index].destroyed = 1;
-                        if (ball_angle == 45)
-                        {
-                            ball_angle = 135;
-                        } else if (ball_angle == 315)
-                        {
-                            ball_angle = 225;
-                        }
+                        ball_dx = -1;
                     }
+                }
 
-                    // 2. Rightmost center pixel hits a block, hit from left
-                    if (ball_y >= blocks[index].pos_y && ball_y <= blocks[index].pos_y + block_height && ball_x == blocks[index].pos_x - 1)
-                    {
+                // Hit from top
+                if (ball_y + ball_height >= blocks[index].pos_y && ball_y <= blocks[index].pos_y + block_height) {
+                    if (ball_x + ball_width >= blocks[index].pos_x && ball_x <= blocks[index].pos_x + block_width) {
                         blocks[index].destroyed = 1;
-                        if (ball_angle == 45)
-                        {
-                            ball_angle = 315;
-                        } else if (ball_angle == 135)
-                        {
-                            ball_angle = 225;
-                        } else {
-                            ball_angle = 270;
-                        }
+                        ball_dy = 1;
                     }
+                }
 
-                    // 3. Bottom center pixel hits a block, hit from above
-                    if (ball_x >= blocks[index].pos_x && ball_x <= blocks[index].pos_x + block_width && ball_y == blocks[index].pos_y - 1)
-                    {
+                // Hit from bottom
+                if (ball_y <= blocks[index].pos_y + block_height && ball_y + ball_height >= blocks[index].pos_y) {
+                    if (ball_x + ball_width >= blocks[index].pos_x && ball_x <= blocks[index].pos_x + block_width) {
                         blocks[index].destroyed = 1;
-                        if (ball_angle == 135)
-                        {
-                            ball_angle = 45;
-                        } else if (ball_angle == 225)
-                        {
-                            ball_angle = 315;
-                        }
-                    }
-
-                    // 4. Leftmost center pixel hits a block, hit from right
-                    if (ball_y >= blocks[index].pos_y && ball_y <= blocks[index].pos_y + block_height && ball_x == blocks[index].pos_x + block_width)
-                    {
-                        blocks[index].destroyed = 1;
-                        if (ball_angle == 135)
-                        {
-                            ball_angle = 45;
-                        } else if (ball_angle == 225)
-                        {
-                            ball_angle = 135;
-                        }
+                        ball_dy = -1;
                     }
                 }
             }
         }
     }
+    
+    // Check hit with walls
+    if (ball_y <= 0 || ball_y >= height - ball_height) {
+        ball_dy = -ball_dy;
+    }
+
+    // Check hit with bar
+    // Check if ball hits the bar in x direction
+    if (ball_x >= bar_x && ball_x <= bar_x + bar_width) {
+
+        // Check hit with centermost 15 pixels
+        if (ball_y >= bar_y + 15 && ball_y <= bar_y + bar_height - 15) {
+            ball_dx = 1;
+            ball_dy = 0;
+        }
+
+        // Check hit with uppermost 15 pixels
+        if (ball_y >= bar_y && ball_y <= bar_y + 15) {
+            ball_dx = 1;
+            ball_dy = -1;
+        }
+
+        // Check hit with lowermost 15 pixels
+        if (ball_y >= bar_y + bar_height - 15 && ball_y <= bar_y + bar_height) {
+            ball_dx = 1;
+            ball_dy = 1;
+        }
+    }
+
+    // TODO: Update balls position and direction
+    ball_x += ball_dx;
+    ball_y += ball_dy;
 }
 
 void update_bar_state()
 {
-    int remaining = 0;
     // TODO: Read all chars in the UART Buffer and apply the respective bar position updates
     // HINT: w == 77, s == 73
     // HINT Format: 0x00 'Remaining Chars':2 'Ready 0x80':2 'Char 0xXX':2, sample: 0x00018077 (1 remaining character, buffer is ready, current character is 'w')
 
-    do
+    unsigned long long out = ReadUart();
+    if (!(out & 0x8000))
     {
-        unsigned long long out = ReadUart();
-        if (!(out & 0x8000))
-        {
-            // not valid - abort reading
-            return;
-        }
-        remaining = (out & 0xFF0000) >> 4;
-        if (remaining >= 0)
-        {
-            char c = out & 0xFF;
-            if (c == 0x77)
-            {
-                // Move bar up
-                bar_y -= 15;
-            }
-            else if (c == 0x73)
-            {
-                // Move bar down
-                bar_y += 15;
-            }
-        }
-    } while (remaining > 0);
+        // not valid - abort reading
+        return;
+    }
+    char c = out & 0xFF;
+    if (c == 0x77)
+    {
+        // Move bar up
+        bar_y -= 15;
+    }
+    else if (c == 0x73)
+    {
+        // Move bar down
+        bar_y += 15;
+    }
+
+    bar_y = bar_y < 0 ? 0 : bar_y;
+    bar_y = bar_y > height - bar_height ? height - bar_height : bar_y;
 }
 
 void write(char *str)
@@ -434,17 +415,21 @@ void play()
         {
             break;
         }
+        ClearScreenFast();
         draw_playing_field();
         draw_ball();
-        DrawBar(120); // TODO: replace the constant value with the current position of the bar
+        DrawBar(bar_y); // TODO: replace the constant value with the current position of the bar
+        CopyFramebufferToVGA();
     }
     if (currentState == Won)
     {
         write(won);
+        currentState = Exit;
     }
     else if (currentState == Lost)
     {
         write(lost);
+        currentState = Exit;
     }
     else if (currentState == Exit)
     {
@@ -530,7 +515,21 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Initialize the bar
+    bar_x = 0;
+    bar_y = height / 2 - bar_height / 2;
+
+    // Initialize the ball
+    ball_x = bar_x + bar_width + 5;
+    ball_y = bar_y + bar_height / 2;
+    ball_dx = -1;
+    ball_dy = 0;
+
+    // Initialize the framebuffer
+    framebuffer = (unsigned char *)malloc(0x3FFFF);
+
     ClearScreen();
+    CopyFramebufferToVGA();
 
     // HINT: This loop allows the user to restart the game after loosing/winning the previous game
     while (1)
@@ -539,7 +538,6 @@ int main(int argc, char *argv[])
         if (currentState == Stopped) {
             continue;
         }
-        ball_active = 1;
 
         play();
         reset();
