@@ -16,7 +16,8 @@ def MonPro(a_bar, b_bar, n, k):
 def RSA_Montgomery(M, e, n, k):
     k = k + 1
     r = 1 << k
-    M_bar = (M * r) % n
+    r_square = (r * r) % n
+    M_bar = MonPro(M, r_square, n, k)
     x_bar = r % n
 
     for i in range(k - 1, -1, -1):
