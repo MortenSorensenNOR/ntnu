@@ -11,10 +11,12 @@ subprojects/
 *.log
 *.aux
 *.fls
+*.blg
 *.toc
-*.tcl
 *.zip
 *.tar.gz
+*.gz
+*.bbl
 *.fdb_latexmk
 *.json
 fpga_Implmnt/
