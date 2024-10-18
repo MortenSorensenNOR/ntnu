@@ -1,0 +1,176 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\newcommand{\nobibparens}[1]{\unskip\cite{#1}}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\subsection*{Del 1 -- Teoretisk}
+\begin{enumerate}
+\item Vi har at systemfunksjonen er gitt som
+    \[
+        H(s) = \frac{\frac{1}{LC}}{s^2 + s * \frac{R}{L} + \frac{1}{LC}} = \frac{\omega_0^2}{s^2 + \omega_0 ^2 \cdot RC \cdot s + \omega_0^2}
+    \]
+    Som kan videre uttrykkes ved $\zeta$ som
+    \[
+        H(s) = \frac{\omega_0^2}{s^2 + 2 \omega_0 \zeta s + \omega_0^2}
+    \]
+    der $\zeta$ blir
+    \[
+        \zeta = \frac{RC \omega_0}{2}
+    \]
+    Setter vi inn komponentverdiene får vi at 
+    \[
+        \zeta = \frac{\SI{200}{\ohm} \cdot \SI{10}{\micro\farad}}{2} \cdot \frac{1}{\sqrt{\SI{100}{\milli\henry} \cdot \SI{10}{\micro\farad}}} = 1
+    \]
+
+    RLC kretsen er derfor kritisk dempet, da $\zeta = 1$.
+
+\item Nei, $\zeta$ baserer ser på systemfunksjonen, og den er forskjellig for forskjellige andreordens system.
+
+\item Dersom vi lar $H(s) = \frac{Q(s)}{P(s)}$ kan vi finne polene til $H(s)$ ved å finne røttene til $P(s)$.
+    Vi har at 
+    \[
+        P(s) = s^2 + 2 \omega_0 \zeta s + \omega_0^2 = (s - p_1)(s - p_2)
+    \]
+    Siden $\zeta = 1$ har vi at 
+    \[
+        p_1 = p_2 = -\omega_0
+    \]
+
+\item Innsat får vi følgende røtter
+    \[
+        p_1 = p_2 = -\frac{1}{\sqrt{LC}} = -1000
+    \]
+
+    Når $R$ øker vil vi få høyere relativ dempningsfaktor, da også to reelle poler, 
+    og for økende $R$ vil avstanden mellom polene på den reelle aksen øke, og vi får at $p_1$ vil gå mot 0 og
+    $p_2$ vil gå mot $-R$.
+
+\item Siden vi for underkritisk demping får komplekse røtter har vi at 
+    ossileringen får en frekvens på 
+    \begin{equation*}
+        \beta = \frac{\omega_0 \sqrt{1 - \zeta^2}}{2\pi} \tag*{\nobibparens{lundheim}}
+    \end{equation*}
+\end{enumerate}
+
+\subsection*{Del 2 -- Eksperimentell}
+\begin{enumerate}
+\item Sprangresponsen til systemet for $R = \SI{200}{\ohm}$, $|v_{in}| = \SI{1}{\volt}$
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Bilder/kritisk_demping_sprang.png}
+    \end{figure}
+
+\item For underkritisk demping valgte jeg $R = \SI{33}{\ohm}$ og fikk følgende sprangrespons
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Bilder/under_kritisk_demping_sprang.png}
+    \end{figure}
+
+    For overkritisk demping valgte jeg $R = \SI{300}{\ohm}$ og fikk
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Bilder/over_kritisk_demping_sprang.png}
+    \end{figure}
+
+    Og siden $R = \SI{200}{\ohm}$ gir kritisk demping, 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Bilder/kritisk_demping_sprang.png}
+    \end{figure}
+    
+\item Forventet svingefrekvens fra 1e er
+    \[
+        \beta = \frac{\omega_0 \sqrt{1 - \zeta^2}}{2\pi} \approx \SI{156.9}{\hertz}
+    \]
+
+    Ser vi på frekvensspekteret til svingningen får vi følgende plot
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Bilder/frekvensspekter_svingning.png}
+    \end{figure}
+
+    og vi ser at realisert svingefrekvens er $f_0 = \SI{163}{\hertz}$, svært nærme den forventede frekvensen.
+
+\end{enumerate}
+
+\subsection*{Del 3 -- Frekvensrespons med poler}
+\begin{enumerate}
+\item Fra kretsstrukturen er det lett å se at kretsen danner at lavpassfilter, da impedansen til kondensatoren styrer styrken
+    på utgangssignalet, og den impedansen starter høy for lave frekvenser, og avtar mot høye frekvenser.
+\item 
+\item 
+\item 
+\item Fra del 1 har vi at en økende $R$ fil føre til at $p_1 \to 0$ og $p_2 \to -R$, den relative dempningsfaktoren
+    $\zeta$ øker, og vi får et skarpere filter, altså at frekvensresponsen vil gi kraftigere dempning etter knekkfrekvensen sammenlignet 
+    ned en lavere verdi for $R$.
+\item Maksimal flat repsons skjer når dempningsfaktoren $\zeta = \sqrt{2}$, og er den flatest mulige 
+    frekvensresponsen i pass-området til filteret. For dette systemet oppnår vi maksimal flat repsons omtrent 
+    rundt $R \approx \SI{282}{\ohm}$.
+\end{enumerate}
+
+\section*{Oppgave 2.}
+\subsection*{Del 1 -- Teoretisk}
+\begin{enumerate}
+\item Vi har at 
+    \[
+        H(s) = \frac{\frac{s}{RC}}{s^2 + \frac{s}{RC} + \frac{1}{LC}} = \frac{\frac{s}{RC}}{s^2 + 2 \omega_0 \zeta s + \omega_0^2}
+    \]
+
+    der 
+    \[
+        \zeta = \frac{1}{2R} \sqrt{\frac{L}{C}}
+    \]
+
+    Setter vi inn verdiene får vi at
+    \[
+        \zeta \approx 0.158
+    \]
+    altså er systemet kritisk underdempet, da $\zeta < 1$.
+
+\item Vi har at $H(s) = \frac{Q(s)}{P(s)}$ gir poler for røttene til $P(s)$. Finner røttene $p_{1,2}$ ved
+    \[
+        p_{1,2} = -\omega_0 \zeta \pm \omega_0 \sqrt{\zeta^2 - 1}
+    \
+    og ettersom at $\zeta < 1$ får vi to komplekse røtter 
+    \[
+        p_{1,2} = -\omega_0 \zeta \pm j\omega_0 \sqrt{1 - \zeta^2}
+    \]
+
+\item De to polene blir 
+    \begin{center}
+        $p_1 = -500 + 3122.5j\:\:\:\:$ og $\:\:\:\:p_1 = -500 - 3122.5j$
+    \end{center}
+        
+\end{enumerate}
+
+\subsection*{Del 2 -- Praktisk}
+\begin{enumerate}
+\item Får følgende sprangrespons
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Bilder/oppgave_2_sprang.png}
+    \end{figure}
+
+    Dette ligner veldig på den analytiske løsningen funnet forrige uke.
+
+\item Høyere $R$ gjør at ossileringene varer "lengre", altså at det leddet som fører til ossileringene henfaller saktere,
+    og korresponderer til at polene beveger seg nærmere origo på realaksen, og ossileringene blir raskere, da
+    imaginær delen vokser.
+\end{enumerate}
+
+\subsection*{Del 3 -- Frekvensrespons med poler}
+\begin{enumerate}
+    \item RLC kretsen blir et båndpassfilter.
+    \item Fikk ikke tid til mer denne uken :)
+\end{enumerate}
+
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
