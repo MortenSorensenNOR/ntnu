@@ -1,0 +1,91 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\newcommand{\nobibparens}[1]{\unskip\cite{#1}}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Vi får følgende analytiske uttrykk for X(f)
+        \[
+            X(f) = \delta(f - 10) + \delta(f + 10) + \frac{4}{5}\delta\left(f - 20\sqrt(2)\right) + \frac{4}{5}\delta\left(f + 20\sqrt(2)\right) 
+        \]
+    \item Vi har at
+        \begin{align*}
+            x(t) &= e^{j \cdot 2\pi \cdot 10 t} + e^{-j \cdot 2\pi \cdot 10 t} + \frac{4}{5}\left(e^{j \cdot 2\pi \cdot 20\sqrt(2) t} + e^{-j \cdot 2\pi \cdot 20\sqrt(2) t}\right) \\
+                 &= 2 \cos\left(20 \pi t\right) + \frac{8}{5} \cos\left(40\pi \sqrt{2} t\right)
+        \end{align*}
+
+    \item Vi har at $T = \frac{1}{f}$. Vi har da at
+        \[
+            T_1 = \frac{1}{10}
+        \]
+        og 
+        \[
+            T_2 = \frac{1}{20\sqrt{2}}
+        \]
+
+        Siden 
+        \[
+            \frac{T_1}{T_2} = \frac{10}{20\sqrt{2}} = \frac{1}{2\sqrt{2}}
+        \]
+        ikke er et rasjonalt tall, er signalet ikke periodisk.
+\end{enumerate}
+
+\section*{Oppgave 2.}
+Vi har at foriertransformen er gitt ved
+\[
+    \mathscr{F}\{x(t)\} = \int_{-\infty}^{\infty}{x(t) e^{-j\omega t} dt}
+\]
+
+Vi har dermed at 
+\begin{align*}
+    \mathscr{F}\{a x_1(t) + b x_2(t)\} &= \int_{-\infty}^{\infty}{(a x_1(t) + b x_2(t)) e^{-j \omega t} dt} \\
+                                       &= a\int_{-\infty}^{\infty}{x_1(t) e^{-j \omega t} dt} + b \int_{-\infty}^{\infty}{x_2(t) e^{-j \omega t} dt} \\
+                                       &= a \mathscr{F}\{x_1(t)\} + b \mathscr{F}\{x_2(t)\}
+\end{align*}
+
+\section*{Oppgave 3.}
+I et kausalt system er $H(t) = 0$ for $t < 0$. Vi har da at
+\begin{align*}
+    \mathscr{L}\{h(t)\}\Big|_{s = j\omega} &= \int_{-\infty}^{\infty}{h(t) e^{-st} dt}\Big|_{s = j\omega} \\
+                                           &= \int_{-\infty}^{\infty}{h(t) e^{-j\omega t} dt} \\
+                                           &= \underline{\underline{\mathscr{F}\{h(t)\}}}
+\end{align*}
+
+\section*{Oppgave 4.}
+\begin{enumerate}
+    \item Vi har at 
+        \begin{align*}
+            h_{LP}(t) &= \mathscr{F}^{-1}\{H(\omega)\} \\
+                      &= \frac{1}{2\pi} \int_{-\infty}^{\infty}{H(\omega) e^{j\omega t} d\omega} \\
+                      &= \frac{1}{2\pi} \int_{-2\pi B}^{2\pi B}{e^{j\omega t} d\omega} \\
+                      &= \frac{1}{2\pi} \left[\frac{e^{j\omega t}}{jt}\right]_{-2\pi B}^{2\pi B} \\
+                      &= \frac{1}{2\pi} \left(\frac{e^{j 2\pi B t}}{jt} - \frac{e^{-j 2\pi B t}}{-jt}\right) \\
+                      &= \frac{1}{2\pi} \cdot \frac{2j \sin(2\pi B t)}{jt} = \underline{\underline{2B \cdot \text{sinc}(2Bt)}}
+        \end{align*}
+    \item 
+    \item En grunn til at filteret ikke kan realiseres er at den utregnede impulsresponsen er uendelig lang.
+\end{enumerate}
+
+\section*{Oppgave 5.}
+Dersom vi har at $H_{HP}(\omega) = 1 - H_{LP}(\omega)$, så har vi at
+\begin{align*}
+    h_{HP}(t) &= \mathscr{F}^{-1}\{H_{HP}(\omega)\} \\
+              &= \mathscr{F}^{-1}\{1 - H_{LP}(\omega)\} \\
+              &= \mathscr{F}^{-1}\{1\} - \mathscr{F}\{H_{LP}\} \\
+              &= \underline{\underline{\delta(t) - h_{LP}(t)}}
+\end{align*}
+
+\section*{Oppgave 7.}
+\begin{enumerate}
+    \item Oscillatoren i figur 4. har en spuriøs-undertrykking på
+        \[
+            20 \cdot \log\left(\frac{0.5}{1}\right) \approx -6_{\:[\text{dB}]}
+        \]
+\end{enumerate}
+
+\end{document}
