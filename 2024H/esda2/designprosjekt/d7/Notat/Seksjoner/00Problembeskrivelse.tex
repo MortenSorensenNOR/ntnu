@@ -1,2 +1,31 @@
 \section{Problembeskrivelse}
 \label{problemBeskrivelse}
+
+For deskretisering av analoge signal er det viktig å ta hensyn til aliasing effekter som oppstår av at ADC-en har begrenset
+sampling frekvens. Det er defor nødvendig å ta i bruk et anti-aliasing filter for å forsikre at Nyquist-kriteriet om at 
+inngangssignalet til ADC-en ikke inneholder frekvenskoponenter over $f_s / 2$. Dette er helt klart ikke mulig å realisere 
+med et fysisk filter, men dette designnotatet skal ta for seg en metode for å designe et aktivt analog Butterworth lavpass filter
+som kan oppnå ønsket demping av de uønskede frekvenskomponentene. Det overordnede systemet er vist i figur \ref{system-figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Bilder/system.png}
+    \caption{System med Anti-Aliasing filteret mellom signalkilden og ADC-en \cite{problembeskrivelse}}
+    \label{system-figure}
+\end{figure}
+
+Videre krav satt til filteret er at 
+\begin{enumerate}
+    \item Filteret skal ha en knekkfrekvens $f_c \geq 0.75 \cdot f_s / 2$, altså $|H(f_s/2)|_{\text{[dB]}} \approx -3$dB
+    \item Anti-Aliasing filteret skal påvirke frekvenskomponenter under $f_s/2$ minst mulig
+    \item Filteret skal oppnå en dempning på minst 10dB ved frekvensen $f_B = f_s / 2$, da dette er i mange tillfeller 
+        tilstrekkelig for å unngå det værste av aliasing problemene for en vanlig ADC.
+\end{enumerate}
+
+For dette notatet er $f_s = \SI{9.1}{\kilo\hertz}$ som gir 
+\begin{center}
+    $f_B \approx \SI{4.55}{\kilo\hertz}\:\:\:\:$ og $\:\:\:\:f_c \geq \SI{3.4125}{\kilo\hertz}$
+\end{center}
+samt at 
+\[
+    |H(\SI{4.55}{\kilo\hertz})|_{\text{[dB]}} = -10\text{dB}
+\]

@@ -1,2 +1,88 @@
 \section{Prinsipiell løsning}
 \label{prinsipiellLoesning}
+
+Den prinsipielle løsningen baserer seg rundt et Butterworth lavpass filter med en n-te ordens Sallen-Key struktur (\ref{sallen-key}). 
+Grunnen til at Butterworth filtertypen er valgt for anti-aliasing applikasjonen er at filteret kan oppnå maksimal flathet, og derfor 
+påvirke signalene vi ønsker å sample under $f_s/2$ minst mulig, som gitt i kravene.
+
+\subsection{Utregning av nødvendig orden}
+Før filteret kan designes må filteres orden bestemmes. Vi har gitt at amplituderesponsen til et Butterworth filter 
+er gitt ved \ref{lundheim-butterworth-amplitude-respons}
+\begin{equation}
+    A = |H(j\omega)| = |H(j \cdot 2\pi f)| = \frac{1}{\sqrt{1 + \left(\frac{f}{f_c})^{2n}}}
+\end{equation}
+hvor $f_c$ er knekkfrekvensen definert ved $f_c = 0.75 \cdot f_s / 2$ som gitt fra problembeskrivelsen.
+
+Løser vi for $n$ får vi at
+\begin{equation}
+    n = \left\lceil\frac{1}{2}\frac{\ln{\left(A^{-2} - 1\right)}}{\ln{\left(\frac{f}{f_c}\right)}}\right\rceil
+\end{equation}
+
+Vi kan så produsere et filter av orden $n$ ved å kaskade koble første og andre ordens Sallen-Key lavpassfiltre, slik at 
+summen av alle filterenes orden blir lik $n$.
+
+\subsection{Sallen-Key Struktur}
+\label{sallen-key}
+Overordnet kan Sallen-Key strukturen for et lavpassfilter av andre orden slik:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Bilder/sallen_key_lowpass.png}
+    \caption{Andre ordens lavpass Sallen-Key struktur \cite{sallen-key-lowpass-wikipedia}}
+\end{figure}
+
+Vi har så at systemfunksjonen til Sallen-Key strukturen over er gitt ved
+\begin{equation}
+    H(s) = \frac{1}{s^2 + 2\zeta\omega_0 s + \omega_0^2}
+\end{equation}
+der $\zeta$ er den relative dempningsfaktoren til filteret, og $\omega_0 = 2\pi f_0 = 2\pi f_c$.
+
+Den ønskede dempningsfaktoren $\zeta$ for hver Sallen-Key strukturen i kaskadekoblingen til det ferdiget 
+lavpassfilteret er gitt ved følgende formel
+\begin{equation}
+    \zeta_i = \begin{cases}
+        \cos\left(\frac{\pi}{n}i\right), & \text{ for $n$ odde,} \\
+        \cos\left(\frac{\pi}{2n} + (i - 1)\frac{\pi}{n}\right), & \text{ for $n$ jevne} \\
+    \end{cases}
+\end{equation}
+der $\zeta_i$ er dempningsfaktoren til $i$-te Sallen-Key strukturen i kretsen.
+
+Vi kan så gå frem for å regne ut komponentverdiene $R_1$, $R_2$, $C_1$ og $C_2$ som oppnår den ønskede frekvensresponsen.
+En metode er ved å velge en motstandsverdi $R$ og la $R_1 = R_2 = R$. Vi har da at de to tidskonstantene blir
+\begin{center}
+    $\tau_1 = \frac{1}{\omega_0 \zeta_i} = R C_1\:\:\:\:\:\:$ og $\:\:\:\:\:\: \tau_2 = \frac{1}{\omega_0^2\tau_1} = R C_2$
+\end{center}
+
+Og vi kan dermed løse for $C_1$ og $C_2$ fra de kjente verdiene
+\begin{center}
+    $C_1 = \frac{\tau_1}{R}\:\:\:\:\:\:$ og $\:\:\:\:\:\: C_2 = \frac{\tau_2}{R}$
+\end{center}
+Vi kan på denne måten gå frem for å finne komponentverdiene til alle Sallen-Key strukturene vi trenger til filteret.
+
+Ettersom at denne metoden baserer seg på å fastsette en felles motstandsverdi $R$ og fra den regne ut kondensatorverdier,
+kan kondensatorverdiene blir litt hårete. Det finnes derfor en annen metode \cite{sallen-key-lowpass-wikipedia} som går ut på 
+å heller velge seg to kondensatorverdier $C_1$ og $C_2$ med et gitt forhold $n$ og $1/n$ og heller fra formelen
+
+\[
+    Q = \frac{mn}{m^2 + 1}
+\]
+der $Q = \frac{1}{\zeta}$ er kvalitetsfaktoren regne ut en verdi $m$ under kravet om at vi ønsker maksimal flathet.
+Maksimal flathet gir oss at $Q = \frac{1}{\sqrt{2}}$. Komponentverdiene blir da valgt som
+
+\begin{align*}
+    &R_1 = mR \\
+    &R_2 = R/m \\
+    &C_1 = nC   \\
+    &C_2 = C/n
+\end{align*}
+
+Dette kan være mer fleksibelt da kondensator verdier kan være vanskeligere å finne rett verdi for. Det finnes også digitale 
+verktøy som benytter denne metoden, slik som denne: \url{https://tools.analog.com/en/filterwizard/}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Bilder/analog_filter_wizzard.png}
+    \caption{Valg av RC sizing for Sallen-Key struktur komponenter}
+    \label{analog-wizzard}
+\end{figure}
+Denne tillater brukeren å velge forholdet mellom motstandene og kondensatorene i strukturen, som vist ovenfor. Det er gjennom 
+dette mulig å velge et forhold som gir kondensator verdier man har for hånd.
+
