@@ -16,7 +16,7 @@ verdi for $n$ er
 Kretsstrukturen til filteret blir dermed to andre ordens Sallen-Key strukturer i kaskade som vist i figur \ref{fig:filter-circuit}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Bilder/filter_circuit.png}
+    \includegraphics[width=0.95\textwidth]{Bilder/filter_circuit.png}
     \caption{Kretsdiagram}
     \label{fig:filter-circuit}
 \end{figure}
@@ -58,16 +58,53 @@ og følgelig for den andre Sallen-Key strukturen
 Siden kodensatorverdiene ikke er standard og mengden størrelser av kondensatorer for hånd var liten, ble 
 metode 2 gjennom \url{https://tools.analog.com/en/filterwizard/} heller brukt, der kondensatorverdiene ble valgt 
 til noe som var for hånd. Programvaren støtter også å kompansere for at operasjonsforsterkeren ikke er fullstendig 
-ideell, men dette ble ikke benyttet. Det gav følgende krets
+ideell, men dette ble ikke benyttet. Det gav følgende komponentverdier
 
+% Table showing component values R1, R2, C1, C2, R3, R4, C3, C4, with a seperator with for the two Sallen-Key structures, with a 
+% line of bold text saying Sallen-Key Struktur 1: and Sallen-Key Struktur 2:
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|l|l|}
+        \hline
+        \multicolumn{2}{|l|}{\textbf{Sallen-Key Struktur 1}} \\
+        \hline
+        Komponent & Verdi \\
+        \hline
+        \( R_1 \) & \(\SI{3.54}{\kilo\ohm}\)\\
+        \( R_2 \) & \(\SI{12.7}{\kilo\ohm}\)\\
+        \( C_1 \) & \(\SI{22}{\nano\farad}\)\\
+        \( C_2 \) & \(\SI{2.2}{\nano\farad}\)\\
+        \hline
+    \end{tabular}
+    \vspace{1em}
+    
+    \begin{tabular}{|l|l|}
+        \hline
+        \multicolumn{2}{|l|}{\textbf{Sallen-Key Struktur 2}} \\
+        \hline
+        Komponent & Verdi \\
+        \hline
+        \( R_1 \) & \(\SI{12.2}{\kilo\ohm}\)\\
+        \( R_2 \) & \(\SI{26.9}{\kilo\ohm}\)\\
+        \( C_1 \) & \(\SI{3}{\nano\farad}\)\\
+        \( C_2 \) & \(\SI{2.2}{\nano\farad}\)\\
+        \hline
+    \end{tabular}
+    \vspace{1em}
+\end{table}
+
+Det gir følgende krets
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\textwidth]{Bilder/ferdig_krets.png}
+    \includegraphics[width=0.9\textwidth]{Bilder/filter_circuit_final.png}
+    \caption{Kretsdiagram med komponentverdier for hele filteret, kilde: \url{https://tools.analog.com/en/filterwizard/}}
+    \label{fig:filter-circuit-final}
 \end{figure}
 
 \subsection{Realisering av kretsen}
 Oppkobling av kretsen ble gjort på et koblingsbrett. Forsyningsspenningen valgt var $V^+ = \SI{5}{\volt}$ og 
-$V^- = \SI{-5}{\volt}$.
+$V^- = \SI{-5}{\volt}$, og ble koblet opp mot Op-Ampenes forsyningsspenninger.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Bilder/oppkobling.png}

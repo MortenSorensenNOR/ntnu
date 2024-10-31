@@ -1,7 +1,19 @@
 \section{Testing}
 \label{testing}
 
+For testing av kretsen er en Analog Discovery 2 benyttet, og er blitt brukt både for å å generere forsyningsspennigene $V^+$ og $V^-$, samt brukt som signalgenerator for inngangssignalet $v_1(t)$ og som oscilloskop for å måle utgangssignalet fra filteret.
+Som nevnt var forsyningsspenningen satt til $\pm \SI{5}{\volt}$, og styrken på inngangssignalet $|v_1(t)| = \SI{100}{\milli\volt}$. Filteret ble så testet ved hjelp av Network funksjonaliteten til Analog Discovery-en. Amplituderesponsen til filteret, og for de to 
+stagene av filteret (de to Sallen-Key strukturene) ble målt fra $\SI{50}{\hertz}$ til $f_s = \SI{9.1}{\kilo\hertz}$. Vi får så følgende resultater, plottet i figur \ref{fig:filter-freq-plot}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{Bilder/filter_freq_plot.png}
+    \caption{Amplituderespons til filteret og de to delstrukturene}
+    \label{fig:filter-freq-plot}
 \end{figure}
+
+Vi ser fra plottet at filteret oppnår god flathet i passbandet slik spesifisert, og at målet om $|H(0.75 f_s / 2)| = -3$dB og $|H(f_s/2)| = -10$dB ble realisert perfekt, med målte verdier lik
+\begin{center}
+    $|H(\SI{3.4125}{\kilo\hertz})| = -3.012\text{dB}\:\:\:\:\:\:\:\:$ og $\:\:\:\:\:\:\:\:|H(\SI{4.55}{\kilo\hertz})| = -10.28\text{dB}$
+\end{center}
+noe som er godt innenfor spesifikasjonen.
