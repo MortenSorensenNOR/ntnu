@@ -22,8 +22,52 @@ Kretsstrukturen til filteret blir dermed to andre ordens Sallen-Key strukturer i
 \end{figure}
 
 \subsection{Utregning av komponentverdier}
+Starter med å finne verdiene for $\zeta_i$. Vi har gitt fra formel 4 at
+\[
+    \zeta_i = \begin{cases}
+        \cos\left(\frac{\pi}{n}i\right), & \text{ for $n$ odde,} \\
+        \cos\left(\frac{\pi}{2n} + (i - 1)\frac{\pi}{n}\right), & \text{ for $n$ jevne} \\
+    \end{cases}
+\]
+
+Vi får dermed at
+\begin{center}
+
+    $\zeta_1 \approx 0.9239\:\:\:\:\:$ og $\:\:\:\:\:\zeta_2 \approx 0.3827$
+\end{center}
+
+\subsubsection{Metode 1}
+Følger vi metode 1 for utregning av komponentverdier i Sallen-Key strukturen fra \ref{sallen-key}, starter vi
+med å sette en gunstig motstandsverdi $R$. Vi ønsker at kretsen skal produsere så lite støy som mulig,
+og det er derfor lurt å velge en verdi for $R$ som gjør at operasjonsforsterkeren introduserer så lite støy
+som mulig. En verdi for $R$ mellom c.a. $\SI{1}{\kilo\ohm}$ og $\SI{100}{\kilo\ohm}$ vil trolig funke bra 
+for den valgte operasjonsforsterkeren, LF353 fra Texas Instruments \cite{opamp}.
+Vi velger her $R = \SI{10}{\kilo\ohm}$.
+
+Følger vi resten av utregingene fra \ref{sallen-key} får vi da følgende komponentverdier for den første 
+andre ordens Sallen-Key struktur
+\begin{center}
+    $C_1 \approx \SI{5}{\nano\farad}\:\:\:\:\:\:\:\:$ og $\:\:\:\:\:\:\:\:C_2 \approx \SI{4.3}{\nano\farad}$
+\end{center}
+
+og følgelig for den andre Sallen-Key strukturen
+\begin{center}
+    $C_3 \approx \SI{12.2}{\nano\farad}\:\:\:\:\:\:\:\:$ og $\:\:\:\:\:\:\:\:C_2 \approx \SI{1.8}{\nano\farad}$
+\end{center}
+
+Siden kodensatorverdiene ikke er standard og mengden størrelser av kondensatorer for hånd var liten, ble 
+metode 2 gjennom \url{https://tools.analog.com/en/filterwizard/} heller brukt, der kondensatorverdiene ble valgt 
+til noe som var for hånd. Programvaren støtter også å kompansere for at operasjonsforsterkeren ikke er fullstendig 
+ideell, men dette ble ikke benyttet. Det gav følgende krets
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Bilder/ferdig_krets.png}
+\end{figure}
 
 \subsection{Realisering av kretsen}
+Oppkobling av kretsen ble gjort på et koblingsbrett. Forsyningsspenningen valgt var $V^+ = \SI{5}{\volt}$ og 
+$V^- = \SI{-5}{\volt}$.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Bilder/oppkobling.png}
