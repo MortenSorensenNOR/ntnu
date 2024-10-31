@@ -14,3 +14,13 @@ Files, tasks and resources pertaining to subjects I have taken at NTNU.
 - Statistikk **-** *TMA4245*
 - Elektronisk systemdesign og -analyse I **-** *TTT4260*
 - Operativsystemer **-** *TDT4186*
+
+**2024H**:
+- Elektronisk systemdesign og analyse II
+- Matematikk 3
+- Fysikk
+- Datamaskiner
+- Design av Digitale System I
+- Design av Integrete Kretser
+- Maskinnær programmering
+- Datamaskinprosjekt
