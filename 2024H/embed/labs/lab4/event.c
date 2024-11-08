@@ -12,7 +12,7 @@
 
 int main(void) {
     // Run off of the 32kHz clock instead of 4MHz
-    FUSE.OSCCFG = 0x1;
+    //FUSE.OSCCFG = 0x1;
     
     // Disable and connect unused ports to internal pull-up resistor to reduce leakage power
     PORTB.PINCONFIG = PORT_ISC_INPUT_DISABLE_gc | PORT_PULLUPEN_bm;
@@ -23,6 +23,10 @@ int main(void) {
     PORTD.PINCTRLUPD = 0xFF;
     PORTE.PINCONFIG = PORT_ISC_INPUT_DISABLE_gc | PORT_PULLUPEN_bm;
     PORTE.PINCTRLUPD = 0xFF;
+    PORTF.PINCONFIG = PORT_ISC_INPUT_DISABLE_gc | PORT_PULLUPEN_bm;
+    PORTF.PINCTRLUPD = 0xFF;
+    
+    PORTA.PINCONFIG = PORT_ISC_INPUT_DISABLE_gc | PORT_PULLUPEN_bm;
     
     // Configure Vref
     VREF.ACREF = VREF_REFSEL_1V024_gc;
@@ -49,3 +53,4 @@ int main(void) {
     
     return 0;
 }
+
