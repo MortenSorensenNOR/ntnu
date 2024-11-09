@@ -1,0 +1,7 @@
+\section{Konklusjon}
+\label{konklusjon}
+
+Dette designnotatet har tatt for seg et mulig design av et anti-aliasing filter. Designet tar i bruk et Butterworth lavpassfilter med en Sallen-Key struktur, da dette gjør at filteret kan designes til å være maksimalt flat for båndpassområdet, noe som er 
+hensiktsmessig da man ønsker å påvirke de signalene man ønsker å deskretisere minst mulig. Notatet viste så to mulig fremgangsmåter for å velge komponentverdiene til filteret slik at kriteriene for fileteret blir oppnådd. For dette notatet var 
+cutoff frekvensen til filteret satt til $0.75 f_s / 2$, der $f_s$ er sampling frekvensen til ADC-en vi ønsker å benytte, samt at anti-aliasing filteret skulle ha en dempning på 10dB ved $f_s/2$. Gjennom realisering av filteret ble det vist at filteret kan 
+oppnå den ønskede amplituderesponsen svært nøyaktig, og at dette kan gjøres med hjelp av relativt enkle komponenter. 

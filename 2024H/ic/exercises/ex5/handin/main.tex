@@ -1,0 +1,132 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1}
+\begin{enumerate}
+    \item Here is the state diagram for detecting a sequence of 101 on the input x.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.7\textwidth]{Bilder/state_diagram.jpg}
+            \caption{State diagram for detecting a sequence of 101 on the input x. Here y = 1 when in S3, and y = 0 otherwise.}
+            \label{fig:Task1_1}
+        \end{figure}
+    \item The corresponding state table is as follows:
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                \textbf{Current State} & \textbf{Input} & \textbf{Next State} & \textbf{Output} \\ \hline
+                IDLE & 0 & IDLE & 0 \\ \hline
+                IDLE & 1 & S1   & 0 \\ \hline
+                S1   & 0 & S2   & 0 \\ \hline
+                S1   & 1 & S1   & 0 \\ \hline
+                S2   & 0 & IDLE & 0 \\ \hline
+                S2   & 1 & S3   & 0 \\ \hline
+                S3   & 0 & IDLE & 1 \\ \hline
+                S3   & 1 & IDLE & 1 \\ \hline
+            \end{tabular}
+            \caption{State table for detecting a sequence of 101 on the input x.}
+            \label{tab:Task1_2}
+        \end{table}
+    \item Using the state table above and the following state encoding
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|c|c|}
+                \hline
+                \textbf{State} & \textbf{Encoding} \\ \hline
+                IDLE & 00 \\ \hline
+                S1   & 01 \\ \hline
+                S2   & 10 \\ \hline
+                S3   & 11 \\ \hline
+            \end{tabular}
+            \caption{State encoding for the state diagram in Figure \ref{fig:Task1_1}.}
+            \label{tab:Task1_3}
+        \end{table}
+        We get that the equation for the next state, and therefore the input equation for the two edge triggered D flip-flops, is
+        \begin{align*}
+            NS_1 &= \overline{S_{11}} \cdot x \\
+            NS_0 &= S_{01} \cdot \overline{x} + S_{10} \cdot x
+        \end{align*}
+        where $NS_0$ and $NS_1$ are the next state bits for the flip-flops, and $S_{ij}$ is the current state, with bits $i$ and $j$ currently set.
+        The output equation is then consequently
+        \begin{equation*}
+            y = S_{11}
+        \end{equation*}
+    \item The combinational circuit can be implemented as follows
+\begin{codebox}[verilog]
+module sequence_detector(
+    input wire x,
+    input wire [1:0] current_state,
+    output reg [1:0] next_state,
+    output reg y
+);
+    // Determine next_state[0] and output y
+    wire T0;
+
+    nand U0 (T0, current_state[0], current_state[1]);
+    and U1 (next_state[0], T0, x);
+
+    not U2 (y, T0);
+
+    // Determine next_state[1]
+    wire T1, T2, T3, T4, T5;
+
+    nor U3 (T1, current_state[1], x);
+    and U4 (T2, current_state[0], T1);
+
+    and U5 (T3, current_state[1], x);
+    not U6 (T4, current_state[0]);
+    and U7 (T5, T3, T4);
+
+    or U8 (next_state[1], T1, T5);
+endmodule
+\end{codebox}
+
+    \item The total number of transistors needed to implement the combinational logic using the following conversion from gate to transistor count
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|l|c|}
+                \hline
+                \textbf{Gate} & \textbf{Transistor count} \\ \hline
+                NOT & 2 \\ \hline
+                NAND & 4 \\ \hline
+                NOR  & 4 \\ \hline
+                AND & 6 \\ \hline
+                OR  & 6 \\ \hline
+            \end{tabular}
+        \end{table}
+        we get that the total number of transistors needed is
+        \begin{align*}
+            \text{NAND} + 4 \cdot \text{AND} + 2 \cdot \text{NOT} + \text{NOR} + \text{OR} &= 4 + 4 \cdot 6 + 2 \cdot 2 + 4 + 6 = 42
+        \end{align*}
+\item
+    \item Another logic implementation style other than static CMOS could domino logic. 
+    \item One upside of domino logic is that it can achieve higher speeds than static CMOS, though at the cost of higher dynamic power consumption, 
+        needing to utilize static CMOS inverters in order to implement all logic functions, and and circuit complexity, amongst others. (Also it needs a clock,
+        which is not ideal for combinational).
+    \item In order to simulate and verify the testbench, since the number of states combined with number of possible input signals are quite small,
+        it's possible to verify the testbench by simply trying all possible combinations of inputs and states, and check that the output is as expected. 
+        Basically all possible combinations of three bits, which is $2^3 = 8$ possible combinations.
+\end{enumerate}
+
+\section*{Task 2}
+\begin{enumerate}
+\item
+\item
+\item
+\item
+\item
+\item
+\item
+\item
+\item
+\item
+\item
+\item
+\end{enumerate}
+
+\end{document}

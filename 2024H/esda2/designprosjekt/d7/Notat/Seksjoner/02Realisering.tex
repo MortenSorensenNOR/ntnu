@@ -1,0 +1,113 @@
+\section{Realisering}
+\label{realisering}
+\subsection{Valg av orden $n$}
+Første steg er å finne filter ordenen som trengs for å realisere den ønskede frekvensresponsen. Vi har først at vi 
+ønsker en dempning på 10dB for nykvistfrekvensen
+\[
+    A_{\text{[dB]}} = 20 \log_{10}(A) = -10\text{dB} \implies A = 10^{-\frac{10}{20}} \approx 0.316
+\]
+
+Med $f = f_B \approx \SI{4.55}{\kilo\hertz}$ og $f_c \geq \SI{3.4125}{\kilo\hertz}$ får vi fra likning 2 at nødvendig 
+verdi for $n$ er
+\[
+    n = \left\lceil\frac{1}{2}\frac{\ln{\left((0.316)^{-2} - 1\right)}}{\ln{\left(\frac{\SI{4.55}{\kilo\hertz}}{\SI{3.4125}{\kilo\hertz}}\right)}}\right\rceil = 4
+\]
+
+Kretsstrukturen til filteret blir dermed to andre ordens Sallen-Key strukturer i kaskade som vist i figur \ref{fig:filter-circuit}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Bilder/filter_circuit.png}
+    \caption{Kretsdiagram}
+    \label{fig:filter-circuit}
+\end{figure}
+
+\subsection{Utregning av komponentverdier}
+Starter med å finne verdiene for $\zeta_i$. Vi har gitt fra formel 4 at
+\[
+    \zeta_i = \begin{cases}
+        \cos\left(\frac{\pi}{n}i\right), & \text{ for $n$ odde,} \\
+        \cos\left(\frac{\pi}{2n} + (i - 1)\frac{\pi}{n}\right), & \text{ for $n$ jevne} \\
+    \end{cases}
+\]
+
+Vi får dermed at
+\begin{center}
+
+    $\zeta_1 \approx 0.9239\:\:\:\:\:$ og $\:\:\:\:\:\zeta_2 \approx 0.3827$
+\end{center}
+
+\subsubsection{Metode 1}
+Følger vi metode 1 for utregning av komponentverdier i Sallen-Key strukturen fra \ref{sallen-key}, starter vi
+med å sette en gunstig motstandsverdi $R$. Vi ønsker at kretsen skal produsere så lite støy som mulig,
+og det er derfor lurt å velge en verdi for $R$ som gjør at operasjonsforsterkeren introduserer så lite støy
+som mulig. En verdi for $R$ mellom c.a. $\SI{1}{\kilo\ohm}$ og $\SI{100}{\kilo\ohm}$ vil trolig funke bra 
+for den valgte operasjonsforsterkeren, LF353 fra Texas Instruments \cite{opamp}.
+Vi velger her $R = \SI{10}{\kilo\ohm}$.
+
+Følger vi resten av utregingene fra \ref{sallen-key} får vi da følgende komponentverdier for den første 
+andre ordens Sallen-Key struktur
+\begin{center}
+    $C_1 \approx \SI{5}{\nano\farad}\:\:\:\:\:\:\:\:$ og $\:\:\:\:\:\:\:\:C_2 \approx \SI{4.3}{\nano\farad}$
+\end{center}
+
+og følgelig for den andre Sallen-Key strukturen
+\begin{center}
+    $C_3 \approx \SI{12.2}{\nano\farad}\:\:\:\:\:\:\:\:$ og $\:\:\:\:\:\:\:\:C_2 \approx \SI{1.8}{\nano\farad}$
+\end{center}
+
+Siden kodensatorverdiene ikke er standard og mengden størrelser av kondensatorer for hånd var liten, ble 
+metode 2 gjennom \url{https://tools.analog.com/en/filterwizard/} heller brukt, der kondensatorverdiene ble valgt 
+til noe som var for hånd. Programvaren støtter også å kompansere for at operasjonsforsterkeren ikke er fullstendig 
+ideell, men dette ble ikke benyttet. Det gav følgende komponentverdier
+
+% Table showing component values R1, R2, C1, C2, R3, R4, C3, C4, with a seperator with for the two Sallen-Key structures, with a 
+% line of bold text saying Sallen-Key Struktur 1: and Sallen-Key Struktur 2:
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{|l|l|}
+        \hline
+        \multicolumn{2}{|l|}{\textbf{Sallen-Key Struktur 1}} \\
+        \hline
+        Komponent & Verdi \\
+        \hline
+        \( R_1 \) & \(\SI{3.54}{\kilo\ohm}\)\\
+        \( R_2 \) & \(\SI{12.7}{\kilo\ohm}\)\\
+        \( C_1 \) & \(\SI{22}{\nano\farad}\)\\
+        \( C_2 \) & \(\SI{2.2}{\nano\farad}\)\\
+        \hline
+    \end{tabular}
+    \vspace{1em}
+    
+    \begin{tabular}{|l|l|}
+        \hline
+        \multicolumn{2}{|l|}{\textbf{Sallen-Key Struktur 2}} \\
+        \hline
+        Komponent & Verdi \\
+        \hline
+        \( R_1 \) & \(\SI{12.2}{\kilo\ohm}\)\\
+        \( R_2 \) & \(\SI{26.9}{\kilo\ohm}\)\\
+        \( C_1 \) & \(\SI{3}{\nano\farad}\)\\
+        \( C_2 \) & \(\SI{2.2}{\nano\farad}\)\\
+        \hline
+    \end{tabular}
+    \vspace{1em}
+\end{table}
+
+Det gir følgende krets
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Bilder/filter_circuit_final.png}
+    \caption{Kretsdiagram med komponentverdier for hele filteret, kilde: \url{https://tools.analog.com/en/filterwizard/}}
+    \label{fig:filter-circuit-final}
+\end{figure}
+
+\subsection{Realisering av kretsen}
+Oppkobling av kretsen ble gjort på et koblingsbrett. Forsyningsspenningen valgt var $V^+ = \SI{5}{\volt}$ og 
+$V^- = \SI{-5}{\volt}$, og ble koblet opp mot Op-Ampenes forsyningsspenninger.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Bilder/oppkobling.png}
+    \caption{Realisering av kretsen på koblingsbrett}
+    \label{fig:realisering-img}
+\end{figure}

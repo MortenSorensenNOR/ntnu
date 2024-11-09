@@ -1,0 +1,33 @@
+\documentclass[a4paper,11pt,norsk]{article}
+
+%Henter ulike pakker fra dokumentet packages.sty
+\usepackage{packages}
+
+\begin{document}
+
+%Overskrift
+\input{Overskrift_innholdsfortegnelse/Titteltekst}
+
+%Innholdfortegnelse
+\input{Overskrift_innholdsfortegnelse/Innholdsfortegnelse}
+
+%Selve rapporten:------------------------------------------
+\input{Seksjoner/00Problembeskrivelse}
+
+\input{Seksjoner/01Prinsipiell_losning}
+
+\input{Seksjoner/02Realisering}
+
+\input{Seksjoner/03Testing.tex}
+
+\input{Seksjoner/04Konklusjon}
+
+\input{Seksjoner/05Takk}
+
+%Bibliografi
+\input{Bibliografi/Bibliografi_kode}
+
+%Tillegg
+\input{Seksjoner/05Tillegg}
+
+\end{document}

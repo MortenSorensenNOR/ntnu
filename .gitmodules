@@ -1,0 +1,3 @@
+[submodule "2024H/dds/termproject/project-rtl"]
+	path = 2024H/dds/termproject/project-rtl
+	url = git@github.com:MortenSorensenNOR/TFE4141-DDS1-Term-Project.git
