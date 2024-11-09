@@ -1,0 +1,5 @@
+i<>.\src\tb_fsm.sv
+i<>.\src\fsm.v
+i<>.\src\dff.v
+i<>.\src\fsm_comb.v
+i<>.\src\tb_fsm_comb.sv

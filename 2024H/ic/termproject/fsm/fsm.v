@@ -4,37 +4,58 @@
 // 11: Write
 // 01: Stable
 
-`timescale 1ns / 1ps
-
 module fsm (
-    input wire op,
-    input wire select,
-    output wire valid,
-    output wire rw
-    );
+    input op,
+    input select,
+    output reg valid,
+    output reg rw
+);
 
-    wire [1:0] current_state;
-    wire [1:0] current_state_n;
-    wire [1:0] next_state;
+    // State encoding
+    parameter IDLE = 2'b00, WRITE = 2'b01, READ = 2'b10, STABLE = 2'b11;
+   
+    reg [1:0] state, next_state;
 
-    wire t0, t1, t2;
+    // State transitions (combinational logic)
+    always @(*) begin
+        case (state)
+            IDLE: begin
+                valid = 0;
+                rw = 0;
+                if (select == 1) begin
+                    if (op == 1) 
+                        next_state = WRITE;
+                    else 
+                        next_state = READ;
+                end else 
+                    next_state = IDLE;
+            end
 
-    // State D Latch
-    nor U1 (current_state[0], ~next_state[0], current_state_n[0]);
-    nor U2 (current_state_n[0], next_state[0], current_state[0]);
+            WRITE: begin
+                valid = 1;
+                rw = 1;
+                next_state = STABLE; // Automatically transition to STABLE after WRITE
+            end
 
-    nor U3 (current_state[1], ~next_state[1], current_state_n[1]);
-    nor U4 (current_state_n[1], next_state[1], current_state[1]);
+            READ: begin
+                valid = 1;
+                rw = 0;
+                next_state = IDLE; // Automatically transition to IDLE after READ
+            end
 
-    // Next state
-    and U5 (t0, current_state[0], current_state[1]);
-    and U6 (t1, select, op);
-    or U7 (next_state[0], t0, t1);
+            STABLE: begin
+                valid = 0;
+                rw = 1;
+                next_state = IDLE; // Automatically transition to IDLE after STABLE
+            end
 
-    nand U8 (t2, current_state[0], current_state[1]);
-    or U9 (next_state[1], select, t2);
+            default: next_state = IDLE;
+        endcase
+    end
 
-    // Assign output signals
-    assign valid = current_state[1];
-    assign rw = current_state[0];
+    // Continuous state update
+    always @(*) begin
+        state = next_state;
+    end
+
 endmodule

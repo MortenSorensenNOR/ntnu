@@ -1,0 +1,13 @@
+.include ..\models\p18_cmos_models_tt.inc
+
+MN1 DRAIN GATE SOURCE BULKN NMOS L=1U W=1U
+
+VGS GATE 0 DC 0.9V
+VDS DRAIN SOURCE DC 0
+VBS BULK SOURCE DC 0
+
+.DC VDS 0 1.8 0.01
+
+.plot dc i(MN1)
+.plot dc gm(MN1)
+.plot dc rds(MN1)

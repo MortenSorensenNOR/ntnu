@@ -1,0 +1,15 @@
+[OPENDOC|Aldec.Hde.HdePlugIn.7|.\src\fsm.v|]
+TemplateId=2
+tab=lu
+[OPENDOC|Aldec.Hde.HdePlugIn.7|.\src\tb_fsm.sv|]
+TemplateId=24
+tab=lu
+[OPENDOC|Aldec.Hde.HdePlugIn.7|.\src\dff.v|]
+TemplateId=2
+tab=lu
+[OPENDOC|Aldec.Hde.HdePlugIn.7|.\src\tb_fsm_comb.sv|]
+TemplateId=24
+tab=lu
+[OPENDOC|Aldec.Hde.HdePlugIn.7|.\src\fsm_comb.v|]
+TemplateId=2
+tab=lu

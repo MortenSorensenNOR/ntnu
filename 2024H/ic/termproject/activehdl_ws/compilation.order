@@ -1,0 +1,12 @@
+.\src\tb_fsm.sv
+.\src\tb_fsm_comb.sv
+.\src\dff.v
+.\src\tb_memory_unit.sv
+.\src\wordcell.v
+.\src\gridcell.v
+.\src\fsm.v
+.\src\bitcell.v
+.\src\memory_unit.sv
+.\src\fsm_comb.v
+.\src\adressDec.sv
+.\src\dff_reg.v
