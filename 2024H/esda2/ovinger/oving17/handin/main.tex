@@ -1,0 +1,232 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\newcommand{\nobibparens}[1]{\unskip\cite{#1}}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Vi ser fra kretstegningen at signalet K kunn er høyt dersom både verdien fra den første flip-floppen, Q1, er høy og verdien på det andre 
+        registeret, Q2, er lavt. Siden verdien til Q2 påtar seg verdien Q1 hadde forrige klokkesykel, vil K kunn være høy på andre positive klokkeflanke,
+        altså den rett etter S går høyt, for så å gå lavt neste klokkeflanke.
+    \item Har ikke veldig lyst å tegne tilstandsdiagrammet, men kan ta tilstandstabellen. Vi lar de to flip-floppene Q1 og Q2 være de to bitene 
+        som representerer tilstanden til maskinen (State).
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|l|l|l|l|}
+                \hline
+                \textbf{State (Q1 \& Q2)} & \textbf{S} & \textbf{Neste state} & \textbf{K} \\
+                \hline
+                00 & 0 & 00 & 0 \\
+                00 & 1 & 10 & 0 \\
+                10 & 0 & 01 & 1 \\
+                10 & 1 & 11 & 1 \\
+                01 & 0 & 00 & 0 \\
+                01 & 1 & 10 & 0 \\
+                11 & 0 & 01 & 0 \\
+                11 & 1 & 11 & 0 \\
+                \hline
+            \end{tabular}
+        \end{table}
+
+    \item Har valgt å implementere dingsen på en Digilent Basys3 FPGA baser på en Xilinx FPGA. Basys3 FPGA-en har en ekstern oscillator med frekvens
+        $\SI{100}{\mega\hertz}$. Dette er noe høyt for Analog Discovery-en å plukke opp, så starter med å generere en 10 MHz klokke.
+        Bruker en av FPGA-ens MMCM enheter og sender utgangen inn i en klokkebuffer for å forhindre problemer med skew (ikke sannsynlig å være et problem 
+        i dette designet, men er alltid greit å være på den sikre siden).
+\begin{codebox}[verilog]
+module clock_10Mhz (
+    input logic clk_100m,    // 100 Mhz
+    output logic clk_10m,
+    output logic clk_10m_5x,
+    output logic clk_10m_locked
+    );
+
+    localparam MULT_MASTER = 10;
+    localparam DIV_MASTER = 1;  
+    localparam DIV_5X = 20;     
+    localparam DIV_1X = 100;    
+    localparam IN_PERIOD = 10.0;
+
+    logic feedback;
+    logic clk_10m_unbuf;
+    logic clk_10m_5x_unbuf;
+    logic locked;
+
+    MMCME2_BASE #(
+        .CLKFBOUT_MULT_F(MULT_MASTER),
+        .CLKIN1_PERIOD(IN_PERIOD),
+        .CLKOUT0_DIVIDE_F(DIV_5X), 
+        .CLKOUT1_DIVIDE(DIV_1X),   
+        .DIVCLK_DIVIDE(DIV_MASTER)
+    ) MMCME2_BASE_inst (
+        .CLKIN1(clk_100m),
+        .RST(0),
+        .CLKOUT0(clk_10m_5x_unbuf),
+        .CLKOUT1(clk_10m_unbuf),   
+        .LOCKED(locked),
+        .CLKFBOUT(feedback),
+        .CLKFBIN(feedback)
+    );
+
+    // Buffer output clocks
+    BUFG bufg_clk(.I(clk_10m_unbuf), .O(clk_10m));
+    BUFG bufg_clk_5x(.I(clk_10m_5x_unbuf), .O(clk_1m_5x));
+
+    // Synchronize the lock signal with clk_100m
+    logic locked_sync_0;
+    always_ff @(posedge clk_10m) begin
+        locked_sync_0 <= locked;
+        clk_10m_locked <= locked_sync_0;
+    end
+endmodule    
+\end{codebox}
+    
+    Lager så en debounce modul (gjennbruk fra et tidligere prosjekt)
+\begin{codebox}[verilog]
+module debounce (
+    input logic  clk,       // 1 MHz
+    input logic  i_btn,     // Input btn som vi ønsker å debounce
+    output logic o_btn      // Output fra debounce
+    );
+
+    parameter c_DEBOUNCE_LIMIT = 100000; // 10ms ved 10 MHz
+
+    reg r_State = 1'b0;
+    reg [$clog2(c_DEBOUNCE_LIMIT)-1:0] r_Count = 0;
+    always @(posedge clk) begin
+        if (i_btn !== r_State && r_Count < c_DEBOUNCE_LIMIT) begin
+            r_Count <= r_Count + 1; // Counter
+        end else if (r_Count == c_DEBOUNCE_LIMIT) begin
+            r_Count <= 0;
+            r_State <= i_btn;
+        end else begin
+            r_Count <= 0;
+        end
+    end
+    assign o_btn = r_State;
+endmodule
+\end{codebox}
+        modulen over har en teller som teller når knappen går fra lav til høyt (men kunn når signalet faktisk er høyt), og når den
+        når en forhåndsdefinert verdi settes utgangen høyt også. Dette gjør så at raske endringer p grunn av bounce ikke kommer på utgangen. 10ms 
+        er en god approksimert verdi for noe som er trygt å anta er tiden det tar før kanppen blir stabil.
+
+        Lager så en modul som etterligner ønsket oppførsel med at vi kunn detekterer positiv flanke på knapp-signalet
+\begin{codebox}[verilog]
+module keypad (
+    input logic clk,        // 1 Mhz
+    input logic [3:0] btn,  // Input knappe trykk
+    output logic [3:0] keys // Output knappe trykk puls
+    );
+
+    logic [3:0] Q1 = '0;
+    logic [3:0] Q2 = '0;
+    always_ff @(posedge clk) begin
+        Q1 <= btn;
+        Q2 <= Q1;
+        keys[0] <= Q1[0] & ~Q2[0];
+        keys[1] <= Q1[1] & ~Q2[1];
+        keys[2] <= Q1[2] & ~Q2[2];
+        keys[3] <= Q1[3] & ~Q2[3];
+    end
+endmodule
+\end{codebox}
+
+        Setter vi disse modulene sammen og ser på utgangen med Analog Discovery-en ser vi at vi får en puls på utgangen når vi trykker ned knappen 
+        på eksakt $\SI{100}{\nano\second}$, som er det vi forventet. 
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{Bilder/key_press.png}
+            \caption{Plot som viser K verdien for den tredje knappen (inngang D). K får en puls på eksakt 100ns som er lik klokkeperioden til FPGA-en.}
+        \end{figure}
+        Det samme ble gjort for de andre kanppene.
+\end{enumerate}
+
+\section*{Oppgave 2.}
+\begin{enumerate}
+    \item Siden vi har 5 states må vi ha et 3-bit register for å holde staten.
+    \item Vi får følgende state transistion
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{|l|l|}
+                \hline 
+                \hline
+                \textbf{Variabel} & \textbf{Logisk uttrykk} \\
+                \hline
+                F_0 & $B + C + D$ \\
+                R_1 & $A\bar{B}\bar{C}\bar{D}$ \\
+                F_1 & $\bar{B}(A + C + D)$ \\
+                R_2 & $B\bar{A}\bar{C}\bar{D}$ \\
+                F_2 & $\bar{B}(A + C + D)$ \\
+                R_3 & $B\bar{A}\bar{C}\bar{D}$ \\
+                F_3 & $\bar{A}(B + C + D)$ \\
+                R_4 & $A\bar{B}\bar{C}\bar{D}$ \\
+                F_4 & $A + B + C + D$ \\
+                \hline
+            \end{tabular}
+        \end{table}
+    \item $I = \bar{A}\bar{B}\bar{C}\bar{D}$.
+\end{enumerate}
+
+\section*{Oppgave 3.}
+\begin{enumerate}
+    \item Gjør dette som en kobinatorisk blokk
+\begin{codebox}[verilog]
+module G (
+    input logic [2:0] current_state,
+    input logic [3:0] keys,
+    output logic [2:0] next_state
+    )
+
+    always_comb begin
+        next_state = current_state;
+        case (current_state)
+            3'b000: begin
+                if (keys[0] & ~keys[1] & ~keys[2] & ~keys[3]) begin
+                    next_state = 3'b001;
+                end
+            end
+
+            3'b001: begin
+                if (~keys[0] & keys[1] & ~keys[2] & ~keys[3]) begin
+                    next_state = 3'b010;
+                end else if (~keys[1] & (keys[0] | keys[2] | keys[3])) begin
+                    next_state = 3'b000;
+                end
+            end
+
+            3'b010: begin
+                if (~keys[0] & keys[1] & ~keys[2] & ~keys[3]) begin
+                    next_state = 3'b011;
+                end else if (~keys[1] & (keys[0] | keys[2] | keys[3])) begin
+                    next_state = 3'b000;
+                end
+            end
+
+            3'b011: begin
+                if (keys[0] & ~keys[1] & ~keys[2] & ~keys[3]) begin
+                    next_state = 3'b100;
+                end else if (~keys[0] & (keys[1] | keys[2] | keys[3])) begin
+                    next_state = 3'b000;
+                end
+            end
+
+            3'b100: begin
+            if (keys[0] | keys[1] | keys[2] | keys[3]) begin
+                next_state = 3'b000;
+            end
+
+            default: begin
+                next_state = 3'b000;
+            end
+        endcase
+    end
+endmodule
+\end{codebox}
+    \item Har ikke tid til resten denne gang.
+
+\end{enumerate}
+
+\end{document}

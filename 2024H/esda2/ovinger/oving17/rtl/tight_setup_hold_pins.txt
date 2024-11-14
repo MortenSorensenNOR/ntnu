@@ -1,0 +1,17 @@
++====================+===================+===================================+
+| Launch Setup Clock | Launch Hold Clock | Pin                               |
++====================+===================+===================================+
+| clk_1m_unbuf       | clk_1m_unbuf      | debounce_inst2/r_Count_reg[10]/D  |
+| clk_1m_unbuf       | clk_1m_unbuf      | keypad_inst/keys_reg[3]/D         |
+| clk_1m_unbuf       | clk_1m_unbuf      | keypad_inst/keys_reg[1]/D         |
+| clk_1m_unbuf       | clk_1m_unbuf      | keypad_inst/keys_reg[2]/D         |
+| clk_1m_unbuf       | clk_1m_unbuf      | keypad_inst/keys_reg[0]/D         |
+| clk_1m_unbuf       | clk_1m_unbuf      | keypad_inst/Q2_reg[3]/D           |
+| clk_1m_unbuf       | clk_1m_unbuf      | keypad_inst/Q1_reg[0]/D           |
+| clk_1m_unbuf       | clk_1m_unbuf      | keypad_inst/Q1_reg[1]/D           |
+| clk_1m_unbuf       | clk_1m_unbuf      | keypad_inst/Q2_reg[1]/D           |
+| clk_1m_unbuf       | clk_1m_unbuf      | clock_1m_inst/clk_1m_locked_reg/D |
+| clk_1m_unbuf       | clk_1m_unbuf      | keypad_inst/Q1_reg[2]/D           |
+| clk_1m_unbuf       | clk_1m_unbuf      | keypad_inst/Q2_reg[0]/D           |
+| clk_1m_unbuf       | clk_1m_unbuf      | keypad_inst/Q2_reg[2]/D           |
++--------------------+-------------------+-----------------------------------+

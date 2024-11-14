@@ -115,18 +115,62 @@ endmodule
 
 \section*{Task 2}
 \begin{enumerate}
-\item
-\item
-\item
-\item
-\item
-\item
-\item
-\item
-\item
-\item
-\item
-\item
+    \item In order to design an unskewed static CMOS inverter the two transconductances be equal, i.e. 
+        $\beta_n = \beta_p$. We may use $L_n = L_p = L = W_n = \SI{45}{\nano\meter}$. 
+        That gives 
+        \begin{align*}
+            \mu_n C_{ox} \frac{W_n}{L} = \mu_p C_{ox} \frac{W_p}{L} \implies W_p = \frac{\mu_n}{\mu_p} W_n
+        \end{align*}
+        For this technology $\frac{\mu_n}{\mu_p} = 4$, so we therefore have an unskewed inverter if 
+        we choose $W_p = 4 W_n$.
+    \item We have a symmetric inverted if both $V_{tn} = |V_{tp}|$ is true for the technology we are using, 
+        and if the designed circuit has $\beta_n = \beta_p$. The first condition rules out the $\SI{0.8}{\micro\meter}$ 
+        and $\SI{0.35}{\micro\meter}$ technologies.
+    \item In a symmetric inverter the rise and fall times are the symmetric, which is ideal because it means 
+        for consistent propagation delay, and can be quite important for high-speed circuits.
+    \item We have that the paracitic capacitances at the midpoint are given by
+        \[
+            R_n = \frac{1}{\beta_n (V_{DD} - V_{tn})}
+        \]
+        and 
+        \[
+            R_p = \frac{1}{\beta_p (V_{DD} - |V_{tp}|)}
+        \]
+
+        We therefore have that $R_n = R_p \approx \SI{4.76}{\ohm}$.
+    \item We have that for the fall-times, the time $t$ it takes for some voltage $V_{out}(t)$
+        to be present can be expressed as
+        \[
+            t = \tau_n \ln{\left(\frac{V_{DD}}{V_{out}}\right)}
+        \]
+        Therefore we get that the fall-time for the symmetric inverter when 10\% and 90\% of the full voltage 
+        swing are used as limits is given as 
+        \begin{align*}
+            t_f &= \tau_n \ln{\left(\frac{V_{DD}}{0.1 V_{DD}}\right)} - \tau_n \ln{\left(\frac{V_{DD}}{0.9 V_{DD}}\right)} \\
+                &= \tau_n \ln{(10)} - \tau_n \ln{(1.11\bar{1})} \\
+                &= \tau_n \ln{(9)} \approx 2.2 \tau_n = \underline{\underline{2.2 \cdot R_n \cdot C_{out}}}}}
+        \end{align*}
+        We have a similar scenario for the rise-time, where by symmetry
+        \[
+            t_r = 2.2 \tau_p
+        \]
+    \item If $C_{out} = \SI{5}{\femto\farad}$, then the rise- and fall-times for the symmetric inverter above is
+        \[
+            t_f = 2.2 \cdot \SI{4.76}{\ohm} \cdot \SI{5}{\femto\farad} \approx \SI{52.4}{\femto\second}
+        \]
+        and 
+        \[
+            t_r = t_f = \SI{52.4}{\femto\second}
+        \]
+    \item We have that
+        \[
+            f_{max} = \frac{1}{t_r + t_f} \approx \SI{9.55}{\tera\hertz}
+        \]
+    \item I do not have the book so I don't quite know what they define it as.
+    \item 
+    \item 
+    \item A latch changes it's value whenever the input changes value, whilst a flip-flop changes
+        it's value only on the edge (either positive or negative edge) of a control signal, usually a clock.
 \end{enumerate}
 
 \end{document}
