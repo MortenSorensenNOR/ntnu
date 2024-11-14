@@ -1,0 +1,96 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1}
+The layout in figure 1 resebles a 6T SRAM cell, where data is transmitted through the pink interconnects,
+the yellow bar is $V_{dd}$ and the middle part of the bottom green connected to the blue line is $V_{ss}$.
+In the middle is the cross-coupled inverters.
+
+\section*{Task 2}
+
+\section*{Task 3}
+
+\section*{Task 4}
+\begin{enumerate}
+    \item For A. we have that
+        \[
+            \overline{\overline{(A\bar{B}C)} \cdot \overline{BC(A + \bar{A})}} = A\bar{B}C + BC = C(A\bar{B} + B) = AC + BC
+        \]
+        which follows the truth table.
+
+        For B. we cannot have that both $\bar{A}\bar{B}\bar{C}$ and $\bar{A}\bar{B}C$ be true at once, so the entire 
+        expression evaluates to 0, which does not match the truth table.
+
+        For C. we have 
+        \[
+            \bar{A}BC + A\bar{B}C + AB\bar{C} + ABC
+        \]
+        which has all the expression evaluating to 1 in the truth table, pluss a free term $AB\bar{C}$ which does not show up in the truth 
+        table. So whether or not it matches depends on the application and whether or not $AB\bar{C}$ is possible to 
+        achieve on the inputs.
+    \item Yes, you can do it like this. If Q is the bit representing whether the sequence of 111 is present, then
+        \[
+            Q = M(0, M(0, A, B), C)
+        \]
+        This may not be the most optimal solution, but M(0, X, Y) acts as an AND gate, so implementing AND3 can be done in this 
+        fashion.
+\end{enumerate}
+
+\section*{Task 5}
+
+\section*{Task 6}
+
+\section*{Task 7}
+
+\section*{Task 8}
+\begin{enumerate}
+    \item DRAM memory is a type of memory that stores it's data in capacitors. The basic bitcell in a DRAM technology 
+        consists of a capacitor and a gate transistor. The capacitor stores the data, and the gate transistor is used to
+        read and write the data. In order to read data the line where the bitcell is connected to is precharged. The gate 
+        transistor is then opened. A sense amplifier is connected to this bitline, and if the capacitor had stored a 1, the 
+        charge associated with the logical 1 will increase the voltage on the bitline, and the sense amplifier will read out a 1.
+        Since the reading of the data destroys the data, the data must be rewritten after reading. 
+    \item One problem of DRAM technologies is that it has to be refreshed quite often. This is due to leakage currents in the 
+        capacitors. The capacitors are not perfect, and will leak charge over time. This means that the data stored in the 
+        capacitors will be lost. We therefore have to periodically read the contents of the DRAM and write it back. This can be 
+        time consuming, reduces power efficiency, and may lead to higher response times.
+    \item The gate transistor also leaks.
+\end{enumerate}
+
+\section*{Task 9}
+For dynamic logic, the inputs to the gate must be monotonically rising. The reason for this is because of the nature 
+of the gate, being that it precharges the output before evaluating. If the inputs were to change from high to low 
+during the evaluation of the function, the output would be affected as the charge stored upon the output would be lost,
+therefore producing an incorrect value. This issue is not present when going from LOW to HIGH during the evaluation, as 
+the affect of the beginning of the evaluation has already pulled the output low (in an inverter), and therefore going HIGH
+does not affect the result.
+
+\section*{Task 10}
+\begin{codebox}[verilog]
+module d_flip_flop (
+    input D,
+    input en,
+    output Q,
+    output Q_bar
+);
+
+    // The other stuff
+    wire I, R, S;
+    not U0 (I, D);
+    and U1 (R, I, E);
+    and U2 (S, D, E);
+
+    // Cross-coupled NORs
+    nor U3 (Q, R, Q_bar);
+    nor U4 (Q_bar, S; Q);
+
+endmodule
+\end{codebox}
+
+\section*{Task 11}
+
+\end{document}
