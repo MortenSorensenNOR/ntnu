@@ -19,6 +19,8 @@ subprojects/
 *.bbl
 *.fdb_latexmk
 *.json
+*.jou
+.Xil/
 fpga_Implmnt/
 tdt4102/
 tdt4110/
