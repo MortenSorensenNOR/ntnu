@@ -1,0 +1,61 @@
+[Project]
+Current Flow=Generic
+VCS=0
+version=4
+Current Config=compile
+[Configurations]
+compile=mem_array
+[Library]
+mem_array=.\mem_array\mem_array.lib
+[$LibMap$]
+mem_array=.
+Active_lib=
+[Settings]
+FLOW_TYPE=HDL
+LANGUAGE=VERILOG
+REFRESH_FLOW=1
+FLOWTOOLS=NONE
+FAMILY=
+fileopenfolder=C:\Users\morte\dev\TFE4151-Term-Project\verilog\FSM
+AccessACCB=1
+AccessACCR=1
+AccessReadTopLevel=0
+AccessRead=1
+AccessReadWrite=1
+AccessReadWriteSLP=0
+SimulationAccessReadPaths=
+SimulationAccessReadModules=
+SimulationAccessReadWritePaths=
+SimulationAccessReadWriteModules=
+SimulationAccessNetsPaths=
+SimulationAccessNetsModules=
+[Files]
+/tb_fsm.sv=-1
+/tb_fsm_comb.sv=-1
+/dff.v=-1
+/tb_memory_unit.sv=-1
+/wordcell.v=-1
+/gridcell.v=-1
+/fsm.v=-1
+/bitcell.v=-1
+/memory_unit.sv=-1
+/fsm_comb.v=-1
+/adressDec.sv=-1
+/dff_reg.v=-1
+[Files.Data]
+.\src\tb_fsm.sv=SystemVerilog Source Code
+.\src\tb_fsm_comb.sv=SystemVerilog Source Code
+.\src\dff.v=Verilog Source Code
+.\src\tb_memory_unit.sv=SystemVerilog Source Code
+.\src\wordcell.v=Verilog Source Code
+.\src\gridcell.v=Verilog Source Code
+.\src\fsm.v=Verilog Source Code
+.\src\bitcell.v=Verilog Source Code
+.\src\memory_unit.sv=SystemVerilog Source Code
+.\src\fsm_comb.v=Verilog Source Code
+.\src\adressDec.sv=SystemVerilog Source Code
+.\src\dff_reg.v=Verilog Source Code
+[HierarchyViewer]
+HierarchyInformation=
+ShowHide=ShowTopLevel
+Selected=

@@ -1,0 +1,170 @@
+timestamp=1731078176628
+
+[~A]
+C:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/bitcell.v_dff_reg.v_memory_unit.sv_tb_memory_unit.sv=0*96098*97785
+C:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/memory_unit.sv=0*179514*180266
+C:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/memory_unit.sv_tb_memory_unit.sv=0*153807*155106
+C:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/tb_fsm.sv_tb_fsm_comb.sv_dff.v_tb_memory_unit.sv_wordcell.v_gridcell.v_fsm.v_bitcell.v_memory_unit.sv_fsm_comb.v_adressDec.sv_dff_reg.v=0*195147*199637
+C:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/tb_memory_unit.sv=0*167510*168521
+LastVerilogToplevel=gridCellTestbench
+ModifyID=55
+Version=74
+c:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/bitcell.v=0*64260*65039
+c:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/bitcell.v_wordcell.v_dff.v_gridcell.v_fsm.v_memory_unit.sv_tb_memory_unit.sv=0*54341*57588
+c:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/bitcell.v_wordcell.v_gridcell.v=0*48971*51005
+c:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/memory_unit.sv=0*87291*88043
+c:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/tb_fsm.sv_tb_fsm_comb.sv_dff.v_tb_memory_unit.sv_wordcell.v_gridcell.v_fsm.v_bitcell.v_memory_unit.sv_fsm_comb.v=0*3411*7062
+c:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/tb_fsm.sv_tb_fsm_comb.sv_dff.v_tb_memory_unit.sv_wordcell.v_gridcell.v_fsm.v_bitcell.v_memory_unit.sv_fsm_comb.v_adressDec.sv=0*11432*15480
+c:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/tb_fsm.sv_tb_fsm_comb.sv_dff.v_tb_memory_unit.sv_wordcell.v_gridcell.v_fsm.v_bitcell.v_memory_unit.sv_fsm_comb.v_adressDec.sv_dff_reg.v=0*79584*83962
+c:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/tb_memory_unit.sv=0*92903*93706
+c:/Users/morte/ntnu/2024H/ic/termproject/activehdl_ws/src/wordcell.v=0*18628*19584
+
+[~MFT]
+0=22|0mem_array.mgf|199637|84045
+1=36|1mem_array.mgf|506857|477859
+3=72|3mem_array.mgf|329872|310518
+
+[$root]
+A/$root=22|||1*477859
+BinW64/$root=3*310518
+SLP=3*310633
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|c73a565f2ade592f8ac1c68f484c9216388087c5feae7d20c778ba4999ef8dd6
+
+[AddressDec]
+A/AddressDec=22|../src/adressDec.sv|2|1*506857
+BinW64/AddressDec=3*329752
+R=../src/adressDec.sv|2
+SLP=3*329872
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|21b4362fbe438b5ea94f60901ea1e0e6f59b3d18c2b703896b53c9c90e9a4e04f22c40f8b0486fe14a512ec3f20c96d1
+
+[bitCell]
+A/bitCell=22|../src/bitcell.v|1|1*494108
+BinW64/bitCell=3*321304
+R=../src/bitcell.v|1
+SLP=3*321922
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|a2b53ab16264d184e53a1cf90959ec1926527262ddaa47cb266f3a3c4d9b973ac4e98e9981fdfc05aaee276b8088f862
+
+[d_flip_flop]
+A/d_flip_flop=22|../src/dff.v|18|1*485981
+BinW64/d_flip_flop=3*315565
+R=../src/dff.v|18
+SLP=3*315875
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|788ba4692486877191c950f725743c105e843cccafa61fe196be74b42a0197444cf54e743d312bcb3676cfbb7a351a6d
+
+[d_latch]
+A/d_latch=22|../src/dff.v|2|1*484457
+BinW64/d_latch=3*315337
+R=../src/dff.v|2
+SLP=3*315454
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|b6e7b07832bc3d2c0bb54ca7091454f326527262ddaa47cb266f3a3c4d9b973ac68e61c8cce94d382b906371455e9179
+
+[dff_reg_2]
+A/dff_reg_2=22|../src/dff_reg.v|65|1*502628
+BinW64/dff_reg_2=3*328617
+R=../src/dff_reg.v|65
+SLP=3*328736
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|a1df65953076a3037725e3d0ac5a0b86c3ae4a388ed88e7ed256dd7851b74639ee93c29c25c5fa9bdc2e0d13f4a57704
+
+[dff_reg_3]
+A/dff_reg_3=22|../src/dff_reg.v|86|1*503734
+BinW64/dff_reg_3=3*328945
+R=../src/dff_reg.v|86
+SLP=3*329064
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|1f1c530822c8153d40fac834c0ed1e52e70f224784076735812589b7bcbe3290b1a1f5a2e692a3c44d00f400ba8dfa6e
+
+[dff_reg_8]
+A/dff_reg_8=22|../src/dff_reg.v|1|1*504972
+BinW64/dff_reg_8=3*329293
+R=../src/dff_reg.v|1
+SLP=3*329412
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|95add75c26b36b8e4e71870ea61c331c0d151d5d869536a5f373f144d9b53c6f3c8637804bb31463c6aa6028a97e72c2
+
+[fsm]
+A/fsm=22|../src/fsm.v|7|1*479930
+BinW64/fsm=3*312719
+R=../src/fsm.v|7
+SLP=3*313061
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|d274df6d00ba93fbeb16b3acd8e09e75cbd6ea686126984e7c53a2b582d21fbb
+
+[fsm_comb]
+A/fsm_comb=22|../src/fsm_comb.v|3|1*482755
+BinW64/fsm_comb=3*314993
+R=../src/fsm_comb.v|3
+SLP=3*315111
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|033969a77423917a539cf2cf1295680a729e6221e4efaa6a8714f045f53f5933ff33c75c8704ddbf9e55238f40bff592
+
+[gridCell]
+A/gridCell=22|../src/gridcell.v|1|1*498299
+BinW64/gridCell=3*324393
+R=../src/gridcell.v|1
+SLP=3*325071
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|6234d9f83b8e95b599c9ec28648015d911509bd0ab67e8f7f285dea6f1275dab2c6a18d50449e0404de7c33e8972f6de
+
+[gridCellTestbench]
+A/gridCellTestbench=22|../src/gridcell.v|38|1*500323
+BinW64/gridCellTestbench=3*325425
+R=../src/gridcell.v|38
+SLP=3*327099
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|fe3f27873b41d0940211acbe45368d07d493c1a755e620550143bde061e261208ec6af4f07ee4836cc2e622c906e4ca7
+
+[memory_unit]
+A/memory_unit=22|../src/memory_unit.sv|1|1*490233
+BinW64/memory_unit=3*320273
+R=../src/memory_unit.sv|1
+SLP=3*320394
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|b34c20dbde1f103a532462c55e6b8d0b2ad095b6e80465877f3acc759c91166967e33796fd66eec0f9920405879c8149
+
+[tb_fsm]
+A/tb_fsm=22|../src/tb_fsm.sv|3|1*478281
+BinW64/tb_fsm=3*310701
+R=../src/tb_fsm.sv|3
+SLP=3*312112
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|455e66c46e828218759e502905bc23c85d1f69ffc643c3464c71da70884cdfad
+
+[tb_fsm_comb]
+A/tb_fsm_comb=22|../src/tb_fsm_comb.sv|3|1*481504
+BinW64/tb_fsm_comb=3*313262
+R=../src/tb_fsm_comb.sv|3
+SLP=3*314203
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|9e71f3402abbc05165929cf51e10308622bc288b4d759b5a5359ed6a94dbf7ab69a2b29fab83b2579a836a6f8408ea8a
+
+[tb_memory_unit]
+A/tb_memory_unit=22|../src/tb_memory_unit.sv|1|1*487371
+BinW64/tb_memory_unit=3*316041
+R=../src/tb_memory_unit.sv|1
+SLP=3*318292
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|764904f481dc70541992f5ac555317c7113831e1ede8c4807018b8fe0e6dab65eccb933ce84f4b9b9907d15760d99509
+
+[wordCell]
+A/wordCell=22|../src/wordcell.v|1|1*492464
+BinW64/wordCell=3*320565
+R=../src/wordcell.v|1
+SLP=3*321067
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|05aa3e281b84dd956351a904a92741b3f1e6d78b2bd53e5b11638c6f5ec5943e81cc7abac940466afb1b52af113e3daa
+
+[wordCellTestbench]
+A/wordCellTestbench=22|../src/wordcell.v|33|1*496662
+BinW64/wordCellTestbench=3*322300
+R=../src/wordcell.v|33
+SLP=3*323512
+Version=15.0.261.9132 (Windows64)|0000000b789cd3f53752d02d2e33ca3634070010af02ea|847bf9a194651da79bf4406a714821327c4b9dc4ce8a051b8828f96b1142e6b60d1f1c64cbcf09bdaad326df1a625f6f
+
+[~U]
+$root=12|0*190613|
+AddressDec=12|0*194935|
+bitCell=12|0*193256|
+d_flip_flop=12|0*192030|
+d_latch=12|0*191827|
+dff_reg_2=12|0*194191|
+dff_reg_3=12|0*194432|
+dff_reg_8=12|0*194677|
+fsm=12|0*191162|
+fsm_comb=12|0*191598|
+gridCell=12|0*193660|
+gridCellTestbench=12|0*193884||0x10
+memory_unit=12|0*192674|
+tb_fsm=12|0*190923||0x10
+tb_fsm_comb=12|0*191423||0x10
+tb_memory_unit=12|0*192262||0x10
+wordCell=12|0*193027|
+wordCellTestbench=12|0*193477||0x10
