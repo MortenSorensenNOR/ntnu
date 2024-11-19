@@ -92,5 +92,12 @@ endmodule
 \end{codebox}
 
 \section*{Task 11}
+In order to drive a large capacitive load, it's best to construct a series of inverters, where each inverter
+has a transconductance $e$ times bigger than the last. The number of stages $N$ required will then be
+\[
+    N = \ln{\left(\frac{C_L}{C_1}\right)}
+\]
+where $C_L$ is the capacitive load we are trying to drive and $C_1$ is the capacitance on the input of the 
+inverter chain.
 
 \end{document}
