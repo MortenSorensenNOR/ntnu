@@ -1,0 +1,15 @@
+\section{Problembeskrivelse}
+\label{problemBeskrivelse}
+Generasjon av \textit{hvit støy} er i mange praktiske sammenhenger et ganske nyttig redskap. Det 
+brukes blant annet innen elektronisk musikk, generering av tilfeldige tall og for testing av elektroniske 
+system. Dette notatet skal ta for seg hvordan man tilnæremet sett kan generere hvitt støy med et digitalt system,
+og ved hjelp av et aktivt filter, båndbegrense det.
+
+Det overordende systemet er illustrert it figur \ref{fig:system_figure}. Systemet består av en 
+digital støygenerator som skal genrere et hvitt signal $s(t)$ i det hørbare området fra $\SI{20}{\hertz}$ til 
+$\SI{20}{\kilo\hertz}$, og et båndpassfilter som skal båndbegrense støysignalet rundt en frekvens $f_0$, slik at 
+utgangssignalet $y(t)$ har en hørbar tonalitet.
+
+Teknologien tatt i bruk i systemet er en Xilinx FPGA på et Digilent Basys3 brett og andre diverse passive og aktive komponenter 
+som kondensatorer, opamper og motstander. Notet skal beskrive fremgangsmåten for å utarbeide støygeneratoren og 
+båndpassfilteret, gi mål på spektrum av generert støy og båndbegrenset støy og måle responsen, båndbredden og Q-faktoren til filteret.

@@ -1,0 +1,75 @@
+\section{Testing}
+\label{testing}
+
+\subsection{LFSR}
+LFSR-en ble testet med ved å koble utgangen $v[n]$ til oscilloskopet til en Analog Discovery 2. Figur \ref{fig:lfsr_plot} viser 
+utgangssignalet til LFSR systemet $s(t)$ over tid og figur \ref{fig:lfsr_freq_plot} viser et plot av frekvensspekteret som ble målt 
+av utgangssignalet.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.775\textwidth]{Bilder/lfsr_signal.png}
+    \caption{Utgangssignalet $s(t)$ fra LFSR systemet}
+    \label{fig:lfsr_signal}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.775\textwidth]{Bilder/støy_freq.png}
+    \caption{Frekvensspekteret til LFSR-et}
+    \label{fig:lfsr_freq_plot}
+\end{figure}
+
+Vi ser at frekvensspekteret er relativt flatt, men at det er noen variasjoner i amplitude over spekteret,
+så variasjonen i frekvens kunne vært bedre.
+
+Dette kan f.eks. skyldes at den valgte konfigurasjonen kunn har 2 taps. En annen lengde $M$ som f.eks. 32
+hadde mulig gitt en flatere spektrum, og da også produsert bedre hvitt støy.
+
+Signalet ble også lyttet til og subjektivt produserte systemet et tydlig hvitt signal med mye observert støy.
+
+\subsection{Delyiannis-Friend filter}
+Filteret ble testet med Analog Discovery-ens Spectrum verktøy og produserte følgende amplituderesponser.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Bilder/bandpass_filter_freq_lang.png}
+    \caption{Amplituderespons til filteret med $H_0 = 1$}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Bilder/bandpass_freq_1h_close.png}
+    \caption{Amplituderespons til filteret med $H_0 = 1$, men nærmere}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Bilder/bandpass_freq_10h.png}
+    \caption{Amplituderespons til filteret med $H_0 = 10$}
+\end{figure}
+
+Vi observerer at filteret ved $H_0 = 10$ gir en meget flat topp. Dette skyldes trolig at amplituderesponsen ble testet ved 
+en inngangsspenning på $\SI{1}{\volt}$ og er trolig fordi at opampen clipper. En mulig forbedring av systemet hadde derfor vært 
+å øke forsyningsspenningen til opampen.
+
+Filteret ved $H_0 = 1$ oppnådde en båndbredde på $\SI{260}{\hertz}$ og en Q-faktor på $Q = 12.5$, mens 
+$H_0 = 10$ gav en båndbredde på $\SI{690}{\hertz}$ og en Q-faktor på $4.5$. 
+
+\subsection{Fullstendig system}
+Det ferdige systemet ble så testet og fikk følgende frekvensspektrum.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Bilder/total_system_freq.png}
+    \caption{Frekvensspektrum til ferdig implementert system}
+\end{figure}
+
+Utgangssignalet $y(t)$ ble også plottet.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Bilder/total_system_signal.png}
+    \caption{Plot av utgangssignalet $y(t)$}
+\end{figure}
+
+Vi ser tydlig at frekvenskomponenten ved $f = \SI{3320}{\hertz}$ er godt isolert, og ved subjektiv høring av 
+signalet var det tydlig en definert tone på utgangssignalet.

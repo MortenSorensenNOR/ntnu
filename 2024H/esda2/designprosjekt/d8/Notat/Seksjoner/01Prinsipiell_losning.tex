@@ -1,0 +1,46 @@
+\section{Prinsipiell løsning}
+\label{prinsipiellLoesning}
+Det prinsipielle designet baserer seg på å benytte et Linear Feedback Shift Register for å genrere 
+støysignalet, og et aktivt Delyiannis-Friend filter for båndpassfilteret.
+
+\subsection{LFSR}
+Et linear feedback shiftregister er et system der et register av størrelse $M + 1$ med et gitt startfrø, 
+sender inn en ny verdi basert på en funksjon $f$ av alle de nåværende registrenes verdi. Systemet er vist i
+figur \ref{fig:lfsr_figure}. 
+
+Vi har da at inngangsverdien til register Q ved klokkesyklus $n$ er gitt 
+\[
+    Q_M[n] = f(Q_M[n-1], Q_{M-1}[n-1], Q_{M-2}[n-1], \dots, Q_0[n-1])
+\]
+
+Det er vanlig å implementere funksjonen $f$ som en XOR operasjon mellom input operandene. For utgangen
+av LFSR-et er det vanlig å la $v[n]$ være gitt av den eldste verdien, nemlig $v[n] Q_0[n]$.
+
+For å kunne generere en pseudo-tilfeldig sekvens av binære verdier $x(t)$ er det ønskelig å ha et signal som er 
+så uperiodisk som mulig. Dette er klart ikke mulig med denne metoden, men det er mulig å generere en sekvens som 
+har lengde $2^M - 1$ dersom funksjonen $f$ velges riktig. Sekvensen har da \textit{maksimal lengde} \cite{lfsr_max_length}.
+
+For valg av $M$ og funksjon $f$ kan følgende ressurs brukes: \\ \url{https://www.eetimes.com/tutorial-linear-feedback-shift-registers-lfsrs-part-1/}.
+
+For å kunne generere støy mellom $\SI{20}{\hertz}$ og $\SI{20}{\kilo\hertz}$ er det ønskelig at systemet kjører på en 
+klokkehastighet minst dobbelte av det som er maksimal ønsket frekvens for å oppfylle Nyquist-kriteriet. Det er da gunstig 
+å velge enten $\SI{40}{\kilo\hertz}$ eller noe over det. I dette notatet er $\SI{80}{\kilo\hertz}$ valgt.
+
+\subsection{Delyiannis-Friend filter}
+Delyiannis-Friend filteret er et aktivt bandpassfilter med god filterkaraketeristikk. Filtertopologien er vist 
+i figur \ref{fig:delyiannis_filter_circuit}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Bilder/delyiannis_filter.png}
+    \caption{Delyiannis-Friend filter topologi \cite{teknisk_notat}}
+    \label{fig:delyiannis_filter_circuit}
+\end{figure}
+
+Fremgangsmåten for å finne rette komponentverdier er som følger \cite{delyiannis}:
+\begin{enumerate}
+    \item Velg en Q-faktor for filteret. Q-faktoren er lik $Q = \frac{f_0}{B}$, der $f_0$ er senterfrekvensen og $B$ er ønsket båndbredde på filteret.
+    \item Valg av kondensatorverdi $C$.
+    \item Valg av forsterkningsfaktor $H_0$. Dette vil da gi amplituderesponsen ved $f_0$.
+    \item Regn ut nødvendige motstandsverdier $R_3 = \frac{Q}{\pi f_0 C}$, $R_1 = \frac{R_3}{2H_0}$ og $R_2 = \frac{R_3}{4Q^2 - 2H_0}$
+\end{enumerate}

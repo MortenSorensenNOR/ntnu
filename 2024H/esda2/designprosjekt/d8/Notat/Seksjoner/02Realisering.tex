@@ -1,0 +1,125 @@
+\section{Realisering}
+\label{realisering}
+
+\subsection{LFSR}
+Realiseringen av systemet er gjort på en Digilent Basys3. Basys3 brettet har en Xilinx Artix A35T FPGA som skal
+benyttes for å implementere LFSR systemet. FPGA-en er noe overkill for dette systemet, men utviklingsverktøyene til Xilinx
+er gode og det lar oss skrive SystemVerilog kode for å implementere systemet.
+
+For dette notatet er en $M$ verdi på 31 valgt, og i følge Maxfield \cite{maxfield} gir følgende funksjonen 
+for $f$ maksimal lengde på utgangssignalet
+\[
+    f(\{Q_i | i \in {0, \dots, M}\}) = Q_2 \oplus Q_{30}
+\]
+
+For å kunne generere klokken som skal utføre shift operasjonen på LFSR-en er det valgt å bruke en teller krets, der 
+et register får verdien sin invertert når telleren når en verdi lik FPGA-ens klokke frekvens delt på
+ønsket klokkefrekvens delt på 2. Da blir telleren også satt til 0.
+
+Implementeringen av systemet er gjort i SystemVerilog og er relativt kort. 
+
+\begin{verilogcode}
+module lfsr #(
+    parameter logic [30:0] SEED = 31'h608420dd, // Seed for å starte LFSR-en
+    parameter unsigned OVERSAMPLING = 4         // X ganger 20kHz
+                                                // for å oppnå Nykvist kriteriet
+) (
+    input logic clk,
+    input logic rst,
+
+    output logic v
+);
+    // Teller for å generere klokke på 20kHz * OVERSAMPLING
+    localparam unsigned NUM_CLKS_PER_SHIFT = 100_000_000 / 
+                                            (20_000 * OVERSAMPLING) / 2;
+    logic [$clog2(NUM_CLKS_PER_SHIFT)-1:0] clk_cntr = '0;
+    logic sr_clk = '0;
+
+    // Generer 80kHz klokken
+    always_ff @(posedge clk) begin
+        if (rst) begin
+            clk_cntr <= '0;
+        end else begin
+            if (clk_cntr == NUM_CLKS_PER_SHIFT - 1) begin
+                clk_cntr <= '0;
+                sr_clk <= ~sr_clk;
+            end else begin
+                clk_cntr <= clk_cntr + 1;
+            end
+        end
+    end
+
+    // Shift registeret
+    logic [30:0] SR = SEED;
+
+    // Funksjonen for å finne neste bit
+    logic Q_n;
+    always_comb begin
+        Q_n = SR[2] ^ SR[30];
+    end
+
+    // Shift operasjon
+    logic sr_clk_r = '0;
+    always_ff @(posedge clk) begin
+        if (rst) begin
+            SR <= SEED;
+        end else begin
+            sr_clk_r <= sr_clk;
+
+            // Shift kunn på positiv flanke
+            if (sr_clk == 1'b1 && sr_clk_r == 1'b0) begin
+                SR <= {SR[29:0], Q_n};
+            end
+        end
+    end
+
+    assign v = SR[30];
+endmodule    
+\end{verilogcode}
+
+I koden over er startverdien til shiftregisteret satt til en konfigurerbar seed. Denne vil bestemme sekvensen som blir generert for $v[n]$. I situasjoner der 
+en fixed seed ikke er ønskelig er det også mulig å blant annet sample FPGA-ens on-chip analog til digital omformer dersom den er latt være flytende.
+
+For å kunne synthesize koden over til FPGA-en måtte følgende constraint fil benyttes
+\begin{verilogcode}
+set_property CONFIG_VOLTAGE 3.3 [current_design]
+set_property CFGBVS VCCO [current_design]
+
+# Clock signal
+set_property PACKAGE_PIN W5 [get_ports clk]							
+    set_property IOSTANDARD LVCMOS33 [get_ports clk]
+    create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports clk]
+
+set_property PACKAGE_PIN T18 [get_ports rst]						
+    set_property IOSTANDARD LVCMOS33 [get_ports rst]
+
+set_property PACKAGE_PIN J1 [get_ports {v}]					
+    set_property IOSTANDARD LVCMOS33 [get_ports {v}]
+\end{verilogcode}
+
+I constaint filen over er utgangssignalet $v$ satt til å være koblet til Basys3 brettets JA PMOD connector sin pin 1.
+
+\subsection{Delyiannis-Friend filter}
+For bandpassfilteret har en Q-faktor på 20 blitt valgt. Dette er hovedsakelig for å ta høyde for at filteret trolig ikke vil kunne oppnå denne verdien, da en ønsket verdi for Q faktoren er at 
+den oppnår $Q >= 10$ for å kunne få en høybar tone fra det båndbegrensede støysignalet. Senterfrekvens for filteret $f_0$ er spesifisert til $\SI{3320}{\hertz}$. Velger så en kondensatorverdi
+$C = \SI{10}{\nano\farad}$ som implementeres ved å parallellkoble 3 $\SI{3.3}{\nano\farad}$ kondensatorer. Til slutt ble det valgt å implementere filteret både med $H_0 = 1$ og 
+$H_0 = 10$, da dette kunn har en realistisk endring på valget av $R_1$, som minker med en faktor på 10 når man går fra $H_0 = 1$ til $H_0 = 10$. Valget av kondensatorverdi er primært for å få realistiske verdier 
+på motstandene ifht. hva som er tilgjengelig og med hensyn på at opampen ikke er ideell, altså er det ønskelig at motstandsverdien $R_1$ er mellom 1-100 kiloohm.
+
+De valgte verdiene gir da at
+\begin{align*}
+    R_3 &= \frac{20}{\pi \cdot \SI{3.32}{\kilo\ohm} \cdot \SI{10}{\nano\farad}} \approx \SI{192}{\kilo\ohm} \\
+    R_1 &= \frac{\SI{192}{\kilo\ohm}}{2} \approx \SI{95870}{\kilo\ohm} \:\:\: \text{ eller } \:\:\: \SI{9.587}{\kilo\ohm} \\
+    R_2 &= \frac{\SI{192}{\kilo\ohm}}{4 \cdot 20^2 - 2} \approx \SI{120}{\ohm} \:\:\: \text{ også for } H_0 = 10
+\end{align*}
+
+Filteret ble implementert med den tidligere nevnte LF353 med en forsyningsspenning på $\pm\SI{5}{\volt}$. Dette er trolig noe 
+lavt da utgangssignalet fra FPGA-en er på 3.3V, og vil derfor gi begrenset forsterkning ved $H_0 = 10$.
+
+\subsection{Implementert system på breadboard}
+Systemet ble realisert på oppkoblingsbrett og på den valgte Basys3 FPGA kortet.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Bilder/system_photo.png}
+    \caption{Bilde av systemet fysisk implementert}
+\end{figure}
