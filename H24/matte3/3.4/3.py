@@ -9,7 +9,7 @@ A4 = np.array([[0, 1], [-1, 0]])
 A5 = np.array([[-1, -1], [1, -1]])
 A6 = np.array([[0, 1], [-1, 2]])
 
-A = A6
+A = A3
 
 def f(x):
     return A @ x
