@@ -24,3 +24,12 @@ Files, tasks and resources pertaining to subjects I have taken at NTNU.
 - Design av Integrete Kretser
 - Maskinnær programmering
 - Datamaskinprosjekt
+
+**2025V**:
+- Elektronisk systemdesign, prosjekt 
+- Matematikk 4
+- Elektromagnetisme
+- Grunnlag for faststoffelektronikk
+- Design av Digitale System II
+- Kompilatorteknikk
+- Datamaskinarkitektur
