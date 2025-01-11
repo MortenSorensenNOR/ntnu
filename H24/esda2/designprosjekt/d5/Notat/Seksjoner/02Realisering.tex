@@ -40,7 +40,7 @@ ble valgt. Kretsen er fremstilt i figur \ref{fig:buffer_realisering}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{Bilder/bjt_buffer_realisering.png}
+    \includegraphics[width=0.6\textwidth]{Bilder/bjt_buffer_realisering.png}
     \caption{Realisering av bufferen med komponentverdier}
     \label{fig:buffer_realisering}
 \end{figure}
@@ -56,14 +56,22 @@ Den forbedrede kretsen er fremstilt i figur \ref{fig:buffer_realisering_forbedre
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{Bilder/bjt_buffer_realisering_improved.png}
+    \includegraphics[width=0.6\textwidth]{Bilder/bjt_buffer_realisering_improved.png}
     \caption{Realisering av bufferen med komponentverdier}
     \label{fig:buffer_realisering_forbedret}
 \end{figure}
 
+En konsekvens av at vi ønsker liten utgangsmotstand, men på samme tid ønsker et arbeidspunkt på $\SI{3}{\volt}$ for 
+$V_{B}$ er at vi får $R_{B1} << R_{B2}$, og dette vil tydelig påvirke systemets endelige inngangsmotstand.
+Dette ble gjort da det var ønskelig å beholde $R_E$ så liten som mulig, og dermed også utgangsmotstanden 
+til bufferen så liten som mulig. Argumentet at dette har blitt gjort er at utgangsmotstanden vil være mer kritisk for bufferens strømforsterkning
+enn det inngangsmotstanden er, dersom vi antar lastmostanden $R_L$ er på ordenen 10-100 $\Omega$ vs. en kildemotstand på noen kilo ohm.
+
+Den endelige realiserte kretsen er vist i figur \ref{fig:buffer_image}.
+
 \begin{figure}[H]
     \centering 
-    \includegraphics[width=0.5\textwidth]{Bilder/buffer_image.jpg}
+    \includegraphics[width=0.7\textwidth]{Bilder/buffer_image.jpg}
     \caption{Bilde av realisert krets}
     \label{fig:buffer_image}
 \end{figure}

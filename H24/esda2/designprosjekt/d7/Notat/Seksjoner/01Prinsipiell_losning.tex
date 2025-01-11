@@ -45,6 +45,7 @@ lavpassfilteret er gitt ved følgende formel
         \cos\left(\frac{\pi}{n}i\right), & \text{ for $n$ odde,} \\
         \cos\left(\frac{\pi}{2n} + (i - 1)\frac{\pi}{n}\right), & \text{ for $n$ jevne} \\
     \end{cases}
+    \label{eq:zeta}
 \end{equation}
 der $\zeta_i$ er dempningsfaktoren til $i$-te Sallen-Key strukturen i kretsen.
 
@@ -59,6 +60,8 @@ Og vi kan dermed løse for $C_1$ og $C_2$ fra de kjente verdiene
     $C_1 = \frac{\tau_1}{R}\:\:\:\:\:\:$ og $\:\:\:\:\:\: C_2 = \frac{\tau_2}{R}$
 \end{center}
 Vi kan på denne måten gå frem for å finne komponentverdiene til alle Sallen-Key strukturene vi trenger til filteret.
+Denne metoden garanterer oss ved å benytte formel (4) et maksimalt flatt filter, som er det vi ønsker for å påvirke 
+frekvenskomponentene under $f_s/2$ minst mulig.
 
 Ettersom at denne metoden baserer seg på å fastsette en felles motstandsverdi $R$ og fra den regne ut kondensatorverdier,
 kan kondensatorverdiene blir litt hårete. Det finnes derfor en annen metode \cite{sallen-key-lowpass-wikipedia} som går ut på 
@@ -68,7 +71,8 @@ kan kondensatorverdiene blir litt hårete. Det finnes derfor en annen metode \ci
     Q = \frac{mn}{m^2 + 1}
 \]
 der $Q = \frac{1}{\zeta}$ er kvalitetsfaktoren regne ut en verdi $m$ under kravet om at vi ønsker maksimal flathet.
-Maksimal flathet gir oss at $Q = \frac{1}{\sqrt{2}}$. Komponentverdiene blir da valgt som
+Kravet om at vi ønsker minst mulig påvirkning av frekvenser under $f_s/2$ gir at filteret må oppnå maksimal flathet,
+og dette får vi ved $Q = \frac{1}{\sqrt{2}}$. Komponentverdiene blir da valgt som
 
 \begin{align*}
     &R_1 = mR \\

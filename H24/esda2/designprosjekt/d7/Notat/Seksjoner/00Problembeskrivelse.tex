@@ -2,9 +2,10 @@
 \label{problemBeskrivelse}
 
 For deskretisering av analoge signal er det viktig å ta hensyn til aliasing effekter som oppstår av at ADC-en har begrenset
-sampling frekvens. Det er defor nødvendig å ta i bruk et anti-aliasing filter for å forsikre at Nyquist-kriteriet om at 
-inngangssignalet til ADC-en ikke inneholder frekvenskoponenter over $f_s / 2$. Dette er helt klart ikke mulig å realisere 
-med et fysisk filter, men dette designnotatet skal ta for seg en metode for å designe et aktivt analog Butterworth lavpass filter
+sampling frekvens. Det er defor nødvendig å ta i bruk et anti-aliasing filter for å forsikre at inngangssignalet til ADC-en 
+ikke inneholder frekvenskoponenter over $f_s / 2$, også kjent som Nyquist frekvensen. Det er helt klart ikke mulig å realisere et 
+kausalt filter som fjerner alle frekvenskomponentene over Nyquist frekvensen totalt, men dette designnotatet skal ta for seg 
+metoder for å designe en approksimering av filteret ved et aktivt analog Butterworth lavpass filter
 som kan oppnå ønsket demping av de uønskede frekvenskomponentene. Det overordnede systemet er vist i figur \ref{system-figure}
 \begin{figure}[H]
     \centering

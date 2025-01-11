@@ -1,3 +1,4 @@
+\newpage
 \section{Testing}
 
 Testing av systemet ble utført ved hjelp av en Analog Discovery 2 \cite{analog_discovery} oscilloskop og 
@@ -11,8 +12,9 @@ $v_0$ plottet sammen med utgangsspenningen til bufferen $v_2$.
 
 \begin{figure}[H]
     \centering 
-    \includegraphics[width=0.7\textwidth]{Bilder/buffer_no_load.png}
-    \caption{Buffer test med ideell lastmotstand $R_L = \infty$ og kildemotstand $R_K = 0$}
+    \includegraphics[width=0.8\textwidth]{Bilder/buffer_no_load.png}
+    \caption{Buffer test med ideell lastmotstand $R_L = \infty$ og kildemotstand $R_K = 0$. Vi ser at 
+    inn- og utgangssignalet ligger like oppå hverandre, altså oppnås det en forsterkning på $\approx 1$.}
     \label{fig:buffer_no_load_plot}
 \end{figure}
 
@@ -34,8 +36,10 @@ og kildemotstand (figur \ref{fig:buffer_load_source_res_plot}).
 
 \begin{figure}[H]
     \centering 
-    \includegraphics[width=0.625\textwidth]{Bilder/buffer_load.png}
-    \caption{System test med lastmotstand $R_L = \SI{220}{\ohm}$ og ideell kildemotstand $R_K = \SI{0}{\ohm}$}
+    \includegraphics[width=0.8\textwidth]{Bilder/buffer_load.png}
+    \caption{System test med lastmotstand $R_L = \SI{220}{\ohm}$ og ideell kildemotstand $R_K = \SI{0}{\ohm}$. 
+    Et større avvik er nå synlig i.fht. figur \ref{fig:buffer_no_load_plot}, med et avvik på 
+    $\approx \SI{20}{\milli\volt}$.}
     \label{fig:buffer_load_no_res_plot}
 \end{figure}
 
@@ -53,8 +57,9 @@ Bufferen oppnår da en demping på
 
 \begin{figure}[H]
     \centering 
-    \includegraphics[width=0.7\textwidth]{Bilder/buffer_load_source.png}
-    \caption{System test med lastmotstand $R_L = \SI{220}{\ohm}$ og kildemotstand $R_K = \SI{1.2}{\kilo\ohm}$}
+    \includegraphics[width=0.8\textwidth]{Bilder/buffer_load_source.png}
+    \caption{System test med lastmotstand $R_L = \SI{220}{\ohm}$ og kildemotstand $R_K = \SI{1.2}{\kilo\ohm}$.
+    Enda mer avvik er nå synlig mellom signalene ved maks spenningssving, nå $\approx \SI{50}{\milli\volt}$.}
     \label{fig:buffer_load_source_res_plot}
 \end{figure}
 
@@ -84,9 +89,13 @@ tydlige forvrengninger, som vist i figur \ref{fig:buffer_disturb_850mv_plot}.
 \begin{figure}[H]
     \centering 
     \includegraphics[width=0.7\textwidth]{Bilder/buffer_distort_1V6.png}
-    \caption{Utgangsspenning $v_2(t)$ ved inngangsspenning $v_0(t)$ lik $\SI{1.6}{\volt}$}
+    \caption{Utgangsspenning $v_2(t)$ ved inngangsspenning $v_0(t)$ lik $\SI{1.6}{\volt}$. Utgangssignalet $v_2(t)$ får tydlige 
+    forvrengninger ved negative utslag.}
     \label{fig:buffer_disturb_850mv_plot}
 \end{figure}
+
+Forvrengningene her er trolig fordi transistoren går over i cutoff eller metningsområdet grunnet for store svingninger på 
+$V_{B}$.
 
 \subsection{Test av frekvensrespons}
 Bufferens frekvensrespons ble også testet. Network Analyser funksjonen i 
