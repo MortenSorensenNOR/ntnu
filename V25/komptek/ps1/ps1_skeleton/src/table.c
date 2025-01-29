@@ -3,7 +3,8 @@
 #define NSTATES 14
 
 // The starting state, at the beginning of each line
-#define START 0
+#define REAL_START 0
+#define START 1
 
 // The state to go to after a valid line
 // All lines end with the newline character '\n'

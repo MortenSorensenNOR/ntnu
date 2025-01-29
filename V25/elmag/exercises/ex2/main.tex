@@ -1,0 +1,111 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1.}
+We have the following pairing
+\[
+    ( A, v_{ii} ), ( B, v_{iii} ), ( C, v_{i} ), ( D, v_{iv} )
+\]
+
+\section*{Task 2.}
+\begin{enumerate}
+    \item We have given the function $\mathbf{v} = xy\mathbf{\hat{x}} + (x^2 + 1)\mathbf{\hat{y}}$. For path
+        (1) we have that the line integral evaluates to
+        \[
+            \int_{a}^{b}{\mathbf{v} \cdot d\mathbf{l}} = \int_{1}^{2}{x dx} + \int_{1}^{3}{5 dy} = 1 - \frac{1}{2} + 15 - 5 = 10.5
+        \]
+        For path (2) we have that $y = 2x - 1$, so
+        \[
+            \int_{a}^{b}{\mathbf{v} \cdot d\mathbf{l}} = \int_{1}^{2}{2x^2 - x + x^2 + 1 dx} = \left[x^3 -\frac{x^2}{2} + x \right]_{1}^{2} = 6.5
+        \]
+        Lastly along (3) we have
+        \[
+            \int_{a}^{b}{\mathbf{v} \cdot d\mathbf{l}} = \int_{1}^{3}{2 dy} + \int_{1}^{2}{3x dy} = 6 - 2 + 6 - \frac{3}{2} = \frac{17}{2}
+        \]
+    \item For (I + II) we calculate the closed-loop integral as the line integral along the initial path minus the return path. So for (I) we have
+        that 
+        \[
+            \oint_{a}^{b}{\mathbf{v} \cdot d\mathbf{l}} = 10.5 - 6.5 = 4
+        \]
+        and for (II) we get
+        \[
+            \oint_{a}^{b}{\mathbf{v} \cdot d\mathbf{l}} = 8.5 - 6.5 = 2
+        \]
+\end{enumerate}
+
+\section*{Task 3.}
+\begin{enumerate}
+    \item Flux is a measure of how much is flowing through some imaginary surface, like water flowing through some crosssection of a pipe.
+    \item We have 
+        \[
+            \mathbf{f} = 2z\mathbf{\hat{x}} + 3x\mathbf{\hat{y}} + 5x^2yz\mathbf{\hat{z}}
+        \]
+        In order to find the flux through the surfaces we consider one surface at a time. In order to aid in calculating 
+        all the fluxes, we numerate the surfaces as in figure (A) and let that persist for (B) and (C). The surface 
+        pointed at by the red arrow in figure (A) therefore would be surface (vi). We start by calculating the flux
+        through each surface. \\
+        (i):
+        \[
+            \Phi_{i} = \int{\mathbf{f} \cdot d\mathbf{a}} = \int_{0}^{2}\int_{0}^{2} 2z dy dz = \int_{0}^{2}4z dz = 8
+        \]
+
+        (ii):
+        \[
+            \Phi_{ii} = \int{\mathbf{f} \cdot d\mathbf{a}} = \int_{0}^{2}\int_{0}^{2} -2z dy dz = \int_{0}^{2}-4z dz = -8
+        \]
+
+        (iii):
+        \[
+            \Phi_{iii} = \int{\mathbf{f} \cdot d\mathbf{a}} = \int_{0}^{2}\int_{0}^{2}10x^2y dy dx = \int_{0}^{2}20x^2 dx = \frac{20}{3} \cdot 8 = \frac{160}{3}
+        \]
+
+        (iv):
+        \[
+            \Phi_{iv} = \int{\mathbf{f} \cdot d\mathbf{a}} = \int_{0}^{2}\int_{0}^{2}0 dy dx = 0
+        \]
+
+        (v):
+        \[
+            \Phi_{iv} = \int{\mathbf{f} \cdot d\mathbf{a}} = \int_{0}^{2}\int_{0}^{2}3x dz dx = \int_{0}^{2}6x dx = \left3x^2 \right|_{0}^{2} = 12
+        \]
+
+        (vi):
+        \[
+            \Phi_{iv} = \int{\mathbf{f} \cdot d\mathbf{a}} = \int_{0}^{2}\int_{0}^{2}-3x dz dx = \int_{0}^{2}-6x dx = \left-3x^2 \right|_{0}^{2} = -12
+        \]
+
+        That means that the total flux for each of the cases is as follows: \\
+        (A): $\Phi = 8 - 8 + \frac{160}{3} + 0 + 12 = \frac{196}{3}$ \\
+        (B): $\Phi = -8 + \frac{160}{3} + 0 + 12 - 12 = \frac{136}{3}$\\
+        (C): $\Phi = 8 - 8 + 0 + 12 - 12 = 0$
+
+\end{enumerate}
+
+\section*{Task 4.}
+The volume of a sphere can be calculated as
+\begin{align*}
+    V = \int{d\tau} &= \int_{0}^{2\pi}\int_{0}^{\pi}\int_{0}^{R}{r^2 \sin\theta dr d\theta d\phi} \\
+                    &= \int_{0}^{2\pi}\int_{0}^{\pi}{\frac{R^3}{3} \sin\theta d\theta d\phi} \\
+                    &= \int_{0}^{2\pi}{\left-\frac{R^3}{3} \cos\theta \right|_{0}^{\pi} d\phi} \\
+                    &= \int_{0}^{2\pi}{\frac{2R^3}{3} d\phi} \\
+                    &= \left\frac{2R^3 \cdot \phi}{3} \right|_{0}^{2\pi} = \frac{4\pi R^3}{3}
+\end{align*}
+
+
+\section*{Task 5.}
+We first convert the function $\rho$ from cartesian coordinates to cylindrical coordinates as
+\[
+    \rho(s, \phi, z) = (s\cos(\phi))^2 + (s\sin(\phi))^2 = s^2
+\]
+We then have that in cylindrical coordinates $d\tau = s ds d\phi dz$, so the volume integral of the charge 
+density $\phi$ for this cylinder becomes
+\begin{align*}
+    \int_{\frac{\pi}{2}}^{2\pi}\int_{0}^{5}\int_{0}^{2}s^2 \cdot s ds dz d\phi &= \int_{\frac{\pi}{2}}^{2\pi}\int_{0}^{5} 4 dz d\phi = \int_{\frac{\pi}{2}}^{2\pi}20 d\phi\\
+                                                                               &= 20 \cdot \left(2\pi - \frac{\pi}{2}\right) = 30\pi
+\end{align*}
+
+\end{document}
