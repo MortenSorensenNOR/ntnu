@@ -1,0 +1,40 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section{Top/down Parsing Tables}
+\subsection{}
+We see that the grammar has a left recursion for $B \rightarrow \:B \:; \:+ \:V \:| \:+ \:V$. So we refactor it to
+\begin{align*}
+    B  &\rightarrow \:+\:V\:B' \\ 
+    B' &\rightarrow \:; \:+ \:V \:B' \:|\: \epsilon
+\end{align*}
+
+We then do left factoring for $C$, so the final LL(1) parsing compatible grammar becomes
+\begin{align*}
+    &S  \rightarrow \:i\:c\:B\:E\:F\:n \\ 
+    &B  \rightarrow \:+\:V\:B' \\ 
+    &B' \rightarrow \:; \:+ \:V \:B' \:|\: \epsilon \\
+    &V  \rightarrow \:x \: | \:y\\
+    &V  \rightarrow \:e \: B\: | \:\epsilon \\
+    &F  \rightarrow \:f \: | \: \epsilon
+\end{align*}
+
+\subsection{}
+\begin{figure}[H]
+    \centering
+    % Table with NONTERMINAL | FIRST | FOLLOW | NULLABILITY
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \textbf{Nonterminal} & \textbf{First} & \textbf{Follow}             & \textbf{Nullable} \\ \hline
+        $S$                  & $\{i\}$        & $\{\$\}$                    & No \\ \hline
+        $B$                  & $\{+\}$        & $\{e, f, n, \$\}$           & No \\ \hline
+    \end{tabular}
+\end{figure}
+
+\subsection{}
+
+\end{document}
