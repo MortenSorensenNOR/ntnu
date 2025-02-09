@@ -1,0 +1,225 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1.}
+\begin{romanlist}
+    \item Start by finding the gradient
+        \[
+            \nabla T = \begin{pmatrix} 5y^2, & 10xy, & 0 \end{pmatrix}
+        \]
+
+        Going along (i) and (ii) we get
+        \[
+            \int_{a}^{b} \nabla T \cdot d\mathbf{l} = \int_{0}^{2} 0\: dx + \int_{0}^{1} 20y\: dy = 10
+        \]
+        
+        Using the theorem we get
+        \[
+            \int_{a}^{b} \nabla T \cdot d\mathbf{l} = T(B) - T(A) = 5\cdot 2 \cdot 1 - 0 = 10
+        \]
+
+        We see that the theorem holds.
+
+    \item  Again we find the gradient
+        \[
+            \nabla T = \begin{pmatrix} 0, & 6y, & 0 \end{pmatrix}
+        \]
+
+        Along (i) and (ii)
+        \[
+            \int_{a}^{b} \nabla T \cdot d\mathbf{l} = \int_{0}^{2} 0\: dx + \int_{0}^{1} 6y\: dy = 3
+        \]
+
+        The theorem gives
+        \[
+            \int_{a}^{b} \nabla T \cdot d\mathbf{l} = T(B) - T(A) = 3 - 0 = 3
+        \]
+\end{romanlist}
+
+\section*{Task 2.}
+Start by finding $\nabla \cdot v$:
+\[
+    \nabla \cdot v = 1
+\]
+
+The volume integral becomes
+\[
+    \int \nabla \cdot v = \int_0^1 \int_0^1 \int_0^1 1 dx dy dz = 1
+\]
+
+\newpage
+The surface integrals become
+\begin{align}
+    \int_0^1 \int_0^1 \hphantom{1 -}\:\:y\: dz dy = \hphantom{-}\frac{1}{2} \tag{i}     \\
+    \int_0^1 \int_0^1 \hphantom{1  }-y\: dz dy =            -\frac{1}{2}    \tag{ii}    \\
+    \int_0^1 \int_0^1 \hphantom{1 -}\:\:x\: dz dx = \hphantom{-}\frac{1}{2} \tag{iii}   \\
+    \int_0^1 \int_0^1 \hphantom{1  }-x\: dz dx =            -\frac{1}{2}    \tag{vi}    \\
+    \int_0^1 \int_0^1 \hphantom{1 -}\:\:x\: dy dx = \hphantom{-}\frac{1}{2} \tag{v}     \\
+    \int_0^1 \int_0^1 1 - x\: dy dx = \hphantom{-}\frac{1}{2}               \tag{vi} 
+\end{align}
+
+So the total flux becomes $1$, therefore the theorem holds.
+
+\section*{Task 3.}
+Start by finding $\nabla \times v$, where $v = x^2 y \mathbf{\hat{y}} + (3zy + 1)\mathbf{\hat{z}}$:
+\[
+    \nabla \times v = \begin{pmatrix} 3z - 0, & 0 - 0, & 2xy - 0 \end{pmatrix} = \begin{pmatrix} 3z, & 0, & 2xy \end{pmatrix}
+\]
+
+\begin{alphalist}
+    \item The surface integral gives us 
+        \[
+            \int \nabla \times v \cdot d\Sigma = \int_0^1 \int_0^1 3z\: dy dz = \frac{3}{2}
+        \]
+
+        The $\mathbf{\hat{y}}$ component of $v$ is independen of $z$, so the line integral over (i) and (iii) cancel out.
+        The line integral for (ii) is:
+        \[
+            \int_0^1 3z + 1 dz = \frac{3}{2} + 1
+        \]
+        And (iv):
+        \[
+            \int_1^0 1 dz = -1
+        \]
+
+        So the sum of the line integrals is $\frac{3}{2}$, and Stokes theorem holds.
+
+    \item We again have that
+        \[
+            \int \nabla \times v \cdot d\Sigma = \int_0^2 \int_0^2 3z\: dy dz = 12
+        \]
+
+        The cancelation of line segments (i) and (iii) still holds. We get that (ii) gives:
+        \[
+            \int_0^2 6z + 1 dz = 12 + 2
+        \]
+        And (vi):
+        \[
+            \int_0^2 -1 dz = -2
+        \]
+
+        So again Stokes theorem holds.
+\end{alphalist}
+
+\section*{Task 4.}
+\begin{alphalist}
+    \item Gauss' theorem tells us that the flux through any closed surface, say for instance a sphere or cylinder, is equal to 
+        the total charge enclosed within. A charge outside the surface will not contribute because it's field lines will enter on one side 
+        and exit on another, contributing nothing to the total flux.
+    \item 
+        Consider the vectorfield $\mathbf{v} = r^2 \mathbf{\hat{r}}$. The volume integral for a spehere with radius $R$ becomes
+        \begin{align*}
+            \int \nabla \cdot \mathbf{v} d\tau &= \int_0^{R} \int_0^\pi \int_0^{2\pi} \frac{1}{r^2} \frac{\partial (r^2 \cdot r^2)}{\partial r} \cdot r^2 \sin(\theta)\: d\phi d\theta dr \\
+                                               &= \int_0^{R} \int_0^\pi \int_0^{2\pi} 4r \cdot r^2 \sin(\theta)\: d\phi d\theta dr \\
+                                               &= \int_0^{R} \int_0^\pi 8 \pi r^3 \sin(\theta)\: d\theta dr \\
+                                               &= \int_0^{R} 16 \pi r^3\: dr = 4 \pi R^4
+        \end{align*}
+        The surface integral over the same vectorfield becomes
+        \[
+            \oint \mathbf{v} \cdot da = \int_{0}^{2\pi} \int_{0}^{\pi} R^2 \cdot R^2 \sin(\theta) d\theta d\phi = 4\pi R^4
+        \]
+        We therefore have that the divergence theorem golds for spherical coordinates.
+\end{alphalist}
+
+\section*{Task 5.}
+The delta function, or dirac delta function, is essentially an infinetly high and narrow spike with are 1. The function does not obey the divergence theorem,
+as shown in the lecture.
+
+Given $\mathbf{v_r} = \frac{1}{r^2}\mathbf{\hat{r}}$, applying the divergence theorem, the left hand side gives us
+\begin{align*}
+    \int \nabla \cdot \mathbf{v} d\tau &= \int_0^{R} \int_{0}^{2\pi} \int_{0}^{\pi} \left(\frac{1}{r^2} \frac{\partial \left(r^2 \cdot \frac{1}{r^2}\right)}{\partial r}\right) \cdot r^2 \sin(\theta)\: d\phi d\theta dr \\
+                                       &= \int_0^{R} \int_{0}^{2\pi} \int_{0}^{\pi} \left(\frac{1}{r^2} \cdot 0\right) r^2 \sin(\theta)\: d\phi d\theta dr = 0 \\
+\end{align*}
+
+Then the right hand side gives
+\[
+    \oint \mathbf{v} \cdot da = \int_{0}^{2\pi} \int_{0}^{\pi} \frac{1}{r^2} \cdot r^2 \sin(\theta) d\phi d\theta = 4\pi
+\]
+
+Therefore we see that the divergence theorem does not hold for the dirac delta function. We may however define a function 
+$\delta(\mathbf{x})$, where $\mathbf{x} \in \mathbb{R}^3$, such that
+\[
+    \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}\int_{-\infty}^{\infty} \delta(\mathbf{x}) dxdydz = \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}\int_{-\infty}^{\infty} \delta(x)\delta(y)\delta(z) dxdydz = 1
+\]
+
+\section*{Task 6.}
+\begin{romanlist}
+    \item A source charge is a charge for which we want to measure or calculate the electric field of. The test charge is an imagnined charge 
+        of which we assume the charge is negligible, such that the measure of force upon it may be approximated as the strength of the field in the 
+        position of the test charge. For electrostatics the source charge should not be moving and the test charge should have a charge that is 
+        infinitesimally small. Presumably, for measuring the electric field strength, the magnetic field ought to be zero.
+    \item Coulomb's law in vector form can be written as the force $\mathbf{F}$ acting between two charges $q$ and $Q$ as
+        \[
+            \mathbf{F} = \frac{1}{4\pi \epsilon_0}\frac{qQ}{n^2}\mathbf{\hat{n}}
+        \]
+        where $\mathbf{n}$ is the seperation vector between the charges and $\epsilon_0$ is the permittivity of free space.
+        The law gives us an expression for the force that two charges act uppon the other.
+    \item The principle of superposition in the context of electrostatics tells us that in a system with multiple charges
+        the force felt by each charge can be calculated as the cumulative sum of the forces for each other charge on it's own. That is,
+        with $k$ charges, the total force felt by any one charge will be
+        \[
+            \mathbf{F_i} = \sum_{i \neq k}^{k} F_{ik}
+        \]
+        where $F_i$ is the total force on charge $i$ and $F_{ik}$ is the force between charge $i$ and $k$. The same 
+        notion of summin up individual contributions also holds for potential fields as well.
+    \item In descrete form, the electric field $E(\mathbf{r})$ can be written as
+        \[
+            E(\mathbf{r}) = \frac{1}{4\pi \epsilon_0} \sum_{i = 1}^{n} \frac{q_i}{n_i^2}\mathbf{\hat{n_i}}
+        \]
+        where $\mathbf{r}$ is a position, say in $\mathbb{R}^3$, $\mathbf{n}$ is the seperation vector between $\mathbf{r}$ and the 
+        charge position $\mathbf{r'}$, and, as before, $\epsilon_0$ is the permittivity of free space. We may understand the field as the force per 
+        unit charge, that is, for a given charge $Q$ the force acted upon that charge in the electric field $E(\mathbf{r})$ is 
+        \[
+            \mathbf{F} = Q\mathbf{E}(\mathbf{r})
+        \]
+        where $\mathbf{r}$ is the position of the charge $Q$.
+    \item No.
+\end{romanlist}
+
+\section*{Task 7.}
+\begin{romanlist}
+    \item Start by finding a common expression for the force in the vertical ($z$) direction. Since the two charges are equedistant in the $x$ direction
+        to the point $P$, and given that the charges are equal but opposite, we have
+        \[
+            F_z = \frac{1}{4\pi \epsilon_0} \left(
+                \frac{q}{n^2}\mathbf{\hat{z}} + \frac{-q}{n^2}\mathbf{\hat{z}}
+            \right) = 0
+        \]
+        where $\mathbf{n}$ is the seperation vector from $q$ to $P$.
+        For the horizontal we have
+        \[
+            F_x = \frac{1}{4\pi \epsilon_0} \left(
+                \frac{q}{n^2} \cdot \mathbf{\hat{x}} + \frac{-q}{n^2} \cdot (-\mathbf{\hat{x}})
+            \right) = \frac{1}{2\pi \epsilon_0} \frac{q}{n^2} \cdot \mathbf{\hat{x}} = \frac{1}{4\pi \epsilon_0} \frac{dq}{\left[z^2 + (d/2)^2\right]^{3/2}} \cdot \mathbf{\hat{x}}
+        \]
+    \item This yields the same result, but with the force component in the $x$-direction pointing the other way.
+\end{romanlist}
+
+\section*{Task 8.}
+\begin{romanlist}
+    \item 
+    \begin{align*}
+        E(P) &= \frac{1}{4\pi \epsilon_0} \int_{0}^{2\pi} \frac{\lambda z}{[r^2 + z^2]^{3/2}} \mathbf{\hat{z}} r d\theta \\
+             &= \boxed{\frac{1}{2\epsilon_0} \frac{\lambda zr}{[r^2 + z^2]^{3/2}} \mathbf{\hat{z}}}
+    \end{align*}
+
+    \item 
+    \begin{align*}
+        E(P) &= \frac{1}{4\pi \epsilon_0} \int_{0}^{r} \frac{\sigma z}{[r'^2 + z^2]^{3/2}} 2\pi r' dr' \\
+             &= \frac{2\pi \sigma z}{4\pi \epsilon_0} \int_{0}^{r} \frac{r'}{[r'^2 + z^2]^{3/2}} dr'
+    \end{align*}
+
+    Using $u = r^2 + z^2$, which means that $du = 2rdr$ (constant z), which gives
+    \begin{align*}
+        E(P) &= \frac{2\pi \sigma z}{4\pi \epsilon_0} \int_{0}^{r} \frac{1}{2u^{3/2}} du \\        
+             &= \frac{2\pi \sigma z}{4\pi \epsilon_0} \cdot \left[-\frac{1}{\sqrt{r'^2 + z^2}}\right]_{0}^{r} \\
+             &= \frac{2\pi \sigma z}{4\pi \epsilon_0} \cdot \left(\frac{1}{z} - \frac{1}{\sqrt{r^2 + z^2}}\right) \\
+             &= \boxed{\frac{\sigma}{2\epsilon_0} \cdot \left(1 - \frac{z}{\sqrt{r^2 + z^2}}\right)}
+    \end{align*}
+\end{romanlist}
+
+\end{document}
