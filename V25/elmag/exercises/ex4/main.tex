@@ -1,0 +1,92 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1.}
+For a given radius $r \neq R$ we have that
+\begin{align*}
+    \oint E \cdot d\mathbf{a} = \oint |E| da = E \cdot 4\pi r^2 = \frac{1}{\epsilon_0} Q_{enc}
+\end{align*}
+For $r < R$ we get $E = 0$ since no charges are enclosed within, since all charges are distributed along the shell outside it.
+For $r > R$ we get 
+\[
+    E = \frac{\sigma R^2}{\epsilon_0 r^2}\mathbf{\hat{r}}
+\]
+
+\section*{Task 2.}
+Again we have for a radius $r$ away from the center of the cyliner
+\[
+    \oint E \cdot d\mathbf{a} = \oint |E| da = E \cdot 2\pi r \cdot l = \frac{1}{\epsilon_0}Q_{enc} = \frac{2 \pi \sigma R \cdot l}{\epsilon_0}
+\]
+For $r < R$, $Q_{enc} = 0$, so $E = 0$. For $r > R$ we get
+\[
+    E = \frac{2\pi \sigma R}{\epsilon_0 r}
+\]
+
+\section*{Task 3.}
+\begin{romanlist}
+    \item For a sphere we imagine a larger sphere with radius $r > R$. Since all the chages are now enclosed within this new 
+        large sphere, we may extract $E$ due to symmetry. This makes the integral easy.
+    \item For a cylinder we imagine a larger cylinder around it. From here the same logic applies as for the sphere.
+    \item For an infinite plane we imagine a small box with some upper and lower area $A$, where, since the field only points normally 
+        to the plane, the sides of the box do not matter. The total enclosed charge is proportional to the surface area of the top and bottom 
+        side $A$, so we may extract $\int E \cdot da = 2A|E|$.
+    \item We do the same as for the solid sphere.
+\end{romanlist}
+
+\section*{Task 4.}
+\begin{romanlist}
+    \item We have
+        \[
+            \int E \cdot d\mathbf{a} = 2A |E| = \frac{1}{\epsilon}\sigma A
+        \]
+        This gives us
+        \[
+            E = \frac{\sigma}{2\epsilon_0} \mathbf{\hat{n}}
+        \]
+    \item Again we have that
+        \[
+            \int E \cdot d\mathbf{a} = 4A |E| = \frac{2\sigma A}{\epsilon}
+        \]
+        This still gives
+        \[
+            E = \frac{\sigma}{2\epsilon_0} \mathbf{\hat{n}}
+        \]
+\end{romanlist}
+The field of the infinite plane is independent of the distance from the plane.
+
+\section*{Task 5.}
+\begin{romanlist}
+    \item Electric potential is a measure of the electric field strength along a line from some predefined reference point 
+        to a point $\mathbf{r}$. The potential difference between two points therefore is the difference of the potentials of the two points.
+        It stems from the fact that the electrif field $E$ has no curl, i.e. $\oint E \cdot d\mathbf{l} = 0$, therefore the path from the
+        reference point to the point $\mathbf{r}$ does not depend upon the path $\mathbf{l}$, so therefore we may define the 
+        potential as we have.
+    \item \hphantom{}
+        \begin{alphalist}
+            \item As found previously, the field strength inside the sphere shell is 0, and outside is
+                \[
+                    E = \frac{1}{4\pi\epsilon_0}\frac{2q}{r^2}\mathbf{\hat{r}}
+                \]
+                for some $r > R$. We therefore have that outside the sphere ($r > R$) we have that
+                \[
+                    V(r) = -\int_{\mathcal{O}}^{\mathbf{r}} E \cdot d\mathbf{l} = \left-\frac{1}{4\pi\epsilon_0}\frac{2q}{r'}\right|_{\infty}^{r} = \frac{1}{4\pi \epsilon_0}\frac{2q}{r}
+                \]
+                Inside the sphere ($r < R$) we have two integrals, one from infinity to $R$, and the other one from $R$ to $r$.
+                \[
+                    V(r) = -\frac{1}{4\pi \epsilon_0}\int_{\infty}^{R} \frac{2a}{{r'^2}}dr' - \int_{R}^{r} 0 dr' = \frac{1}{4\pi \epsilon_0}\frac{2q}{R}
+                \]
+            \item 
+        \end{alphalist}
+\end{romanlist}
+
+\section*{Task 6.}
+\begin{romanlist}
+    \item 
+    \item 
+\end{romanlist}
+
+\end{document}

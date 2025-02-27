@@ -1,0 +1,197 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1.}
+\begin{itemize}
+    \item Gradient represents the direction of most significant change in some scalar field.
+    \item Divergence is the measure of expantion of some vectorfield.
+    \item Curl is a measure of how much, and about which axis, a vectorfield rotates.
+\end{itemize}
+
+\section*{Task 2.}
+\begin{alphalist}
+    \item  Gauss' theorem states that for the vector field $F$
+        \[
+            \int_{S} F \cdot d\mathbf{S} = \int_{V} (\nabla \cdot F) d\mathbf{V}
+        \]
+        If we let $\mathbf{F} = \nabla \times \mathbf{v}$, then
+        \[
+            \int_{S} (\nabla \times v) \cdot D\mathbf{S} = \int_{V} \nabla \cdot (\nabla \times \mathbf{v}) d\mathbf{V} = 0
+        \]
+        since $\nabla \cdot (\nabla \times \mathbf{v}) = 0$.
+    \item Stokes theorem states that
+        \[
+            \oint_{S}(\nabla \times \mathbf{u}) \cdot d\mathbf{a} = \oint_{\partial S} \mathbf{u} \cdot d\mathbf{l} \overset{def}{=} 0
+        \]
+        since $S$ is a closed surface, and the boundry therefore does not exist.
+\end{alphalist}
+
+\section*{Task 3.}
+The electric field $E$ at a point $\mathbf{r}$ above the line is given as
+\[
+    E(\mathbf{r}) = \frac{1}{4\pi\epsilon_0}\int \frac{\lambda}{\mathcal{R}^2}\mathbf{\hat{\mathcal{R}}} dl
+\]
+where $\mathbf{\mathcal{R}} = \mathbf{r} - \mathbf{r}'$ is the separation vector between the segments $dl$ and the field point $P$,
+which here becomes 
+\[
+    \mathbf{\mathcal{R}} = Z\hat{\mathbf{z}} - x\hat{\mathbf{x}}
+\]
+Therefore 
+\[
+    \mathcal{R} = \sqrt{Z^2 + x^2}
+\]
+and
+\[
+    \hat{\mathbf{\mathcal{R}}} = \frac{Z\hat{\mathbf{z}} - x\hat{\mathbf{x}}}{\sqrt{Z^2 + x^2}}
+\]
+We get 
+\begin{align*}
+    E(\mathbf{r}) &= \frac{1}{4\pi\epsilon_0} \int_{-L/2}^{L/2} \frac{\lambda}{Z^2 + x^2}\frac{Z\hat{\mathbf{z}} - x\hat{\mathbf{x}}}{\sqrt{Z^2 + x^2}} dx \\
+                  &= \frac{\lambda}{4\pi\epsilon_0}\left[Z\hat{\mathbf{z}} \int_{-L/2}^{L/2} \frac{1}{(Z^2 + x^2)^{3/2}}dx - \int_{-L/2}^{L/2} \frac{x\mathbf{\hat{x}}}{(Z^2 + x^2)^{3/2}}dx\right]  \\
+                  &= \frac{\lambda}{4\pi\epsilon_0} \left[ z\mathbf{\hat{z}} \cdot \left \frac{x}{Z^2 \cdot \sqrt{Z^2 + x^2}} \right|_{-L/2}^{L/2} + \left \frac{\hat{\mathbf{x}}}{\sqrt{Z^2 + x^2}}\right|_{-L/2}^{L/2}  \right] \\
+                  &= \frac{\lambda}{4\pi\epsilon_0} \frac{\lambda L}{z\sqrt{Z^2 + \frac{L^2}{4}}} \mathbf{\hat{z}}
+\end{align*}
+
+\section*{Task 4.}
+\begin{alphalist}
+    \item The electric potential $V(\mathbf{r})$ at the point $\mathbf{r}$ is the measure of the strength of an electric field $E$ along some line from a reference point $\mathcal{O}$ to
+        the point $\mathbf{r}$. Since the electric field is conservative, the path taken does not matter.
+    \item 
+    \begin{romanlist}
+        \item The field strength inside a hollow sphere shell is 0, and outside is
+            \[
+                E(\mathbf{r}) = \frac{1}{4\pi\epsilon_0}\frac{2q}{r^2}\mathbf{\hat{r}}
+            \]
+            as we have found previously. Outside the sphere shell ($r > R$) we therefore have that, for a reference point 
+            at infinity, the potential is
+            \[
+                V(\mathbf{r}) = -\int_{\mathcal{O}}^{\mathbf{r}} E \cdot d\mathbf{l} = -\left \frac{1}{4\pi\epsilon_0}\frac{2q}{r'} \right|_{\infty}^{r} = \frac{1}{4\pi\epsilon_0}\frac{2q}{r}
+            \]
+            Inside the sphere ($r < R$) we get that the potential is
+            \[
+                V(\mathbf{r}) = -\int_{\infty}^{R}\frac{2q}{r'^2}dr' - \int_{R}^{r} 0\: dr' = \frac{1}{4\pi\epsilon_0}\frac{2q}{R}
+            \]
+        \item In the case of the solid sphere the electric field outside when $r > R$ is simply the field of gaussian surface enclosing the 
+            sphere as
+            \[
+                E(\mathbf{r}) = \frac{1}{4\pi\epsilon_0}\frac{2q}{r^2}
+            \]
+            For inside the sphere, the enclosed charge will be proportional to $\frac{r^3}{R^3}, so
+            the field strength becomes
+            \[
+                E(\mathbf{r}) = \frac{1}{4\pi\epsilon_0}\frac{2qr}{R^3}
+            \]
+
+            We may then calculate the potetial, first for $r > R$:
+            \[
+                V(\mathbf{r}) = -\int_{\infty}^{r} \frac{1}{4\pi\epsilon_0}\frac{2q}{r'^2} dr' = -\left \frac{1}{4\pi\epsilon_0}\frac{2q}{r'} \right|_{\infty}^{r} = \frac{1}{4\pi\epsilon_0}\frac{2q}{r}
+            \]
+            Then for $r < R$:
+            \begin{align*}
+                V(\mathbf{r}) &= -\int_{\infty}^{R} \frac{1}{4\pi\epsilon_0}\frac{2q}{r'^2} dr' - \int_{R}^{r} \frac{1}{4\pi\epsilon_0}\frac{2qr'}{R^3} dr' \\
+                              &= \frac{1}{4\pi\epsilon_0}\frac{2q}{R} - \frac{1}{4\pi\epsilon_0}\frac{2q(r^2 - R^2)}{2R^3} = \frac{2q}{4\pi\epsilon_0} \cdot \left[\frac{1}{R} - \frac{r^2 - R^2}{2R^3}\right]
+            \end{align*}
+    \end{romanlist}
+\end{alphalist}
+
+\section*{Task 5.}
+\begin{alphalist}
+    \item We have that $W = qV$ (assuming that we start at infinity where $V = 0$), so we start by finding the voltage at the the point.
+        \[
+            V = \frac{1}{4\pi\epsilon_0} \cdot \left(\frac{q}{a} + \frac{-q}{\sqrt{2}a}\right)
+        \]
+        And the work to bring the new charge in becomes
+        \[
+            W = -q \cdot \frac{1}{4\pi\epsilon_0} \cdot \left(\frac{q}{a} + \frac{-q}{\sqrt{2}a}\right) = \frac{1}{4\pi\epsilon_0} \cdot \left(\frac{q^2}{\sqrt{2}a} - \frac{q^2}{a}\right)
+        \]
+    \item The fourth charge has a potential in the upper right corner of
+        \[
+            V = \frac{1}{4\pi\epsilon_0} \cdot \left(\frac{-q}{a} + \frac{-q}{a} + \frac{q}{\sqrt{2}a} \right) = \frac{q}{4\pi\epsilon_0 a}\left(-2 + \frac{1}{\sqrt{2}}\right)
+        \]
+        So the work to bring it in becomes
+        \[
+            W = qV = \frac{q^2}{4\pi\epsilon_0 a}\left(-2 + \frac{1}{\sqrt{2}}\right)
+        \]
+    \item The total work to configure it is going to be
+        \[
+            W = \frac{q^2}{4\pi\epsilon_0 a} \cdot \left(-1 + \frac{1}{\sqrt{2}} - 1 - 2 + \frac{1}{\sqrt{2}}\right)
+        \]
+        (First charge requires no work, second one only affected by the first one, and then sum the other two).
+\end{alphalist}
+
+\section*{Task 6.}
+The electrostatic work $W$ for a volume $V$ with charge density $\rho$ is equal to
+\[
+    W = \frac{1}{2}\int \rho V d\tau
+\]
+We may rewrite the expression onto a form that is only dependent on $E$ by first setting
+\[
+    \rho = \epsilon_0 \cdot (\nabla \cdot E)
+\]
+This comes from Gauss' law, where 
+\[
+    \int_{V} \nabla \cdot E d\tau = \frac{1}{\epsilon_0}\int_{V} \rho d\tau
+\]
+We may then rewrite the work as
+\[
+    W = \frac{\epsilon_0}{2} \int (\nabla \cdot E) V d\tau
+\]
+If we then integrate by parts we get
+\[
+    W = \frac{\epsilon_0}{2} \left[ -\int_V E \cdot (\nabla V) d\tau + \oint_{S} EV \cdot d\mathbf{a} \right]
+\]
+We see now that $\nabla V = -E$, so
+\[
+    W = \frac{\epsilon_0}{2} \left[ \int_{V} E^2 d\tau + \oint_{S} EV \cdot d\mathbf{a} \right]
+\]
+The trick here is to see that the volume, and therefore the corresponding surface $S$, that we are integrating
+over is independent of the work, so if we integrate over all space, then the surface integral goes to 0, and we are left with
+\[
+    \boxed{W = \frac{\epsilon_0}{2} \int E^2 \:d\tau}
+\]
+
+\section*{Task 7.}
+We start with the equation derived above
+\[
+    W = \frac{\epsilon_0}{2} \int E^2 \:d\tau
+\]
+Let $E = E_1 + E_2$. We then have 
+\begin{align*}
+    W &= \frac{\epsilon_0}{2} \int E^2 \:d\tau \\ 
+      &= \frac{\epsilon_0}{2} \int (E_1 + E_2)^2 \:d\tau \\
+      &= \frac{\epsilon_0}{2} \int E_1^2 + E_2^2 + 2E_1 \cdot E_2 \:d\tau \\
+      &= W_1 + W_2 + \epsilon_0 \int E_1 \cdot E_2 \:d\tau \neq W_1 + W_2
+\end{align*}
+Therefore the expression for work above does not follow the superposition principle. Coulumb's law on the
+other hand does follow the superposition principle, as we have shown in earlier exercises.
+
+\section*{Task 8.}
+\begin{alphalist}
+    \item The surface charge density of the metal sphere is given as
+        \[
+            \sigma_R = \frac{q}{4\pi R^2}
+        \]
+
+        Since the shell is supposed to be neutrally charged, the surface charge for the inner surface at a radius of $a$ must be 
+        oppositly charged in order to keep the shell uncharged. So
+        \[
+            \sigma_a = \frac{-q}{4\pi a^2}
+        \]
+        Similarly, the outer surface of the shell must have a surface charge of
+        \[
+            \sigma_b = \frac{q}{4\pi b^2}
+        \]
+    
+    \item The potential at the center of the sphere becomes
+        \begin{align*}
+            V(0) &= -\int_{\infty}^{0} E \cdot d\mathbf{l} = -\int_{\infty}^{b} \frac{1}{4\pi\epsilon_0}\frac{q}{r^2} dr - \int_{b}^{a} 0\: dr - \int_{a}^{R} \frac{1}{4\pi\epsilon_0}\frac{q}{r^2}\:dr - \int_{R}^{0} 0\: dr \\
+                 &= \frac{q}{4\pi\epsilon_0} \cdot \left(\frac{1}{b} + \frac{1}{R} - \frac{1}{a}\right)
+        \end{align*}
+
+\end{alphalist}
+
+\end{document}

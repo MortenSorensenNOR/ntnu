@@ -1,0 +1,26 @@
+\section{Background}
+In order to understand how and why Pythia works, we must first understand the basics 
+of reinforcement learning, and specifically, the algorithms and methods that the authors of
+Pythia have implemented to achive the prefetchers excellent performance.
+
+\subsection{Reinforcement Learning}
+Reinforcement Learning (LR) \cite{reinforcement_learning, pythia} is an area of machine learning 
+research that is concerned with teaching an autonomous agent an optimal set of \textit{actions} for
+a given set of \textit{states} in a dynamic enviorment through numerical \textit{rewards}. Typically 
+an RL system is comprised of two parts: the agent and it's environment. The agent, at descritezed 
+timesteps $t$, observes the state of the environment $S_t$ and based on this decides on some action
+$A_t$. This action leads the environment to change to a new state $S_{t+1}$ and, as a result of the 
+action at time $t$, issues a reward for the action $R_{t+1}$ based on the desirability of the action.
+This reward may be given to the agent immediatly at time $t+1$ or at some later time $t+n$. Through this 
+mechanism, and through policies and the mechanism of Q-values as we descuss next, the agent converges on some optimal 
+behavior, indirectly controlled by the reward system.
+
+The \textbf{\textit{policy }} of an RL system defines the behavior of the agent by mapping the 
+states to the actions. The goal of RL is for the agent to iteratively learn the optimal policy 
+that maximizes the cumulative reward recevied over time from it's environment, thereby creating 
+a mechanism through which optimal control of the system is achieved. The expected cumulative reward 
+for taking some action $A$ in the state $S$ is called the \textbf{\textit{Q-value}} of the state-action
+pair, denoted $Q(S, A)$. It is this value which the agent iteratively optimizes over. This optimization
+may be characterized as a two-step process.
+
+\textbf{1. Q-value Update.} 

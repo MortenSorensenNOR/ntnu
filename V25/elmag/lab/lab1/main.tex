@@ -1,0 +1,107 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section{Forarbeid}
+\subsection{}
+En sirkelplate med radius $a$ vil ha en ladningstetthet
+\[
+    \sigma = \frac{Q}{\pi a^2}
+\]
+Bruker så resultatet fra oppgave 8 i øving 3 hvor det elektriske feltets styrke ved en gitt avstand 
+$z$ over senteret til en ladet sirkelplate er gitt ved 
+\[
+    E(z) = \frac{\sigma}{2\epsilon_0} \cdot \left(1 - \frac{z}{\sqrt{a^2 + z^2}}\right)
+\]
+
+Tar vi i betraktning at rommet mellom platen og puntket i $z$ ikke er i vakum kan vi innføre en relativ permitivitet 
+$\epsilon_r$ slik at uttrykket over blir
+\[
+    E(z) = \frac{\sigma}{2\epsilon_0\epsilon_r} \cdot \left(1 - \frac{z}{\sqrt{a^2 + z^2}}\right)
+\]
+
+Vi har to slike plater, den ene med positiv og den andre med negativ ladning. Integrer vi over avstanden 
+mellom platene $d$ får vi at spenningen er gitt ved
+\[
+    V = V_+ - V_- = -\int_{0}^{d}E \cdot dz
+\]
+der den negative platen er plassert i $z = -d/2$ og den positive i $z = d/2$, feltet $E$ er summen av feltene 
+til de to platene. Dette gir
+\begin{align}
+    V &= -\frac{\sigma}{2\epsilon_0\epsilon_r}\int_{-d/2}^{d/2}{\left(1 - \frac{z - d/2}{\sqrt{a^2 + (z - d/2)^2}}\right) + \left(1 - \frac{z + d/2}{\sqrt{a^2 + (z + d/2)^2}}\right) dz} \\
+      &= -\frac{\sigma}{2\epsilon_0\epsilon_r}\left[\int_{-d/2}^{d/2}{2 dz} - \int_{-d/2}^{d/2}{\frac{z - d/2}{\sqrt{a^2 + (z - d/2)^2}}dz} - \int_{-d/2}^{d/2}{\frac{z + d/2}{\sqrt{a^2 + (z + d/2)^2}}dz}\right]
+\end{align}
+
+Vi har at 
+\[
+    \int \frac{x}{\sqrt{x^2 + a^2}} = \sqrt{x^2 + a^2}
+\]
+Siden vi integrerer fra $-d/2$ til $d/2$ vil de to siste leddene i (2) kanseleres ut.
+
+\newpage
+Vi står derfor igen med
+\[
+    V = -\frac{\sigma d}{\epsilon_0 \epsilon_r}
+\]
+Her dropper vi minus tegnet siden vi ser på en spenningsforskjell. Bruker vi så kondensatorligningen 
+\[
+    C = \frac{Q}{V}
+\]
+får vi at 
+\[
+    \boxed{C = \frac{A\epsilon_0\epsilon_r}{d}}
+\]
+
+\subsection{}
+\begin{enumerate}
+    \item Starter med å finne får $C = C_{osc}$. For konfigurasjonen beskrevet har vi at
+        \[
+            \frac{A\epsilon_0\epsilon_r}{d} \approx \frac{1.7802 \cdot 10^{-13}}{d} F
+        \]
+        Så 
+        \[
+            d = \frac{1.7802 \cdot 10^{-13}}{150 \cdot 10^{-12}} = \SI{1.186}{\milli\meter}
+        \]
+        Usikker på hva som menes med $C_{osc} >> C$, men det er tenkelig at en faktor på 10 vil være tilstrekkelig for det. Da
+        vil $d \approx \SI{1}{\centi\meter}$
+
+
+    \item Vi har
+        \[
+            Z_2 || Z_3 = \frac{\frac{R_{\text{osc}}}{j\omega C_{\text{tot}}}}{R_{\text{osc}} + \frac{1}{j\omega C_{\text{tot}}}} = \frac{R_{\text{osc}}}{j\omega R_{\text{osc}} C_{\text{tot}} + 1}
+        \]
+        Dette gir
+        \[
+            \frac{V_o}{V_i} = \frac{\frac{R_{\text{osc}}}{j\omega R_{\text{osc}} C_{\text{tot}} + 1}}{R_1 + \frac{R_{\text{osc}}}{j\omega R_{\text{osc}} C_{\text{tot}} + 1}} = \frac{R_{\text{osc}}}{R_{\text{osc}} + j\omega R_1 R_{\text{osc}} C_{\text{tot}} + R_1}
+        \]
+
+        Amplituden blir
+        \[
+            \left|\frac{V_o}{V_i}\right| = \frac{R_{\text{osc}}}{\sqrt{(R_{\text{osc}} + R_1)^2 + (\omega R_1 R_{\text{osc}} C_{\text{tot}})^2}}
+        \]
+
+    \item 
+        Vi har følgende
+        \[
+            |Z_2| = |Z_3| \implies \frac{1}{2\pi f C_{\text{tot}}} = R_{\text{osc}}
+        \]
+
+        Løser for $f$
+        \[
+            f = \frac{1}{2\pi \cdot \SI{1}{\mega\ohm} \cdot \left(\SI{150}{\pico\farad} + \frac{\epsilon_0 \pi (\SI{0.08}{\meter})^2}{\SI{5}{\milli\meter}}\right)} \approx \SI{858}{\hertz}
+        \]
+
+    \item Setter inn verdiene og får en $R_1 \approx \SI{162.7}{\kilo\ohm}$
+
+    \item Aner ikke hvilket svar som fiskes etter, så sier det bare slik at
+        \[
+            C_{\text{tot}} = C_{\text{osc}} + C = C_{\text{osc}} + \frac{A\epsilon_r\epsilon_0}{d}
+        \]
+        altså blir $C_{\text{tot}}$ mindre når $d$ øker. Om den har samme relasjon i ligning (15) er jeg for trøtt til å finne ut av.
+
+\end{enumerate}
+
+\end{document}

@@ -1,43 +1,86 @@
 %{
-#include "vslc.h"
-
-// The tokens defined in parser.y
 #include "parser.h"
-
-// parser.h contains some unused functions, ignore that
-#pragma GCC diagnostic ignored "-Wunused-function"
+#include "tree.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 %}
 
-%option noyywrap
-%option array
-%option yylineno
-
-WHITESPACE [ \t]
-COMMENT \/\/[^\n]+
-QUOTED \"([^\"\n]|\\\")*\"
+DIGIT      [0-9]
+LETTER     [a-zA-Z_]
+ID         {LETTER}({LETTER}|{DIGIT})*
+NUMBER     {DIGIT}+
+STRING     \"([^\"\\]|\\.)*\"
+WHITESPACE [ \t\n\r\v]+
+COMMENT    \/\/.*
 
 %%
-{WHITESPACE}+           { /* Eliminate whitespace */ }
-{COMMENT}               { /* Eliminate comments */ }
-{QUOTED}                { return STRING_TOKEN; }
 
-/*
- * TODO:
- *
- * Add the rest of the translation rules here.
- * See the lexical structure definition of the modified VSL in PS2.
- * Also see the `%token` directives in parser.y for all symbolic names that can be returned - e.g. FUNC, IF, IDENTIFIER_TOKEN.
- *
- * Hint to get you started:
- * The WHITESPACE regex defined above is not quite finished. Finish it.
- * The scanner returns STRING_TOKEN when matching the QUOTED regex above.
- * When should the scanner return a NUMBER_TOKEN, IDENTIFIER_TOKEN, etc?
- * In which specific scenarios should the scanner return keyword tokens like FUNC or PRINT?
- *
- * For operators, which are all a single char or two chars, we let each char be a separate token.
- * This is achieved by using the "catch-all" rule at the very bottom of this file.
- */
+{WHITESPACE}   { /* Ignore whitespace */ }
+{COMMENT}      { /* Ignore comments */ }
+{STRING}       { yylval.sval = strdup(yytext); return STRING_TOKEN; }
+{NUMBER}       { yylval.ival = atoi(yytext); return NUMBER_TOKEN; }
+{ID}           { yylval.sval = strdup(yytext); return IDENTIFIER_TOKEN; }
 
-  /* All other chars get returned as single char tokens */
-.                       { return yytext[0]; }
+"func"        { return FUNC; }
+"var"         { return VAR; }
+"return"      { return RETURN; }
+"print"       { return PRINT; }
+"if"          { return IF; }
+"then"        { return THEN; }
+"else"        { return ELSE; }
+"while"       { return WHILE; }
+"do"          { return DO; }
+"break"       { return BREAK; }
+
+"="          { return '='; }
+"+"          { return '+'; }
+"-"          { return '-'; }
+"*"          { return '*'; }
+"/"          { return '/'; }
+"=="         { return EQ; }
+"!="         { return NE; }
+"<"          { return '<'; }
+"<="         { return LE; }
+">"          { return '>'; }
+">="         { return GE; }
+"!"          { return '!'; }
+"("          { return '('; }
+")"          { return ')'; }
+"{"          { return '{'; }
+"}"          { return '}'; }
+","          { return ','; }
+
 %%
+
+int yywrap() { return 1; }
+
+node_t *node_create(node_type type, int num_children, ...) {
+    node_t *node = malloc(sizeof(node_t));
+    node->type = type;
+    node->num_children = num_children;
+    node->children = malloc(num_children * sizeof(node_t *));
+    va_list args;
+    va_start(args, num_children);
+    for (int i = 0; i < num_children; i++) {
+        node->children[i] = va_arg(args, node_t *);
+    }
+    va_end(args);
+    return node;
+}
+
+void node_finalize(node_t *node) {
+    if (node) {
+        free(node->children);
+        free(node);
+    }
+}
+
+void destroy_subtree(node_t *node) {
+    if (node) {
+        for (int i = 0; i < node->num_children; i++) {
+            destroy_subtree(node->children[i]);
+        }
+        node_finalize(node);
+    }
+}
