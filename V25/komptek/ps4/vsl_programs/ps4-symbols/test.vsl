@@ -1,0 +1,18 @@
+func main() {
+  var a, b
+  var c
+
+
+  var d, f, g
+  c = 2
+
+  {
+    var y, z
+    y = 2
+  }
+
+  return other(a, b, c)
+}
+
+func other(a, b, c)
+    return a * b + c

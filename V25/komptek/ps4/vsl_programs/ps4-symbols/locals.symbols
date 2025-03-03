@@ -1,0 +1,9 @@
+0: FUNCTION(main)
+    0: LOCAL_VAR(a)
+    1: LOCAL_VAR(b)
+1: FUNCTION(recursive)
+    0: PARAMETER(x)
+
+ == STRING LIST == 
+
+ == BOUND SYNTAX TREE == 

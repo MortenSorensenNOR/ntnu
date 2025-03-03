@@ -7,31 +7,72 @@
 
 \section*{Task 1.}
 \begin{alphalist}
-    \item 
-    \item 
-    \item 
+    \item If there were to be an electric field inside the conductor, this field would promote electrons to redistribute themselfs
+        within the conductor, thereby canceling out the electric field.
+    \item From Gauss' law $\nabla \cdot E = \rho/\epsilon_0$. If the field is zero inside the conductor, then the charge density also must be 0.
+    \item If the charge $+q$ is somewhere within the sphere's cavity, then this would induce 
+        a charge $-q$ to surround the cavity in order to cancel out the charge, leaving a net zero effect from the cavity. This, though, in turn leaves 
+        a net positive charge on the rest of the conductor of $+q$, which is now free to distribute itself uniformly on the surface of the sphere (see 1a for why only surface).
+        Since it is uniformly distributed on the surface, we may state that the field outside the conductor is independent of the shape and size of the cavity.
 \end{alphalist}
 
 \section*{Task 2.}
-\begin{romanlist}
-    \item 
-    \item 
-    \item 
-\end{romanlist}
+Remember from an earlier exercise that the field strength $E$ from an infinite charged plane with charge density $\sigma$ is given as
+\[
+    E = \frac{\sigma}{2\epsilon_0}\mathbf{\hat{n}}
+\]
+Here the field strength is independent of the distance to the surface, where $\mathbf{\hat{n}}$ points away from each of the planes, i.e.
+for the positive plane, in region (i) $\mathbf{\hat{n}}$ points upwards and in region (ii) and (iii) it points downwards.
+The field from the two planes will therefore point away from each other in region (i) and (iii), having equal strength, meaning the net 
+field strenght in those regions being 0. In region (ii) they both point downwards, with a field strength of
+\[
+    E = \frac{\sigma}{\epsilon_0}\mathbf{\hat{n}}
+\]
+where $\mathbf{\hat{n}}$ points downwards.
 
 \section*{Task 3.}
 \begin{alphalist}
-    \item 
-    \item 
-    \item 
+    \item The charge densities are $+\sigma = \frac{+Q}{A}$ and $-\sigma = \frac{-Q}{A}$.
+    \item We may, as in task 2., assume that the field outside the two conductive plates is 0. The potential difference between the two plates
+        therefore is simply equal to the distance $d$ times the field strength inbetween the plates, i.e.
+        \[
+            E = \frac{Q}{A\epsilon}
+        \]
+        so the potential difference becomes
+        \[
+            V = \frac{Qd}{A\epsilon_0}
+        \]
+        The exact same question was part of the lab preperation work, so doing the integral felt unnecessary.
+    \item The capacitance $C = \frac{Q}{V}$, so the capacitance for the two conductors is
+        \[
+            C = \frac{A\epsilon_0}{d}
+        \]
 \end{alphalist}
 
 \section*{Task 4.}
 \begin{alphalist}
-    \item 
-    \item 
-    \item 
-    \item 
+    \item The field between the conductors is given by Gauss' law for a given length $L$ of cable with charge $Q$ on the inner conductor is
+        \[
+            \int E \cdot d\mathbf{a} = E \cdot 2\pi s \cdot L = \frac{Q}{\epsilon_0}
+        \] 
+        This implies that 
+        \[
+            E = \frac{Q}{2\pi L \epsilon_0}\frac{1}{s} \mathbf{\hat{s}}
+        \]
+    \item The potential differnece between the conductors is 
+        \[
+            V(b) - V(a) = -\int_{a}^{b} E \cdot d\mathbf{l} = -\frac{Q}{2\pi L\epsilon_0} \int_{a}^{b}\frac{1}{s} ds = -\frac{Q}{2\pi L\epsilon_0} \ln\left(\frac{b}{a}\right)
+        \]
+        We may drop the negative sign here.
+    \item Since $C = \frac{Q}{V}$ we have that
+        \[
+            C = \frac{2\pi\epsilon_0}{\ln\left(\frac{b}{a}\right)}
+        \]
+        per unit length $L$.
+    \item The ratio becomes
+        \[
+            \frac{b}{a} = e^{\frac{2\pi\epsilon_0}{C}} \approx 16
+        \]
 \end{alphalist}
 
 \end{document}
