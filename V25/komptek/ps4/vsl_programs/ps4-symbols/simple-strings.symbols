@@ -2,6 +2,11 @@
 1: FUNCTION(printNewlines)
 
  == STRING LIST == 
+0: "Hello "
+1: " World"
+2: "Another one"
+3: "Yet another"
+4: "\n\n\n"
 
  == BOUND SYNTAX TREE == 
 LIST
@@ -14,17 +19,17 @@ LIST
      LIST
       PRINT_STATEMENT
        LIST
-        STRING_LITERAL ("Hello ")
+        STRING_LIST_REFERENCE (0)
         NUMBER_LITERAL (2)
-        STRING_LITERAL (" World")
+        STRING_LIST_REFERENCE (1)
       PRINT_STATEMENT
        LIST
-        STRING_LITERAL ("Another one")
+        STRING_LIST_REFERENCE (2)
       BLOCK
        LIST
         PRINT_STATEMENT
          LIST
-          STRING_LITERAL ("Yet another")
+          STRING_LIST_REFERENCE (3)
     RETURN_STATEMENT
      NUMBER_LITERAL (0)
  FUNCTION
@@ -36,6 +41,6 @@ LIST
      LIST
       PRINT_STATEMENT
        LIST
-        STRING_LITERAL ("\n\n\n")
+        STRING_LIST_REFERENCE (4)
     RETURN_STATEMENT
      NUMBER_LITERAL (0)

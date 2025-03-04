@@ -26,17 +26,9 @@ void create_tables(void)
         symbol_t* symbol = global_symbols->symbols[i];
         if (symbol->type == SYMBOL_FUNCTION) {
             node_t* function_body = symbol->node->children[2];
-
-            printf("Going into function: %s\n", symbol->name);
-
             bind_names(symbol->function_symtable, function_body);
         }
     }
-
-    // Binding should performed by bind_names(function symbol table, function body AST node).
-    // IDENTIFIERs that reference declarations should point to the symbol_t they reference.
-    // It handles pushing and popping scopes, and adding variables to the local symbol table.
-    // A final task performed by bind_names(...), is adding strings to the global string list.
 }
 
 // Prints the global symbol table, and the local symbol tables for each function.
@@ -48,7 +40,7 @@ void print_tables(void)
     printf("\n == STRING LIST == \n");
     print_string_list();
     printf("\n == BOUND SYNTAX TREE == \n");
-    // print_syntax_tree();
+    print_syntax_tree();
 }
 
 // Cleans up all memory owned by symbol tables and the global string list
@@ -136,10 +128,19 @@ static void find_globals(void)
 //    Overwrites the node's data.string_list_index field with with string list index
 static void bind_names(symbol_table_t* local_symbols, node_t* node)
 {
+    if (node == NULL)
+        return;
+
+    // Perserve original hashmap
+    symbol_hashmap_t* local_symbols_hashmap = local_symbols->hashmap;
     bool starts_with_variables = false;
 
     if (node->type == BLOCK) {
         assert(node->n_children > 0);
+
+        // Create new hashmap for new block
+        local_symbols->hashmap = symbol_hashmap_init();
+        local_symbols->hashmap->backup = local_symbols_hashmap;
 
         // We may only have variable declarations in the beginning of a block
         if (node->children[0]->type == LIST && node->children[0]->children[0]->type == LIST && 
@@ -166,6 +167,7 @@ static void bind_names(symbol_table_t* local_symbols, node_t* node)
                 }
             }
         }
+
     } else if (node->type == IDENTIFIER) {
         symbol_t* sym = symbol_hashmap_lookup(local_symbols->hashmap, node->data.identifier);
         if (sym == NULL) {
@@ -173,28 +175,26 @@ static void bind_names(symbol_table_t* local_symbols, node_t* node)
         }
 
         node->symbol = sym;
+    } else if (node->type == STRING_LITERAL) {
+        char* string = node->data.string_literal;
+        size_t string_table_idx = add_string(string);
+
+        // Modify node 
+        node->type = STRING_LIST_REFERENCE;
+        node->data.string_list_index = string_table_idx;
     }
 
     // Loop over all other nodes
     int i = starts_with_variables ? 1 : 0;
     for (; i < node->n_children; i++) {
         node_t* child = node->children[i];
-        symbol_hashmap_t* local_scope_hashmap = local_symbols->hashmap; 
-
-        if (child->type == BLOCK) {
-            // Create new scope. This symbol hastable will be the new scope. Set old hashmap as backup
-            local_symbols->hashmap = symbol_hashmap_init();
-            local_symbols->hashmap->backup = local_scope_hashmap;
-        }
-
         bind_names(local_symbols, child);
+    }
 
-        // Destroy scope hashmap if was new block
-        if (child->type == BLOCK) {
-            symbol_hashmap_t* block_scope_hashmap = local_symbols->hashmap;
-            local_symbols->hashmap = local_scope_hashmap;   // Reset the hashmap pointer
-            symbol_hashmap_destroy(block_scope_hashmap);   
-        }
+    // Reverse to local_symbols scope's hashmap
+    if (node->type == BLOCK) {
+        symbol_hashmap_destroy(local_symbols->hashmap);
+        local_symbols->hashmap = local_symbols_hashmap;
     }
 
     // Tip: Strings can be added to the string list using add_string(). It returns its index.
@@ -234,6 +234,16 @@ static void destroy_symbol_tables(void)
 
     // TIP: Using symbol_table_destroy() goes a long way, but it only cleans up the given table.
     // Try cleaning up all local symbol tables before cleaning up the global one.
+
+    for (size_t i = 0; i < global_symbols->n_symbols; i++) {
+        symbol_t* s = global_symbols->symbols[i];
+
+        // Free local symbol tables
+        if (s->type == SYMBOL_FUNCTION) {
+            symbol_table_destroy(s->function_symtable);
+        }
+    }
+    symbol_table_destroy(global_symbols);
 }
 
 // Declaration of global string list
@@ -256,6 +266,16 @@ static size_t add_string(char* string)
     // Tip: See the realloc function from the standard library
 
     // Return the position the added string gets in the list.
+
+    if (string_list_len + 1 >= string_list_capacity) {
+        string_list_capacity = string_list_capacity * 2 + 8;    // Don't know if this is quite right
+        string_list = realloc(string_list, string_list_capacity * sizeof(char*));
+    }
+
+    string_list[string_list_len] = string;
+    string_list_len++;
+
+    return string_list_len - 1;
 }
 
 // Prints all strings added to the global string list
@@ -269,4 +289,8 @@ static void print_string_list(void)
 static void destroy_string_list(void)
 {
     // TODO: Called during cleanup, free strings, and the memory used by the string list itself
+    for (size_t i = 0; i < string_list_len; i++) {
+        free(string_list[i]);
+    }
+    free(string_list);
 }
