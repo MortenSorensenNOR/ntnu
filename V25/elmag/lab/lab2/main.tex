@@ -1,0 +1,57 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Forarbeid}
+\begin{enumerate}
+    \item Vi har at
+        \[
+            \mathcal{E} = -N\frac{d\Phi_{B}}{dt}
+        \]
+        der $\mathcal{E}$ er den elektromotoriske spenningen indusert av det endrende magnetfeltet.
+        Fluksen gjennom spolen blir lik
+        \[
+            \Phi_{B}(t) = B(t) \cdot S
+        \]
+        der 
+        \[
+            B(t) = B_0 + \Delta B\cos(2\pi f t)
+        \]
+        Vi har altså at 
+        \[
+            \mathcal{E} = -N\frac{d\Phi_{B}}{dt} = 2\pi f N \Delta B S \sin(2\pi f t)
+        \]
+        som gir at 
+        \[
+            \mathcal{E}_{\text{max}} = 2\pi f N \delta B S
+        \]
+
+        Setter vi inn for verdiene får vi at
+        \[
+            \mathcal{E}_{\text{max}} \approx \SI{28.3}{\milli\volt}
+        \]
+
+    \item 
+        \[
+            f = \frac{1}{2l}\sqrt{\frac{F}{\rho}} \implies l_n = \frac{1}{2f_n}\sqrt{\frac{F}{\rho}}
+        \]
+
+    \item 
+        \[
+            L \approx \SI{21.3}{\milli\henry}
+        \]
+
+    \item Forholdet blir 
+        \[
+            \left|\frac{V_{\text{inn}}}{\mathcal{E}}\right| = \left|\frac{R}{R + j 2\pi f L}\right| = \left|\frac{1}{1 + 2\pi fj \cdot \frac{L}{R}}\right| = \frac{1}{\sqrt{1 + 4\pi^2 f^2 \frac{L^2}{R^2}}}
+        \]
+        Siden vi her får dannet et lavpass filter vil frekvenser med høyere frekvens leses med mindre amplitude enn lavere frekvente signal med samme
+        amplitude. Vil ha ganske flat frekvensrespons fram til cutoff frekvensen på $f_c = \frac{R}{2\pi L} \approx \SI{15.6}{\kilo\hertz}$.
+        Tror ikke at gitarstrengen kommer til å påvirkes mye i det frekvensområdet.
+
+\end{enumerate}
+
+\end{document}
