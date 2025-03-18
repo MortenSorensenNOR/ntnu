@@ -1,0 +1,12 @@
+func main(x, y) {
+     var A, B
+     var C
+     A = 10
+     B = 20
+     C = A + B
+     print C
+}
+
+//TESTCASE:
+//30
+
