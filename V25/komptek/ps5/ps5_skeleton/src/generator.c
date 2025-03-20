@@ -1,3 +1,4 @@
+#include "tree.h"
 #include "vslc.h"
 
 // This header defines a bunch of macros we can use to emit assembly to stdout
@@ -55,7 +56,7 @@ void generate_program(void) {
         fprintf(stderr, "No entry function found. Returning.\n");
         return;
     }
-    // generate_main(entry);
+    generate_main(entry);
 }
 
 // Prints one .asciz entry for each string in the global string_list
@@ -74,7 +75,7 @@ static void generate_stringtable(void) {
     // You have access to the global variables string_list and string_list_len from symbols.c
     for (size_t i = 0; i < string_list_len; i++) {
         char* str = string_list[i];
-        DIRECTIVE("string%ld: .asciz \"%s\"", i, str);
+        DIRECTIVE("string%ld: .asciz %s", i, str);
     }    
 }
 
@@ -120,14 +121,12 @@ static void generate_function(symbol_t* function) {
     MOVQ("%rsp", "%rbp");
 
     // Push parameters to stack
-    char* function_parameter_registers[6] = {RDI, RSI, RDX, RCX, R8, R9};
     for (size_t i = 0; i < function->function_symtable->n_symbols; i++) {
-
         symbol_t* sym = function->function_symtable->symbols[i];
         if (sym->type == SYMBOL_PARAMETER) {
-            if (i > 6) 
+            if (i > 5) 
                 continue;
-            PUSHQ(function_parameter_registers[i]);
+            PUSHQ(REGISTER_PARAMS[i]);
         } else if (sym->type == SYMBOL_LOCAL_VAR) {
             PUSHQ("$0");
         }
@@ -136,6 +135,7 @@ static void generate_function(symbol_t* function) {
     // Push local variables
 
     // TODO: 2.4 the function body can be sent to generate_statement()
+    current_function = function;
     generate_statement(function->node->children[2]);
 
     // TODO: 2.3.2
@@ -147,7 +147,37 @@ static void generate_function(symbol_t* function) {
 
 // Generates code for a function call, which can either be a statement or an expression
 static void generate_function_call(node_t* call) {
-    // TODO 2.4.3
+    // Push function parameters onto stack
+    assert(call->n_children == 2);
+    node_t* param_list = call->children[1];
+    size_t num_params = param_list->n_children;
+
+    // Go from right to left, 6 will be passed in registers, rest pushed on stack
+    // Start by pushing the last N - 6 onto stack
+
+    if (num_params > 0) {
+        size_t i = num_params;
+        for (; i-- > 0;) {
+            node_t* ident = param_list->children[i];
+            generate_expression(ident);
+            PUSHQ(RAX);
+        }
+
+        // Pop parameters back into registers
+        size_t num_to_pop = 0;
+        if (num_params > 6)
+            num_to_pop = 6;
+        else
+            num_to_pop = num_params;
+        for (size_t i = 0; i < num_to_pop; i++) {
+            POPQ(REGISTER_PARAMS[i]);
+        }
+    }
+
+
+    // Call function
+    node_t* func_ident = call->children[0];
+    CALL(func_ident->symbol->name);
 }
 
 // Generates code to evaluate the expression, and place the result in %rax
@@ -155,15 +185,124 @@ static void generate_expression(node_t* expression) {
     // TODO: 2.4.1 Generate code for evaluating the given expression.
     // (The candidates are NUMBER_LITERAL, IDENTIFIER, ARRAY_INDEXING, OPERATOR and FUNCTION_CALL)
     switch(expression->type) {
-        case NUMBER_LITERAL:
+        case NUMBER_LITERAL: {
+            NUM_LITERAL(expression->data.number_literal, RAX);
             break;
-        case IDENTIFIER:
+        }
+        case IDENTIFIER: {
+            if (expression->symbol == NULL)
+                break;
+
+            if (expression->symbol->type == SYMBOL_GLOBAL_VAR) {
+                LOAD_GLOBAL_VAR(expression->symbol->name, RAX);
+            } else if (expression->symbol->type == SYMBOL_PARAMETER) {
+                // Get stack offset for parameter
+                size_t num_params = FUNC_PARAM_COUNT(current_function);
+                int sym_table_index = expression->symbol->sequence_number;
+            
+                int stack_offset = 0;
+                if (sym_table_index < 6) {
+                    stack_offset = -8 * (sym_table_index + 1);
+                } else {
+                    // Have to positive relative to %rbp
+                    stack_offset = 8 + 8 * (sym_table_index - 6 + 1);
+                }
+            
+                // Load parameter
+                LOAD_LOCAL_VAR(stack_offset, RAX);
+            
+            } else if (expression->symbol->type == SYMBOL_LOCAL_VAR) {
+                // Get stack offset for local var
+                size_t num_params = FUNC_PARAM_COUNT(current_function);
+                size_t sym_table_index = expression->symbol->sequence_number;
+                int stack_offset_idx = sym_table_index;
+                if (num_params > 6) {
+                    stack_offset_idx -= (num_params - 6);
+                }
+            
+                int stack_offset = -8 * (stack_offset_idx + 1);
+            
+                // Load var
+                LOAD_LOCAL_VAR(stack_offset, RAX);
+            }
             break;
+        }
         case ARRAY_INDEXING:
+            assert(expression->n_children == 2);
+            node_t* ident  = expression->children[0];
+            node_t* offset = expression->children[1];
+
+            assert(ident->symbol->type == SYMBOL_GLOBAL_ARRAY);
+
+            // Load value from array at index
+            generate_expression(offset);
+            LEAQ(ident->symbol->name, RCX);
+            LEAQ_O(RCX, RAX, RCX);
+            MOVQ(MEM(RCX), RAX);
+
             break;
         case OPERATOR:
+            if (expression->n_children == 1) {
+                node_t* left = expression->children[0];
+                generate_expression(left);
+
+                if (strcmp(expression->data.operator, "-") == 0) {
+                    NEGQ(RAX);
+                } else if (strcmp(expression->data.operator, "!") == 0) {
+                    EMIT("test %s, %s", RAX, RAX);
+                    SETE(AL);
+                    MOVZBQ(AL, RAX);
+                }
+
+            } else {
+                node_t* left = expression->children[0];
+                node_t* right = expression->children[1];
+
+                // Handle LHS
+                generate_expression(right);
+                PUSHQ(RAX);
+                generate_expression(left);
+                POPQ(RCX);
+
+                if (strcmp(expression->data.operator, "+") == 0) {
+                    ADDQ(RCX, RAX);
+                } else if (strcmp(expression->data.operator, "-") == 0) {
+                    SUBQ(RCX, RAX);
+                } else if (strcmp(expression->data.operator, "*") == 0) {
+                    IMULQ(RCX, RAX);
+                } else if (strcmp(expression->data.operator, "/") == 0) {
+                    CQO;
+                    IDIVQ(RCX);
+                } else if (strcmp(expression->data.operator, "==") == 0) {
+                    CMPQ(RAX, RCX);
+                    SETE(AL);
+                    MOVZBQ(AL, RAX);
+                } else if (strcmp(expression->data.operator, "!=") == 0) {
+                    CMPQ(RCX, RAX);
+                    SETNE(AL);
+                    MOVZBQ(AL, RAX);
+                } else if (strcmp(expression->data.operator, "<") == 0) {
+                    CMPQ(RCX, RAX);
+                    SETL(AL);
+                    MOVZBQ(AL, RAX);
+                } else if (strcmp(expression->data.operator, "<=") == 0) {
+                    CMPQ(RCX, RAX);
+                    SETLE(AL);
+                    MOVZBQ(AL, RAX);
+                } else if (strcmp(expression->data.operator, ">") == 0) {
+                    CMPQ(RCX, RAX);
+                    SETG(AL);
+                    MOVZBQ(AL, RAX);
+                } else if (strcmp(expression->data.operator, ">=") == 0) {
+                    CMPQ(RCX, RAX);
+                    SETGE(AL);
+                    MOVZBQ(AL, RAX);
+                }
+            }
+
             break;
         case FUNCTION_CALL:
+            generate_function_call(expression);
             break;
         default:
             break;
@@ -176,15 +315,99 @@ static void generate_assignment_statement(node_t* statement) {
     // Use the IDENTIFIER's symbol to find out what kind of symbol you are assigning to.
     // The left hand side of an assignment statement may also be an ARRAY_INDEXING node.
     // In that case, you must also emit code for evaluating the index being stored to
+
+    // LHS and RHS must be expressions (i think)
+    assert (statement->n_children == 2);
+
+    node_t* left  = statement->children[0];
+    node_t* right = statement->children[1];
+
+    // Generate LHS
+    generate_expression(right); // must now be a num literal right?
+
+    if (left->type == IDENTIFIER) {
+        assert(left->symbol != NULL);
+        if (left->symbol->type == SYMBOL_GLOBAL_VAR) {
+            STORE_GLOBAL_VAR(RAX, left->symbol->name);
+        } else if (left->symbol->type == SYMBOL_PARAMETER) {
+            size_t num_params = FUNC_PARAM_COUNT(current_function);
+            int sym_table_index = left->symbol->sequence_number;
+
+            int stack_offset = 0;
+            if (sym_table_index < 6) {
+                stack_offset = -8 * (sym_table_index + 1);
+            } else {
+                // Have to positive relative to %rbp
+                stack_offset = 8 + 8 * (sym_table_index - 6 + 1);
+            }
+        
+            // Load parameter
+            STORE_LOCAL_VAR(RAX, stack_offset);
+
+        } else if (left->symbol->type == SYMBOL_LOCAL_VAR) {
+            size_t num_params = FUNC_PARAM_COUNT(current_function);
+            int sym_table_index = left->symbol->sequence_number;
+
+            int stack_offset_idx = sym_table_index;
+            if (num_params > 6) {
+                stack_offset_idx -= (num_params - 6);
+            }
+        
+            int stack_offset = -8 * (stack_offset_idx + 1);
+        
+            // Load var
+            STORE_LOCAL_VAR(RAX, stack_offset);
+        }
+    } else if (left->type == ARRAY_INDEXING) {
+        assert(left->children[0]->symbol->type == SYMBOL_GLOBAL_ARRAY);
+        assert(left->n_children == 2);
+
+        node_t* ident  = left->children[0];
+        node_t* offset = left->children[1];
+
+        assert(ident->symbol->type == SYMBOL_GLOBAL_ARRAY);
+
+        // Store value in %rax to array
+        PUSHQ(RAX); // Save RHS of assignment value
+        generate_expression(offset);
+        LEAQ(ident->symbol->name, RCX);
+        LEAQ_O(RCX, RAX, RCX);
+        POPQ(RAX);
+        MOVQ(RAX, MEM(RCX));
+    }
 }
 
 static void generate_print_statement(node_t* statement) {
     // TODO: 2.4.4
     // Remember to call safe_printf instead of printf
+
+    // Loop over the list of statements to be printed and call safe_print
+    node_t* printables_list = statement->children[0];
+    for (size_t i = 0; i < printables_list->n_children; ++i) {
+        node_t* ps = printables_list->children[i];
+
+        if (ps->type == STRING_LIST_REFERENCE) {
+            size_t str_list_idx = ps->data.string_list_index;
+            EMIT("leaq string%ld(%rip), %rsi", str_list_idx);
+            EMIT("leaq strout(%rip), %rdi");
+            EMIT("call safe_printf");
+        } else {
+            generate_expression(ps);
+            MOVQ(RAX, RSI);
+            EMIT("leaq intout(%rip), %rdi");
+            EMIT("call safe_printf");
+        }
+    }
+
+    NUM_LITERAL('\n', RDI);
+    EMIT("call putchar");
 }
 
 static void generate_return_statement(node_t* statement) {
     // TODO: 2.4.5 Evaluate the return value, store it in %rax and jump to the function epilogue
+    assert(statement->n_children == 1);
+    generate_expression(statement->children[0]);
+    EMIT("jmp .%s.epilogue", current_function->name);
 }
 
 // Recursively generate the given statement node, and all sub-statements.
@@ -197,14 +420,21 @@ static void generate_statement(node_t* node) {
     // FUNCTION_CALL
     switch (node->type) {
         case BLOCK:
+            for (size_t i = 0; i < node->n_children; ++i) {
+                generate_statement(node->children[i]);
+            }
             break;
         case ASSIGNMENT_STATEMENT:
+            generate_assignment_statement(node);
             break;
         case PRINT_STATEMENT:
+            generate_print_statement(node);
             break;
         case RETURN_STATEMENT:
+            generate_return_statement(node);
             break;
         case FUNCTION_CALL:
+            generate_expression(node);
             break;
         case LIST:
             for (size_t i = 0; i < node->n_children; ++i) {
@@ -212,6 +442,7 @@ static void generate_statement(node_t* node) {
             }
             break;
         default:
+            generate_expression(node);
             break;
     }
 }

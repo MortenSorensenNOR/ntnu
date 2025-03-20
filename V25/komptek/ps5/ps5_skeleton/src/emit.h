@@ -28,9 +28,19 @@
 #define LABEL(name, ...) printf(name ":\n" __VA_OPT__(, ) __VA_ARGS__)
 #define EMIT(fmt, ...) printf("\t" fmt "\n" __VA_OPT__(, ) __VA_ARGS__)
 
+#define NUM_LITERAL(num, dst) EMIT("movq $%ld, %s", num, dst)
+#define LOAD_GLOBAL_VAR(name, dst) EMIT("movq .%s(%rip), %s", name, dst)
+#define LOAD_LOCAL_VAR(off, dst)   EMIT("movq %d(%rbp), %s", off, dst)
+#define STORE_GLOBAL_VAR(src, dst_name) EMIT("movq %s, .%s(%rip)", src, dst_name)
+#define STORE_LOCAL_VAR(src, off) EMIT("movq %s, %d(%rbp)", src, off)
+
+#define CALL(name) EMIT("call .%s", name)
+
 #define MOVQ(src, dst) EMIT("movq %s, %s", (src), (dst))
 #define PUSHQ(src) EMIT("pushq %s", (src))
 #define POPQ(src) EMIT("popq %s", (src))
+#define LEAQ(name, dst) EMIT("leaq .%s(%rip), %s", (name), (dst))
+#define LEAQ_O(base, offset, dst) EMIT("leaq (%s, %s, 8), %s", (base), (offset), (dst))
 
 #define ADDQ(src, dst) EMIT("addq %s, %s", (src), (dst))
 #define SUBQ(src, dst) EMIT("subq %s, %s", (src), (dst))

@@ -1,30 +1,9 @@
 func main(x, y) {
-    var A, B
-    var C
-    
-    
-    {
-        var K
-        K = 2
-        print K
-
-        {
-
-            var N
-            N = 112
-            print N
-        }
-    }
-
-     A = 10
-     B = 20
-     C = A + B
-     print C
+    var J
+    J = other(x, y)
+    print J
 }
 
-func other(x, y)
+func other(x, y) {
     return x * y
-
-//TESTCASE:
-//30
-
+}
