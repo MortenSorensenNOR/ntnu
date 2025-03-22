@@ -1,0 +1,169 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1.}
+\begin{alphalist}
+    \item Using Gauss' Law with electric displacement we have that 
+        \[
+            \oint_{V} \mathbf{D} \cdot d\mathbf{a} = Q_{\text{enc}} = q
+        \]
+        So, for $r < R$ we have that
+        \[
+            D_{r} \cdot 4\pi r^2 = q \implies D_r = \frac{q}{4\pi r^2}
+        \]
+        We know that, since this situation is spherically symmetric, that
+        \[
+            \mathbf{D} = \epsilon \mathbf{E}
+        \]
+        i.e.
+        \[
+            \mathbf{E} = \frac{q}{4\pi \epsilon r^2}\mathbf{\hat{r}}
+        \]
+        For the field outside the dielectric $\epsilon$ becomes $\epsilon_0$ (i think).
+    \item We have that for a linear dielectric material
+        \[
+            \mathbf{P} = \epsilon_0 \chi_e \mathbf{E} = \frac{\epsilon_0 \chi_e q}{4\pi \epsilon r^2}\mathbf{\hat{r}}
+        \]
+    \item The average bound volume charge in the dielectric is
+        \[
+            \rho_b = - \nabla \cdot \mathbf{P} = - \frac{\epsilon_0 \chi_e q}{4\pi \epsilon} \cdot \left(\nabla \cdot \left(\frac{\mathbf{\hat{r}}}{r^2}\right)\right) \stackrel{\mathclap{\normalfont\mbox{(1.99)}}}{=\joinrel=\joinrel=} -\frac{\chi_e q}{\epsilon_r} \delta^3(\mathbf{r})
+        \]
+        The average surface charge is 
+        \[
+            \sigma_b = \mathbf{P} \cdot \mathbf{\hat{n}} = \frac{\epsilon_0 \chi_e q}{4\pi \epsilon R^2}
+        \]
+    \item The total bound volume charge is
+        \[
+            q_{\text{vb}} = \oint_{\mathcal{V}} \rho_b d\tau = -\frac{\chi_e q}{e_r} \oint \delta^3(\mathbf{r}) d\tau = -\frac{\chi_e q}{\epsilon_r}
+        \]
+        This charge is located at the very center of the sphere - due to the dirac-delta.
+
+        The surface charge 
+        \[
+            q_{\text{sb}} = \oint_{\mathcal{A}} \sigma_b d\mathbf{a} = 4\pi R^2 \sigma_b = \frac{\chi_e q}{\epsilon_r}
+        \]
+\end{alphalist}
+
+\section*{Task 2.}
+\begin{alphalist}
+    \item Electrostatic energy is the measure of potential energy stored in some charge configuration, whilst the total energy, 
+        also includes the energy of actually polarizing the dielectric material. The total energy can be written as
+        \begin{equation}
+            W = \frac{1}{2} \int \mathbf{D} \cdot \mathbf{E} \:d\tau
+            \label{eq:total_energy}
+        \end{equation}
+        whilst the electrostatic (from previous exercises) is
+        \begin{equation}
+            W = \frac{\epsilon_0}{2}\int E^2 \:d\tau
+            \label{eq:static_energy}
+        \end{equation}
+    \item Start by finding $\mathbf{D}$ and $\mathbf{E}$ both inside - $r < R$ - and outside - $r > R$ - the dielectric.
+        We have that 
+        \[
+            \oint \mathbf{D} \cdot d\mathbf{a} = Q_{\text{enc}}
+        \]
+        so
+        \[
+            D_r \cdot 4\pi r^2 = Q_{\text{enc}}
+        \]
+        For $r < R$ we have that
+        \[
+            Q_{\text{enc}} = \int \rho_f \:d\tau = \int_{0}^{r} \rho_f \cdot 4\pi r'^2 \:dr' = \frac{4\pi \rho_f r^3}{3}
+        \]
+        so
+        \[
+            \boxed{\mathbf{D}(r) = \frac{\rho_f}{3}\mathbf{r}}
+        \]
+        For $r > R$ we have 
+        \[
+            Q_{\text{enc}} = \int_{0}^{R} \rho_f \cdot 4\pi r^2 \:dr = \frac{4\pi \rho_f R^3}{3}
+        \]
+        so
+        \[
+            \boxed{\mathbf{D}(r) = \frac{\rho_f R^3}{3r^2}\mathbf{\hat{r}}}
+        \]
+
+        For the electric field $\mathbf{E}$ we use $\mathbf{D} = \epsilon \mathbf{E}$, so
+        we have that for $r < R$
+        \[
+            \boxed{\mathbf{E}(r) = \frac{\rho_f}{3\epsilon_0\epsilon_r}\mathbf{r}}
+        \]
+        and $r > R$
+        \[
+            \boxed{\mathbf{E}(r) = \frac{\rho_f R^3}{3\epsilon_0 r^2}\mathbf{\hat{r}}}
+        \]
+        (for $r > R$ the effect of polarization disappears and we no longer have the $\epsilon_r$).
+
+        Now we can find the electrostatic energy using equation (\ref{eq:static_energy})
+        \begin{align*}
+            W_{\text{static}} &= \frac{\epsilon_0}{2} \cdot \left[\left(\frac{\rho_f}{3\epsilon_0\epsilon_r}\right)^2 \int_0^R r^2 \cdot 4\pi r^2 dr
+            + \left(\frac{\rho_f R^3}{3\epsilon_0}\right)^2 \int_R^{\infty} \frac{1}{r^4} \cdot 4\pi r^2 \:dr \right] \\
+                              &= \frac{2\pi}{9\epsilon_0}\rho_f^2 R^5 \left(\frac{1}{5\epsilon_r^2} + 1\right)
+        \end{align*}
+        If we now insert $\rho_f = 3k$ we get that the electrostatic energy in the system is
+        \[
+            W_{\text{static}} = \frac{2\pi k}{\epsilon_0} R^{5}\left(\frac{1}{5\epsilon_r^2} + 1\right)
+        \]
+
+        Now the total energy can be calculated using equation (\ref{eq:total_energy})
+        \begin{align*}
+            W_{\text{total}} &= \frac{1}{2} \cdot \left[\left(\frac{\rho_f}{3}\right) \cdot \left(\frac{\rho_f}{3\epsilon_0\epsilon_r}\right) \cdot \int_0^R r^2 \cdot 4\pi r^2 \:dr 
+            + \left(\frac{\rho_f R^3}{3}\right) \cdot \left(\frac{\rho_f R^3}{3\epsilon_0}\right) \cdot \int_{R}^{\infty} \frac{1}{r^4} \cdot 4\pi r^2 \:dr\right] \\
+                             &= \frac{2\pi}{9\epsilon_0} \rho_f^2 R^5 \left(\frac{1}{5\epsilon_r} + 1\right)
+        \end{align*}
+        Again using $\rho_f = 3k$ we get
+        \[
+            W_{\text{total}} = \frac{2\pi k}{\epsilon_0} R^5 \left(\frac{1}{5\epsilon_r} + 1\right)
+        \]
+
+\end{alphalist}
+
+\section*{Task 3.}
+\begin{alphalist}
+    \item A stationary charge produces an electric field $\mathbf{E}$, whilst a moving charge also produces a magnetic field $\mathbf{B}$.
+    \item The Lorentz force $\mathbf{F}_{\text{mag}}$ for when
+        \begin{romanlist}
+            \item only a magnetic field is applied can be defined as
+                \[
+                    \mathbf{F}_{\text{mag}} = \mathbf{Q}(\mathbf{v} \times \mathbf{B})
+                \]
+                for a charge $\mathbf{Q}$ moving with a velocity $\mathbf{v}$ through a magnetic field $\mathbf{B}$.
+            \item both a magnetic field and an electric field is applied can be defined as
+                \[
+                    \mathbf{F}_{\text{mag}} = \mathbf{Q}(E + \left(\mathbf{v} \times \mathbf{B}\right))
+                \]
+        \end{romanlist}
+\end{alphalist}
+
+\section*{Task 4.}
+\begin{alphalist}
+    \item The needle will point north, becuase there is unlikely to be any strong local magnetic field sources stronger than that of the earths
+        magnetic field.
+    \item Considering each case of current direction separetly
+        \begin{romanlist}
+            \item For point A the needle will point into the page and for B out of it. For C no direction will be stronger than any other, so
+                perhaps pointing north?
+            \item For point A the needle will point out of the page and for B into the page. For C the same argument follows as before.
+        \end{romanlist}
+    \item The Lorentz force will here point to the left for the left wire and to the right for the right one. They will therefore repell one another.
+\end{alphalist}
+
+\section*{Task 5.}
+The work done by the magnetic field on an electron following some path $x(t)$ is defined as
+\[
+    W = \int \mathbf{F} \cdot d\mathbf{l} = \int \mathbf{F} \cdot \dot{x}(t) \:dt = \int Q(\mathbf{v} \times \mathbf{B}) \cdot \mathbf{v} \:dt
+\]
+Now since $(\mathbf{v} \times \mathbf{B})$ is perpendicular to both $\mathbf{v}$ and $\mathbf{B}$, the dot product
+$(\mathbf{v} \times \mathbf{B}) \cdot \mathbf{v} = 0$, so the work done by the magnetic field is also 0.
+
+\section*{Task 6.}
+\begin{alphalist}
+    \item 
+    \item 
+\end{alphalist}
+
+\end{document}

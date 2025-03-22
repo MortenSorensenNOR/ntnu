@@ -1,0 +1,142 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1.}
+Most materials fit into one of two classes of materials: conductors and insulators. A conductor has
+many free electrons able to conduct currents when a field is applied to the material. Insulators, or 
+dielectrics, have electrons that are tightly bound to the atoms in it's lattice, and as such, does not 
+\textit{conduct}, so current does not move easily or at all in the material. This means that such materials 
+can be used to insulate currents and is therefore quite usefull.
+
+\section*{Task 2.}
+Since the atom is comprised of two parts - a positively charged core and negatively charged electrons surrounding it - the field will pull the 
+core along the field lines, and the electrons the opposite way.
+\begin{alphalist}
+    \item If the field is relatively weak, this system will reach an equilibrium, where the force of the applied electric field pulling the atom apart is
+        equal in strength to attraction force of the core and the electrons in the atom keeping it together.
+    \item If, however, the applied field is strong enough, it may seperate the core from the electrons, ionizing it.
+\end{alphalist}
+
+\section*{Task 3.}
+\begin{alphalist}
+    \item When a field is applied to the otherwise neutrally charged atom, forcing the core to be pulled away from the electrons that surround it, a dipole is induced,
+        between the core and the electrons. This dipole has a \textit{dipole moment} $\mathbf{p}$, pointing in the same direction as the applied field $\mathbf{E}$,
+        and is proportional to the field, i.e. $\mathbf{p} = \alpha \mathbf{E}$, where $\alpha$ is hte atomic polarizability of that specific atom, and depends on the structure 
+        and size of the atom. For molecules the situation is more complicated, as they may polarize more easily in some direction as compared with others, and therefore 
+        we must decompose the dipole moment into multiple axies and their respective polarizability. In the case of polar molecules, such as H$_2$O, the force on the negative 
+        and positive poles will cancel out, leaving a net torque on the molecule to point in the same direction as the applied field.
+    \item When studying dielectric materials as a whole, the dipole moment of the individual atom generalizes to the \textbf{polarization} $\mathbf{P}$,
+        which is the dipole moment of the material per unit volume.
+\end{alphalist}
+
+\section*{Task 4.}
+\begin{alphalist}
+    \item A free charge is an electron that is free to move around in the material to which it pertains, such as a conductor, whilst a bound charge is an electron 
+        in a dielectric material that arrise when a field is applied to the dielectric material. They are not free to move about the material, and are consequently \textbf{bound} 
+        to their atom. In a dielectric material, as apposed to a single atom, the induced polarization in the atoms in the material means that the dipole created by one 
+        atom surplants the charge of the next atom over, i.e. the electrons move in some direction to an equalibrium, creating a charge difference. The negative pole will cancel out the 
+        positive pole of the atom next to it, it canceling out the charge of the next and so on. At the ends of the material, no such neighbour atom exist, so, though these electrons have moved and are not 
+        canceled out, they are still bound to their atom and are not free to move around.
+    \item For a dipole $\mathbf{p}$, the potential is given as
+        \[
+            V(\mathbf{r}) = \frac{1}{4\pi\epsilon_0}\frac{\mathbf{p} \cdot \hat{\boldscriptr}}{\scriptr^2}
+        \]
+        where $\boldscriptr$ is the seperation vector from the dipole to the point of potential reference. We have a dipole moment $\mathbf{p} = \mathbf{P} d\tau '$,
+        and therefore the potential is given as 
+        \[
+            V(\mathbf{r}) = \frac{1}{4\pi\epsilon_0}\int_{\mathcal{V}} \frac{\mathbf{P}(\mathbf{r}') \cdot \hat{\boldscriptr}}{\scriptr^2} d\tau' 
+        \]
+        Can rewrite somewhat if we use that
+        \[
+            \pmb{\nabla}' \left(\frac{1}{\scriptr}\right) = \frac{\hat{\boldscriptr}}{\scriptr^2}
+        \]
+        if the differentiation is with respect to the source coordinate $\mathbf{r}'$, giving
+        \[
+            V(\mathbf{r}) = \frac{1}{4\pi\epsilon_0}\int_{\mathcal{V}} \mathbf{P} \cdot \pmb{\nabla}' \left(\frac{1}{\scriptr}\right) d\tau' 
+        \]
+        Now we may do integration by parts:
+        \[
+            V = \frac{1}{4\pi\epsilon_0}\left[\int_{\mathcal{V}} \pmb{\nabla}' \cdot \left(\frac{\mathbf{P}}{\scriptr}\right) d\tau' - \int_{\mathcal{V}}(\pmb{\nabla}' \cdot \mathbf{P}) d\tau'\right]
+        \]
+        Using the divergence theorem we get
+        \[
+            V = \frac{1}{4\pi\epsilon_0}\left[\oint_{\mathcal{S}} \frac{1}{\scriptr}\mathcal{P} \cdot d\mathbf{a}' - \int_{\mathcal{V}}(\pmb{\nabla}' \cdot \mathbf{P}) d\tau'\right]
+        \]
+        Using 
+        \begin{center}
+            $\sigma_b \equiv \mathbf{P} \cdot \mathbf{\hat{n}}\:\:\:\:$ and $\:\:\:\:\rho_b \equiv - \pmb{\nabla} \cdot \mathbf{P}$
+        \end{center}
+        we get
+        \[
+            V(\mathbf{r}) = \frac{1}{4\pi\epsilon_0}\oint_{\mathcal{S}}\frac{\sigma_b}{\scriptr}da' + \frac{1}{4\pi\epsilon_0}\int_{\mathcal{V}}\frac{\rho_b}{\scriptr}d\tau'
+        \]
+        Here $\sigma_b$ is the bound surface charge density and $\rho_b$ is the bound volume charge density, and each integral therefore is the bound surface and volume potentials.
+\end{alphalist}
+
+\section*{Task 5.}
+\begin{alphalist}
+    \item We have that the polarization is given as $\mathbf{P} = kr^2\mathbf{\hat{r}}$ in cartesian coordinates, and we know that the bound volume charge density is
+        given as $\rho_b = \pmb{\nabla} \cdot \mathbf{P}$ and the bound surface charge density is given as $\sigma_b = \mathbf{P} \cdot \hat{\mathbf{n}}$. In order to find $\rho_b$ we must
+        first express $\mathbf{P}$'s divergence in spherical coordinates, since $\mathbf{P}$ points radially.
+        \[
+            \pmb{\nabla} \cdot \mathbf{P} = \frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2 \mathbf{P_r}\right)
+        \]
+        Therefore we have that
+        \[
+            \rho_b = -\frac{1}{r^2} \frac{\partial}{\partial r} \left(kr^4 \mathbf{\hat{r}}\right) = -4kr
+        \]
+        For $\sigma_b$ we have that, since $\mathbf{P}$ points radially, when $r = R$ 
+        \[
+            \sigma_b = \mathbf{P} \cdot \mathbf{\hat{n}} = kR^2
+        \]
+        Not quite sure how to find the free charges in this question. Assuming it is a plain dielectric, one may assume that there are no free charges, and as such
+        $\rho_f = 0$.
+    \item Using Gauss' law with the electric displacement $\mathbf{D}$, i.e $\nabla \cdot \mathbf{D} = \rho_f$, where $\rho_f$ is the free volume charge,
+        we get that, using the assumption that there are no free charges, 
+        \[
+            \nabla \cdot \mathbf{D} = 0
+        \]
+        which in integral form is
+        \[
+            \oint_{\mathcal{S}} \mathbf{D} \cdot d\mathbf{a} = 0
+        \]
+        Since $\mathbf{P}$ points radially,
+        \[
+            \mathbf{D}_r \cdot 4\pi r^2 = 0 \implies \mathbf{D}_r = 0
+        \]
+        Therefore, since 
+        \[
+            \mathbf{D} \equiv \epsilon_0 \mathbf{E} + \mathbf{P},
+        \]
+        we have that the electric field inside the sphere is equal to
+        \[
+            \mathbf{E}_r = -\frac{k}{\epsilon_0}r^2 \mathbf{\hat{r}}
+        \]
+
+        In order to find the electric field outside the sphere we first need to find the total bound charge inside $Q_b$, which may be found as
+        \[
+            Q_b = \int_{\mathcal{V}} \rho_b d\tau
+        \]
+        Using $\rho_b = -4kr$ and converting the integral to spherical coordinates we get
+        \begin{align*}
+            Q_b &= \int_{0}^{R} (-4kr) \cdot 4\pi r^2 dr \\
+                &= -16\pi k \int_{0}^{R} r^3 dr \\ 
+                &= -16\pi k \frac{R^4}{4} = -4\pi k R^4
+        \end{align*}
+
+        The field outside the sphere can then be written as 
+        \begin{align*}
+            E &= \frac{1}{4\pi\epsilon_0}\frac{Q_b}{r^2} \mathbf{\hat{r}} \\
+              &= \frac{1}{4\pi\epsilon_0}\frac{-4\pi k R^4}{r^2} \mathbf{\hat{r}} = -\frac{kR^4}{\epsilon_0 r^2}\mathbf{\hat{r}} \\
+        \end{align*}
+
+\end{alphalist}
+
+\section*{Task 6.}
+Did not have time for this :/
+
+\end{document}

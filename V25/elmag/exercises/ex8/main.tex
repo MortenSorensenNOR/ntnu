@@ -1,0 +1,104 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1.}
+\begin{alphalist}
+    \item There are two types are \textit{free} and \textit{bound} charges. Free charges are charges not related to the polarization $\mathbf{P}$, such 
+        as charges from ions and other impurities inside the dielectric, or other free charges present in the material. These charges are free to move around the 
+        material. A bound charges on the other hand, are charges that are bound to their respective atom, not free to move around the material. Due to polarization, say from an
+        applied electric field, the positive and negative charges in the atom are pulled slightly away from one another; the protons in the core pulled along the field, and the 
+        electrons pulled in the other direction. Though this creates an induced electric field, this field only really exists at the edges of the material. This is because interally,
+        the skewed electrons of one atom cancle out with the skewed protons of a neighbouring atomic core. This way only the atoms at the edge of the material really have an impact on the overall
+        induced electric field of the material. The charges here are called "bound charges", as they are still bound to the respective atoms, but contribute to some induced field.
+    \item If we let the overall charge density in a dielectric material 
+        \[
+            \rho = \rho_f + \rho_b
+        \]
+        where $\rho_f$ is the charge density of the free charges and $\rho_b$ is the charge density of the bound charges, then Gauss' law becomes
+        \[
+            \nabla \cdot \mathbf{E} = \frac{1}{\epsilon_0} \cdot (\rho_f + \rho_b)
+        \]
+        If we have some polarization $\mathbf{P}$, then using $\rho_b = -\nabla \cdot \mathbf{P}$, we may rewrite this as
+        \[
+            \epsilon_0 \cdot \nabla \cdot \mathbf{E} = -\nabla \cdot \mathbf{P} + \rho_f
+        \]
+        Shuffeling around and letting $\mathbf{D} = \epsilon_0 \mathbf{E} + \mathbf{P}$, we have that
+        \[
+            \nabla \cdot \mathbf{D} = \rho_f
+        \]
+\end{alphalist}
+
+\section*{Task 2.}
+\begin{alphalist}
+    \item Let the length of the wire be $L$, and the thickness $r < R$. If we use intergal version of the electric displacement 
+        verison of Gauss' law we have that
+        \[
+            \oint \mathbf{D} \cdot d\mathbf{a} = Q_{enc}
+        \]
+        This means that
+        \[
+            2\pi r L \cdot D = L \cdot 2\lambda
+        \]
+        Rearranging we get
+        \[
+            D = \frac{\lambda}{\pi r} \implies \mathbf{D} = \frac{\lambda}{\pi r}\mathbf{\hat{r}}
+        \]
+        The displacement will not be the same inside and outside the rubber, because outside the rubber $\mathbf{P} = 0$, so 
+        $\mathbf{E} = \frac{1}{\epsilon}\mathbf{D}$.
+    \item As above, outside the rubber
+        \[
+            \mathbf{E} = \frac{1}{\epsilon}\mathbf{D} = \frac{\lambda}{\pi r \epsilon_0}\mathbf{\hat{r}}
+        \]
+        For inside the rubber we would have to know what $\mathbf{P}$, which is not provided.
+
+\end{alphalist}
+
+\section*{Task 3.}
+\begin{alphalist}
+    \item Linear dielectrics are materials that, provided as strong enough external electric field, obeys the formula
+        \begin{equation}
+            \mathbf{P} = \epsilon_0 \chi_e \mathbf{E}
+            \label{eq:sus}
+        \end{equation}
+        where $\chi_e$ is a diemtionless constant for the material, called the materials electric susceptibility. Here $\mathbf{E}$ is the entire field, induced
+        polarized field included.
+    \item Kind of explained that above :)
+    \item Not sure how to find the nonlinear ones. Have not been to the lectures, so perhaps it was covered there. Assuming, based on the phrasing of the 
+        question that the polarization is an equation \ref{eq:sus} that the linear term is the dominant one, with a lot of nonlinear terms following, though what
+        shape they take I do not know.
+\end{alphalist}
+
+\section*{Task 4.}
+\begin{alphalist}
+    \item From equation \ref{eq:sus} and using the formula for electric displacement from earlier, we have that
+        \[
+            \mathbf{D} = \epsilon_0 \mathbf{E} + \mathbf{P} = \epsilon_0(1 + \chi_e) \mathbf{E}
+        \],
+        Here the proportionality between the electric field $\mathbf{E}$ and the electric displacement $\mathbf{D}$ is the \textit{permittivity} $\epsilon$ of the material. 
+        If we devide out the permittivity of free space $\epsilon_0$, we get the \textit{relative permittivity} of the material 
+        \[
+            \epsilon_r = 1 + \chi_e = \frac{\epsilon}{\epsilon_0}
+        \]
+    \item Relative permittivity measures the ratio between the absolute permittivity of the material in relation to free space. $\epsilon = \epsilon_0 \cdot \epsilon_r$.
+    \item Air has a relative permittivity very close to 1, whilst dielectrics like paper have values in the range of 1.4, and a mouse matt, containing quite a bit of air, has a value 
+        around 1.2 (Lab 1). Not quite sure about the refractive index, but I do assume that if you take the relative permitivity of two materials and the angle of intersection for say some light, we 
+        get Snell's law out.
+    \item Dielectrics have relative permitivity slightly above 1, whilst metals have values waaaay greater than 1. Relative permittivity can also be less than 1, because the way the material is 
+        structured resists the applied field more than what vacuum does. As for negative relative permittivity, a quick google search says yes, but I do not think I am able to explain why it happens or why it makes sense.
+\end{alphalist}
+
+\section*{Task 5.}
+\begin{alphalist}
+    \item
+        \begin{romanlist}
+            \item 
+            \item 
+        \end{romanlist}
+    \item
+\end{alphalist}
+
+\end{document}

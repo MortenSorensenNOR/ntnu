@@ -14,5 +14,6 @@ func main() {
   return other(a, b, c)
 }
 
-func other(a, b, c)
+func other(a, b, c) {
     return a * b + c
+}
