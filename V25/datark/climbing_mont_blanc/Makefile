@@ -42,7 +42,6 @@ check_small: checker_small $(EXECUTABLE)
 	cat small_input.txt | ./$(EXECUTABLE) > tmp.txt
 	./checker_small dummy small_answer.txt tmp.txt
 
-
 run_reference flower_tiny_correct.ppm flower_small_correct.ppm flower_medium_correct.ppm: image_processing_reference
 	./image_processing_reference
 

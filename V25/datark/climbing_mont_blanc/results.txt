@@ -4,4 +4,11 @@ baseline:
 precalc loop bounds, offset into pixel and switch loop order:
 - 14.4s 
 
+summed area table:
+- 2.06s
 
+openmp simple:
+- 1.61s
+
+switch to float:
+- 1.11s

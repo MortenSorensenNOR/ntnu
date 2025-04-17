@@ -26,9 +26,9 @@ AccurateImage *convertToAccurateImage(PPMImage *image) {
 	imageAccurate = (AccurateImage *)malloc(sizeof(AccurateImage));
 	imageAccurate->data = (AccuratePixel*)malloc(image->x * image->y * sizeof(AccuratePixel));
 	for(int i = 0; i < image->x * image->y; i++) {
-		imageAccurate->data[i].red   = (float) image->data[i].red;
-		imageAccurate->data[i].green = (float) image->data[i].green;
-		imageAccurate->data[i].blue  = (float) image->data[i].blue;
+		imageAccurate->data[i].red   = (double) image->data[i].red;
+		imageAccurate->data[i].green = (double) image->data[i].green;
+		imageAccurate->data[i].blue  = (double) image->data[i].blue;
 	}
 	imageAccurate->x = image->x;
 	imageAccurate->y = image->y;
@@ -52,45 +52,50 @@ PPMImage * convertToPPPMImage(AccurateImage *imageIn) {
     return imageOut;
 }
 
-// blur one color channel
-void blurIteration(AccurateImage *imageOut, AccurateImage *imageIn, int colourType, int size) {
-    // Update the output image
-    int numberOfValuesInEachRow = imageOut->x; // R, G and B
+#define IDX(x, y, width) ((y) * (width) + (x))
+void compute_image_integral(AccurateImage* image, int channel, int width, int height, double* integral) {
+    #pragma omp parallel for
+    for (int y = 0; y < height; y++) {
+        double row_sum = 0;
+        for (int x = 0; x < width; x++) {
+            row_sum += *(&(image->data[IDX(x, y, width)].red) + channel);
+            integral[IDX(x, y, width)] = row_sum;
+        }
+    }
 
+    #pragma omp parallel for
+    for (int x = 0; x < width; x++) {
+        for (int y = 1; y < height; y++) {
+            integral[IDX(x, y, width)] += integral[IDX(x, y - 1, width)];
+        }
+    }
+}
+
+// blur one color channel
+void blurIteration(AccurateImage *imageOut, AccurateImage *imageIn, int channel, int size, double* integral_image) {
     int width = imageIn->x;
     int height = imageIn->y;
-	
-	// Iterate over each pixel
-    for(int senterY = 0; senterY < imageIn->y; senterY++) {
-        int kernel_start_y = senterY >= size ? -size : -senterY;
-        int kernel_end_y   = senterY <= imageIn->y - size - 1 ? size : imageIn->y - senterY - 1;
+    compute_image_integral(imageIn, channel, width, height, integral_image);
 
-        for(int senterX = 0; senterX < imageIn->x; senterX++) {
-            int kernel_start_x = senterX >= size ? -size : -senterX;
-            int kernel_end_x   = senterX <= imageIn->x - size - 1 ? size : imageIn->x - senterX - 1;
+    #pragma omp parallel for
+    for (int y = 0; y < height; y++) {
+        int y1 = (y - size < 0) ? 0 : y - size;
+        int y2 = (y + size >= height) ? height - 1 : y + size;
 
-            // For each pixel we compute the magic number
-            float sum = 0;
-            int countIncluded = 0;
+        for (int x = 0; x < width; x++) {
+            int x1 = (x - size < 0) ? 0 : x - size;
+            int x2 = (x + size >= width) ? width - 1 : x + size;
 
-                for(int y = kernel_start_y + senterY; y <= kernel_end_y + senterY; y++) {
-                    for(int x = kernel_start_x + senterX; x <= kernel_end_x + senterX; x++) {
-                    // Now we can begin
-                    int offsetOfThePixel = (numberOfValuesInEachRow * y + x);
-                        sum += (float)*(&(imageIn->data[offsetOfThePixel].red) + colourType);
+            double A = (x1 > 0 && y1 > 0) ? integral_image[IDX(x1 - 1, y1 - 1, width)] : 0;
+            double B = (y1 > 0) ? integral_image[IDX(x2, y1 - 1, width)] : 0;
+            double C = (x1 > 0) ? integral_image[IDX(x1 - 1, y2, width)] : 0;
+            double D = integral_image[IDX(x2, y2, width)];
 
-                    // Keep track of how many values we have included
-                    countIncluded++;
-                }
-
-            }
-
-            // Now we compute the final value
-            float value = (float)sum / countIncluded;
-            int offsetOfThePixel = (numberOfValuesInEachRow * senterY + senterX);
-            *(&(imageOut->data[offsetOfThePixel].red) + colourType) = value;
-		}
-	}
+            float sum = D - B - C + A;
+            int area = (x2 - x1 + 1) * (y2 - y1 + 1);
+            *(&(imageOut->data[IDX(x, y, width)].red) + channel) = (float)sum / area;
+        }
+    }
 }
 
 
@@ -103,52 +108,22 @@ PPMImage * imageDifference(AccurateImage *imageInSmall, AccurateImage *imageInLa
 	imageOut->x = imageInSmall->x;
 	imageOut->y = imageInSmall->y;
 
-	for(int i = 0; i < imageInSmall->x * imageInSmall->y; i++) {
-		float value = (imageInLarge->data[i].red - imageInSmall->data[i].red);
-		if(value > 255)
-			imageOut->data[i].red = 255;
-		else if (value < -1.0) {
-			value = 257.0+value;
-			if(value > 255)
-				imageOut->data[i].red = 255;
-			else
-				imageOut->data[i].red = floor(value);
-		} else if (value > -1.0 && value < 0.0) {
-			imageOut->data[i].red = 0;
-		} else {
-			imageOut->data[i].red = floor(value);
-		}
+    #pragma omp parallel for
+    for (int channel = 0; channel < 3; channel++) {
+        #pragma omp parallel for
+        for(int i = 0; i < imageInSmall->x * imageInSmall->y; i++) {
+            float value = (*(&imageInLarge->data[i].red+channel) - *(&imageInSmall->data[i].red + channel));
+            if (value < -1.0)
+                value = 257.0 + value;
+            if (value < 0.0f)
+                value = 0.0f;
+            if (value > 255.0f)
+                value = 255.0f;
 
-		value = (imageInLarge->data[i].green - imageInSmall->data[i].green);
-		if(value > 255)
-			imageOut->data[i].green = 255;
-		else if (value < -1.0) {
-			value = 257.0+value;
-			if(value > 255)
-				imageOut->data[i].green = 255;
-			else
-				imageOut->data[i].green = floor(value);
-		} else if (value > -1.0 && value < 0.0) {
-			imageOut->data[i].green = 0;
-		} else {
-			imageOut->data[i].green = floor(value);
-		}
+            *(&imageOut->data[i].red + channel) = floor(value);
+        }
+    }
 
-		value = (imageInLarge->data[i].blue - imageInSmall->data[i].blue);
-		if(value > 255)
-			imageOut->data[i].blue = 255;
-		else if (value < -1.0) {
-			value = 257.0+value;
-			if(value > 255)
-				imageOut->data[i].blue = 255;
-			else
-				imageOut->data[i].blue = floor(value);
-		} else if (value > -1.0 && value < 0.0) {
-			imageOut->data[i].blue = 0;
-		} else {
-			imageOut->data[i].blue = floor(value);
-		}
-	}
 	return imageOut;
 }
 
@@ -165,6 +140,9 @@ int main(int argc, char** argv) {
         image = readStreamPPM(stdin);
     }
 	
+    int width = image->x;
+    int height = image->y;
+    double* integral_image = (double*)calloc(width * height, sizeof(double));
 	
 	AccurateImage *imageAccurate1_tiny = convertToAccurateImage(image);
 	AccurateImage *imageAccurate2_tiny = convertToAccurateImage(image);
@@ -172,11 +150,11 @@ int main(int argc, char** argv) {
 	// Process the tiny case:
 	for(int colour = 0; colour < 3; colour++) {
 		int size = 2;
-        blurIteration(imageAccurate2_tiny, imageAccurate1_tiny, colour, size);
-        blurIteration(imageAccurate1_tiny, imageAccurate2_tiny, colour, size);
-        blurIteration(imageAccurate2_tiny, imageAccurate1_tiny, colour, size);
-        blurIteration(imageAccurate1_tiny, imageAccurate2_tiny, colour, size);
-        blurIteration(imageAccurate2_tiny, imageAccurate1_tiny, colour, size);
+        blurIteration(imageAccurate2_tiny, imageAccurate1_tiny, colour, size, integral_image);
+        blurIteration(imageAccurate1_tiny, imageAccurate2_tiny, colour, size, integral_image);
+        blurIteration(imageAccurate2_tiny, imageAccurate1_tiny, colour, size, integral_image);
+        blurIteration(imageAccurate1_tiny, imageAccurate2_tiny, colour, size, integral_image);
+        blurIteration(imageAccurate2_tiny, imageAccurate1_tiny, colour, size, integral_image);
 	}
 	
 	
@@ -186,11 +164,11 @@ int main(int argc, char** argv) {
 	// Process the small case:
 	for(int colour = 0; colour < 3; colour++) {
 		int size = 3;
-        blurIteration(imageAccurate2_small, imageAccurate1_small, colour, size);
-        blurIteration(imageAccurate1_small, imageAccurate2_small, colour, size);
-        blurIteration(imageAccurate2_small, imageAccurate1_small, colour, size);
-        blurIteration(imageAccurate1_small, imageAccurate2_small, colour, size);
-        blurIteration(imageAccurate2_small, imageAccurate1_small, colour, size);
+        blurIteration(imageAccurate2_small, imageAccurate1_small, colour, size, integral_image);
+        blurIteration(imageAccurate1_small, imageAccurate2_small, colour, size, integral_image);
+        blurIteration(imageAccurate2_small, imageAccurate1_small, colour, size, integral_image);
+        blurIteration(imageAccurate1_small, imageAccurate2_small, colour, size, integral_image);
+        blurIteration(imageAccurate2_small, imageAccurate1_small, colour, size, integral_image);
 	}
 
     // an intermediate step can be saved for debugging like this
@@ -202,11 +180,11 @@ int main(int argc, char** argv) {
 	// Process the medium case:
 	for(int colour = 0; colour < 3; colour++) {
 		int size = 5;
-        blurIteration(imageAccurate2_medium, imageAccurate1_medium, colour, size);
-        blurIteration(imageAccurate1_medium, imageAccurate2_medium, colour, size);
-        blurIteration(imageAccurate2_medium, imageAccurate1_medium, colour, size);
-        blurIteration(imageAccurate1_medium, imageAccurate2_medium, colour, size);
-        blurIteration(imageAccurate2_medium, imageAccurate1_medium, colour, size);
+        blurIteration(imageAccurate2_medium, imageAccurate1_medium, colour, size, integral_image);
+        blurIteration(imageAccurate1_medium, imageAccurate2_medium, colour, size, integral_image);
+        blurIteration(imageAccurate2_medium, imageAccurate1_medium, colour, size, integral_image);
+        blurIteration(imageAccurate1_medium, imageAccurate2_medium, colour, size, integral_image);
+        blurIteration(imageAccurate2_medium, imageAccurate1_medium, colour, size, integral_image);
 	}
 	
 	AccurateImage *imageAccurate1_large = convertToAccurateImage(image);
@@ -215,12 +193,15 @@ int main(int argc, char** argv) {
 	// Do each color channel
 	for(int colour = 0; colour < 3; colour++) {
 		int size = 8;
-        blurIteration(imageAccurate2_large, imageAccurate1_large, colour, size);
-        blurIteration(imageAccurate1_large, imageAccurate2_large, colour, size);
-        blurIteration(imageAccurate2_large, imageAccurate1_large, colour, size);
-        blurIteration(imageAccurate1_large, imageAccurate2_large, colour, size);
-        blurIteration(imageAccurate2_large, imageAccurate1_large, colour, size);
+        blurIteration(imageAccurate2_large, imageAccurate1_large, colour, size, integral_image);
+        blurIteration(imageAccurate1_large, imageAccurate2_large, colour, size, integral_image);
+        blurIteration(imageAccurate2_large, imageAccurate1_large, colour, size, integral_image);
+        blurIteration(imageAccurate1_large, imageAccurate2_large, colour, size, integral_image);
+        blurIteration(imageAccurate2_large, imageAccurate1_large, colour, size, integral_image);
 	}
+
+    free(integral_image);
+
 	// calculate difference
 	PPMImage *final_tiny = imageDifference(imageAccurate2_tiny, imageAccurate2_small);
     PPMImage *final_small = imageDifference(imageAccurate2_small, imageAccurate2_medium);
