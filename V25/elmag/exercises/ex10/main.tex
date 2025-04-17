@@ -1,0 +1,160 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Task 1.}
+\begin{alphalist}
+    \item The following are the definitions of current in 1D, 2D and 3D:
+    \begin{romanlist}
+        \item 1D:
+            \[
+                \mathbf{I} = \lambda \mathbf{v}
+            \]
+            where $\lambda$ is the mobile line charge.
+        \item 2D:
+            \[
+                \mathbf{K} = \sigma \mathbf{v}
+            \]
+            where $\sigma$ is the surface charge density.
+        \item 3D:
+            \[
+                \mathbf{J} = \rho \mathbf{v}
+            \]
+            where $\rho$ is the volume charge density.
+    \end{romanlist} 
+
+    \item The Lorentz force for each of the cases 1D, 2D and 3D are:
+    \begin{romanlist}
+        \item 1D:
+            \[
+                \mathbf{F_{\text{mag}}} = \int I(d\mathbf{l} \times \mathbf{B})
+            \]
+        \item 2D:
+            \[
+                \mathbf{F_{\text{mag}}} = \int (\mathbf{K} \times \mathbf{B})
+            \]
+        \item 3D:
+            \[
+                \mathbf{F_{\text{mag}}} = \int (\mathbf{J} \times \mathbf{B})
+            \]
+    \end{romanlist}
+
+    \item Don't quite understand the question, but I guess one can say that the currents are simply some stationary charges/charge distributions ($\lambda$, $\sigma$, etc.) 
+        with some movement with velocity $\mathbf{v}$.
+\end{alphalist}
+
+\section*{Task 2.}
+\begin{alphalist}
+    \item From the equation
+        \[
+            I = \int_{\mathcal{S}} \mathbf{J} \cdot d\mathbf{a}
+        \]
+        which, using the divergence theorem we get
+        \[
+            \oint_{\mathcal{S}} \mathbf{J} \cdot d\mathbf{a} = \int_{\mathcal{V}} (\nabla \cdot \mathbf{J}) d\tau
+        \]
+        Since charge cannot simply be created or destroyed, what leaves the surface $\mathcal{S}$ must come from the volume inside, so
+        \[
+            \int_{\mathcal{V}} (\nabla \cdot \mathbf{J}) d\tau = -\frac{d}{dt} \int_{\mathcal{V}} \rho d\tau = -\int_{\mathcal{V}} \frac{\partial \rho}{\partial t} d\tau
+        \]
+        Since the area of integration is the same, the integrands must be equal, so 
+        \[
+            \nabla \cdot \mathbf{J} = -\frac{\partial \rho}{\partial t}
+        \]
+        which is the \textbf{continuity equation}. The physical meaning is that charge is conserved,
+        meaning that a change in charge density must escape through the surface of the volume.
+    
+    \item For magnetostatics we have steady currents. That means that the change in volume charge density
+        \[
+            \frac{\partial \rho}{\partial t} = 0
+        \]
+        Therefore the continuity equation for magnetostatics simplifies to
+        \[
+            \nabla \cdot \mathbf{J} = 0
+        \]
+\end{alphalist}
+
+\section*{Task 3.}
+For a line current we have that Biot-Savart's Law is defined as
+\[
+    \mathbf{B}(\mathbf{r}) = \frac{\mu_0}{4\pi} I \int \frac{d\mathbf{l'} \times \hat{\boldscriptr}}{\scriptr^2}
+\]
+where $\mu_0$ is the permiability of free space.
+
+For surface currents
+\[
+    \mathbf{B}(\mathbf{r}) = \frac{\mu_0}{4\pi} \int \frac{\mathbf{K(r')} \times \hat{\boldscriptr}}{\scriptr^2} da'
+\]
+
+and volume currents
+\[
+    \mathbf{B}(\mathbf{r}) = \frac{\mu_0}{4\pi} \int \frac{\mathbf{J(r')} \times \hat{\boldscriptr}}{\scriptr^2} da'
+\]
+
+Biot-Savart's law is applicable for steady currents, and may not me used for individual point charges as this does not constitute 
+a steady current.
+
+\section*{Task 4.}
+\begin{alphalist}
+    \item Firstly, we see from the figure that $d\mathbf{l'} \times \hat{\boldscriptr}$ points out of the page with a magnitude of 
+        $dl' \sin(\alpha) = dl \cos(\theta)$. We also know that $l' = s \cdot \tan(\theta)$, so
+        \[
+            dl' = \frac{s}{\cos^2(\theta)} d\theta
+        \]
+        and since $s = \scriptr \cos(\theta)$
+        \[
+            \frac{1}{\scriptr^2} = \frac{\cos^2(\theta)}{s^2}
+        \]
+        
+        We can therefore find the magnetic field considering two angles $\theta_1$ and $\theta_2$ as
+        \begin{align*}
+            B &= \frac{\mu_0 I}{4\pi} \int_{\theta_1}^{\theta_2} \frac{\cos^2(\theta)}{s^2} \cdot \frac{s}{\cos^2(\theta)} \cos(\theta) d\theta \\
+              &= \frac{\mu_0 I}{4\pi} \left(\sin(\theta_2) - \sin(\theta_1)\right)         
+        \end{align*}
+
+        If we now consider the contribution from the entire infinite wire we get that $\theta$ ranges from $-\pi/2$ to $\pi/2$, so
+        \[
+            B = \frac{\mu_0 I}{2\pi s}
+        \]
+        and since it curls around the wire in accordance with the right-hand rule we get
+        \[
+            \mathbf{B} = \frac{\mu_0 I}{2\pi s} \hat{\mathbf{\phi}}
+        \]
+
+    \item The field from the first wire experienced at the second wire simply becomes
+        \[
+            B = \frac{\mu_0 I}{2\pi d}
+        \]
+
+    \item The Lorentz force between the two wires becomes 
+        \[
+            F = 3I \cdot \frac{\mu_0 I}{2\pi d} \int dl
+        \]
+\end{alphalist}
+
+\section*{Task 5.}
+\begin{alphalist}
+    \item If we have some wire carrying a current $I$ the line integral of the magnetic field $\mathbf{B}$ around some 
+        loop enclosing the wire is
+        \[
+            \oint \mathbf{B} \cdot d\mathbf{l} = \frac{\mu_0I}{2\pi} \oint \frac{1}{s} d\phi = \frac{\mu_0 I}{2\pi} \int_0^{2\pi} d\phi = \mu_0 I
+        \]
+        Now the current $I$ can be expressed in terms of the volume charge density $\mathbf{J}$, where
+        \[
+            I = \int \mathbf{J} \cdot d\mathbf{a}
+        \]
+        Stokes theorem on the line integral over the magnetic field therefore gives that
+        \[
+            \int \left(\nabla \times \mathbf{B}\right) \cdot d\mathbf{a} = \mu_0 \int \mathbf{J} \cdot d\mathbf{a}
+        \]
+        The integrands have to be equal, so
+        \[
+            \nabla \times \mathbf{B} = \mu_0 \mathbf{J}
+        \]
+        which is Ampère's law in differential form.
+\end{alphalist}
+
+\end{document}
