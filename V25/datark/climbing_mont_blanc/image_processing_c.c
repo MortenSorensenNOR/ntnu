@@ -52,52 +52,68 @@ PPMImage * convertToPPPMImage(AccurateImage *imageIn) {
     return imageOut;
 }
 
-#define IDX(x, y, width) ((y) * (width) + (x))
-void compute_image_integral(AccurateImage* image, int channel, int width, int height, double* integral) {
-    #pragma omp parallel for
-    for (int y = 0; y < height; y++) {
-        double row_sum = 0;
-        for (int x = 0; x < width; x++) {
-            row_sum += *(&(image->data[IDX(x, y, width)].red) + channel);
-            integral[IDX(x, y, width)] = row_sum;
-        }
-    }
-
-    #pragma omp parallel for
-    for (int x = 0; x < width; x++) {
-        for (int y = 1; y < height; y++) {
-            integral[IDX(x, y, width)] += integral[IDX(x, y - 1, width)];
-        }
-    }
-}
-
 // blur one color channel
-void blurIteration(AccurateImage *imageOut, AccurateImage *imageIn, int channel, int size, double* integral_image) {
+#define IDX(x, y, width) ((y) * (width) + (x))
+void blurIteration(AccurateImage *imageOut, AccurateImage *imageIn, int channel, int size, float* temp) {
     int width = imageIn->x;
     int height = imageIn->y;
-    compute_image_integral(imageIn, channel, width, height, integral_image);
 
+    // Horizontal pass
     #pragma omp parallel for
     for (int y = 0; y < height; y++) {
-        int y1 = (y - size < 0) ? 0 : y - size;
-        int y2 = (y + size >= height) ? height - 1 : y + size;
+        float sum = 0;
+        // Initial sum for the first pixel in the row
+        for (int x = -size; x <= size; x++) {
+            int clamped_x = (x < 0) ? 0 : ((x >= width) ? width - 1 : x);
+            sum += *(&(imageIn->data[IDX(clamped_x, y, width)].red) + channel);
+        }
+        temp[IDX(0, y, width)] = sum;
 
-        for (int x = 0; x < width; x++) {
-            int x1 = (x - size < 0) ? 0 : x - size;
-            int x2 = (x + size >= width) ? width - 1 : x + size;
+        for (int x = 1; x < width; x++) {
+            int add_idx = x + size;
+            int sub_idx = x - size - 1;
 
-            double A = (x1 > 0 && y1 > 0) ? integral_image[IDX(x1 - 1, y1 - 1, width)] : 0;
-            double B = (y1 > 0) ? integral_image[IDX(x2, y1 - 1, width)] : 0;
-            double C = (x1 > 0) ? integral_image[IDX(x1 - 1, y2, width)] : 0;
-            double D = integral_image[IDX(x2, y2, width)];
+            // Clamp add_idx and sub_idx to valid range
+            int clamped_add_idx = (add_idx >= width) ? width - 1 : add_idx;
+            int clamped_sub_idx = (sub_idx < 0) ? 0 : sub_idx;
 
-            float sum = D - B - C + A;
-            int area = (x2 - x1 + 1) * (y2 - y1 + 1);
-            *(&(imageOut->data[IDX(x, y, width)].red) + channel) = (float)sum / area;
+            float add_val = *(&(imageIn->data[IDX(clamped_add_idx, y, width)].red) + channel);
+            float sub_val = *(&(imageIn->data[IDX(clamped_sub_idx, y, width)].red) + channel);
+            sum += add_val - sub_val;
+
+            temp[IDX(x, y, width)] = sum;
+        }
+    }
+
+    // Vertical pass
+    #pragma omp parallel for
+    for (int x = 0; x < width; x++) {
+        float sum = 0;
+        // Initial sum for the first pixel in the column
+        for (int y = -size; y <= size; y++) {
+            int clamped_y = (y < 0) ? 0 : ((y >= height) ? height - 1 : y);
+            sum += temp[IDX(x, clamped_y, width)];
+        }
+
+        int area = (2 * size + 1) * (2 * size + 1);
+        *(&(imageOut->data[IDX(x, 0, width)].red) + channel) = sum / area;
+
+        for (int y = 1; y < height; y++) {
+            int add_idx = y + size;
+            int sub_idx = y - size - 1;
+
+            // Clamp add_idx and sub_idx to valid range
+            int clamped_add_idx = (add_idx >= height) ? height - 1 : add_idx;
+            int clamped_sub_idx = (sub_idx < 0) ? 0 : sub_idx;
+
+            float add_val = temp[IDX(x, clamped_add_idx, width)];
+            float sub_val = temp[IDX(x, clamped_sub_idx, width)];
+            sum += add_val - sub_val;
+
+            *(&(imageOut->data[IDX(x, y, width)].red) + channel) = sum / area;
         }
     }
 }
-
 
 // Perform the final step, and return it as ppm.
 PPMImage * imageDifference(AccurateImage *imageInSmall, AccurateImage *imageInLarge) {
@@ -142,7 +158,7 @@ int main(int argc, char** argv) {
 	
     int width = image->x;
     int height = image->y;
-    double* integral_image = (double*)calloc(width * height, sizeof(double));
+    float* integral_image = (float*)calloc(width * height, sizeof(float));
 	
 	AccurateImage *imageAccurate1_tiny = convertToAccurateImage(image);
 	AccurateImage *imageAccurate2_tiny = convertToAccurateImage(image);
@@ -172,7 +188,7 @@ int main(int argc, char** argv) {
 	}
 
     // an intermediate step can be saved for debugging like this
-//    writePPM("imageAccurate2_tiny.ppm", convertToPPPMImage(imageAccurate2_tiny));
+   writePPM("imageAccurate2_tiny.ppm", convertToPPPMImage(imageAccurate2_tiny));
 	
 	AccurateImage *imageAccurate1_medium = convertToAccurateImage(image);
 	AccurateImage *imageAccurate2_medium = convertToAccurateImage(image);
