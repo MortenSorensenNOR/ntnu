@@ -12,3 +12,9 @@ openmp simple:
 
 switch to float:
 - 1.11s
+
+separable sliding window:
+- 0.45s (2.71s website)
+
+simd image diff:
+- 0.22s

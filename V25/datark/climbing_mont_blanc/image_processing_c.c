@@ -1,17 +1,20 @@
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stddef.h>
 #include <assert.h>
 
 #include <omp.h>
 #include "ppm.h"
 
+typedef float v4sf __attribute__((vector_size(16)));  // 4 floats
+typedef int v4si __attribute__((vector_size(16))); // for mask
+
 typedef struct {
     int width, height;
-    float* r;
-    float* g;
-    float* b;
+    float* data[3];
 } Image;
+
 
 Image *convertToAccurateImage(PPMImage *pp_image) {
     Image* image;
@@ -19,15 +22,15 @@ Image *convertToAccurateImage(PPMImage *pp_image) {
     image->width = pp_image->x;
     image->height = pp_image->y;
 
-    image->r = (float*)malloc(image->width * image->height * sizeof(float));
-    image->g = (float*)malloc(image->width * image->height * sizeof(float));
-    image->b = (float*)malloc(image->width * image->height * sizeof(float));
+    image->data[0] = (float*)malloc(image->width * image->height * sizeof(float));
+    image->data[1] = (float*)malloc(image->width * image->height * sizeof(float));
+    image->data[2] = (float*)malloc(image->width * image->height * sizeof(float));
 
     #pragma omp parallel for
     for (int i = 0; i < image->width * image->height; i++) {
-        image->r[i] = (float)pp_image->data[i].red;
-        image->g[i] = (float)pp_image->data[i].green;
-        image->b[i] = (float)pp_image->data[i].blue;
+        image->data[0][i] = (float)pp_image->data[i].red;
+        image->data[1][i] = (float)pp_image->data[i].green;
+        image->data[2][i] = (float)pp_image->data[i].blue;
     }
     return image;
 }
@@ -35,9 +38,9 @@ Image *convertToAccurateImage(PPMImage *pp_image) {
 void fillImageData(Image* image, PPMPixel* data) {
     #pragma omp parallel for
     for (int i = 0; i < image->width * image->height; i++) {
-        image->r[i] = (float)data[i].red;
-        image->g[i] = (float)data[i].green;
-        image->b[i] = (float)data[i].blue;
+        image->data[0][i] = (float)data[i].red;
+        image->data[1][i] = (float)data[i].green;
+        image->data[2][i] = (float)data[i].blue;
     }
 }
 
@@ -46,9 +49,9 @@ Image* shallowCopyImage(Image* orig) {
     copy->width = orig->width;
     copy->height = orig->height;
 
-    copy->r = (float*)malloc(copy->width * copy->height * sizeof(float));
-    copy->g = (float*)malloc(copy->width * copy->height * sizeof(float));
-    copy->b = (float*)malloc(copy->width * copy->height * sizeof(float));
+    copy->data[0] = (float*)malloc(copy->width * copy->height * sizeof(float));
+    copy->data[1] = (float*)malloc(copy->width * copy->height * sizeof(float));
+    copy->data[2] = (float*)malloc(copy->width * copy->height * sizeof(float));
 
     return copy;
 }
@@ -61,9 +64,9 @@ PPMImage * convertToPPPMImage(Image *imageIn) {
     imageOut->y = imageIn->height;
 
     for(int i = 0; i < imageIn->width * imageIn->height; i++) {
-        imageOut->data[i].red = imageIn->r[i];
-        imageOut->data[i].green = imageIn->g[i];
-        imageOut->data[i].blue = imageIn->b[i];
+        imageOut->data[i].red   = imageIn->data[0][i];
+        imageOut->data[i].green = imageIn->data[1][i];
+        imageOut->data[i].blue  = imageIn->data[2][i];
     }
     return imageOut;
 }
@@ -84,7 +87,6 @@ inline void flip_block_single_channel(const float* in, float* out, int width, in
         const int block_y = MIN(height, y + block) - y;
         for (int xx = 0; xx < block_x; xx++) {
             for (int yy = 0; yy < block_y; yy++) {
-    
                 *q = *p;
                 p += width;
                 q += 1;
@@ -99,27 +101,9 @@ inline void flip_block_single_channel(const float* in, float* out, int width, in
 
 void flip_block(Image* in, Image* out, const int width, const int height) {
     // For each color channel, transpose image data using a 2D block to reduce cache misses
-
-    #pragma omp parallel sections
-    {
-        // Red channel
-        #pragma omp section
-        {
-            flip_block_single_channel(in->r, out->r, width, height);
-        } 
-    
-        // Green channel
-        #pragma omp section
-        {
-            flip_block_single_channel(in->g, out->g, width, height);
-        }
-
-        // Blue channel
-        #pragma omp section
-        {
-            flip_block_single_channel(in->b, out->b, width, height);
-        }
-    }
+    flip_block_single_channel(in->data[0], out->data[0], width, height);
+    flip_block_single_channel(in->data[1], out->data[1], width, height);
+    flip_block_single_channel(in->data[2], out->data[2], width, height);
 }
 
 inline void blur_horizontal_single_channel(const float* src, float* dst, const int width, const int height, const int size) {
@@ -127,6 +111,7 @@ inline void blur_horizontal_single_channel(const float* src, float* dst, const i
 
     #pragma omp parallel for
     for (int i = 0; i < height; i++) {
+        float inorm;
         const int begin = i * width;
         const int end   = begin + width;
 
@@ -134,62 +119,45 @@ inline void blur_horizontal_single_channel(const float* src, float* dst, const i
         float acc = 0.0f;
         int ti = begin, li = begin-size-1, ri = begin+size;
 
-        // initial acucmulation
+        // Initial acucmulation
         for(int j=ti; j<ri; j++)
         {
             acc += src[j];
         }
 
-        // 1. left side out and right side in
+        // Left side out and right side in
         for(; li < begin; ri++, ti++, li++)
         { 
             acc += src[ri];
-            const float inorm = 1.f / (float)(ri+1-begin);
+            inorm = 1.f / (float)(ri+1-begin);
             dst[ti] = acc*inorm;
         }
 
-        // 2. left side in and right side in
+        // Left side in and right side in
         for(; ri<end; ri++, ti++, li++)
         { 
             acc += src[ri] - src[li];
             dst[ti] = acc*iarr;
         }
 
-        // 3. left side in and right side out
+        // Left side in and right side out
         for(; ti<end; ti++, li++)
         { 
             acc -= src[li];
-            const float inorm = 1.f / (float)(end-li-1);
+            inorm = 1.f / (float)(end-li-1);
             dst[ti] = acc*inorm;
         }
     }
 }
 
 void blur_horizontal(Image* src, Image* dst, const int width, const int height, const int size) {
-    #pragma omp parallel sections
-    {
-        // Red channel
-        #pragma omp section
-        {
-            blur_horizontal_single_channel(src->r, dst->r, width, height, size);
-        } 
-    
-        // Green channel
-        #pragma omp section
-        {
-            blur_horizontal_single_channel(src->g, dst->g, width, height, size);
-        }
+    blur_horizontal_single_channel(src->data[0], dst->data[0], width, height, size);
+    blur_horizontal_single_channel(src->data[1], dst->data[1], width, height, size);
+    blur_horizontal_single_channel(src->data[2], dst->data[2], width, height, size);
 
-        // Blue channel
-        #pragma omp section
-        {
-            blur_horizontal_single_channel(src->b, dst->b, width, height, size);
-        }
-    }
 }
 
 void imageBlur(Image* src, Image* dst, int size) {
-    Image* temp;
     const int width = src->width;
     const int height = src->height;
 
@@ -207,14 +175,99 @@ void imageBlur(Image* src, Image* dst, int size) {
     blur_horizontal(src, dst, height, width, size);
     blur_horizontal(dst, src, height, width, size);
     blur_horizontal(src, dst, height, width, size);
-
+    
     // transpose the image
-    flip_block(src, dst, height, width);
+    flip_block(dst, src, height, width);
 
-    temp = src;
-    dst = src;
-    src = temp;
+    // swap the pointers
+    float* tmp = src->data[0];    
+    src->data[0] = dst->data[0];
+    dst->data[0] = tmp;
+    tmp = src->data[1];
+    src->data[1] = dst->data[1];
+    dst->data[1] = tmp;
+    tmp = src->data[2];
+    src->data[2] = dst->data[2];
+    dst->data[2] = tmp;
 }
+
+// PPMImage * imageDifference(Image *imageInSmall, Image *imageInLarge) {
+// 	PPMImage *imageOut;
+// 	imageOut = (PPMImage *)malloc(sizeof(PPMImage));
+// 	imageOut->data = (PPMPixel*)malloc(imageInSmall->width * imageInSmall->height * sizeof(PPMPixel));
+//
+// 	imageOut->x = imageInSmall->width;
+// 	imageOut->y = imageInSmall->height;
+//
+//     const int step = 4;
+//     const int total_pixels = imageInSmall->width * imageInSmall->height;
+//
+//     #pragma omp parallel for
+//     for (int i = 0; i < total_pixels; i += 4) {
+//         // Load 4 pixels at once for each channel
+//         v4sf r_large = *(v4sf*)&imageInLarge->data[0][i];
+//         v4sf r_small = *(v4sf*)&imageInSmall->data[0][i];
+//         v4sf g_large = *(v4sf*)&imageInLarge->data[1][i];
+//         v4sf g_small = *(v4sf*)&imageInSmall->data[1][i];
+//         v4sf b_large = *(v4sf*)&imageInLarge->data[2][i];
+//         v4sf b_small = *(v4sf*)&imageInSmall->data[2][i];
+//
+//         // Compute difference
+//         v4sf r = r_large - r_small;
+//         v4sf g = g_large - g_small;
+//         v4sf b = b_large - b_small;
+//
+//         // Wrap
+//         v4sf threshold = {-1.0f, -1.0f, -1.0f, -1.0f};
+//         v4sf addval = {-257.0f, -257.0f, -257.0f, -257.0f};
+//
+//         v4si mask_r = (v4si)(r < threshold);
+//         v4si mask_g = (v4si)(g < threshold);
+//         v4si mask_b = (v4si)(b < threshold);
+//         v4sf mask_r_f = __builtin_convertvector(mask_r, v4sf);
+//         v4sf mask_g_f = __builtin_convertvector(mask_g, v4sf);
+//         v4sf mask_b_f = __builtin_convertvector(mask_b, v4sf);
+//
+//         r = r + (mask_r_f * addval);
+//         g = g + (mask_g_f * addval);
+//         b = b + (mask_b_f * addval);
+//
+//         // Clamp to [0, 255]
+//         v4sf min_val = {0.0f, 0.0f, 0.0f, 0.0f};
+//         v4sf max_val = {255.0f, 255.0f, 255.0f, 255.0f};
+//
+//         r = __builtin_ia32_maxps(__builtin_ia32_minps(r, max_val), min_val);
+//         g = __builtin_ia32_maxps(__builtin_ia32_minps(g, max_val), min_val);
+//         b = __builtin_ia32_maxps(__builtin_ia32_minps(b, max_val), min_val);
+//
+//         // Convert to unsigned char (simulating floor)
+//         for (int j = 0; j < 4; j++) {
+//             imageOut->data[i + j].red   = (unsigned char)(r[j]);
+//             imageOut->data[i + j].green = (unsigned char)(g[j]);
+//             imageOut->data[i + j].blue  = (unsigned char)(b[j]);
+//         }
+//     }
+//
+//     for (int i = total_pixels - (total_pixels % 4); i < total_pixels; i++) {
+//         float r = imageInLarge->data[0][i] - imageInSmall->data[0][i];
+//         if (r < -1.0f) r += 257.0f;
+//         r = fminf(fmaxf(r, 0.0f), 255.0f);
+//
+//         float g = imageInLarge->data[1][i] - imageInSmall->data[1][i];
+//         if (g < -1.0f) g += 257.0f;
+//         g = fminf(fmaxf(g, 0.0f), 255.0f);
+//
+//         float b = imageInLarge->data[2][i] - imageInSmall->data[2][i];
+//         if (b < -1.0f) b += 257.0f;
+//         b = fminf(fmaxf(b, 0.0f), 255.0f);
+//
+//         imageOut->data[i].red   = (unsigned char)r;
+//         imageOut->data[i].green = (unsigned char)g;
+//         imageOut->data[i].blue  = (unsigned char)b;
+//     }
+//
+// 	return imageOut;
+// }
 
 PPMImage * imageDifference(Image *imageInSmall, Image *imageInLarge) {
 	PPMImage *imageOut;
@@ -226,7 +279,7 @@ PPMImage * imageDifference(Image *imageInSmall, Image *imageInLarge) {
 
     #pragma omp parallel for
     for(int i = 0; i < imageInSmall->width * imageInSmall->height; i++) {
-        float value = imageInLarge->r[i] - imageInSmall->r[i];
+        float value = imageInLarge->data[0][i] - imageInSmall->data[0][i];
         if (value < -1.0)
             value = 257.0 + value;
         if (value < 0.0f)
@@ -236,7 +289,7 @@ PPMImage * imageDifference(Image *imageInSmall, Image *imageInLarge) {
 
         imageOut->data[i].red = floor(value);
 
-        value = imageInLarge->g[i] - imageInSmall->g[i];
+        value = imageInLarge->data[1][i] - imageInSmall->data[1][i];
         if (value < -1.0)
             value = 257.0 + value;
         if (value < 0.0f)
@@ -246,7 +299,7 @@ PPMImage * imageDifference(Image *imageInSmall, Image *imageInLarge) {
 
         imageOut->data[i].green = floor(value);
 
-        value = imageInLarge->b[i] - imageInSmall->b[i];
+        value = imageInLarge->data[2][i] - imageInSmall->data[2][i];
         if (value < -1.0)
             value = 257.0 + value;
         if (value < 0.0f)
@@ -259,7 +312,6 @@ PPMImage * imageDifference(Image *imageInSmall, Image *imageInLarge) {
 
 	return imageOut;
 }
-
 
 int main(int argc, char** argv) {
     PPMImage *image;
@@ -288,7 +340,6 @@ int main(int argc, char** argv) {
     fillImageData(base_image, image->data);
     imageBlur(base_image, image_small, size);
     
-    
     size = 5;
     fillImageData(base_image, image->data);
     imageBlur(base_image, image_medium, size);
@@ -296,8 +347,6 @@ int main(int argc, char** argv) {
     size = 8;
     fillImageData(base_image, image->data);
     imageBlur(base_image, image_large, size);
-
-    writePPM("image_test.ppm", convertToPPPMImage(image_large));
 
 	PPMImage *final_tiny = imageDifference(image_tiny, image_small);
     PPMImage *final_small = imageDifference(image_small, image_medium);
