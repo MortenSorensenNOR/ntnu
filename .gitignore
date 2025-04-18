@@ -9,6 +9,7 @@ subprojects/
 *.ppm
 *.out
 *.pygtex
+*.o
 *.log
 *.aux
 *.fls
