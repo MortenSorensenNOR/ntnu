@@ -53,7 +53,7 @@ void blurIteration(AccurateImage *imageOut, AccurateImage *imageIn, int colourTy
 					// Check if we are outside the bounds
 					if(currentX < 0)
 						continue;
-					if(currentX >= imageIn->x)
+if(currentX >= imageIn->x)
 						continue;
 					if(currentY < 0)
 						continue;
@@ -154,6 +154,21 @@ PPMImage * imageDifference(AccurateImage *imageInSmall, AccurateImage *imageInLa
 	return imageOut;
 }
 
+PPMImage * convertToPPPMImage(AccurateImage *imageIn) {
+    PPMImage *imageOut;
+    imageOut = (PPMImage *)malloc(sizeof(PPMImage));
+    imageOut->data = (PPMPixel*)malloc(imageIn->x * imageIn->y * sizeof(PPMPixel));
+
+    imageOut->x = imageIn->x;
+    imageOut->y = imageIn->y;
+
+    for(int i = 0; i < imageIn->x * imageIn->y; i++) {
+        imageOut->data[i].red = imageIn->data[i].red;
+        imageOut->data[i].green = imageIn->data[i].green;
+        imageOut->data[i].blue = imageIn->data[i].blue;
+    }
+    return imageOut;
+}
 
 int main() {
 	PPMImage *image;
@@ -212,6 +227,8 @@ int main() {
         blurIteration(imageAccurate1_large, imageAccurate2_large, colour, size);
         blurIteration(imageAccurate2_large, imageAccurate1_large, colour, size);
 	}
+
+    writePPM("image_test_accurate.ppm", convertToPPPMImage(imageAccurate2_large));
 	
 	// Save the images.
 	PPMImage *final_tiny = imageDifference(imageAccurate2_tiny, imageAccurate2_small);

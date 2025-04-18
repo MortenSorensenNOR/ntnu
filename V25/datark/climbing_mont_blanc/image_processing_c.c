@@ -4,140 +4,257 @@
 #include <assert.h>
 
 #include <omp.h>
-
 #include "ppm.h"
 
-// Image from:
-// http://7-themes.com/6971875-funny-flowers-pictures.html
-
 typedef struct {
-     float red,green,blue;
-} AccuratePixel;
+    int width, height;
+    float* r;
+    float* g;
+    float* b;
+} Image;
 
-typedef struct {
-     int x, y;
-     AccuratePixel *data;
-} AccurateImage;
+Image *convertToAccurateImage(PPMImage *pp_image) {
+    Image* image;
+    image = (Image*)malloc(sizeof(Image));
+    image->width = pp_image->x;
+    image->height = pp_image->y;
 
-// Convert ppm to high precision format.
-AccurateImage *convertToAccurateImage(PPMImage *image) {
-	// Make a copy
-	AccurateImage *imageAccurate;
-	imageAccurate = (AccurateImage *)malloc(sizeof(AccurateImage));
-	imageAccurate->data = (AccuratePixel*)malloc(image->x * image->y * sizeof(AccuratePixel));
-	for(int i = 0; i < image->x * image->y; i++) {
-		imageAccurate->data[i].red   = (double) image->data[i].red;
-		imageAccurate->data[i].green = (double) image->data[i].green;
-		imageAccurate->data[i].blue  = (double) image->data[i].blue;
-	}
-	imageAccurate->x = image->x;
-	imageAccurate->y = image->y;
-	
-	return imageAccurate;
+    image->r = (float*)malloc(image->width * image->height * sizeof(float));
+    image->g = (float*)malloc(image->width * image->height * sizeof(float));
+    image->b = (float*)malloc(image->width * image->height * sizeof(float));
+
+    #pragma omp parallel for
+    for (int i = 0; i < image->width * image->height; i++) {
+        image->r[i] = (float)pp_image->data[i].red;
+        image->g[i] = (float)pp_image->data[i].green;
+        image->b[i] = (float)pp_image->data[i].blue;
+    }
+    return image;
 }
 
-PPMImage * convertToPPPMImage(AccurateImage *imageIn) {
+void fillImageData(Image* image, PPMPixel* data) {
+    #pragma omp parallel for
+    for (int i = 0; i < image->width * image->height; i++) {
+        image->r[i] = (float)data[i].red;
+        image->g[i] = (float)data[i].green;
+        image->b[i] = (float)data[i].blue;
+    }
+}
+
+Image* shallowCopyImage(Image* orig) {
+    Image* copy = (Image*)malloc(sizeof(Image));
+    copy->width = orig->width;
+    copy->height = orig->height;
+
+    copy->r = (float*)malloc(copy->width * copy->height * sizeof(float));
+    copy->g = (float*)malloc(copy->width * copy->height * sizeof(float));
+    copy->b = (float*)malloc(copy->width * copy->height * sizeof(float));
+
+    return copy;
+}
+
+PPMImage * convertToPPPMImage(Image *imageIn) {
     PPMImage *imageOut;
     imageOut = (PPMImage *)malloc(sizeof(PPMImage));
-    imageOut->data = (PPMPixel*)malloc(imageIn->x * imageIn->y * sizeof(PPMPixel));
+    imageOut->data = (PPMPixel*)malloc(imageIn->width * imageIn->height * sizeof(PPMPixel));
+    imageOut->x = imageIn->width;
+    imageOut->y = imageIn->height;
 
-    imageOut->x = imageIn->x;
-    imageOut->y = imageIn->y;
-
-    for(int i = 0; i < imageIn->x * imageIn->y; i++) {
-        imageOut->data[i].red = imageIn->data[i].red;
-        imageOut->data[i].green = imageIn->data[i].green;
-        imageOut->data[i].blue = imageIn->data[i].blue;
+    for(int i = 0; i < imageIn->width * imageIn->height; i++) {
+        imageOut->data[i].red = imageIn->r[i];
+        imageOut->data[i].green = imageIn->g[i];
+        imageOut->data[i].blue = imageIn->b[i];
     }
     return imageOut;
 }
 
-// blur one color channel
-#define IDX(x, y, width) ((y) * (width) + (x))
-void blurIteration(AccurateImage *imageOut, AccurateImage *imageIn, int channel, int size, float* temp) {
-    int width = imageIn->x;
-    int height = imageIn->y;
+// Main algorithm
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
 
-    // Horizontal pass
+inline void flip_block_single_channel(const float* in, float* out, int width, int height) {
+    const int block = 256;
     #pragma omp parallel for
-    for (int y = 0; y < height; y++) {
-        float sum = 0;
-        // Initial sum for the first pixel in the row
-        for (int x = -size; x <= size; x++) {
-            int clamped_x = (x < 0) ? 0 : ((x >= width) ? width - 1 : x);
-            sum += *(&(imageIn->data[IDX(clamped_x, y, width)].red) + channel);
-        }
-        temp[IDX(0, y, width)] = sum;
-
-        for (int x = 1; x < width; x++) {
-            int add_idx = x + size;
-            int sub_idx = x - size - 1;
-
-            // Clamp add_idx and sub_idx to valid range
-            int clamped_add_idx = (add_idx >= width) ? width - 1 : add_idx;
-            int clamped_sub_idx = (sub_idx < 0) ? 0 : sub_idx;
-
-            float add_val = *(&(imageIn->data[IDX(clamped_add_idx, y, width)].red) + channel);
-            float sub_val = *(&(imageIn->data[IDX(clamped_sub_idx, y, width)].red) + channel);
-            sum += add_val - sub_val;
-
-            temp[IDX(x, y, width)] = sum;
+    for (int x = 0; x < width; x += block) {
+    for (int y = 0; y < height; y += block) {
+        const float* p = in + y * width + x;
+        float* q = out + y + x * height;
+    
+        const int block_x = MIN(width,  x + block) - x;
+        const int block_y = MIN(height, y + block) - y;
+        for (int xx = 0; xx < block_x; xx++) {
+            for (int yy = 0; yy < block_y; yy++) {
+    
+                *q = *p;
+                p += width;
+                q += 1;
+            }
+    
+            p += -block_y * width + 1;
+            q += -block_y + height;
         }
     }
+    }
+}
 
-    // Vertical pass
-    #pragma omp parallel for
-    for (int x = 0; x < width; x++) {
-        float sum = 0;
-        // Initial sum for the first pixel in the column
-        for (int y = -size; y <= size; y++) {
-            int clamped_y = (y < 0) ? 0 : ((y >= height) ? height - 1 : y);
-            sum += temp[IDX(x, clamped_y, width)];
+void flip_block(Image* in, Image* out, const int width, const int height) {
+    // For each color channel, transpose image data using a 2D block to reduce cache misses
+
+    #pragma omp parallel sections
+    {
+        // Red channel
+        #pragma omp section
+        {
+            flip_block_single_channel(in->r, out->r, width, height);
+        } 
+    
+        // Green channel
+        #pragma omp section
+        {
+            flip_block_single_channel(in->g, out->g, width, height);
         }
 
-        int area = (2 * size + 1) * (2 * size + 1);
-        *(&(imageOut->data[IDX(x, 0, width)].red) + channel) = sum / area;
-
-        for (int y = 1; y < height; y++) {
-            int add_idx = y + size;
-            int sub_idx = y - size - 1;
-
-            // Clamp add_idx and sub_idx to valid range
-            int clamped_add_idx = (add_idx >= height) ? height - 1 : add_idx;
-            int clamped_sub_idx = (sub_idx < 0) ? 0 : sub_idx;
-
-            float add_val = temp[IDX(x, clamped_add_idx, width)];
-            float sub_val = temp[IDX(x, clamped_sub_idx, width)];
-            sum += add_val - sub_val;
-
-            *(&(imageOut->data[IDX(x, y, width)].red) + channel) = sum / area;
+        // Blue channel
+        #pragma omp section
+        {
+            flip_block_single_channel(in->b, out->b, width, height);
         }
     }
 }
 
-// Perform the final step, and return it as ppm.
-PPMImage * imageDifference(AccurateImage *imageInSmall, AccurateImage *imageInLarge) {
-	PPMImage *imageOut;
-	imageOut = (PPMImage *)malloc(sizeof(PPMImage));
-	imageOut->data = (PPMPixel*)malloc(imageInSmall->x * imageInSmall->y * sizeof(PPMPixel));
-	
-	imageOut->x = imageInSmall->x;
-	imageOut->y = imageInSmall->y;
+inline void blur_horizontal_single_channel(const float* src, float* dst, const int width, const int height, const int size) {
+    const float iarr = 1.0f / (size * 2 + 1);
 
     #pragma omp parallel for
-    for (int channel = 0; channel < 3; channel++) {
-        #pragma omp parallel for
-        for(int i = 0; i < imageInSmall->x * imageInSmall->y; i++) {
-            float value = (*(&imageInLarge->data[i].red+channel) - *(&imageInSmall->data[i].red + channel));
-            if (value < -1.0)
-                value = 257.0 + value;
-            if (value < 0.0f)
-                value = 0.0f;
-            if (value > 255.0f)
-                value = 255.0f;
+    for (int i = 0; i < height; i++) {
+        const int begin = i * width;
+        const int end   = begin + width;
 
-            *(&imageOut->data[i].red + channel) = floor(value);
+        // current index, left index, right index
+        float acc = 0.0f;
+        int ti = begin, li = begin-size-1, ri = begin+size;
+
+        // initial acucmulation
+        for(int j=ti; j<ri; j++)
+        {
+            acc += src[j];
         }
+
+        // 1. left side out and right side in
+        for(; li < begin; ri++, ti++, li++)
+        { 
+            acc += src[ri];
+            const float inorm = 1.f / (float)(ri+1-begin);
+            dst[ti] = acc*inorm;
+        }
+
+        // 2. left side in and right side in
+        for(; ri<end; ri++, ti++, li++)
+        { 
+            acc += src[ri] - src[li];
+            dst[ti] = acc*iarr;
+        }
+
+        // 3. left side in and right side out
+        for(; ti<end; ti++, li++)
+        { 
+            acc -= src[li];
+            const float inorm = 1.f / (float)(end-li-1);
+            dst[ti] = acc*inorm;
+        }
+    }
+}
+
+void blur_horizontal(Image* src, Image* dst, const int width, const int height, const int size) {
+    #pragma omp parallel sections
+    {
+        // Red channel
+        #pragma omp section
+        {
+            blur_horizontal_single_channel(src->r, dst->r, width, height, size);
+        } 
+    
+        // Green channel
+        #pragma omp section
+        {
+            blur_horizontal_single_channel(src->g, dst->g, width, height, size);
+        }
+
+        // Blue channel
+        #pragma omp section
+        {
+            blur_horizontal_single_channel(src->b, dst->b, width, height, size);
+        }
+    }
+}
+
+void imageBlur(Image* src, Image* dst, int size) {
+    Image* temp;
+    const int width = src->width;
+    const int height = src->height;
+
+    blur_horizontal(src, dst, width, height, size);
+    blur_horizontal(dst, src, width, height, size);
+    blur_horizontal(src, dst, width, height, size);
+    blur_horizontal(dst, src, width, height, size);
+    blur_horizontal(src, dst, width, height, size);
+
+    // transpose the image
+    flip_block(dst, src, width, height);
+
+    blur_horizontal(src, dst, height, width, size);
+    blur_horizontal(dst, src, height, width, size);
+    blur_horizontal(src, dst, height, width, size);
+    blur_horizontal(dst, src, height, width, size);
+    blur_horizontal(src, dst, height, width, size);
+
+    // transpose the image
+    flip_block(src, dst, height, width);
+
+    temp = src;
+    dst = src;
+    src = temp;
+}
+
+PPMImage * imageDifference(Image *imageInSmall, Image *imageInLarge) {
+	PPMImage *imageOut;
+	imageOut = (PPMImage *)malloc(sizeof(PPMImage));
+	imageOut->data = (PPMPixel*)malloc(imageInSmall->width * imageInSmall->height * sizeof(PPMPixel));
+	
+	imageOut->x = imageInSmall->width;
+	imageOut->y = imageInSmall->height;
+
+    #pragma omp parallel for
+    for(int i = 0; i < imageInSmall->width * imageInSmall->height; i++) {
+        float value = imageInLarge->r[i] - imageInSmall->r[i];
+        if (value < -1.0)
+            value = 257.0 + value;
+        if (value < 0.0f)
+            value = 0.0f;
+        if (value > 255.0f)
+            value = 255.0f;
+
+        imageOut->data[i].red = floor(value);
+
+        value = imageInLarge->g[i] - imageInSmall->g[i];
+        if (value < -1.0)
+            value = 257.0 + value;
+        if (value < 0.0f)
+            value = 0.0f;
+        if (value > 255.0f)
+            value = 255.0f;
+
+        imageOut->data[i].green = floor(value);
+
+        value = imageInLarge->b[i] - imageInSmall->b[i];
+        if (value < -1.0)
+            value = 257.0 + value;
+        if (value < 0.0f)
+            value = 0.0f;
+        if (value > 255.0f)
+            value = 255.0f;
+
+        imageOut->data[i].blue = floor(value);
     }
 
 	return imageOut;
@@ -145,83 +262,47 @@ PPMImage * imageDifference(AccurateImage *imageInSmall, AccurateImage *imageInLa
 
 
 int main(int argc, char** argv) {
-    // read image
     PPMImage *image;
-    // select where to read the image from
     if(argc > 1) {
-        // from file for debugging (with argument)
         image = readPPM("flower.ppm");
     } else {
-        // from stdin for cmb
         image = readStreamPPM(stdin);
     }
 	
+    // Shared
     int width = image->x;
     int height = image->y;
-    float* integral_image = (float*)calloc(width * height, sizeof(float));
-	
-	AccurateImage *imageAccurate1_tiny = convertToAccurateImage(image);
-	AccurateImage *imageAccurate2_tiny = convertToAccurateImage(image);
-	
-	// Process the tiny case:
-	for(int colour = 0; colour < 3; colour++) {
-		int size = 2;
-        blurIteration(imageAccurate2_tiny, imageAccurate1_tiny, colour, size, integral_image);
-        blurIteration(imageAccurate1_tiny, imageAccurate2_tiny, colour, size, integral_image);
-        blurIteration(imageAccurate2_tiny, imageAccurate1_tiny, colour, size, integral_image);
-        blurIteration(imageAccurate1_tiny, imageAccurate2_tiny, colour, size, integral_image);
-        blurIteration(imageAccurate2_tiny, imageAccurate1_tiny, colour, size, integral_image);
-	}
-	
-	
-	AccurateImage *imageAccurate1_small = convertToAccurateImage(image);
-	AccurateImage *imageAccurate2_small = convertToAccurateImage(image);
-	
-	// Process the small case:
-	for(int colour = 0; colour < 3; colour++) {
-		int size = 3;
-        blurIteration(imageAccurate2_small, imageAccurate1_small, colour, size, integral_image);
-        blurIteration(imageAccurate1_small, imageAccurate2_small, colour, size, integral_image);
-        blurIteration(imageAccurate2_small, imageAccurate1_small, colour, size, integral_image);
-        blurIteration(imageAccurate1_small, imageAccurate2_small, colour, size, integral_image);
-        blurIteration(imageAccurate2_small, imageAccurate1_small, colour, size, integral_image);
-	}
+    Image* base_image = convertToAccurateImage(image);
 
-    // an intermediate step can be saved for debugging like this
-   writePPM("imageAccurate2_tiny.ppm", convertToPPPMImage(imageAccurate2_tiny));
-	
-	AccurateImage *imageAccurate1_medium = convertToAccurateImage(image);
-	AccurateImage *imageAccurate2_medium = convertToAccurateImage(image);
-	
-	// Process the medium case:
-	for(int colour = 0; colour < 3; colour++) {
-		int size = 5;
-        blurIteration(imageAccurate2_medium, imageAccurate1_medium, colour, size, integral_image);
-        blurIteration(imageAccurate1_medium, imageAccurate2_medium, colour, size, integral_image);
-        blurIteration(imageAccurate2_medium, imageAccurate1_medium, colour, size, integral_image);
-        blurIteration(imageAccurate1_medium, imageAccurate2_medium, colour, size, integral_image);
-        blurIteration(imageAccurate2_medium, imageAccurate1_medium, colour, size, integral_image);
-	}
-	
-	AccurateImage *imageAccurate1_large = convertToAccurateImage(image);
-	AccurateImage *imageAccurate2_large = convertToAccurateImage(image);
-	
-	// Do each color channel
-	for(int colour = 0; colour < 3; colour++) {
-		int size = 8;
-        blurIteration(imageAccurate2_large, imageAccurate1_large, colour, size, integral_image);
-        blurIteration(imageAccurate1_large, imageAccurate2_large, colour, size, integral_image);
-        blurIteration(imageAccurate2_large, imageAccurate1_large, colour, size, integral_image);
-        blurIteration(imageAccurate1_large, imageAccurate2_large, colour, size, integral_image);
-        blurIteration(imageAccurate2_large, imageAccurate1_large, colour, size, integral_image);
-	}
+    int size;
+    Image* image_tiny = shallowCopyImage(base_image);
+    Image *image_small = shallowCopyImage(base_image);
+    Image *image_medium = shallowCopyImage(base_image);
+    Image *image_large = shallowCopyImage(base_image); 
 
-    free(integral_image);
+    // Run blur
+    size = 2;
+    imageBlur(base_image, image_tiny, size);
+    
+    size = 3;
+    fillImageData(base_image, image->data);
+    imageBlur(base_image, image_small, size);
+    
+    
+    size = 5;
+    fillImageData(base_image, image->data);
+    imageBlur(base_image, image_medium, size);
+    
+    size = 8;
+    fillImageData(base_image, image->data);
+    imageBlur(base_image, image_large, size);
 
-	// calculate difference
-	PPMImage *final_tiny = imageDifference(imageAccurate2_tiny, imageAccurate2_small);
-    PPMImage *final_small = imageDifference(imageAccurate2_small, imageAccurate2_medium);
-    PPMImage *final_medium = imageDifference(imageAccurate2_medium, imageAccurate2_large);
+    writePPM("image_test.ppm", convertToPPPMImage(image_large));
+
+	PPMImage *final_tiny = imageDifference(image_tiny, image_small);
+    PPMImage *final_small = imageDifference(image_small, image_medium);
+    PPMImage *final_medium = imageDifference(image_medium, image_large);
+	
 	// Save the images.
     if(argc > 1) {
         writePPM("flower_tiny.ppm", final_tiny);
@@ -232,6 +313,5 @@ int main(int argc, char** argv) {
         writeStreamPPM(stdout, final_small);
         writeStreamPPM(stdout, final_medium);
     }
-	
 }
 
