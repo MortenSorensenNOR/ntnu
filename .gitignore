@@ -6,6 +6,7 @@ subprojects/
 *.png
 *.jpg
 *.pdf
+*.ppm
 *.out
 *.pygtex
 *.log
