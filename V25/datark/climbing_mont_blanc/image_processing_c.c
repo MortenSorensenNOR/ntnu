@@ -160,35 +160,41 @@ void blur_horizontal(Image* src, Image* dst, const int width, const int height, 
 void imageBlur(Image* src, Image* dst, int size) {
     const int width = src->width;
     const int height = src->height;
+    Image bi = {
+        .width = width,
+        .height = height,
+        .data = {
+            (float*)malloc(width * height * sizeof(float)),
+            (float*)malloc(width * height * sizeof(float)),
+            (float*)malloc(width * height * sizeof(float)),
+        }
+    };
 
     blur_horizontal(src, dst, width, height, size);
-    blur_horizontal(dst, src, width, height, size);
-    blur_horizontal(src, dst, width, height, size);
-    blur_horizontal(dst, src, width, height, size);
-    blur_horizontal(src, dst, width, height, size);
+    blur_horizontal(dst, &bi, width, height, size);
+    blur_horizontal(&bi, dst, width, height, size);
+    blur_horizontal(dst, &bi, width, height, size);
+    blur_horizontal(&bi, dst, width, height, size);
 
     // transpose the image
-    flip_block(dst, src, width, height);
+    flip_block(dst, &bi, width, height);
 
-    blur_horizontal(src, dst, height, width, size);
-    blur_horizontal(dst, src, height, width, size);
-    blur_horizontal(src, dst, height, width, size);
-    blur_horizontal(dst, src, height, width, size);
-    blur_horizontal(src, dst, height, width, size);
+    blur_horizontal(&bi, dst, height, width, size);
+    blur_horizontal(dst, &bi, height, width, size);
+    blur_horizontal(&bi, dst, height, width, size);
+    blur_horizontal(dst, &bi, height, width, size);
+    blur_horizontal(&bi, dst, height, width, size);
     
     // transpose the image
-    flip_block(dst, src, height, width);
+    flip_block(dst, &bi, height, width);
 
     // swap the pointers
-    float* tmp = src->data[0];    
-    src->data[0] = dst->data[0];
-    dst->data[0] = tmp;
-    tmp = src->data[1];
-    src->data[1] = dst->data[1];
-    dst->data[1] = tmp;
-    tmp = src->data[2];
-    src->data[2] = dst->data[2];
-    dst->data[2] = tmp;
+    free(dst->data[0]);
+    free(dst->data[1]);
+    free(dst->data[2]);
+    dst->data[0] = bi.data[0];
+    dst->data[1] = bi.data[1];
+    dst->data[2] = bi.data[2];
 }
 
 // PPMImage * imageDifference(Image *imageInSmall, Image *imageInLarge) {
@@ -337,15 +343,15 @@ int main(int argc, char** argv) {
     imageBlur(base_image, image_tiny, size);
     
     size = 3;
-    fillImageData(base_image, image->data);
+    // fillImageData(base_image, image->data);
     imageBlur(base_image, image_small, size);
     
     size = 5;
-    fillImageData(base_image, image->data);
+    // fillImageData(base_image, image->data);
     imageBlur(base_image, image_medium, size);
     
     size = 8;
-    fillImageData(base_image, image->data);
+    // fillImageData(base_image, image->data);
     imageBlur(base_image, image_large, size);
 
 	PPMImage *final_tiny = imageDifference(image_tiny, image_small);
