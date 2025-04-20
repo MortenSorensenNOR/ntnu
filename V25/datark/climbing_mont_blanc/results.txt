@@ -18,3 +18,6 @@ separable sliding window:
 
 simd image diff:
 - 0.22s
+
+no simd image diff, simd blur:
+- website: 1.57s (shaky results locally)
