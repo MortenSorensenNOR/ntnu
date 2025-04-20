@@ -1,6 +1,6 @@
 .PHONY: clean check run_reference run zip
 
-# export OMP_NUM_THREADS=1
+export OMP_NUM_THREADS=8
 
 LD:=g++
 CC:=gcc

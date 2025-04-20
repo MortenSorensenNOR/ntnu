@@ -1,28 +1,18 @@
-from PIL import Image
-import numpy as np
+# create_ppm_p6.py
 
-# Load images and convert to RGB
-img1 = Image.open('./image_test.ppm').convert('RGB')
-img2 = Image.open('./image_test_accurate.ppm').convert('RGB')
+width = 123
+height = 123
 
-# Convert to numpy arrays
-arr1 = np.array(img1).astype(np.int16)
-arr2 = np.array(img2).astype(np.int16)
+with open("test.ppm", "wb") as f:
+    # Write the P6 header (note: ends with a single newline)
+    header = f"P6\n{width} {height}\n255\n"
+    f.write(header.encode())
 
-# Sanity check
-if arr1.shape != arr2.shape:
-    raise ValueError("Images must have the same dimensions")
+    # Write binary RGB pixel data
+    for y in range(height):
+        for x in range(width):
+            r = int((x / width) * 255)      # Horizontal red gradient
+            g = 0                           # Green stays 0
+            b = int((y / height) * 255)     # Vertical blue gradient
+            f.write(bytes([r, g, b]))
 
-# Difference
-diff = arr1 - arr2
-
-# Prepare counts
-channels = ['Red', 'Green', 'Blue']
-for i, color in enumerate(channels):
-    channel_diff = np.abs(diff[:, :, i])
-    off_by_one = np.sum(channel_diff == 1)
-    off_by_more = np.sum(channel_diff > 1)
-
-    print(f"{color} channel:")
-    print(f"  Pixels off by exactly 1: {off_by_one}")
-    print(f"  Pixels off by more than 1: {off_by_more}")

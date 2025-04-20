@@ -150,17 +150,15 @@ inline void blur_horizontal_single_channel(const float* src, float* dst, const i
     }
 }
 
-inline void blur_horizontal_single_channel_simd_4x(const float* src, float* dst, const int width, const int height, const int size) {
+void blur_horizontal_single_channel_simd_4x(const float* src, float* dst, const int width, const int height, const int size) {
     const float iarr = 1.0f / (size * 2 + 1);
-
-    assert(height % 4 == 0);
 
     int l1 = width;
     int l2 = l1 + width;
     int l3 = l2 + width;
 
     #pragma omp parallel for
-    for (int i = 0; i < height; i+=4) {
+    for (int i = 0; i < height-3; i+=4) {
         float inorm;
         const int begin = i * width;
         const int end   = begin + width;
@@ -211,6 +209,43 @@ inline void blur_horizontal_single_channel_simd_4x(const float* src, float* dst,
             dst[ti + l1] = res[1];
             dst[ti + l2] = res[2];
             dst[ti + l3] = res[3];
+        }
+    }
+
+    // Last lines if height is not multiple of 4
+    #pragma omp parallel for
+    for (int i = height - (height % 4); i < height; i++) {
+        float inorm;
+        const int begin = i * width;
+        const int end   = begin + width;
+
+        // current index, left index, right index
+        float acc = 0.0f;
+        int ti = begin, li = begin-size-1, ri = begin+size;
+
+        // Initial acucmulation
+        for(int j=ti; j<ri; j++) {
+            acc += src[j];
+        }
+
+        // Left side out and right side in
+        for(; li < begin; ri++, ti++, li++) { 
+            acc += src[ri];
+            inorm = 1.f / (float)(ri+1-begin);
+            dst[ti] = acc*inorm;
+        }
+
+        // Left side out and right side in
+        for(; ri<end; ri++, ti++, li++) { 
+            acc += src[ri] - src[li];
+            dst[ti] = acc*iarr;
+        }
+
+        // Left side in and right side out
+        for(; ti<end; ti++, li++) { 
+            acc -= src[li];
+            inorm = 1.f / (float)(end-li-1);
+            dst[ti] = acc*inorm;
         }
     }
 }
@@ -269,10 +304,10 @@ inline void blur_horizontal_rgb(float* src[3], float* dst[3], const int width, c
 }
 
 void blur_horizontal(Image* src, Image* dst, const int width, const int height, const int size) {
-    blur_horizontal_single_channel_simd_4x(src->data[0], dst->data[0], width, height, size);
-    blur_horizontal_single_channel_simd_4x(src->data[1], dst->data[1], width, height, size);
-    blur_horizontal_single_channel_simd_4x(src->data[2], dst->data[2], width, height, size);
-    // blur_horizontal_rgb(src->data, dst->data, width, height, size);
+    // blur_horizontal_single_channel_simd_4x(src->data[0], dst->data[0], width, height, size);
+    // blur_horizontal_single_channel_simd_4x(src->data[1], dst->data[1], width, height, size);
+    // blur_horizontal_single_channel_simd_4x(src->data[2], dst->data[2], width, height, size);
+    blur_horizontal_rgb(src->data, dst->data, width, height, size);
 }
 
 void imageBlur(Image* src, Image* dst, int size) {
@@ -327,7 +362,7 @@ PPMImage * imageDifference_simd(Image *imageInSmall, Image *imageInLarge) {
     const int total_pixels = imageInSmall->width * imageInSmall->height;
 
     #pragma omp parallel for
-    for (int i = 0; i < total_pixels; i += 4) {
+    for (int i = 0; i < total_pixels-3; i += 4) {
         // Load 4 pixels at once for each channel
         v4sf r_large = *(v4sf*)&imageInLarge->data[0][i];
         v4sf r_small = *(v4sf*)&imageInSmall->data[0][i];
@@ -438,6 +473,8 @@ PPMImage * imageDifference(Image *imageInSmall, Image *imageInLarge) {
 }
 
 int main(int argc, char** argv) {
+    omp_set_num_threads(8);
+
     PPMImage *image;
     if(argc > 1) {
         image = readPPM("flower.ppm");
@@ -472,9 +509,9 @@ int main(int argc, char** argv) {
     // fillImageData(base_image, image->data);
     imageBlur(base_image, image_large, size);
 
-	PPMImage *final_tiny = imageDifference_simd(image_tiny, image_small);
-    PPMImage *final_small = imageDifference_simd(image_small, image_medium);
-    PPMImage *final_medium = imageDifference_simd(image_medium, image_large);
+	PPMImage *final_tiny = imageDifference(image_tiny, image_small);
+    PPMImage *final_small = imageDifference(image_small, image_medium);
+    PPMImage *final_medium = imageDifference(image_medium, image_large);
 	
 	// Save the images.
     if(argc > 1) {
