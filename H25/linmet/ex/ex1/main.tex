@@ -49,17 +49,17 @@ We have therefore prooved that if $\lambda v = 0$ then either $\lambda = 0$ or $
 Let V be the vector space $\mathbb{R}^2$, and let $W$ be defined as the subspace of $V$ s.t. 
 $$W = \{(0, y) \:|\: y \in \mathbb{R}\} \subseteq V$$
 We now define $U_1$ and $U_2$ as 
-$$U_1 = \{ (x, y) \:\: x, y \in \mathbb{R}, x = y \}$$
+$$U_1 = \{ (x, y) \:|\: x, y \in \mathbb{R}, x = y \}$$
 that is a line with a positive slope, and 
-$$U_2 = \{ (x, y) \:\: x, y \in \mathbb{R}, x = -y \}$$
+$$U_2 = \{ (x, y) \:|\: x, y \in \mathbb{R}, x = -y \}$$
 i.e. a line with a negative slope. To prove that the sums
 \begin{center}
     $U_1 + W\:\:\:\:$ and $\:\:\:\:U_2 + W$
 \end{center}
 both produce all elements in $\mathbb{R}^2$, take any element $(a, b) \in \mathbb{R}^2$. 
-We can write $(a, b)$ in $U_1 + W$ as the sum
+We can write $(a, b)$ in $U_1 + W$ as the sum of elements in $W$ and $U_1$, $u_1 = (a, a)$ and $w_1 = (0, b - a)$, which gives
 $$(a, b) = u_1 + w_1 = (a, a) + (0, b - a) = (a, b)$$
-where $u_1 \in U_1$ and $w_1 \in W$. Equally for $U_2 + W$ we can write
+where $u_1 \in U_1$ and $w_1 \in W$. Equally for $U_2 + W$ we can write the sum of $u_2 = (a, -a)$ and $w_2 = (0, b + a)$ which gives
 $$(a, b) = u_2 + w_2 = (a, -a) + (0, b + a) = (a, b)$$
 with $u_2 \in U_2$ and $w_2 \in W$. We clearly see that both sums produce all 
 elements in $\mathbb{R}^2$ without implying that $U_1 = U_2$. The statement does not hold.
@@ -137,7 +137,7 @@ elements in $\mathbb{R}^2$ without implying that $U_1 = U_2$. The statement does
 
     \item One possible counterexample is letting $S = \{(2, 2)\}$ and $T = \{(1, 1)\}$. We have that
         \[
-            S \cap T = Ø
+            S \cap T = \varnothing
         \]
         and 
         \[
