@@ -1,0 +1,152 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problem 1.}
+\begin{enumerate}
+    \item Every element $u \in U$ can be written as 
+        $$u = (3x_2, x_2, 7x_4, x_4, x_5)$$
+        for some $x_2, x_4, x_5 \in \mathbb{R}$. a basis $b$ for $u$ can therefore be written as
+        \begin{center}
+            $b_1 = (3, 1, 0, 0, 0)\:\:\:$ $\:\:\:b_2 = (0, 0, 7, 1, 0)\:\:\:$ $\:\:\:b_3 = (0, 0, 0, 0, 1)$
+        \end{center}
+        with $b_1, b_2, b_3 \in b$.
+        lastly, we need to show that these vectors are linearly independent. any linear combination of $b_1$, $b_2$ and $b_3$ can be 
+        written as 
+        $$(3, 1, 0, 0, 0)\lambda_1 + (0, 0, 7, 1, 0)\lambda_2 + (0, 0, 0, 0, 1)\lambda_3$$
+        for $\lambda_1, \lambda_2, \lambda_3 \in \mathbb{R}$. it's clear that this linear combination is only ever equal to the 
+        zero vector for $\lambda_1 = \lambda_2 = \lambda_3 = 0$, i.e. the vectors are linearly independent, and $b$ is a valid basis for $u$.
+
+    \item In order to extend the basis $B$ to be a basis for $\mathbb{R}^5$ we must clearly be able to produce the vectors $(1, 0, 0, 0, 0)$ and 
+        $(0, 0, 1, 0, 0)$, which we currently cannot. We can therefore add these vectors as basis vectors in B, 
+        \begin{center}
+            $b_4 = (1, 0, 0, 0, 0)\:\:\:\:\:\:$ $b_5 = (0, 0, 1, 0, 0)$
+        \end{center}
+        so long as they are linearly independent with
+        the current basis and each other. It's clear that $b_4$ and $b_5$ are linearly independent of each other (no scalar $\lambda$ can 
+        remove the 1 of the first vector in the $x_1$ position and place it in the $x_3$ position). Next, through the same argument,
+        it is trivial to see that $b_4$ is linearly independent of $b_2$ and $b_3$ and that $b_5$ is equally independent of $b_1$ and $b_3$.
+        In order to say that $b_1$ and $b_4$ are linearly dependent, it must be true that
+        $$b_4 = \lambda b_1 \implies \frac{1}{3} = \frac{0}{1}$$
+        which is not true, therefore we cannot write one as a scalar multiple of the other, and they are linearly independent. The same is true for 
+        $b_5$ and $b_2$. Since we therefore have a basis of $\mathbb{R}^5$ with five linearly independent vectors, we know that we have a valid basis for
+        $\mathbb{R}^5$ since the cardinality of $B$ is equal to the dimention of $\mathbb{R}^5$.
+\end{enumerate}
+
+\section*{Problem 2.}
+Definition 2.1 does not describe the existance of a multiplicative inverse for members in the field $\mathbb{K}$, but 
+I can't find I way to prove this otherwise.
+
+Want to prove that $\lambda v = 0$ implies that either $\lambda = 0$ or $v = 0$. We first assume that $\lambda \neq 0$, as that 
+would mean we are done. Let $\mu$ be the multiplicative inverse of $\lambda$. We have that 
+$$v = 1 \cdot v = (\mu \lambda) \cdot v = \mu \cdot (\lambda v) = \mu \cdot 0 = 0$$
+We have therefore prooved that if $\lambda v = 0$ then either $\lambda = 0$ or $v = 0$.
+
+\section*{Problem 3.}
+Let V be the vector space $\mathbb{R}^2$, and let $W$ be defined as the subspace of $V$ s.t. 
+$$W = \{(0, y) \:|\: y \in \mathbb{R}\} \subseteq V$$
+We now define $U_1$ and $U_2$ as 
+$$U_1 = \{ (x, y) \:\: x, y \in \mathbb{R}, x = y \}$$
+that is a line with a positive slope, and 
+$$U_2 = \{ (x, y) \:\: x, y \in \mathbb{R}, x = -y \}$$
+i.e. a line with a negative slope. To prove that the sums
+\begin{center}
+    $U_1 + W\:\:\:\:$ and $\:\:\:\:U_2 + W$
+\end{center}
+both produce all elements in $\mathbb{R}^2$, take any element $(a, b) \in \mathbb{R}^2$. 
+We can write $(a, b)$ in $U_1 + W$ as the sum
+$$(a, b) = u_1 + w_1 = (a, a) + (0, b - a) = (a, b)$$
+where $u_1 \in U_1$ and $w_1 \in W$. Equally for $U_2 + W$ we can write
+$$(a, b) = u_2 + w_2 = (a, -a) + (0, b + a) = (a, b)$$
+with $u_2 \in U_2$ and $w_2 \in W$. We clearly see that both sums produce all 
+elements in $\mathbb{R}^2$ without implying that $U_1 = U_2$. The statement does not hold.
+
+\section*{Problem 4.}
+\begin{enumerate}
+    \item The kernel of $S$ is
+        $$\ker(S) = \{ a \:|\: a \in \mathbb{R}\}$$
+        which is the set of all degree 0 polynomials, since
+        $$\frac{d}{dx}a = 0, \forall a \in \mathbb{R}$$
+        The range of $S$ is
+        $$\text{ran}(S) = \mathcal{P}$$
+        that is all polynomials are the derivative of some other polynomial.
+
+        The kernel of $T$ is 
+        $$\ker(T) = \{0\}$$
+        as 
+        $$\int_{0}^{x} p(t) dt = 0$$
+        only holds for $p(t) = 0$.
+        The range of $T$ is the set of all polynomials with a 0 constant term
+        $$\text{ran}(T) = \{ p(t) \in \mathcal{P} \:|\: p(0) = 0\}$$
+
+    \item 
+        Let $p(x) \in \mathcal{P}$ be defined as a polynomial in the form
+        \[
+            p(x) = \sum_{i = 0}^{\infty} a_i x^i
+        \]
+        We can write the composition $S \circ T$ as 
+        \begin{align*}
+            (S \circ T)(p(x)) &= \frac{d}{dx} \int_{0}^{x} \sum_{i = 0}^{\infty} a_i t^{i} dt \\
+                              &= \frac{d}{dx} \sum_{i = 0}^{\infty} \frac{a_i}{i+1} x^{i+1} \\
+                              &= \sum_{i = 0}^{\infty} \frac{d}{dx} \frac{a_i}{i+1} x^{i+1} = \sum_{i = 0}^{\infty} a_i x^{i} = p(x)
+        \end{align*}
+        That is, $S \circ T$ is the identity operator. Similarly we can rewrite $T \circ S$ as 
+        \begin{align*}
+            (T \circ S)(p(x)) &= \int_{0}^{x} \left(\frac{d}{dx} \sum_{i = 0}^{\infty} a_i t^{i} \right)dt \\
+                              &= \int_{0}^{x} \left(\sum_{i = 1}^{\infty} (a_i \cdot i) t^{i-1} \right)dt \\
+                              &= \sum_{i = 1}^{\infty} \int_{0}^{x} (a_i \cdot i) t^{i-1} dt = \sum_{i = 1}^{\infty} a_i x^{i} \neq p(x)
+        \end{align*}
+        We see that this composition results in the constant term of $p(x)$ begin lost, and consequently $T \circ S$ is not the 
+        identity operator.
+\end{enumerate}
+
+\section*{Problem 5.}
+\begin{enumerate}
+    \item Let $x \in \text{Span}(S \cup T)$. We can then write $x$ as
+        \[
+            x = \sum_{k=1}^{n} \lambda_k x_k
+        \]
+        where $x_k \in S \cup T$ and $\lambda_k \in \mathbb{R}$. Since $x_k$ is in the union of $S$ and $T$ we can split the $x_k$'s into two sets with index set $I$ and $J$,
+        where $I = \{k \:|\: x_k \in S\}$ and $J = \{k \:|\: x_k \in T\}$. We can now rewrite $x$ as
+        \[
+            x = \sum_{k \in I} \lambda_k x_k + \sum_{k \in J} \lambda_k x_k = u + v
+        \]
+        where $u \in \text{Span}(S)$ and $v \in \text{Span}(T)$. Thus
+        \[
+             x \in \text{Span}(S) + \text{Span}(T)
+        \]
+        If we now take two vectors $u \in \text{Span}(S)$ and $v \in \text{Span}(T)$, where 
+        \begin{center}
+            $u = \sum_{k=1}^{n} \alpha_k s_k\:\:\:\:$ and $\:\:\:\:v = \sum_{k=1}^{n} \beta_k t_k$
+        \end{center}
+        Since $s_k, t_k \in S \cup T$ any linear combination
+        \[
+            x = u + v = \sum_{k=1}^{n} \alpha_k s_k + \sum_{k=1}^{n} \beta_k t_k
+        \]
+        must be in $\text{Span}(S \cup T)$, so we must have that
+        \[
+            x \in \text{Span}(S \cup T)
+        \]
+        We therefore have that the two sets must be equal
+        \[
+            \text{Span}(S \cup T) = \text{Span}(S) + \text{Span}(T)
+        \]
+
+    \item One possible counterexample is letting $S = \{(2, 2)\}$ and $T = \{(1, 1)\}$. We have that
+        \[
+            S \cap T = Ø
+        \]
+        and 
+        \[
+            \text{Span}(S) \cap \text{Span}(T) = \text{Span}(S) = \text{Span}(T)
+        \]
+        since the span of both $S$ and $T$ are just the line $x = y$ in the xy-plane. Since the span of the 
+        empty set is just 0, we have that 
+        \[
+            \text{Span}(S \cap T) \neq \text{Span}(S) \cap \text{Span}(T)
+        \]
+        and the statement is therefore incorrect.
+\end{document}
