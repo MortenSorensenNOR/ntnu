@@ -30,6 +30,13 @@ Files, tasks and resources pertaining to subjects I have taken at NTNU.
 - Matematikk 4
 - Elektromagnetisme
 - Grunnlag for faststoffelektronikk
-- Design av Digitale System II
 - Kompilatorteknikk
 - Datamaskinarkitektur
+
+**2025H**
+- Exphil
+- Lineære metoder
+- Numerisk matematikk
+- Digital signalbehandling
+- Algoritmer og datastrukturer
+- Kvanteinformasjon og beregninger
