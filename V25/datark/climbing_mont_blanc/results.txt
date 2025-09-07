@@ -21,3 +21,6 @@ simd image diff:
 
 no simd image diff, simd blur:
 - website: 1.57s (shaky results locally)
+
+running all five iterations on one line at once:
+- 0.22s (though prob faster on website)

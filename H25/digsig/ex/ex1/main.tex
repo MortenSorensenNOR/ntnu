@@ -1,0 +1,172 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problem 1.}
+\begin{enumerate}
+    \item 
+        \begin{figure}[H]
+            \center
+            \includegraphics[width=0.85\textwidth]{Bilder/1a.png}
+        \end{figure}
+    \item 
+        \begin{figure}[H]
+            \center
+            \includegraphics[width=0.85\textwidth]{Bilder/1b.png}
+        \end{figure}
+    \item 
+        \begin{figure}[H]
+            \center
+            \includegraphics[width=0.85\textwidth]{Bilder/1c.png}
+        \end{figure}
+    \item 
+        \begin{figure}[H]
+            \center
+            \includegraphics[width=0.85\textwidth]{Bilder/1d.png}
+        \end{figure}
+    \item 
+        \begin{figure}[H]
+            \center
+            \includegraphics[width=0.85\textwidth]{Bilder/1e.png}
+        \end{figure}
+
+    \item $x[n]$ can be expressed as
+        \[
+            x[n] = 5\delta[n] + 4\delta[n-1] + 3\delta[n-2] + 2\delta[n-3] + \delta[n-4]
+        \]
+    \item $y[n]$ expressed with unit step signal is
+        \[
+            y[n] = u[n - 2] - u[n - 5]
+        \]
+    \item The energy in the signal $x$, $E_x$, is 
+        \[
+            E_x = \sum_{n=-\infty}^{\infty}|x[n]|^2 = 5^2 + 4^2 + 3^2 + 2^1 + 1^2 = 55
+        \]
+\end{enumerate}
+
+\section*{Problem 2.}
+\begin{enumerate}
+    \item The normalized frequency $f_1$ is something like $\frac{F_1}{F_s}$, but this would mean that $F_1$ is in the range $[0, \SI{6}{\kilo\hertz}]$, however,
+        since $x(t)$ is a sampled analogue signal, I would assume that the normalized frequency would be such that we avoid the physical frequency being above the nyquist 
+        frequency, so, I would therefore assume that $F_1 \in [0, \SI{3}{\kilo\hertz}]$, where $0 < f_1 \leq 0.5$.
+    \item Python code to generate 4 seconds of $x[n]$
+\begin{pythoncode}
+import numpy as np
+import matplotlib.pyplot as plt
+
+time = 4  # seconds
+Fs = 6000 # Hz
+
+dt = 1 / (time * Fs)
+t = np.arange(0, time * Fs)
+
+f1 = 0.3
+x  = np.cos(2 * np.pi * f1 * t)       
+\end{pythoncode}
+    \item As $F_s$ is increased, the sound seems to get higher in frequency.
+    \item It sounds as if, when we increase the physical frequency from 3 kHz to 6 kHz, the frequency goes down. This is 
+        likely because of aliasing, where $F_1/F_s = 0.75 \geq 0.5$, i.e. hearing an aliased $f_1 = 0.25$ instead of the higher frequency.
+\end{enumerate}
+
+\section*{Problem 3.}
+\begin{enumerate}
+    \item The system is causal (only index by $n$ or $n - k$), non-linear ($x^2$ term) and time-invariant.
+    \item The system is causal (only index by $n$ or $n - k$), linear, but not time-invariant since we have a scaling by $n$ in the first term.
+    \item The system is causal (same), linear and time-invariant.
+    \item Not causal ($n + 3$ gets future value), linear and time-invariant.
+\end{enumerate}
+
+\section*{Problem 4.}
+\begin{enumerate}
+    \item For $y_1$ we have 
+        \[
+            h_1 = \delta[n] + 2\delta[n - 1] + \delta[n - 2]
+        \]
+        For $y_2$ we have that for $x[n] = \delta[n]$ that
+        \[
+            h_2[n] = -0.9h_2[n-1] + delta[n]
+        \]
+        Since they are causal, $h_2[n] = 0, n < 0$, and so $h_2[0] = 1$, and for $n \geq 1$
+        \[
+            h_2[n] = -0.9h_2[n-1]
+        \]
+        and as such, the entire system must look like
+        \[
+            h_2[n] = (-0.9)^n u[n]
+        \]
+    \item The first one is obviously FIR, as there is only three values of $n$ for which $h_1[n]$ is not 0. For $h_2[n]$
+        we see that the impulse response is never actually zero, but rather decays towards 0 as $n \to \infty$, so IIR.
+    \item Can find stability either through checking if the sum of $h[n]$ is less than infinity or through the Z-transform and if the ROC contains the unit circle. Will do the simple 
+        sum though :)
+        \[
+            \sum_{n=-\infty}^{\infty} |h_1[n]| = 4 < \infty
+        \]
+        so system (2) is stable. 
+        \[
+            \sum_{n=-\infty}^{\infty} |h_2[n]| = \sum_{n=0}^{\infty} (-0.9)^n = \frac{1}{1 - 0.9} = 10 < \infty
+        \]
+        i.e. system (3) is also stable.
+    \item System (2):
+        \begin{figure}[H]
+            \center
+            \includegraphics[width=0.35\textwidth]{Bilder/y_1[n].png}
+        \end{figure}
+        System (3):
+        \begin{figure}[H]
+            \center
+            \includegraphics[width=0.35\textwidth]{Bilder/y_2[n].png}
+        \end{figure}
+\end{enumerate}
+
+\section*{Problem 5.}
+\begin{enumerate}
+    \item This python code: 
+\begin{pythoncode}
+import numpy as np
+import matplotlib.pyplot as plt
+
+t = np.arange(0, 20)
+x = np.where((t>=0)&(t<=2), t+1, 0)
+
+h1 = np.array([1, 1, 1])
+h2 = 0.9 ** np.arange(0, 11)
+
+y1 = np.convolve(x, h1, mode="full")
+y2 = np.convolve(y1, h2, mode="full")
+
+# Plot
+plt.figure(figsize=(10,4))
+
+plt.subplot(1, 2, 1)
+plt.title(r"$y_1[n]$")
+plt.stem(y1, basefmt=" ")
+plt.xticks(np.arange(0, y1.shape[0]))
+
+plt.subplot(1, 2, 2)
+plt.title(r"$y_2[n]$")
+plt.stem(y2, basefmt=" ")
+plt.xticks(np.arange(0, y2.shape[0]))
+
+plt.show()
+\end{pythoncode}
+        produced the following plot for $y_1[n]$ and $y_2[n]$ -- did not want to sketch by hand :)
+        \begin{figure}[H]
+            \center
+            \includegraphics[width=\textwidth]{Bilder/5a.png}
+        \end{figure}
+    \item (see above)
+    \item The signal length at the output is greater than that on the input because the length of the 
+        sample response is appended to the end of the input signal.
+    \item Swapping the order of the two systems we get the following singal plots 
+        \begin{figure}[H]
+            \center
+            \includegraphics[width=\textwidth]{Bilder/5d.png}
+        \end{figure}
+        We see that the final output $y_2[n]$ remains the same, but the signal $y_1[n]$ is now obviously different.
+        This is what we would expect from the behaviour of cascaded systems.
+\end{enumerate}
+
+\end{document}
