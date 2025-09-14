@@ -1,0 +1,219 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problem 1.}
+\begin{enumerate}
+    \item The transformation matrix $A$ of $T$ is the diagonal matrix with elements $1, \dots, n$, i.e.
+        \[
+            A = \text{diag}(1, \dots, n)
+        \]
+        with eigenvalues $\{1, \dots, n\}$ and eigenvectors $\{e_1, \dots, e_n\}$, where 
+        $e_i$ is the i-th unit vector of $\mathbb{F}^n$.
+    \item A subspace $U \subseteq \mathbb{F}^n$ is T-invariant if $Tu \in U, \forall u \in U$.
+        Let $S \subseteq \{1, \dots, n\}$, then $U = \text{span}(\{e_i \:|\: i \in S\})$ is a T-invariant subspace over $\mathbb{F}^n$.
+        Since $e_i$ form an orthonormal basis of $\mathbb{F}^n$, we know that any subset will compose a direct sum. 
+        That means that for every $u \in U$, $u$ can be uniquely written as the sum
+        \[
+            u = \sum_{i \in S} c_i e_i
+        \]
+        We have that any transformation by $T$ of $u$ can be written as
+        \[
+            Tu = \sum_{i \in S} T (c_i e_{S_i}) = \sum_{i \in S} i \cdot (c_i e_i) = \sum_{i \in S} \alpha_i e_i
+        \]
+        where $\alpha_i \in \mathbb{F}$. That is any transformation by $T$ of $u \in U$ results in a vector
+        that must also clearly be in $U$. $U$ is therefore a invariant subspace of $T$.
+\end{enumerate}
+
+\section*{Problem 2.}
+\begin{proof}
+We fix $V$ such that the transformation matrix of $T$ with respect to the basis of $V$ only contains real entries. Further, let
+$C$ be the complex conjugate operator $C : V \to V$ such that for any $\alpha \in \mathbb{C}$ and $v \in V$,
+\[
+    C(\alpha v) = \bar{\alpha}C(v)
+\]
+Since $T$ with respect to $V$ only has real valued components, we know that $C$ and $T$ will commute, so
+\[
+    C(Tv) = T(Cv)
+\]
+Now lets assume that $\lambda$ is an eigenvalue of $T$ for some eigenvector $v \in V$. We have that
+\[
+    Tv = \lambda v
+\]
+and that if we apply $C$ we get
+\[
+    C(Tv) = C(\lambda v) = \bar{\lambda} C(v)
+\]
+and opposite
+\[
+    T(Cv) = C(Tv) = \bar{\lambda} C(v)
+\]
+Since $C(v)$ is non-zero and the $C$ operator is bijective, we know that $C(v)$ must be a valid eigenvector of $T$ with eigenvalue
+$\bar{\lambda}$. Therefore, if $\lambda$ is an eigenvalue of $T$, then $\bar{\lambda}$ is also an eigenvalue.
+\end{proof}
+
+
+\section*{Problem 3.}
+\begin{enumerate}
+    \item The transformation matrix can be expressed as
+        \[
+            A = \begin{bmatrix}
+                    0 & -1 \\
+                    1 &  0
+                \end{bmatrix}
+        \]
+        We have that 
+        \[
+            \det(A - \lambda I) = \det\left(
+                \begin{bmatrix}
+                    -\lambda & -1        \\
+                    1        & -\lambda
+                \end{bmatrix}
+            \right) = \lambda^2 + 1
+        \]
+        Therefore we have the eigenvalues $\lambda = i$ and $\lambda = -i$. For $\lambda = i$ we have
+        Solving 
+        \[
+            (A - iI)v = \begin{bmatrix} -i & -1 \\ 1 & -i \end{bmatrix} \begin{bmatrix} w \\ z \end{bmatrix} = 0
+        \]
+        we get 
+        \[
+            \begin{cases}
+                -i w - z = 0 \\
+                \:\:\,\,w - iz   = 0
+            \end{cases}
+        \]
+        We let $w = 1$ and $z = -i$, yielding the eigenvector $[1, -i]^{T}$. \\
+        For $\lambda = -i$ we have 
+        \[
+            (A - iI)v = \begin{bmatrix} i & -1 \\ 1 & i \end{bmatrix} \begin{bmatrix} w \\ z \end{bmatrix} = 0
+        \]
+        giving us
+        \[
+            \begin{cases}
+                i w - z = 0 \\
+                w + iz  = 0
+            \end{cases}
+        \]
+        which gives $w = -i$ and $z = 1$, or $[-i, 1]^T$.
+        
+    \item The transformation matrix can be expressed as
+        \[
+            A = \begin{bmatrix}
+                    0 & 1 \\
+                    0 & 0
+                \end{bmatrix}
+        \]
+        We have that 
+        \[
+            \det(A - \lambda I) = \det\left(
+                \begin{bmatrix}
+                    -\lambda & 1        \\
+                    0        & -\lambda
+                \end{bmatrix}
+            \right) = \lambda^2
+        \]
+        That is we have a double eigenvalue $\lambda = 0$, and corresponding eigenvector $[1, 0]^T$. Since we want the generalized eigenvectors
+        we look for generalized eigenvectors in
+        \[
+            (A - 0I)^2v = 0
+        \]
+        But since $(A - 0I)^2 = (A - 0I)$ this does not produce any generalized eigenvectors. We can see that the vector $(0, 1)$.
+        \[
+            T^2 \cdot (0, 1) = T(1, 0) = (0, 0)
+        \]
+        thus $[0, 1]^T$ is a generalized eigenvector for $\lambda = 0$.
+
+    \item The transformation matrix can be expressed as
+        \[
+            A = \begin{bmatrix}
+                     3 & 1 & 0 \\
+                    -1 & 1 & 0 \\
+                     0 & 0 & 2
+                \end{bmatrix}
+        \]
+        We have that 
+        \[
+            \det(A - \lambda I) = \det\left(
+                \begin{bmatrix}
+                    3-\lambda & 1 & 0 \\
+                   -1 & 1-\lambda & 0 \\
+                    0 & 0 & 2-\lambda
+                \end{bmatrix}
+            \right) = (3 - \lambda) \cdot (1 - \lambda) \cdot (2 - \lambda) + (2 - \lambda)
+        \]
+        Solving for $\lambda$ we get $\lambda = 2$, that is all three eigenvalues are 2.
+        We now have that for $\lambda = 2$
+        \[
+            (A - iI)v = \begin{bmatrix} 1 & 1 & 0 \\ -1 & -1 & 0 \\ 0 & 0 & 0 \end{bmatrix} \begin{bmatrix} u \\ w \\ z \end{bmatrix} = 0
+        \]
+        which means
+        \[
+            \begin{cases}
+               \:\:\,\,u + w  = 0 \\
+                      -u - w  = 0
+            \end{cases}
+        \]
+
+        Since $z$ is free, we have that $[0, 0, 1]^T$ is a valid eigenvector. Next, we have that 
+        $u = -w$ gives the eigenvector $[1, -1, 0]^T$ as another valid eigenvector. We need one generalized eigenvector.
+        Let $v_1$ be an eigenvector not in the span of $(0, 0, 1)$, such as $(-1, 1, 0)$. Then
+        we wish to find the generalized eigenvector $v_g$ such that
+        \[
+            (A - 2I)v_g = v_1
+        \]
+        Solving for $v_g$ we get that
+        \[
+            \begin{cases}
+                \:\:\,\,u + w = -1 \\
+                -u - w = 1
+            \end{cases}
+        \]
+        and lastly that the z component is free. If we now let $w = -1$ we get that $[0, -1, 0]^T$ is a valid 
+        generalized eigenvector for $T$.
+\end{enumerate}
+
+\section*{Problem 4.}
+\begin{itemize}
+    \item 
+        \begin{proof}
+        We have that $p(T)$ is defined as the transformation 
+        \[
+            p(T) = \sum_{i=0}^{n} c_i T^i
+        \]
+        for a polynomial of degree $n$. Let $v \in V$ be an eigenvector of $T$ with eigenvalue $\lambda$. We know that 
+        \[
+            T^2(v) = T \circ T (v) = T(\lambda v) = \lambda^2 v
+        \]
+        Everyone can see that this property holds for all $n >= 1$ (please don't make me do an inductive proof, I'm tired)
+        \[
+            T^n(v) = \lambda^n v
+        \]
+        and for the special case of $T^0 = I$ we simply get $T^0(v) = v$. We therefore have that
+        \[
+            (p(T))(v) = \sum_{i=0}^{n} c_i T^i (v) = \left(\sum_{i=0}^{n} c_i \lambda^i\right) v = \alpha v
+        \]
+        where $\alpha$ is the eigenvalue of $p(T)$ wrt. $v$. We therefore have that any eigenvector of $T$ is an eigenvector of $p(T)$.
+        \end{proof}
+    \item As we showed above the eigenvalue $\alpha$ of $p(T)$ wrt. $v$ is given as 
+        \[
+            \alpha = \sum_{i=0}^n c_i \lambda^i
+        \]
+        where $\lambda$ is the eigenvalue of $T$ wrt. $v$.
+    \item Let $T: \mathbb{C}^2 \to \mathbb{C}^2$ be defined as $T(x, y) = (y, 0)$, and further let $p \in \mathcal{P}$ such that
+        $p(t) = t^2$. Since $T$ is nilpotent we have that $T^2 = 0$. For the zero-operator every non-zero vector is an eigenvector with eigenvalue 0,
+        so we have that $(0, 1)$ is an eigenvector of $p(T)$ but not of $T$. Now, $(0, 1)$ is a generalized eigenvector of $T$ (from earlier), but I think
+        this is fine though, right?
+\end{itemize}
+
+\section*{Problem 5.}
+\begin{enumerate}
+    \item
+    \item
+    \item
+\end{enumerate}
+
+\end{document}
