@@ -1,4 +1,4 @@
-B     = fircls1(8,0.3,0.02,0.008);
+B     = fircls1(0.9);
 A     = [1];
 [H,W] = freqz(B,A); plot(W/pi,abs(H));
 

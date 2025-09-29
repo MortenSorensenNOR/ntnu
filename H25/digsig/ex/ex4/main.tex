@@ -1,0 +1,138 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problem 1.}
+\begin{enumerate}
+    \item 
+        For $a = 0.9$:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.55\textwidth]{Bilder/1a_1.png}
+            \caption{Pole-Zero plot for $a = 0.9$}
+        \end{figure}
+        For $a = -0.9$:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.55\textwidth]{Bilder/1a_2.png}
+            \caption{Pole-Zero plot for $a = -0.9$}
+        \end{figure}
+        For $a = 0.9$ the pole is on the positive side of the real axis, so this is a lowpass filter, and 
+        oppositely for $a = -0.9$ gives a highpass filter.
+
+    \item Plotting the frequency response in matlab we get for $a = 0.9$:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{Bilder/1b_1.png}
+            \caption{Normalized frequency reponse plot for $a = 0.9$}
+        \end{figure}
+        and for $a = -0.9$:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{Bilder/1b_2.png}
+            \caption{Normalized frequency reponse plot for $a = -0.9$}
+        \end{figure}
+        We see from the plots that the answer from (a) is correct.
+\end{enumerate}
+
+\section*{Problem 2.}
+\begin{enumerate}
+    \item
+        \begin{align*}
+            H^{-1}(z) = \frac{1}{H(z)} = (1 - 1/2z^{-1})(1 + 1/2z^{-1})
+        \end{align*}
+    \item The above transfer function can be expressed as $h^{-1}[n] = \delta[n] - 0.25\delta[n - 2]$, which means the system is 
+        BIBO stable.
+    \item Minimum-phase filter requires that both the filter and it's inverse are both causal and stable. I.e. all poles of $H(z)$ must lie 
+        inside the unit circle, and inversely, for $H^{-1}(z)$ the zeros (poles turn into zeros when inverting the transfer function) must also 
+        lie inside the unit circle. The zeros for the $H^{-1}(z)$ system are $\pm 2$, i.e. outside. I believe that the filter is therefore 
+        not minimum-phase.
+    \item So
+        \[
+            G(e^{j\omega}) = 1 - \frac{1}{4}e^{-2j\omega} = 1 - \frac{1}{4}\cos(2\omega) + j\left(\frac{1}{4}\sin(2\omega)\right)
+        \]
+        And the phase response would therefore be
+        \[
+            \phi(\omega) = \tan^{-1}\left(\frac{1/4\sin(2\omega)}{1 - 1/4\cos(2\omega)}\right)
+        \]
+        which I don't think can be expressed as a linear function $\alpha \omega + \beta$. Plotting the phase reponse in matlab gave this
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\textwidth]{Bilder/2d.png}
+        \end{figure}
+        which does indeed not look linear. Therefore the inverse filter is not linear phase.
+\end{enumerate}
+
+\section*{Problem 3.}
+\begin{enumerate}
+    \item 
+        Start by finding the frequency response of $A(z)$:
+        \begin{align*}
+            |A(e^{j\omega})| = \left| \frac{a - e^{-j\omega}}{1 - ae^{-j\omega}}\right| = \frac{\sqrt{ a^2 - a(e^{j\omega} + e^{-j\omega}) +1}}{\sqrt{ 1 - a(e^{j\omega} + e^{-j\omega}) + a^2 }} = 1
+        \end{align*}
+        so I guess the filter is allpass, meaning that the frequency response is entirely flat. It will however have a phase response that is non-flat.
+
+    \item 
+        The upper branch can be expressed as
+        \[
+            H_u(z) = \frac{1}{2}(1 + A(z))
+        \]
+        whilst the lower branch
+        \[
+            H_l(z) = \frac{K}{2}(1 - A(z))
+        \]
+
+        The following matlab code can be used to get the magnitude reponse plots
+\begin{matlabcode}
+a = 0.9;
+K = 1;
+
+a_coeff = [a -1];
+b_coeff = [1 -a];
+[H_A, w] = freqz(b_coeff, a_coeff);
+
+H_upper = 1/2 * (1 + H_A);
+H_lower = K/2 * (1 - H_A);
+
+figure;
+subplot(2,1,1);
+plot(w/pi, abs(H_upper));
+xlabel('Normalized Frequency (\times\pi rad/sample)');
+ylabel('|H_{up}(e^{j\omega})|');
+title('Upper branch magnitude (high-pass)');
+
+subplot(2,1,2);
+plot(w/pi, abs(H_lower));
+xlabel('Normalized Frequency (\times\pi rad/sample)');
+ylabel('|H_{low}(e^{j\omega})|');
+title('Lower branch magnitude (low-pass)');
+grid on;
+\end{matlabcode}
+
+        which produced this plot
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/3b.png}
+        \end{figure}
+
+
+    \item Listening to the different values of $\alpha$ it seems that simply more and more of the higher tones are cut out (maybe, kind if difficult to 
+        compare when I can't quickly switch back and forth).
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/3c.png}
+            \caption{Magnitude response for $\alpha=0.9$. The magnitude response significantly cuts out higher frequencies.}
+        \end{figure}
+
+        When altering the $K$ value it seems that for $K < 1$ the system is a high-pass filter, at $K=1$ we have a flat 
+        response and at $K > 1$ it is a low-pass filter.
+
+        Seems to me that $\alpha$ controls the "slope" of the magnitude response, i.e. how sharply it drops from the passband to the stopband, whilst $K$ determines what kind of filter 
+        it is, as I said above.
+
+\end{enumerate}
+
+\end{document}
