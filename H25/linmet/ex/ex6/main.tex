@@ -1,0 +1,306 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problem 1.}
+In order to find the Moore-Penrose inverse of the matrix
+\[
+    A := \begin{pmatrix}
+        1 & 1 \\ 
+        0 & 0
+    \end{pmatrix}
+\]
+we start by first finding the SVD decomposition of $A$. Start by finding $AA^H$.
+
+\[
+    AA^H = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} \begin{pmatrix} 1 & 0 \\ 1 & 0\end{pmatrix} = \begin{pmatrix} 2 & 0 \\ 0 & 0\end{pmatrix}
+\]
+Since $AA^H$ is upper triangular it has eigenvalues $\lambda_1 = 2$ and $\lambda_2 = 0$. We very clearly see that 
+eigenvectors must be 
+\begin{center}
+    $v_1 = \begin{pmatrix}1 \\ 0\end{pmatrix}\:\:\:\:\:\:$ and $\:\:\:\:\:\:v_2 = \begin{pmatrix}0 \\ 1\end{pmatrix}$
+\end{center}
+
+We now have singular values $\sigma_1 = \sqrt{2}$ and $\sigma_2 = 0$, i.e. we get
+\[
+    \Sigma = \begin{pmatrix}
+        \sqrt{2} & 0 \\
+        0        & 0
+    \end{pmatrix}
+\]
+Since we have orthonormal vectors we have that 
+\[
+    Q = \begin{pmatrix}
+        1 & 0 \\ 0 & 1
+    \end{pmatrix}
+\]
+
+Next we calculate $A^H A$.
+\[
+    A^HA = \begin{pmatrix} 1 & 0 \\ 1 & 0 \end{pmatrix} \begin{pmatrix} 1 & 1 \\ 0 & 0\end{pmatrix} 
+         = \begin{pmatrix} 1 & 1 \\ 1 & 1\end{pmatrix}
+\]
+
+This has the same eigenvalues as $AA^H$, but with eigenvectors
+\begin{center}
+    $v_1 = \frac{1}{\sqrt{2}}\begin{pmatrix}1 \\ 1\end{pmatrix}\:\:\:\:\:\:$ and $\:\:\:\:\:\:v_2 = \frac{1}{\sqrt{2}}\begin{pmatrix}1 \\ -1\end{pmatrix}$
+\end{center}
+That gives the matrix 
+\[
+    P = \frac{1}{\sqrt{2}}\begin{pmatrix}
+        1 &  1 \\
+        1 & -1
+    \end{pmatrix}
+\]
+
+Now, we can find the Moore-Penrose inverse as
+\[
+    A^{\dagger} = P\Sigma^{-1}Q^{H} 
+                = \frac{1}{\sqrt{2}} \begin{pmatrix}1&1\\1&-1\end{pmatrix} 
+                                     \begin{pmatrix}\frac{1}{\sqrt{2}} & 0 \\ 0 & 0\end{pmatrix}
+                                     \begin{pmatrix}1 & 0 \\ 0 & 1\end{pmatrix}
+                = \frac{1}{2}\begin{pmatrix}1 & 0 \\ 1 & 0\end{pmatrix}
+\]
+
+In order to show that it is not necessarily so that $(A^{\dagger})^2 = (A^2)^{\dagger}$, we first see that
+\[
+    A^2 = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}
+\]
+which means that $(A^2)^{\dagger} = A^{\dagger}$. Next, we have that 
+\[
+    (A^\dagger)^2 = \frac{1}{4} \begin{pmatrix} 1 & 0 \\ 1 & 0\end{pmatrix} \begin{pmatrix} 1 & 0 \\ 1 & 0\end{pmatrix} = \frac{1}{4}\begin{pmatrix} 1 & 0 \\ 1 & 0\end{pmatrix}
+\]
+I.e. we have that 
+\[
+    (A^\dagger)^2 = \frac{1}{2} (A^2)^\dagger
+\]
+
+\section*{Problem 2.}
+Start by computing $AA^H$ and $A^H A$.
+
+\begin{align*}
+    AA^H &= \begin{pmatrix} 10 & 10 \\ -1 & 7  \\ 5  & 5  \\ -2 & 14 \end{pmatrix} \begin{pmatrix} 10 & -1 & 5 & -2 \\ 10 & 7  & 5 & 14 \end{pmatrix} = 
+            \begin{pmatrix} 200 &  60 & 100 & 120 \\ 60 &  50 &  30 & 100 \\ 100 &  30 &  50 &  60 \\ 120 & 100 &  60 & 200 \end{pmatrix} \\
+    A^HA &= \begin{pmatrix} 10 & -1 & 5 & -2 \\ 10 & 7  & 5 & 14 \end{pmatrix} \begin{pmatrix} 10 & 10 \\ -1 & 7  \\ 5  & 5  \\ -2 & 14 \end{pmatrix} = 
+            \begin{pmatrix} 130 &  90 \\ 90 & 370 \end{pmatrix}
+\end{align*}
+
+Since $A^HA$ is significantly smaller, we will find the eigenvalues on it.
+\[
+    \begin{vmatrix}130 - \lambda & 90 \\ 90 & 370 - \lambda\end{vmatrix} = (130 - \lambda)(370 - \lambda) - 90^2
+\]
+which gives $\lambda_1 = 100$ and $\lambda_2 = 400$, i.e. $\sigma_1 = 10$ and $\sigma_2 = 20$.
+This means that 
+\[
+    \Sigma = \begin{pmatrix}
+        10 & 0 \\
+        0  & 20
+    \end{pmatrix}
+\]
+
+Next, to find $P$, we find the eigenvectors of $A^H A$. For $\lambda_1$ we get $v_1 = \frac{1}{\sqrt{10}}\left(-3, 1\right)^T$, and for 
+$\lambda_2$ we get $v_2 = \frac{1}{\sqrt{10}}(1, 3)^T$. Therefore we have that
+\[
+    P = \frac{1}{\sqrt{10}}
+    \begin{pmatrix}
+        -3 & 1 \\    
+        1  & 3
+    \end{pmatrix}
+\]
+
+Next, using that 
+\[
+    Q_i = \frac{1}{\sigma_i} Av_1
+\]
+where $Q_i$ is the $i$'th column of $Q$, we have that
+\[
+    Q = \frac{1}{\sqrt{10}}
+    \begin{pmatrix}
+        -2 & 2 \\   
+         1 & 1 \\
+        -1 & 1 \\
+         2 & 2
+    \end{pmatrix}
+\]
+
+Therefore the SVD decomposition of $A$ is 
+\[
+    A = Q\Sigma P^H = 
+    \frac{1}{\sqrt{10}}
+    \begin{pmatrix}
+        -2 & 2 \\   
+         1 & 1 \\
+        -1 & 1 \\
+         2 & 2
+    \end{pmatrix}
+    \begin{pmatrix}
+        10 & 0 \\
+        0  & 20
+    \end{pmatrix}
+    \frac{1}{\sqrt{10}}
+    \begin{pmatrix}
+        -3 & 1 \\    
+        1  & 3
+    \end{pmatrix}^H
+\]
+
+The Moore-Penrose inverse $A^\dagger$ is 
+\[
+    A^\dagger = P\Sigma^{-1} Q^H = 
+    \frac{1}{\sqrt{10}} 
+    \begin{pmatrix}
+        -3 & 1 \\    
+        1  & 3
+    \end{pmatrix}
+    \begin{pmatrix}
+        1/10 & 0 \\
+        0    & 1/20
+    \end{pmatrix}
+    \frac{1}{\sqrt{10}}
+    \begin{pmatrix}
+        -2 & 2 \\   
+         1 & 1 \\
+        -1 & 1 \\
+         2 & 2
+    \end{pmatrix}^H
+\]
+
+Since we have from theorem 3.57 in the lecture notes that the equation
+\[
+    u^\dagger = T^\dagger v
+\]
+solves the least squares problem, we simply here have that
+\[
+    x^\dagger = A^\dagger b
+\]
+i.e.
+\[
+    x^\dagger = \frac{1}{\sqrt{10}} 
+    \begin{pmatrix}
+        -3 & 1 \\    
+        1  & 3
+    \end{pmatrix}
+    \begin{pmatrix}
+        1/10 & 0 \\
+        0    & 1/20
+    \end{pmatrix}
+    \frac{1}{\sqrt{10}}
+    \begin{pmatrix}
+        -2 & 2 \\   
+         1 & 1 \\
+        -1 & 1 \\
+         2 & 2
+    \end{pmatrix}^H \cdot \begin{pmatrix} 7 \\ -5 \\ 1 \\ 1 \end{pmatrix}
+\]
+which gives
+\[
+    x^\dagger = \begin{pmatrix}
+        0.6 \\ 0
+    \end{pmatrix}
+\]
+
+\section*{Problem 3.}
+\begin{enumerate}
+    \item 
+        Let $\lambda \in \mathbb{K}$ be an eigenvalue of $T$ with eigenvector $u \in U$. Then
+        \[
+            \lambda ||u||^2 = \langle \lambda u, u \rangle = \langle Tu, u \rangle = \langle u, T^*u \rangle = \langle u, -Tu \rangle = \langle u, -\lambda u \rangle = \overline{-\lambda}||u||^2
+        \]
+        Therefore, since $||u|| \neq 0$, $\lambda = \overline{-\lambda}$, which only holds true if $\lambda \in \mathbb{C}$.
+    \item
+        Let $\lambda_i$ be an eigenvalue of $T$ with eigenvector $v_i$
+        \[
+            T^*Tv_i = T^*(Tv_i) = T^*(\lambda_i v_i) = -T(\lambda_i v_i) = -\lambda^2 v_i
+        \]
+        Now, since the singular values of $T$, $\sigma_i$, is equal to the square root of the eigenvalues of
+        $T^*T$, we know that 
+        \[
+            \sigma_i = \sqrt{-\lambda_i^2}
+        \]
+        and since we know that all $\lambda_i$ of $T$ are purely imaginary
+        \[
+            \sigma_i = \sqrt{-\lambda_i^2} = |\lambda_i|
+        \]
+        Therefore the singular values of $T$ are exactly the absolute values of the eigenvalues of $T$.
+\end{enumerate}
+
+
+\section*{Problem 4.}
+\begin{enumerate}
+    \item
+        We have that the matrix $M$ represents the transformation $T$. We wish to find the matrix $M^*$ that 
+        represents the adjoint transformation of $T$, $T^*$. From Lemma 3.50 in the lecture notes we have that
+        the matrix $M^*$ for $T^*$, where $T : U \to V$ can be expressed as
+        \[
+            M^* = G_U^{-1} M^H G_V
+        \]
+        where $G_U$, $G_V$ are the Gram matrices for the vector spaces $U$ and $V$ respectively.
+        In our case $U = \text{Mat}_{m, n}$ and $V = \text{Mat}_{\ell, n}$. Though, because of the 
+        inner product we are using, each Gram matrix is equal to the identity matrix (of correct size of course), so
+        $M^* = M^H$.
+
+        Therefore, we must have that we can represent
+        \[
+            T^* : \text{Mat}_{\ell, n} \to \text{Mat}_{m, n}
+        \]
+        as
+        \[
+            B \mapsto T^*(B) = M^H B
+        \]
+    \item 
+        \begin{proof}
+        By definition 3.22 in the lecture notes a matrix is Hermitian if $A^H = A$, and by
+        definition 3.60 in the lecture notes $T$ is self-adjoint if $T^* = T$.
+        First, it is trivial to see given the result in (a) that if the matrix $M$ is Hermitian that the transformation above is 
+        self-adjoint, since we found that $M^* = M^H$, and therefore, by $M$ being Hermitian, $M^* = M$.
+        Secondly, if we have that $T$ is self-adjoint, then $T^* = T$, and by (a) $M^* = M$, and therefore 
+        $M^* = M^H = M$, so $T$ is Hermitian as well. Therefore $T$ is self-adjoint iff. $M$ is Hermitian.
+        \end{proof}
+    \item \begin{proof} 
+        We have by Lemma 3.41 that 
+        $T$ is unitary iff. 
+        \[
+            G_U = A^HG_VA
+        \]
+        where $A$ represents the transformation $T$ in matrix form. Therefore in problem 4. we have that 
+        $T$ is unitary iff.
+        \[
+            M^H M = \text{Id}_m
+        \]
+        \end{proof}
+\end{enumerate}
+
+Realized I never really showed that the Gram matrices are the identity matrices for the inner product in problem 4.
+Short proof for a given matrix $\text{Mat}_{m, n}(\mathbb{K})$:
+\begin{proof}
+(ish) Given the inner product 
+\[
+    \langle A, B \rangle = \tr(B^H A)
+\]
+Want to find the Grahm matrix
+\[
+    G_{\text{Mat}_{m, n}} = \begin{pmatrix}
+        \langle E_{11}, E_{11} \rangle & \dots & \langle E_{1n}, E_{11} \rangle \\
+        \vdots  & \ddots & \vdots \\
+        \langle v_{11}, v_{m1} \rangle & \dots & \langle E_{mn}, E_{mn} \rangle
+    \end{pmatrix}
+\]
+wrt. the basis $(E_{11}, \dots, E_{mn})$ of $\text{Mat}_{m, n}(\mathbb{K})$ (or something like that),
+where $E_{ij}$ is the matrix with a 1 in place $(i, j)$ and zero elsewhere.
+Now, the inner product 
+\[
+    \langle E_{ij}, E_{kl} \rangle = \tr(E^H_{kl}E_{ij}) = \tr(E_{kl}E_{ij})
+\]
+where the last identity is true for all $\mathbb{K}$. Since the product above is zero unless $k = i$ and $l = j$,
+we have that
+\[
+    \langle E_{ij}, E_{kl} \rangle = \delta_{ik} \delta_{jl}
+\]
+Therefore the basis of the vector space $\text{Mat}_{m, n}(\mathbb{K})$, $\{E_{ij}\}$ is orthonormal, and 
+so the Gram matrix is the identity matrix of the correct size $G_{\text{Mat}_{m, n}} = \text{Id}_{m, n}$.
+\end{proof}
+
+\end{document}
