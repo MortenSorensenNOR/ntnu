@@ -278,7 +278,7 @@ Short proof for a given matrix $\text{Mat}_{m, n}(\mathbb{K})$:
 \begin{proof}
 (ish) Given the inner product 
 \[
-    \langle A, B \rangle = \tr(B^H A)
+    \langle A, B \rangle = \text{tr}(B^H A)
 \]
 Want to find the Grahm matrix
 \[
@@ -292,7 +292,7 @@ wrt. the basis $(E_{11}, \dots, E_{mn})$ of $\text{Mat}_{m, n}(\mathbb{K})$ (or 
 where $E_{ij}$ is the matrix with a 1 in place $(i, j)$ and zero elsewhere.
 Now, the inner product 
 \[
-    \langle E_{ij}, E_{kl} \rangle = \tr(E^H_{kl}E_{ij}) = \tr(E_{kl}E_{ij})
+    \langle E_{ij}, E_{kl} \rangle = \text{tr}(E^H_{kl}E_{ij}) = \text{tr}(E_{kl}E_{ij})
 \]
 where the last identity is true for all $\mathbb{K}$. Since the product above is zero unless $k = i$ and $l = j$,
 we have that
