@@ -1,0 +1,199 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problem 1.}
+\begin{enumerate}
+    \item Used this code to compute the DTFT of $x[n]$:
+\begin{matlabcode}
+N = 28;
+n = 0:N-1;
+x = 0.9.^(0:N-1);
+
+f      = linspace(0, 1, 2000);
+f(end) = [];
+E      = exp(-1j*2*pi*(n.').*f);
+X      = x * E;
+
+% Shift frequencies so that the last half is the negative frequencies
+Xs = fftshift(X);
+fs = fftshift(f);
+fs(fs >= 0.5) = fs(fs >= 0.5) - 1;
+
+figure;
+plot(fs, abs(Xs)), grid on
+xlim([-0.5, 0.5])
+\end{matlabcode}
+        which gave this plot
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\textwidth]{Bilder/1a.png}
+        \end{figure}
+
+    \item Using this code
+\begin{matlabcode}
+N = 28;
+n = 0:N-1;
+x = 0.9.^(0:N-1);
+
+fft_points = [N/4, N/2, N, 2*N];
+
+figure;
+for i = 1:length(fft_points)
+    X = fft(x, fft_points(i));
+    X_shifted = fftshift(X);
+    f = (-fft_points(i)/2 : fft_points(i)/2 - 1) / fft_points(i);
+
+    subplot(2, 2, i);
+    plot(f, abs(X_shifted));
+    title(['|X(k)|, N_{DFT} = ', num2str(fft_points(i))]);
+    xlim([-0.5 0.5]);
+end
+\end{matlabcode}
+        I got this plot
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.9\textwidth]{Bilder/1b.png}
+        \end{figure}
+        The end value seems to be cut off, so I did not get a frequency component at $k = 1$.
+
+    \item The relationship is something like
+        \[
+            f = \frac{k}{L}
+        \]
+        where $L$ is the length of the DFT. For $k = 1$ above we simply have 
+        \[
+            f = \frac{1}{L}
+        \]
+        so, in order of appearance in (b) we have the following $f$'s:
+        \begin{center}
+            $f = 4/N_x\:\:\:\:$, $\:\:\:\:f = 2/N_x\:\:\:\:$ $\:\:\:\:f = 1 / N_x\:\:\:\:$ $\:\:\:\:f = 1/(2N_x)$
+        \end{center}
+
+    \item Plotting them together yielded this figure
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.9\textwidth]{Bilder/1d.png}
+        \end{figure}
+        It's clear that lengths up until at least $N_x$ yields higher precision in comparison to the DTFT, though perhaps 
+        there are some diminishing for $L > N_x$.
+
+    \item For real signals the DFT is going to be symmetric around $\pi$ and $2\pi$ periodic, so computing for $f \in [0, 0.5]$ is sufficient for normalized frequency.
+\end{enumerate}
+
+\section*{Problem 2.}
+\begin{enumerate}
+\item
+\begin{matlabcode}
+Nx = 28;
+n  = 0:Nx-1;
+x  = 0.9.^(0:Nx-1);
+
+Nh = 9;
+h  = ones(Nh, 1);
+y = conv(x, h);
+
+figure;
+stem(y); 
+\end{matlabcode}
+
+This gave
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Bilder/2a.png}
+\end{figure}
+
+The length of $y[n]$ will be the sum of the length of the two convoluted signals minus 1, i.e. $N_y = N_x + N_h - 1 = 36$.
+
+\item Doing in freqency domain I did this
+\begin{matlabcode}
+Nx = 28;
+Nh = 9;
+Ny = Nx + Nh - 1;
+
+n  = 0:Nx-1;
+x  = 0.9.^(0:Nx-1)';
+X  = fft(x, Ny);
+
+h  = ones(Nh, 1);
+H  = fft(h, Ny);
+
+disp(X);
+disp(H);
+
+Y  = X.*H;
+y  = ifft(Y, Ny);
+
+figure;
+stem(y);
+title("Convolution in frequency domain Y = X * H");
+\end{matlabcode}
+
+    I chose the length of the fft window to be $N_y$, because then the frequency domain signals for $X$ and $H$ are 
+    the same size for the elementwise multiplication.
+
+    Looking at the different sizes for Ny I got this plot
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{Bilder/2b.png}
+    \end{figure}
+    We see that again for DFT lengths greater or equal to Ny we get the same signal out as the constructed signal, but 
+    that for lower ones, we loose some of the higher frequency components (likely) in the output convoluted signal.
+\end{enumerate}
+
+\section*{Problem 3.}
+\begin{enumerate}
+    \item There will be two peaks, one at $7/40$ and one at $9/40$. My drawing skills are poor :/
+    \item Using this matlab code:
+\begin{matlabcode}
+f1 = 7/40;
+f2 = 9/40;
+
+N = 100;
+n = 0:N-1;
+x = sin(2*pi*f1*n) + sin(2*pi*f2*n);
+
+figure;
+fft_sizes = [1024, 1000, 30, 10];
+for i = 1:length(fft_sizes)
+    X = fft(x, fft_sizes(i));
+    X = fftshift(X);
+    f = (-fft_sizes(i)/2 : fft_sizes(i)/2-1) / fft_sizes(i);
+    
+    subplot(2, 2, i);
+    plot(f, abs(X));
+    xlim([0.0 0.5]);
+end
+\end{matlabcode}
+    I got this plot 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{Bilder/3b.png}
+    \end{figure}
+
+    We see that there are the two peaks we expected, but also som ripple due to the limited length of the signal $x[n]$ and 
+    the fft window (I think).
+
+    \item We now get
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.9\textwidth]{Bilder/3c.png}
+        \end{figure}
+
+        I think the only difference is that the peaks are spread out a bit more in frequency, as well
+        as having some more ripple for the other frequencies, i.e. more noise or something like that.
+        Also, since these are powers of two, no extra padding is needed when doing the FFT.
+\end{enumerate}
+
+\section*{Problem 4.}
+\begin{enumerate}
+    \item The FFT is an efficient way of computing the DFT.
+    \item It assumes that the number of samples N is a power of two, and repetedly divides the DFT into smaller 
+        DFT's of N/2 samples, using divide and conquer, with complexity $O(N\log(N))$.
+    \item DFT algorithm is $O(N^2)$.
+\end{enumerate}
+
+\end{document}

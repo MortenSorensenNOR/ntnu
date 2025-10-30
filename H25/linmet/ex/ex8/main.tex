@@ -1,0 +1,134 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problem 1.}
+\begin{proof}
+Start by showing that $T$ is a contraction on $(U, \|\cdot\|_\infty)$. Firstly, we know that since $f \in C([0, 1])$, then both 
+$s \mapsto sf(s)$ is continuous, and therefore also $Tf$ being continuously differentiable with $(Tf)'(t) = tf(t)$, therefore 
+$Tf \in C([0, 1]) = U$. Secondly, we have that for $f, g \in U$,
+\[
+    |(Tf - Tg)(t)| = \left|\int_0^t s(f - g)(s) ds \right| \leq \int_0^t s ds \|f - g\|_\infty = \frac{t^2}{2} \| f - g \|_\infty \leq \frac{1}{2} \| f - g \|_\infty
+\]
+The maximum over $t \in [0, 1]$ gives
+\[
+    \| Tf - Tg \|_\infty \leq \frac{1}{2} \| f - g \|_\infty
+\]
+so $T$ is Lipschitz continuous with constant $L = 1/2 < 1$, hence $T$ is a contraction on $U$.
+
+Next, we need to show that $f(t) = 0$ is the unique fixed point on $T$. First, note that $T0 = 0$, that is $f(t) = 0$ is a fixed point on $T$.
+By Theorem 4.75 we have that this fixed point is unique.
+\end{proof}
+
+\section*{Problem 2.}
+\begin{enumerate}
+    \item By the definition $T$ is defined as 
+        \[
+            (T(x))_n = a_n + \frac{1}{n}\sum_{k=1}^n f(x_k)
+        \]
+        Want to show that the sequence $(T(x))_n$ is in $\ell^\infty$. Firstly, we know by definition that $a_n$ is bounded, and therefore
+        $M_a = \sup_n |a_n| < \infty$. Next, we know that the same holds for $x_n$, with $M_x = \sup_n |x_n| < \infty$. Lastly, since we know that
+        $f$ is a contraction, we have that
+        \[
+            |f(x_k)| \leq |f(0)| + L|x_k| \leq |f(0)| + LM_x = M_f
+        \]
+        where the average of bounded numbers is also bounded
+        \[
+            \left| \frac{1}{n} \sum_{k=1}^n f(x_k) \right| \leq M_f
+        \]
+        Therefore, 
+        \[
+            |(T(x))_n| \leq |a_n| + M_f \leq M_a + M_f
+        \]
+        and hence we have that $T(x)$ is bounded and in $\ell^\infty$.
+
+    \item In order show that $T$ has a unique fixed point, we first need to show that $T$ is a contraction operator on $\ell^\infty$. For two bounded
+        sequences $x, n$ we have that
+        \[
+            |(T(x))_n - (T(y))_n| = \left| \frac{1}{n} \sum_{k=1}^n (f(x_k) - f(y_k)) \right| \leq \frac{1}{n} \sum_{k=1}^n |f(x_k) - f(y_k)| \leq L \frac{1}{n} \sum_{k=1}^n |x_k - y_k|
+        \]
+        where the last step is a consequence of $f$ being a contraction on $\ell^\infty$. We then take the supremum over $n$, and since the last expression is an average, we know that
+        this is never larger than the max value over $k$, so 
+        \[
+            \|(T(x))_n - (T(y))_n\|_\infty \leq L \|x - y\|_\infty
+        \]
+        Therefore $T$ is a contraction over $\ell^\infty$ with the same constant $L$ as $f$, with $L < 1$. By Theorem 4.75 the fixed point of $T$ will be 
+        unique.
+\end{enumerate}
+
+\section*{Problem 3.}
+\begin{enumerate}
+    \item Let $x^m$ denote a sequence of elements in $\ell^\infty$, that is $x^m$ is a sequence of sequences in $\ell^\infty$. For $x^m$ to be a cauchy sequence
+        we must have that
+        \[
+            \forall \epsilon > 0, \exists M \text{ s.t. } m, p \geq M \implies \| x^m - x^p \|_\infty = \sup_n |x_n^m - x_n^p| < \epsilon
+        \]
+        We further have that each element sequence $(x_n^m)_m$ is a Cauchy sequnece (lets assume in $\mathbb{R}$), because
+        \[
+            |x_n^m - x_n^p| \leq \sup_k | x_k^m - x_k^p | = \| x^m - x^p \|_\infty
+        \]
+        And since $\mathbb{R}$ is complete, Theorem 4.48, each element $(x_n^m)_m$ converges, i.e.
+        \[
+            x_n = \lim_{m \to \infty} x_n^m
+        \]
+        
+        Now, becuase $(x^m)$ is a cauchy sequence it is alos bounded. It therefore exists an $M > 0$ s.t.
+        \[
+            \|x^m\|_\infty \leq M \:\:\:\: \forall m
+        \]
+        so
+        \[
+            |x_n| = \lim_{m \to \infty} |x_n^m| \leq M
+        \]
+        Hence
+        \[
+            \sup_n |x_n| \leq M
+        \]
+        meaning that $x \in \ell^\infty$. We therefore know that each element of $x^m$ converges. Lastly, we need to show that $x^m$ exhibits uniform
+        convergece. Let therefore $\epsilon > 0$. Since $(x^m)$ is Cauchy, there exists and $M$ s.t. for all $p, q \geq M$
+        \[
+            \| x^p - x^q \| < \epsilon
+        \]
+        If we now fix $p \geq M$ and let $q \to \infty$, which means that $x_n^q \to x_n$, which results in 
+        \[
+            \sup_n |x_n^p - x_n| \leq \epsilon
+        \]
+        and hence
+        \[
+            \|x^p - x\|_\infty \leq \epsilon
+        \]
+        and $x^m$ converges to $x$ wrt. the infinity norm with $x \in \ell^\infty$. The space is therefore complete, i.e. $(\ell^\infty, \|\cdot\|_\infty)$ is a
+        Banach space.
+
+    \item It's clear that since $\ell^\infty$ is the space of all bounded sequences that, since any sequence that converges to 0 must clearly also be 
+        bounded, that $c_0$ is a subspace of $\ell^\infty$. Furthermore, since the limit of the sequences is 0, then it must also be closed. By Theorem 4.61
+        $(c_0, \|\cdot\|_\infty)$ is a complete subspace, and therefore a Banach space.
+\end{enumerate}
+
+\section*{Problem 4.}
+Since $(u_n)$ is a Cauchy sequence, we know that for all $\epsilon > 0$ there exists some $N$ s.t.
+\[
+    \|u_n - u_m\| < \frac{\epsilon}{2}, \:\:\:\:\: \forall m, n \geq N
+\]
+and equally for the subsequence, there exists some $K$ s.t.
+\[
+    \|u_{n_k} - u\| < \frac{\epsilon}{2}, \:\:\:\:\: \forall k \geq K
+\]
+We may now choose our indices s.t. $n, n_k \geq N$, giving
+\[
+    \| u_n - u_{n_k} \| < \frac{\epsilon}{2}
+\]
+and 
+\[
+    \| u_{n_k} - u \| < \frac{\epsilon}{2}
+\]
+Using the triangle inequality we get
+\[
+    \| u_n - u \| \leq \| u_n - u_{n_k} \| + \| u_{n_k} - u \| < \frac{\epsilon}{2} + \frac{\epsilon}{2} = \epsilon
+\]
+Therefore we get $u_n \to u$.
+
+\end{document}

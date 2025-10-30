@@ -1,0 +1,156 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problem 1.}
+\begin{enumerate}
+    \item It's clear that the norm $\|\cdot\|_c$ follows the property of positivity, since both elements in the
+        internal sum of the two norms $\|\cdot\|_a$ and $\|\cdot\|_b$ follow this property. Homogeneity can be shown with
+        \begin{align*}
+            \|\lambda u\|_c &= (\|\lambda u\|_a + \|\lambda u\|_b)^{1/2} \\
+                            &= \lambda (\|u\|_a + \|u\|_b)^{1/2} = \lambda\| u\|_c
+        \end{align*}
+        Lastly, we need to show that the triangle inequality holds. We have that
+        \[
+            \|u + v\|_c^2 = \|u + v\|_a^2 + \|u + v\|_b^2
+            \leq (\|u\|_a + \|v\|_a)^2 + (\|u\|_b + \|v\|_b)^2.
+        \]
+        Now we see that the last expression can be viewed as the square of a $2$-norm in $\mathbb{R}^2$,
+        so we apply the triangle inequality for the Euclidean norm and get
+        \[
+            (\|u\|_a + \|v\|_a)^2 + (\|u\|_b + \|v\|_b)^2
+            = \big\|(\|u\|_a, \|u\|_b) + (\|v\|_a, \|v\|_b)\big\|_2^2
+            \leq (\|u\|_c + \|v\|_c)^2.
+        \]
+        Taking square roots on both sides, we obtain
+        \[
+            \|u + v\|_c \leq \|u\|_c + \|v\|_c.
+        \]
+        Therefore, the last property of the norm also holds, and $\|\cdot\|_c$ indeed defines a norm on $U$.
+
+    \item \begin{proof} Want to show that there exists an $N \in \mathbb{N}$ for $\forall \epsilon > 0$ s.t.
+        \[
+            \|u_n - u\|_c < \epsilon \:\:\:\: \text{ whenever } n \geq N
+        \]
+        iff. $(u_n)_{n \in \mathbb{N}}$ converges to $u$ wrt. both $\|\cdot\|_a$ and $\|\cdot\|_b$.
+
+        First, let $(u_n)_{n \in \mathbb{N}}$ converge to $u$ wrt. $\|\cdot\|_a$ and $\|\cdot\|_b$. We therefore have that for some 
+        $\epsilon > 0$, we can choose a sufficiently large $N$ s.t. both
+        \[
+            \|u_n - u\|_a < \frac{\epsilon}{\sqrt{2}}
+        \]
+        and
+        \[
+            \|u_n - u\|_b < \frac{\epsilon}{\sqrt{2}}
+        \]
+        with $n \geq N$. We therefore have that
+        \begin{align*}
+            \|u_n - u\|_c = (\|u_n - u\|_a^2 + \|u_n - u\|_b^2)^{1/2} < \left(\frac{\epsilon^2}{2} + \frac{\epsilon^2}{2}\right)^{1/2} = \epsilon
+        \end{align*}
+        Therefore we have that $(u_n)_{n \in \mathbb{N}}$ converges to $u$ wrt. $\|\cdot\|_c$.
+
+        Next, assume $\|u_n-u\|_c \to 0$. Then for every $\varepsilon>0$ there is $N$ such that for $n\ge N$,
+        \[
+            \|u_n-u\|_c<\varepsilon.
+        \]
+        Since $\|w\|_a\le \|w\|_c$ and $\|w\|_b\le \|w\|_c$ for all $w\in U$, we get
+        \[
+            \|u_n-u\|_a<\varepsilon\quad\text{and}\quad \|u_n-u\|_b<\varepsilon,
+        \]
+        so $u_n\to u$ with respect to both $\|\cdot\|_a$ and $\|\cdot\|_b$.
+    \end{proof}
+\end{enumerate}
+
+\section*{Problem 2.}
+\begin{proof}
+Theorem 5.5 states that $T$ being continuous and $T$ being bounded are equivelent statements. Therefore, let's 
+first assume that $T$ is not continuous. By extension that means that $T$ is an unbounded operator, so for every $n \in \mathbb{N}$
+there exists some $v_n \in U$ where
+\[
+    \|Tv_n\|_V > n\|v_n\|_U
+\]
+Can then define
+\[
+    u_n = \frac{v_n}{\|v_n\|_U}
+\]
+This means that $\|u_n\|_U = 1$, and in turn we also get that
+\[
+    \|Tu_n\|_V = \frac{\|Tv_n\|_V}{\|v_n\|_U} > n
+\]
+
+Secondly, lets assume that there exists a sequence $u_n$ where $\|u_n\|_U = 1$ and $\|T(u_n)\|_V \geq n$ for all $n$.
+There are now exists no uniform bound $C \geq 0$ s.t.
+\[
+    \|Tu\|_V \leq C\|u\|_U
+\]
+for all $u$ because letting $u = u_n$ would force $n \leq C$. Therefore $T$ is unbounded, and consequently not continuous.
+\end{proof}
+
+\section*{Problem 3.}
+We have that 
+\[
+    |Tu| = |\langle u, v \rangle| \leq \|u\| \|v\|
+\]
+where the last step is due to Cauchy-Schwarz. Now, choosing $C = \|v\|$ we get that $T$ is a bounded linear operator with
+\[
+    |Tu| \leq C \|u\| \:\:\:\: \text{ for all } u \in U
+\]
+
+Using Lemma 5.14 we have that
+\[
+    \|T\| = \sup_{u \neq 0} \frac{|Tu|}{\|u\|_U} = \sup_{\|u\|_U = 1}|Tu| = \sup_{\|u\|_U = 1} |\langle u, v \rangle| \leq \|v\|
+\]
+which is achieved when $u = \frac{v}{\|v\|_U}$ with $v \neq 0$. Therefore $\|T\| = \|v\|$ for $v \neq 0$, and simply $\|T\| = 0$ when 
+$v = 0$.
+
+\section*{Problem 4.}
+Need to check that
+\begin{equation}
+    \|T\| = \sup_{u \neq 0}\frac{\|Tu\|_V}{\|u\|_U}
+    \label{eq:T_norm}
+\end{equation}
+defines a norm on $B(U, V)$. First, it is clear that the norm achieves positivity, as if $\|T\| = 0$, then $\|Tu\| \leq 0 \cdot \|u\| = 0$ and if $T = 0$, then $\|T\| = 0$.
+Second, $\|T\|$ passes homogeneity as 
+\[
+    \|\lambda T\| = \sup_{u \neq 0} \frac{\|\lambda Tu\|_V}{\|u\|_U} = |\lambda| \sup_{u \neq 0} \frac{\|Tu\|_V}{\|u\|_U} = |\lambda| \|T\|
+\]
+Lastly, let $S, T \in B(U, V)$. Then
+\[
+    \frac{\|(S + T)u\|_V}{\|u\|_U} = \leq \frac{\|Su\|_V}{\|u\|_U} + \frac{\|Tu\|_V}{\|u\|_U} \leq \|S\| + \|T\|
+\]
+Taking the supremum over this as before we get that $\|S + T\| \leq \|S\| + \|T\|$ proving the triangle inequality. Therefore (\ref{eq:T_norm}) defines a 
+norm on $B(U, V)$.
+
+\section*{Problem 5.}
+\begin{enumerate}
+    \item Since $T$ is a linear operator on $C^\infty([0,1])$ we must have that $T$ is continuous iff. $T$ is a bounded linear operator. Therefore we have
+        \[
+            |Tf| = |\int_0^1 f(x) dx| \leq \int_0^1 |f(x)| dx \leq \max_{x\in [0, 1]}|f(x)| = \|f\|_\infty
+        \]
+        for all $f \in C^\infty([0, 1])$, and therefore bounded, and consequently continuous wrt. the infinity norm.
+
+    \item This operator is not continuous. Take any trigonometric function as an example, say $\sin(2\pi n x)$. There is no $C$ s.t.
+        \[
+            \|f'\|_\infty \leq C\|f\|_\infty
+        \]
+        because, as $n \to \infty$, $C \to \infty$. $T$ is therefore not a continuous wrt. the infinity norm.
+
+    \item Not continuous, since, for the bounded decision, as we let $x \to \infty$, $C$ must also grow to infinity, so therefore not bounded $\implies$ not continuous.
+
+    \item Not bounded, though each element in the output of the mapping is bounded by definition of existing in $\ell^\infty$, though I don't see how we can construct some uniform constant $C$ s.t. 
+        the entire mapping for all $f$ is bounded, therfore, not continuous (I think).
+\end{enumerate}
+
+\section*{Problem 6.}
+\begin{proof}
+Using Lemma 5.14 we have that
+\[
+    \max_{x \in \mathbb{K}^n \ \{0\}} \frac{\|Ax\|_\infty}{\|x\|_\infty} = \max_{\|x\|_\infty = 1} \|Ax\|_\infty = \max_{1 \leq i \leq m} \sum_{j=1}^n |a_{ij}|
+\]
+The last step is a consequence of $x$ being chosen to be infinity normed (perhaps a bit oversimplified, but I think it works).
+\end{proof}
+
+\end{document}

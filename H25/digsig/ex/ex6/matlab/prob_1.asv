@@ -1,0 +1,19 @@
+N = 28;
+n = 0:N-1;
+x = 0.9.^(0:N-1);
+
+f      = linspace(0, 1, 2000);
+f(end) = [];
+E      = exp(-1j*2*pi*(n.').*f);
+X      = x * E;
+
+% Shift frequencies so that the last half is the negative frequencies
+Xs = fftshift(X);
+fs = fftshift(f);
+fs(fs >= 0.5) = fs(fs >= 0.5) - 1;  % map to [-0.5, 0.5)
+
+plot(fs, abs(Xs)), grid on
+xlim([-0.5, 0.5])
+
+figure;
+plot(f, abs(X)), grid on
