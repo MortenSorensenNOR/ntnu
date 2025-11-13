@@ -1,0 +1,145 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problem 1.}
+\begin{enumerate}
+    \item \begin{proof} We have that
+        \[
+            \|T\| = \sup_{\|x\|_1 \leq 1} \|Tx\|_1 = \sum_{k=1}^\infty \left|\frac{x_k}{k}\right| = \sum_{k=1}^\infty \frac{|x_k|}{k}
+        \]
+        The upper bound of $\|T\|$ we have that $1/k \leq 1, \forall k$, so
+        \[
+            \|Tx\|_1 \leq \sum_{k=1}^\infty |x_k| = \|x\|_1
+        \]
+        i.e. $\|T\| \leq 1$.
+
+        Now we can choose $x = (1, 0, 0, \dots)$, meaning that 
+        \[
+            \|x\|_1 = 1 \implies \|Tx\|_1 = \frac{|1|}{1} = 1
+        \]
+        i.e. $\|Tx\|_1 = \|x\|_1$, meaning that 
+        \[
+            \|T\| = 1
+        \]
+    \end{proof}
+
+    \item Let $x, y \in \ell^1$. Then if $Tx = Ty$, then $x = y$ implies injectivity.
+        \[
+            Tx = \left(\frac{x_k}{k}\right)_{k \in \mathbb{N}} = Ty = \left(\frac{y_k}{k}\right)_{k \in \mathbb{N}}
+        \]
+        then we have that $x_k = y_k$ for all $k \in \mathbb{N}$.
+
+        If $T$ is surjective, then for some $y \in \ell^1$ there exists some $x \in \ell^1$ s.t. $Tx = y$.
+        In other words 
+        \[
+            y_k = \frac{x_k}{k} \implies x_k = ky_k
+        \]
+        Since $x \in \ell^1$, we must check if the norm of $x$ is bounded. We have
+        \[
+            \|x\|_1 = \sum_{k=1}^\infty k|y_k|
+        \]
+        Now, we can let $y_k = \frac{1}{k^2}$, which is in $\ell^1$, but we have 
+        \[
+            \|x\|_1 = \sum_{k=1}^\infty \frac{1}{k} = \infty
+        \]
+        i.e. $x \notin \ell^1$, so $T$ is not surjective.
+
+    \item We have that 
+        \[
+            \text{range}(T) = \{ (y_k) \in \ell^1 | \exists x \in \ell^1 \text{ s.t. } y_k = \frac{x_k}{k} \}
+        \]
+        From 1b we have that $T$ is not surjective, so we know that there are elements $y \in \ell^1$ not in the range of 
+        $T$. I.e. we know that the range is a propper subset of $\ell^1$.
+\end{enumerate}
+
+\section*{Problem 2.}
+\begin{enumerate}
+    \item Since $(a_n)_{n \in \mathbb{N}}, (x_n)_{n \in \mathbb{N}} \in \ell^2$, we have that both
+        \[
+            \sum_{n=1}^\infty |a_n|^2 < \infty
+        \]
+        and
+        \[
+            \sum_{n=1}^\infty |x_n|^2 < \infty
+        \]
+        want to show that $Tx \in \ell^1, \forall x \in \ell^2$, i.e.
+        \[
+            \sum_{n=1}^\infty |a_n x_n| < \infty
+        \]
+        Using the cauchy schwarz inequality we have that 
+        \[
+            \sum_{n=1}^\infty |a_n x_n| \leq (\sum_{n=1}^\infty |a_n|^2)^{1/2} (\sum_{n=1}^\infty |x_n|^2)^{1/2} < \infty
+        \]
+        and since both $a_n$ and $x_n$ converge, the sum of all $|a_n x_n|$ will also converge. Therefore
+        $Tx = (a_n x_n) \in \ell^1$.
+
+    \item 
+        $T$ maps from $\ell^2$ to $\ell^2$ through element wise multiplication between two sequences in $\ell^2$, so 
+        $\text{range}(T)$ should be a subspace (could prove, but I'm tired).
+
+        Can easily see that $\text{range}(T)$ is a propper subspace of $\ell^2$ by defining a 
+        sequence $y = a_n x_n$, i.e. $x_n = \frac{y_n}{a_n}$ s.t. $\|x\| = \infty$. Take for instance 
+        $y_n = |a_n|$, meaning that $x_n$ is a sequence of $\pm 1$, i.e. not convergent, so $y \notin \text{range}(T)$.
+
+        Lastly, let $y \in \ell^2$ and let $y^{(N)} = (y_1, y_2, \dots, y_N, 0, 0, \dots)$ define a vector 
+        that given some $\epsilon$ we may choose $N$ s.t the two sequences are arbitrarily close. The corresponding $x^(N)$ 
+        will also live in $\ell^2$ since it has finitely many non-zero elements. Therefore, we can find an $N$ given some 
+        $\epsilon$ where
+        \[
+            \|y - Tx^{(N)}\|_2 = \|y - y^{(N)}\|_2 \leq \epsilon
+        \]
+        $T$ is therefore a proper dense subspace of $\ell^2$.
+\end{enumerate}
+
+\section*{Problem 3.}
+\begin{enumerate}
+    \item Let $u, v \in U$. Assume $Su = Sv$, then
+        \[
+            Su = u - Tu = Sv = v - Tv
+        \]
+        therefore we have that 
+        \[
+            (1 - T)u = (1 - T)v
+        \]
+        i.e. $u = v$. $S$ is injective.
+
+    \item No clue :/
+
+    \item Assuming (b), then 
+        \[
+            \|S^{-1}v\| \leq \sum_{k=0}^\infty \|T\|^k \|v\| = \frac{1}{1 - \|T\|} \|v\|
+        \]
+        so the thing from the task holds.
+\end{enumerate}
+
+\section*{Problem 4.}
+Want to show that for all $x \in c_0$, there exists a sequence $y \in \ell^1$ s.t.
+\[
+    f(x) = \sum_{k=1}^\infty x_k y_k
+\]
+is equivelent to $f$ being a bounded linear function on $c_0$.
+
+First, assume $y \in \ell$. We have that
+\[
+    f(x) = \sum x_k y_k
+\]
+We know that the series converges for all $x$ since $|x_k|$ is bounded and $y_k$, by virtue of being 
+in $\ell^1$ is summable. Therfore $f$ is also bounded and linear with
+\[
+    |f(x)|leq \|y\|_| \|x\|_\infty
+\]
+Therefore $f \in (c_0)^*$.
+
+Conversely, let $f \in (c_0)^*$. If we now let 
+\[
+    y_k = f(e^{(k)})
+\]
+where $e^{(k)}$ is the $k-th$ standard basis vector. Now, we have $y = (y_k) \in \ell^1$ (since $f$ is bounded and $\|e^{(k)}\|_\infty = 1$) and
+\[
+    f(x) = \sum x_k y_k
+\]
+\end{document}

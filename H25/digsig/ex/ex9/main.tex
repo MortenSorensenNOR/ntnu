@@ -1,0 +1,95 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problem 1.}
+\begin{enumerate}
+    \item 
+        \begin{align*}
+            h_d[n] &= \int_{-f_c}^{f_c} e^{j2\pi f n} df = \left[\frac{e^{j2\pi fn}}{j 2\pi n}\right]_{-f_c}^{f_c} = \frac{e^{j2\pi f_c n} - e^{-j2\pi f_c n}}{j2\pi n} = \frac{\sin(2\pi f_c n)}{\pi n} = 2 f_c \cdot \text{sinc}(2f_c n)
+        \end{align*}
+
+    \item Timeshifting and windowing gives
+        \[
+            h[n] = h_d[n - (N - 1)/2] \cdot w[n]
+        \]
+
+    \item Code for calculating coefficients in matlab
+\begin{matlabcode}
+fc = 0.2;
+N  = 31;
+
+function [coeffs] = fir_window_coeffs(N, fc, w)
+    m = -(N-1)/2 : (N-1)/2;
+    hd = 2 * fc * sinc(2 * fc * m);
+    coeffs = hd(:) .* w(:);
+end
+
+w = hamming(N);
+coeffs = fir_window_coeffs(N, fc, w);
+[h, w] = freqz(coeffs, 1, 4096);
+
+figure;
+title("Hamming window magnitude response")
+plot(w/(2*pi), abs(h));
+saveas(gcf, "../Bilder/1d_hamming_win_mag.png")
+\end{matlabcode}
+
+    \item For the actual FIR coefficients 
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}{.5\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{Bilder/1d_rect_win.png}
+                \subcaption{Rectangular window}
+            \end{subfigure}%
+            \begin{subfigure}{.5\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{Bilder/1d_hamming_win.png}
+                \subcaption{Hamming window}
+            \end{subfigure}
+        \end{figure}
+
+        And the magnituderesponse
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}{.5\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{Bilder/1d_rect_win_mag.png}
+                \subcaption{Rectangular window}
+            \end{subfigure}%
+            \begin{subfigure}{.5\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{Bilder/1d_hamming_win_mag.png}
+                \subcaption{Hamming window}
+            \end{subfigure}
+        \end{figure}
+
+        It seems that the rectangular window has a longer impulse response and more ripple in both the pass and stopband, whilst
+        the hamming window as a smoother, but longer transition band.
+
+    \item Using fir1 I got
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}{.5\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{Bilder/1e_fir1_rect_win_mag.png}
+                \subcaption{fir1 + Rectangular window}
+            \end{subfigure}%
+            \begin{subfigure}{.5\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{Bilder/1e_fir1_hamming_win_mag.png}
+                \subcaption{fir1 + Hamming window}
+            \end{subfigure}
+        \end{figure}
+
+        Figures look the same (though I plotted up until 1.0 instead of 0.5 due to different scaling in fir1 vs. coeff implementation).
+\end{enumerate}
+
+\section*{Problem 2.}
+
+
+\end{document}

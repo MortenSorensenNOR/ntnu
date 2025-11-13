@@ -1,0 +1,162 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problem 1.}
+\begin{enumerate}
+    \item  Let $u, v \in \ell^2$. The general property of the adjoint operator is that
+        \[
+            \langle T_a v, u \rangle = \langle v, T_a^* u \rangle
+        \]
+        We have that
+        \[
+            \langle T_a v, u \rangle = \sum_{n=1}^{\infty} a_n v_n \overline{u_n} = \sum_{n=1}^{\infty} v_n \overline{\overline{a_n} u_n} = \langle u, (\overline{a_1}v_1, \overline{a_2}v_2, \dots) \rangle
+        \]
+        Therefore 
+        \[
+            T^*_a v = T_{\overline{a}} v
+        \]
+
+    \item We have that
+        \[
+            T_aT_a^* = (a_1 \overline{a_1}, a_2 \overline{a_2}, \dots) = (\overline{a_1} a_1, \overline{a_2} a_2, \dots) = T^*_a T_a
+        \]
+        I.e. $T_a$ is normal.
+
+    \item If $a$ is a real sequance, then $T_a$ is self-adjoint.
+\end{enumerate}
+
+\section*{Problem 2.}
+\begin{enumerate}
+    \item Let $u, v \in \ell^2$ and $\lambda \in \mathbb{K}$. We have that
+        \begin{align*}
+            D(\lambda u + v) &= ((\lambda u_2 + v_2) - (\lambda u_1 + v_1), (\lambda u_3 + v_3) - (\lambda u_2 + v_2), \dots) \\
+                             &= ( \lambda u_2 - \lambda u_1 + v_2 - v_1, \dots ) \\
+                             &= \lambda Du + Dv
+        \end{align*}
+        Therefore $D$ is a bounded linear operator.
+
+    \item 
+        We have that
+        \begin{align*}
+            \langle Dx, y \rangle &= \sum_{i=1}^{\infty} (x_{i+1} - x_i) \overline{y_i} \\
+                                  &= \sum_{i=1}^{\infty} x_{i+1} \overline{y_i} - \sum_{i=1}^{\infty} x_i \overline{y_i} \\
+                                  &= \sum_{i=2}^{\infty} x_i \overline{y_{i-1}} - \sum_{i=1}^{\infty} x_i \overline{y_i} \\
+                                  &= \sum_{i=1}^{\infty} x_i (\overline{y_{i-1}} - \overline{y_i})
+        \end{align*}
+        Therefore, 
+        \[
+            D^* y = (\dots, \overline{y_{i-1}} - \overline{y_i}, \dots)
+        \]
+        where $y_0 = 0$ (assumed).
+\end{enumerate}
+
+\section*{Problem 3.}
+\begin{enumerate}
+    \item Let $x \in H$. We can decompose $x$ as
+        \[
+            x = P_M(x) + (x - P_M(x))
+        \]
+        where $P_M(x) \in M$ and $x - P_M(x) \in M^{\bot}$. Let $z = P_M(x)$. Since $z \in M$ it has no
+        component in $M^{\bot}$, i.e. $P_M(z) = z$, so
+        \[
+            (P_M \circ P_M)(x) = P_M(z) + (z - P_M(z)) = P_M(z) = z = P_M(x)
+        \]
+
+        Next we want to find the adjoint operator of the projection that satisfies 
+        \[
+            \langle P_M u, v \rangle = \langle u, P_M^* v \rangle, \:\:\: \forall u, v \in H
+        \]
+        where we wish to show that $P_M = P_M^*$. We can rewrite $u$ and $v$ as 
+        \begin{center}
+            $u = u_M + u_\bot$ and $v = v_M + v_\bot$
+        \end{center}
+        where 
+        \[
+            u_M = P_M(u) \in M, \:\:\:\: u_\bot = u - P_M(u) \in M^\bot
+        \]
+        and 
+        \[
+            v_M = P_M(v) \in M, \:\:\:\: v_\bot = v - P_M(v) \in M^\bot
+        \]
+            
+        We now have that
+        \[
+            \langle P_M u, v \rangle = \langle u_M, v_M + v_\bot \rangle = \langle u_M, v_M \rangle
+        \]
+        since $v_\bot$ is in the orthogonal complement to $u_M$, and therefore, because of linearity, an innerproduct value of zero.
+
+        Now, similarily we have that
+        \[
+            \langle u, P_M v \rangle = \langle u_M + u_\bot, v_M \rangle = \langle u_M, v_M \rangle
+        \]
+        Therefore we have that
+        \[
+            \langle P_M u, v \rangle = \langle u, P_M v \rangle
+        \]
+        which follows the definition of the adjoint operator with $P_M^* = P_M$.
+
+        Lastly, we wish to show that $\|P_M\| = 1$. Since $P_M$ is a contraction, since
+        \[
+            \|x\|^2 = \|P_M x\|^2 + \|x - P_M x\|^2 \implies \|P_M x\| \leq \|x\|
+        \]
+        therefore $\|P_M\| \leq 1$. However, since we may apply $P_M$ to vectors already in $M$, leaving them unchanged,
+        we know that by the definition of norms of bounded linear operators that $\|P_M\| = 1$.
+
+    \item Let $M = \text{ran}(P)$. Want to show that $M$ is closed. We know that $\text{ker}(I - P)$ is closed by definition,
+        so if we can show that $\text{ran}(P) = \text{ker}(I - P)$, then we have shown that $M$ is closed. 
+
+        First, let $x \in M$, where $x = Py$ for some $y \in H$. We have that
+        \[
+            (I - P)x = (I - P)Py = Py - P^2y = Py - Py = 0
+        \]
+        Therefore $x \in \text{ker}(I - P)$.
+        Second, let $x \in \text{ker}(I - P)$, then
+        \[
+            (I - P)x = 0 \implies Px = x
+        \]
+        so $x \in \text{ran}(P)$. Therefore we have that
+        \[
+            M = \text{ran}(P) = \text{ker}(I - P)
+        \]
+        is closed.
+
+        Next, want to show that $P$ acts as an identity on $M$. Let $x \in M$, where $x = Py$ for some $y \in H$. Then
+        \[
+            Px = P(Py) = P^2 y = Py = x
+        \]
+        So $P$ acts as an identity on $M$.
+
+        Furthermore, we need to show that $\text{ker}(P) = M^\bot$. First, let $x \in \text{ker}(P)$, i.e. $Px = 0$.
+        Take some $m \in M$, and let $m = Py$ for some $y \in H$. We have that
+        \[
+            \langle x, m \rangle = \langle x, Py \rangle = \langle Px, y \rangle = \langle 0, y \rangle = 0
+        \]
+        Therefore $\ker(P) \subset M^\bot$.
+
+        Second, let $x \in M^\bot$. Start by computing 
+        \[
+            \|Px\|^2 = \langle Px, Px \rangle = \langle P^2x, x \rangle = \langle Px, x \rangle
+        \]
+        However, since $x \in M^\bot$ and $Px \in M$, we have that
+        \[
+            \langle Px, x \rangle = 0
+        \]
+        Therefore $\|Px\| = 0$, which means that $Px = 0$, and hence $x \in \ker(P)$ and $M^\bot \subset \ker(P)$, 
+        and as a consequence of the first, $\ker(P) = M^\bot$.
+
+        Lastly, we can show that $P$ can be used to decompose a vector $x \in H$ into an orthogonal and projected part.
+        We can write
+        \[
+            x = Px + (x - Px)
+        \]
+        which is a valid decomposition sinec $Px \in M$ and $x - Px \in M^\bot$, which means that $P$ is in fact the 
+        orthogonal projection operator on some closed subspace $M$ of $H$.
+
+
+\end{enumerate}
+
+\end{document}

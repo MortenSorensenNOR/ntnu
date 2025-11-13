@@ -1,0 +1,29 @@
+\usepackage{tikz}
+\usepackage{babel}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{a4wide}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{pgfplots}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\usepackage{subcaption}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[pdftex, pdfborderstyle={/S/U/W 0}]{hyperref}
+
+\setlength{\parindent}{0pt} 
+\setlength{\parskip}{2.5pt}
+
+\setlist[enumerate]{label=\bfseries\alph*), align=left, labelwidth=!, itemindent=0pt, leftmargin=0pt}
+
+\newenvironment{pythoncode}{\VerbatimEnvironment\begin{tcolorbox}[colback=white!16!black, colframe=white!75!black]\begin{minted}[style=monokai]{python}}{\end{minted}\end{tcolorbox}}
+\newenvironment{matlabcode}{\VerbatimEnvironment\begin{tcolorbox}[colback=blue!2.5!white, colframe=black!50!white]\begin{minted}[]{matlab}}{\end{minted}\end{tcolorbox}}

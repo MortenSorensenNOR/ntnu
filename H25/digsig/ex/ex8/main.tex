@@ -1,0 +1,126 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Problem 1.}
+\begin{enumerate}
+    \item We have that 
+        \[
+            X(z) = W(z)H(z) = W(z) \frac{1}{1 + \frac{1}{2}z^{-1}}
+        \]
+        i.e. in time domain
+        \[
+            x[n] + \frac{1}{2}x[n-1] = w[n]
+        \]
+        which is an autoregressive process of order 1 with coefficient $a_1 = -\frac{1}{2}$.
+
+    \item The optimal first order predictor for $x[n]$ is 
+        \[
+            \hat{x}[n|n-1] = \alpha_1 x[n-1]
+        \]
+        where 
+        \[
+            \alpha_1 = \frac{\gamma_{xx}(1)}{\gamma_{xx}(0)}
+        \]
+        Since system is AR(1) we have that
+        \[
+            \gamma_{xx}(1) = -a_1\gamma_{xx}(0)
+        \]
+        (found on wikipedia :) )
+        So, we have that 
+        \[
+            \alpha_1 = \frac{1}{2}
+        \]
+
+        I believe that the optimal second order predictor for the AR(1) process won't make much 
+        sense, as $\alpha_2$ will be zero.
+\end{enumerate}
+
+\section*{Problem 2.}
+\begin{enumerate}
+    \item The system is a moving average process. Can clearly bee seen as the white noise is effectively 
+        put through a system function with only zeros (compared with only poles for the autoregressive process).
+
+    \item Since $w[n]$ is white gaussian noise we have the property that 
+        \[
+            \gamma_{ww}(\ell) = \sigma_w^2 \delta[\ell] 
+        \]
+        Can write $x[n]$ as
+        \[
+            x[n] = b_0w[n] + b_1 w[n-1]
+        \]
+        with $b_0 = 1$ and $b_1 = -0.5$.
+        Since we know there are only two taps for $x[n]$ with $n$ and $n-1$, we know that this 
+        dirac-delta pulse only will be non-zero for $\ell \in \{-1, 0, 1\}$, so the autocorrelation of 
+        $x$ becomes
+        \[
+            \gamma_{xx}(\ell) = E[x[n]x[n + \ell]] = \sum_{i=0}^1\sum_{j=0}^1 b_i b_j \cdot E[w[n-i]w[n+\ell-j]] = \sigma_w^2\sum_{i, j} b_i b_j \delta[\ell + i - j]
+        \]
+
+        Therefore we have that
+        \[
+            \gamma_{xx}(\ell) = \begin{cases}
+                \sigma_w^2(b_0^2 + b_1^2)       = 1.25 & \text{ when } \ell = 0 \\
+                \sigma_w^2(b_0 b_1) \:\:\:\:\:\:= -0.5 & \text{ when } \ell = \pm 1 \\
+                0 & \text{ otherwise. }
+            \end{cases}
+        \]
+
+        The PSD can be found with
+        \[
+            \Gamma_{xx}(e^{j\omega}) = \sum_{\ell=-\infty}^{\infty} \gamma_{xx}(\ell)e^{-j\omega \ell} = 1.25 - \cos(\omega)
+        \]
+\end{enumerate}
+
+\section*{Problem 3.}
+I did not end up recording my own vowel to do the transformation, but using the vowels given I was able to still transform 
+one vowel into another. This proves that it would be possible also for my own vowels (I believe).
+
+\begin{matlabcode}
+% Parameters
+Fs  = 8000;
+p   = 10;
+NFFT = 4096;
+
+% Load data
+matFile = 'vowels.mat';
+S = load(matFile);
+vowelCell = [];
+for fn = fieldnames(S).'
+    v = S.(fn{1});
+    if iscell(v) && isequal(size(v), [1 9])
+        vowelCell = v; break;
+    end
+end
+x_dst = vowelCell{3}(:);
+
+% Load my vowel
+x_src = vowelCell{1}(:);
+
+% LPC envelope of src and dst signals
+[a_src,g_src] = lpc(x_src, p);
+[a_dst,g_dst] = lpc(x_dst, p);
+
+% Inverse-filter of source to get voice base thingy
+vowel_flat = filter(a_src, 1, x_src) / sqrt(g_src);
+
+% Synthesize new vowel with dst envelope
+y = filter(1, a_dst, vowel_flat*sqrt(g_dst));
+
+% Listen to the input's and the output
+sound(x_src, Fs);
+pause(0.5);
+sound(x_dst, Fs);
+pause(0.5);
+sound(y, Fs);
+\end{matlabcode}
+
+Listening to the output I can very clearly hear that it did indeed work when using only the vowels provided. Since the method 
+first normalizes the src vowel with the inverse of the LPC envelope, whatever src vowel is used, the \textbf{vowel\_flat}
+signal should represent the base of the voice in either case, and so the last process of synthesizing by the destination LPC envelope
+filter thing should produce a good destination vowel for both mine and the provided vowels. (Too much hassle to record one of my vowels :/).
+
+\end{document}
