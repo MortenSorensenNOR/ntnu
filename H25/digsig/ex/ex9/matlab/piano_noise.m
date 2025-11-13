@@ -1,5 +1,10 @@
 % Load sound file
-% [y, fs] = audioread("pianoise.wav");
-% spectrogram(y, 100, 80, 100, 'yaxis')
+[x, fs] = audioread("pianoise.wav");
 
-% Create bandstop filter for ~0.4 to 0.5 in normalized frequecy rad/sample
+% Load minimum order filter
+num = minimum_order_num;
+
+% Filter
+y = filter(minimum_order_num, 1, x);
+sound(y, fs);
+pause(1.5);

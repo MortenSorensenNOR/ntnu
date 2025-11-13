@@ -90,6 +90,119 @@ saveas(gcf, "../Bilder/1d_hamming_win_mag.png")
 \end{enumerate}
 
 \section*{Problem 2.}
+\begin{enumerate}
+    \item The filter has magnitude response 
+        \[
+            |H_a(j\omega)| = \left| \frac{1}{RC j\omega + 1} \right| = \sqrt{\frac{1}{1 + (RC)^2 \omega^2}}
+        \]
+        Cutoff frequency when magnitude is euqal to $1/\sqrt{2}$, so
+        \[
+            \frac{1}{\sqrt{2}} = \sqrt{\frac{1}{1 + (RC)^2 \omega^2}} \implies \omega = \frac{1}{RC}
+        \]
+    \item 
+        Start with substituing in for $s$ and $z$ and get
+        \begin{align*}
+            s = j\Omega = \frac{2}{T} \frac{1 - z^{-1}}{1 + z^{-1}} &= \frac{2}{T} \frac{1 - e^{-j\omega}}{1 + e^{-j\omega}}
+        \end{align*}
+        Simplifying we get
+        \[
+            1 - e^{-j\omega} = e^{-j\omega/2}(e^{j\omega/2} + e^{-j\omega/2}) = e^{-j\omega/2} \cdot 2j\sin(\omega/2)
+        \]
+        and
+        \[
+            1 + e^{-j\omega} = e^{-j\omega/2}(e^{j\omega/2} + e^{-j\omega/2}) = e^{-j\omega/2} \cdot 2\cos(\omega/2)
+        \]
+        Which gives
+        \[
+            \frac{1 - e^{-j\omega}}{1 + e^{-j\omega}} = \frac{2j \sin(\omega/2)}{2\cos(\omega/2)} = j\tan(\omega/2)
+        \]
+        Combining with the earlier equation gives
+        \[
+            \Omega = \frac{2}{T} \tan(\omega/2)
+        \]
 
+    \item Resultant cutoff in discrete domain is (assuming $T = 1$)
+        \[
+            \Omega_c = \frac{2}{T} \cdot 0.3249 = 0.6498
+        \]
+        So the analog transform function is
+        \[
+            H_a(s) = \frac{0.6498}{s + 0.6498}
+        \]
+        Applying the bilinear transform
+        \begin{align*}
+            H(z) &= \frac{0.6498}{\frac{2(1 - z^{-1})}{1 + z^{-1}} + 0.6498} \\
+                 &= \frac{0.6498 (1 + z^{-1})}{2(1 - z^{-1}) + 0.6498(1 + z^{-1})} \\
+                 &= \frac{0.6498 (1 + z^{-1})}{2.6498(1 - 0.5097z^{-1})} \\
+                 &= \frac{0.245 (1 + z^{-1})}{1 - 0.51z^{-1}}
+        \end{align*}
+
+        Plotting the magnitude response I got this
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/2c_mag.png}
+        \end{figure}
+\end{enumerate}
+
+\section*{Problem 3.}
+\begin{enumerate}
+    \item Again finding at which point the magnitude is at $1/\sqrt{2}$. Start with finding the magnitude response
+        \begin{align*}
+            |H_a(j\Omega)| &= \left| \frac{1}{(j\Omega)^2 + \sqrt{2}j\Omega + 1} \right| \\
+                           &= \left| \frac{1}{(1 - \Omega^2) + j\sqrt{2}\Omega} \right| \\
+                           &= \frac{1}{\sqrt{(1 - \Omega^2)^2 + 2\Omega^2}} = \frac{1}{\sqrt{1 + \Omega^4}}
+        \end{align*}
+        We then get
+        \[
+            \frac{1}{\sqrt{1 + \Omega^4}} = \frac{1}{\sqrt{2}} \implies \Omega_c = 1
+        \]
+        The transfer function also follows the structure of a normalized Butterworth filter of degree 2.
+
+    \item Get the following plot
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/3b_mag.png}
+        \end{figure}
+
+    \item Using matlab I found two poles at $-\frac{\sqrt{2}}{2} \pm j \frac{\sqrt{2}}{2}$.
+\end{enumerate}
+
+\section*{Problem 4.}
+\begin{enumerate}
+    \item The filter designer tool window is a bit broken on Ubuntu, so I was not able to specify filter order at all, and 
+        therefore was not able to effectively use a windowing method at all (the input box for filter order did not show/was broken, so only the default value could be used, which of 
+        course does not meet any of the specifications).
+
+    \item Using the "optimal order" selection in the filter designer I got a filter order of 201.
+        I got the following plot for the magnitude and phase
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/4b_mag_and_phase.png}
+        \end{figure}
+        and this plot for the passband 
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/4b_mag_passband.png}
+        \end{figure}
+
+    \item For the IIR filter I got a filter order of 13, with these plots
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/4c_mag_and_phase.png}
+        \end{figure}
+        and
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/4c_mag_passband.png}
+        \end{figure}
+
+    \item It seems that the IIR filter has a much stronger stopband performance than the FIR filter, though
+        it does not have a linear phase response, which may be desired in some applications. As far as I am aware 
+        in audio applications linear phase/good phase performance is not necesserily critical as the human ear is not 
+        as sensitive to phase as it is to frequency and amplitude, so IIR may work quite well for this kind of application. It also has
+        a much shorter filter structure, but will have a much longer impulse response (from the name infinite).
+
+    \item After filtering the noise is gone :)
+\end{enumerate}
 
 \end{document}
