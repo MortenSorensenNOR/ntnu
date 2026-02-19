@@ -1,0 +1,78 @@
+Signal Analysis Results
+==================================================
+
+File: data/100hz_sin.bin
+--------------------------------------------------
+ADC 1: f = 100.1 Hz
+  Low freq max: -71.0 dB at 49.6 Hz
+  High freq max (incl harmonics): -65.5 dB at 832.6 Hz
+  High freq max (excl harmonics): -74.1 dB at 112.5 Hz
+  SNR including harmonic noise: 65.52 dB
+  SNR excluding harmonic noise: 71.00 dB
+
+ADC 2: f = 100.1 Hz
+  Low freq max: -71.0 dB at 49.6 Hz
+  High freq max (incl harmonics): -65.5 dB at 832.6 Hz
+  High freq max (excl harmonics): -74.3 dB at 112.5 Hz
+  SNR including harmonic noise: 65.48 dB
+  SNR excluding harmonic noise: 71.00 dB
+
+ADC 3: f = 100.1 Hz
+  Low freq max: -71.0 dB at 49.6 Hz
+  High freq max (incl harmonics): -65.5 dB at 832.6 Hz
+  High freq max (excl harmonics): -74.1 dB at 112.5 Hz
+  SNR including harmonic noise: 65.49 dB
+  SNR excluding harmonic noise: 71.04 dB
+
+Theoretical SNR max = 74.0081115499123
+
+File: data/1khz_sin.bin
+--------------------------------------------------
+ADC 1: f = 1000.4 Hz
+  Low freq max: -68.2 dB at 833.5 Hz
+  High freq max (incl harmonics): -71.1 dB at 1667.0 Hz
+  High freq max (excl harmonics): -71.1 dB at 1667.0 Hz
+  SNR including harmonic noise: 68.18 dB
+  SNR excluding harmonic noise: 68.18 dB
+
+ADC 2: f = 1000.4 Hz
+  Low freq max: -68.1 dB at 833.5 Hz
+  High freq max (incl harmonics): -71.2 dB at 1667.0 Hz
+  High freq max (excl harmonics): -71.2 dB at 1667.0 Hz
+  SNR including harmonic noise: 68.09 dB
+  SNR excluding harmonic noise: 68.09 dB
+
+ADC 3: f = 1000.4 Hz
+  Low freq max: -68.1 dB at 833.5 Hz
+  High freq max (incl harmonics): -71.1 dB at 1667.0 Hz
+  High freq max (excl harmonics): -71.1 dB at 1667.0 Hz
+  SNR including harmonic noise: 68.14 dB
+  SNR excluding harmonic noise: 68.14 dB
+
+Theoretical SNR max = 74.0081115499123
+
+File: data/10khz_sin.bin
+--------------------------------------------------
+ADC 1: f = 10000.2 Hz
+  Low freq max: -68.6 dB at 3749.8 Hz
+  High freq max (incl harmonics): -67.2 dB at 15000.3 Hz
+  High freq max (excl harmonics): -67.2 dB at 15000.3 Hz
+  SNR including harmonic noise: 67.15 dB
+  SNR excluding harmonic noise: 67.15 dB
+
+ADC 2: f = 10000.2 Hz
+  Low freq max: -68.6 dB at 3749.8 Hz
+  High freq max (incl harmonics): -67.1 dB at 15000.3 Hz
+  High freq max (excl harmonics): -67.1 dB at 15000.3 Hz
+  SNR including harmonic noise: 67.15 dB
+  SNR excluding harmonic noise: 67.15 dB
+
+ADC 3: f = 10000.2 Hz
+  Low freq max: -68.5 dB at 3749.8 Hz
+  High freq max (incl harmonics): -67.1 dB at 15000.3 Hz
+  High freq max (excl harmonics): -67.1 dB at 15000.3 Hz
+  SNR including harmonic noise: 67.11 dB
+  SNR excluding harmonic noise: 67.11 dB
+
+Theoretical SNR max = 74.0081115499123
+
