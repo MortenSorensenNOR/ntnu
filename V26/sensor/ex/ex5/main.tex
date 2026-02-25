@@ -1,0 +1,44 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Regner ut spenningen i hver gren. Får da
+        \[
+            V1 = \frac{R2}{R1 + R2}E_0
+        \]
+        og
+        \[
+            V2 = \frac{R3}{R(T) + R3}E_0
+        \]
+        Finner så utgangsspenningen
+        \[
+            E_{out} = V2 - V1 = \left(\frac{R3}{R(T) + R3} - \frac{R2}{R1 + R2}\right)E_0
+        \]
+
+    \item Vi lar $F = \frac{R1}{R2} = \frac{R0}{R3}$. Får da
+        \begin{align*}
+            E_{out} &= E_0 \left(\frac{1}{\frac{R(T)}{R_3} + 1} - \frac{1}{\frac{R_1}{R_2} + 1} \right) \\
+                    &= E_0 \left(\frac{1}{F\left(1 + \frac{\alpha \Delta T}{R_0}\right) + 1} - \frac{1}{F + 1} \right) \\
+                    &= E_0 \left(\frac{1}{(F + 1) + F\frac{\alpha \Delta T}{R_0}} - \frac{1}{F + 1} \right) \\
+                    &= E_0 \left(\frac{1}{(F + 1)\left(1 + \frac{F}{F+1}\frac{\alpha \Delta T}{R_0}\right)} - \frac{1}{F + 1} \right) \\
+                    &\approx E_0 \left(\frac{1}{F + 1}\left(1 - \frac{F}{F+1}\frac{\alpha \Delta T}{R_0}\right) - \frac{1}{F + 1} \right) \\
+                    &= -E_0 \frac{F}{(F+1)^2}\frac{\alpha \Delta T}{R_0}
+        \end{align*}
+        Motsatt fortegn siden spenningen er definert andre veien i (1) (antar jeg).
+    \item Maks verdi er gitt ved $F = 1$, da
+        \[
+            \frac{\partial}{\partial F} \frac{F}{(F + 1)^2} = \frac{(x + 1)^2 - 2x(x + 1)}{(x + 1)^4} = 0
+        \]
+        gir $F = 1$.
+    \item Vi får
+        \[
+            A_2 = -E_0 \frac{F^2}{(F + 1)^3}
+        \]
+\end{enumerate}
+
+\end{document}

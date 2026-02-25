@@ -1,0 +1,68 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Støyeffekten til motstandend ved temperatur $T$ er 
+        \[
+            P_n = kTB
+        \]
+        og total støyeffekt på utgangen av forsterkeren blir 
+        \[
+            P_{\text{out}} = G \cdot F \cdot kTB
+        \]
+        hvor $F$ er støyfaktoren til forsterkeren og $G$ er forsterker gain-en. For dette oppsette blir 
+        \[
+            P_{\text{out}} = 3981 \cdot 1.445 \cdot 1.380649 \cdot 10^{-23} \cdot \SI{160}{\kelvin} \cdot \SI{6}{\mega\hertz} \approx 7{,}62 \times 10^{-11} \, \text{W} = \SI{-71.2}{dBm}
+        \]
+    \item Signalets effekt er 
+        \[
+            P = \frac{V^2}{2R} \approx \SI{2.42}{\pico\watt} = \SI{-86.2}{dBm}
+        \]
+        SNR blir da
+        \[
+            \text{SNR} = \SI{-86.2}{dBm} + \SI{36}{dB} - (\SI{-71.2}{dBm}) = \SI{21}{dB}
+        \]
+\end{enumerate}
+
+\section*{Oppgave 2.}
+\begin{enumerate}
+    \item Støyfaktoren til kaskadekoblingen blir
+        \[
+            F_{cas} = 1.778 + \frac{6.310 - 1}{100} = 1.831
+        \]
+        Effektiv støytemperatur blir da
+        \[
+            T_e = 290 \cdot (1.831 - 1) = \SI{241}{\kelvin}
+        \]
+    \item Signal power blir 
+        \[
+            P_{out} = \SI{-90}{dBm} + \SI{20}{dB} + \SI{16}{dB} = \SI{-54}{dBm}
+        \]
+        Vi har at 
+        \[
+            P_{noise} = kT_eB = 1.38 \cdot 10^{-23} \cdot (241 + 50) \cdot 3 \cdot 10^{6} \approx 1.20474 \cdot 10^{-14} \text{W}
+        \]
+        SNR blir så
+        \[
+            \text{SNR} = P_{out} - 10 \cdot \log_{10}\left(\frac{P_{noise}}{10^{-3}}\right) = -54 - 10 \cdot \log_{10}\left(\frac{1.20474 \cdot 10^{-14} \text{W}}{10^{-3}}\right) = \SI{55.19}{dB}
+        \]
+    \item Vi har at
+        \[
+            F_{tot} = F_1 + \frac{F_{cable} - 1}{G_1} + \frac{F_2 - 1}{G_1 \cdot G_cable} = 2.399
+        \]
+        Får da en effektiv støytemperatur på
+        \[
+            T_e = 290 \cdot (2.399 - 1) = \SI{405.7}{\kelvin}
+        \]
+        SNR blir så
+        \[
+            \text{SNR} = -54 - 10 \cdot \log_{10}\left(\frac{1.886598 \cdot 10^{-14} \text{\: W}}{10^{-3}}\right) = \SI{53.24}{dB}
+        \]
+\end{enumerate}
+
+\end{document}

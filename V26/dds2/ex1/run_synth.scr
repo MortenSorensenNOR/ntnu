@@ -1,0 +1,15 @@
+#!/bin/bash
+
+SCRIPT="synthesis.tcl"
+LOG="reports/synthesis.log"
+
+mkdir -p reports
+
+echo "Starting synthesis with Design Compiler..."
+
+# Run dc_shell
+# -f: tells it to run the following file
+# | tee: sends output to screen AND the log file
+dc_shell -f $SCRIPT | tee $LOG
+
+echo "Synthesis complete. Logic and errors saved to $LOG"

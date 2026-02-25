@@ -1,0 +1,129 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+Vet at 
+\[
+    \cos(\theta) = \frac{x}{d},\:\:\:\: x = \tau \cdot c
+\]
+altså er
+\[
+    \cos(\theta) = \frac{c\tau}{d}
+\]
+
+\section*{Oppgave 2.}
+\begin{enumerate}
+    \item Maksimal relativ feil for $f$ blir da
+        \[
+            \left|\frac{\Delta f}{f}\right|_{\max} = \left|\frac{\Delta \tau}{\tau}\right| + \left|\frac{\Delta d}{d}\right| \approx 0.03
+        \]
+    \item Den er relativ, så nei.
+    \item Python koden gav $1.03013$:
+\begin{pythoncode}
+import numpy as np
+
+nrand  = int(1e4)
+tauvec = (1 + 2*0.01*(np.random.rand(nrand) - 0.5))
+dvec   = (1 + 2*0.02*(np.random.rand(nrand) - 0.5))
+f = tauvec / dvec
+print(f, np.max(f))
+\end{pythoncode}
+\end{enumerate}
+
+\section*{Oppgave 3.}
+\begin{enumerate}
+    \item 
+        Bruker kjerneregelen
+        \[
+            \Delta\theta = \left|\frac{d\theta}{df}\right| \cdot \Delta f
+        \]
+        Får da at
+        \[
+            \frac{d\theta}{df} = \frac{d}{df}(\cos^{-1}(f)) = -\frac{1}{\sqrt{1 - f^2}}
+        \]
+        Altså er
+        \[
+            |\Delta \theta| = \frac{1}{\sqrt{1 - f^2}} \cdot |\Delta f|
+        \]
+        Finner så relativ feil
+        \[
+            \left|\frac{\Delta\theta}{\theta}\right| = \frac{|\Delta f|}{|\theta| \cdot \sqrt{1 - f^2}}
+        \]
+        Vi har at $f = \cos(\theta)$, altså får vi
+        \begin{align*}
+            \left|\frac{\Delta\theta}{\theta}\right|_{\max} = \frac{|\Delta f|_\max}{|\theta| \cdot \sqrt{1 - \cos(\theta)^2}} = \frac{|\Delta f|_\max}{|\theta| \cdot |\sin(\theta)|}
+        \end{align*}
+
+        Setter vi inn det vi fant i oppgave 2 har vi at
+        \begin{align*}
+            \left|\frac{\Delta\theta}{\theta}\right|_{\max} = \frac{0.03 \cdot |\cos(\theta)|}{|\theta| \cdot |\sin(\theta)|} = 0.03 \cdot \frac{|\cot(\theta)|}{|\theta|}
+        \end{align*}
+    \item Ja, den maksimale relative feilen avhenger av $\theta$.
+    \item Ser store divergeringer rundt singularitetet ved $\theta = 0$ og ved $\theta = \pi/2$.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.85\textwidth]{Bilder/3c.png}
+        \end{figure}
+\begin{pythoncode}
+import numpy as np
+import matplotlib.pyplot as plt
+
+nrand = int(1e4)
+c = 343
+
+# oppgave 2
+tauvec = lambda: (1 + 2*0.01*(np.random.rand(nrand) - 0.5))
+dvec   = lambda: (1 + 2*0.02*(np.random.rand(nrand) - 0.5))
+f = tauvec() / dvec()
+print(f"f maks relativ feil: {np.max(f)}")
+
+# oppgave 3
+thetas = np.linspace(0.001, np.pi/2, 20)
+relative_erros = []
+
+montecarlo_verdier = []
+teoretisk_verdier = []
+
+d_real = 0.1
+for theta in thetas:
+    f = np.cos(theta)
+    fc = f / c
+    tau = fc * d_real
+
+    dvals = dvec() * d_real
+    tauvals = tauvec() * tau
+
+    theta_vals = []
+    for i in range(len(dvals)):
+        if tauvals[i] * c > dvals[i]:
+            continue
+        theta_vals.append(float(np.arccos(c * tauvals[i] / dvals[i])))
+    
+    feil = max(abs(theta_vals - theta))
+    rel_feil = feil / theta
+    teoretisk = 0.03 * abs(1 / np.tan(theta)) * 1 / abs(theta)
+    montecarlo_verdier.append(rel_feil)
+    teoretisk_verdier.append(teoretisk)
+
+    print(f"theta: {theta}, maks relativ feil: {rel_feil}")
+    print(f"theoretisk mask relativ feil: {teoretisk}")
+    print()
+
+plt.plot(thetas, np.array(montecarlo_verdier), label="Montecarlo simulert")
+plt.plot(thetas, np.array(teoretisk_verdier), label="Teoretisk")
+plt.yscale('log')
+plt.xlabel(r"$\theta$")
+plt.ylabel(r"$|\Delta\theta|/|\theta|_\max$")
+plt.legend()
+plt.show()
+\end{pythoncode}
+
+\end{enumerate}
+
+\section*{Oppgave 4.}
+
+\end{document}

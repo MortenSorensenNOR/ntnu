@@ -1,0 +1,21 @@
+#!/bin/csh -fx
+
+
+rm -rf work
+rm -f transcript vsim.wlf *.ucdb
+
+vlib work
+
+vlog -sv ./rtl/NtnuTfe4171Lab1Fifo.sv \
+        ./tb/test_NtnuTfe4171Lab1Fifo.sv #\
+        #./lab1/tb/test_NtnuTfe4171Lab1Fifo.sv.architecturalTest.sv
+
+
+vsim -c -assertdebug test_NtnuTfe4171Lab1Fifo \
+     -l run_fifo.log \
+     -do "run -all; quit"
+
+#vsim -c -assertdebug test_NtnuTfe4171Lab1Fifo_architecturalTest \
+#     -l run_fifo_arch.log \
+#     -do "run -all; quit"
+
