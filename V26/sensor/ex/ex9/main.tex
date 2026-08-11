@@ -1,0 +1,57 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item 
+        \[
+            \Delta \lambda = \frac{2v f_0}{c} \approx \SI{1.67}{\kilo\hertz}
+        \]
+    \item Ren dopplerradar sender kunn ut et kontinuerlig signal med en fast frekvens, der den
+        bruker faseforskjellen mellom utsendt og mottatt signal for å måle fart. Det er ignenting med signalet 
+        som sier oss noe om hvor langt signalet beveget seg før den ble reflektert, med mindre man vet godt hvordan tingen
+        man måler ser ut ifht rf reflektivitet, da man muligens kan se på styrken til det mottatte signalet (ren spekulasjon fra min side).
+    \item Blir kosinusdelen av geometrien til oppsettet, så $\cos(45^\circ) \approx 0.707$ av det vi fikk i (a),
+        så omtrent $\SI{1.18}{\kilo\hertz}$.
+\end{enumerate}
+
+\section*{Oppgave 2.}
+\begin{enumerate}
+    \item Radarligningen
+        \[
+            P_r = \frac{P_t G^2 \lambda^2 \sigma}{(4\pi)^3 R^4}
+        \]
+        Vi har $G = 28 \text{ dBi } = 631$, $\lambda = \frac{c}{f} = \frac{3 \cdot 10^8}{3.1 \cdot 10^9} \approx \SI{0.0968}{\meter}$. 
+        Løser for $R$ for å få maks radius 
+        \[
+            R^4 = \frac{10^4 \cdot 631^2 \cdot 0.0968^2 \cdot 10}{(4\pi)^3 \cdot 4 \cdot 10^{-10}} \approx
+        \]
+        det gir
+        \[
+            R_{max} \approx \SI{4656}{\meter}
+        \]
+    \item 
+        Da får vi
+        \[
+            R_{max} \approx \SI{5537}{\meter}
+        \]
+\end{enumerate}
+
+\section*{Oppgave 3.}
+\begin{enumerate}
+    \item Vi har
+        \[
+            A_{eff} = \frac{a^2}{\sqrt{3}}
+        \]
+        og får da radartverrsnitt
+        \[
+            \sigma = \frac{4\pi A_{eff}^2}{\lambda^2} = \frac{4\pi a^4}{3\lambda^2} \approx \SI{16.4}{\meter^2}
+        \]
+    \item $\sigma = \pi r^2 \implies r = \sqrt{\frac{16.4}{\pi}} = \SI{2.28}{\meter}$
+\end{enumerate}
+
+\end{document}

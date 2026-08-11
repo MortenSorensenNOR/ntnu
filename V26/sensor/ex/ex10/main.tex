@@ -1,0 +1,48 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Maks effekt 
+        \[
+            P_{max} = \frac{V^2}{2R} = \frac{\SI{0.5}{\volt}^2}{2 \cdot \SI{50}{\ohm}} = \SI{0.025}{\watt}
+        \]
+    \item 
+        \[
+            P_Q = \frac{(2^{-12})^2}{12 \cdot R} \approx \SI{99.3}{\pico\watt}
+        \]
+    \item Knekkfrekvensen helst være $f_s / 2$ eller lavere. Praktisk sett er det typisk, avhengig av filterorden på 
+        lavpassfilteret, å sette knekkfrekvensen 10-20\% lavere for å kompansere for rolloff i filteret.
+    \item Effekten til termisk støy fra bakken er $kTB$, hvor $k$ er boltzmannskonstanten, $T$ temperaturen i kelvin, or $B$ bandwidth. Altså
+        \[
+            P_T = 1.380659 \cdot 10^{-23} \cdot 263.15 \cdot \SI{10}{\mega\hertz} = 3.63 \cdot 10^{-14} \text{ W } 
+        \]
+         Noise factor for kaskadekoblingen blir
+         \[
+             F_{cas} = F_1 + \frac{F_2 - 1}{G_1} = 1.259 + \frac{2.512-1}{1000} \approx 1.261
+         \]
+         Systemets støytemperatur blir da
+         \[
+             T_{cas} = \frac{F_{cas} - 1} \cdot T_0 = 0.261 \cdot 290 \approx \SI{75.6}{\kelvin}
+         \]
+         Støyeffekten på inngangen blir da
+         \[
+             P_{støy} = k \cdot T_{cas} \cdot B = 1.381 \cdot 10^{-23} \cdot 338.8 \cdot \SI{10}{\mega\hertz} \approx 4.68 \cdot 10^{-14} \text{ W}
+         \]
+         Ønsker at termisk støy skal ligge 10 dB over kvantisering, så
+         \[
+             P_{ønsket} = 10 \cdot P_Q \approx 9.93 \cdot 10^{-10} \text{ W}
+         \]
+         Altså må
+         \[
+             G_{cas} = \frac{P_{ønsket}}{P_{støy}} = 21218 \approx 43.3 \text{ dB}
+         \]
+         som gir $G_2 = 13.3 \text{ dB}$.
+    \item
+\end{enumerate}
+
+\end{document}

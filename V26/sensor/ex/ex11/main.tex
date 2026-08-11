@@ -1,0 +1,40 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Rundt -155 dBm
+    \item SNR blir $-41.6 - (-155) = 113.4$ dB
+    \item RBW er 100 Hz, så støytettheten blir
+        \[
+            N_0 = -155 - 10 \log_{10}(100) = -155 - 20 = -175 \text{ dBm/Hz}
+        \]
+    \item Ved RBW lik 100 kHz bir støygulvet $-175 + 10 \log_{10}(10^{5}) = -175 + 50 = -125$ dBm
+\end{enumerate}
+
+\section*{Oppgave 2.}
+Vi har $N = \frac{\SI{5}{\giga\hertz}}{\SI{156.25}{\mega\hertz}} = 32$. Dette skalerer fasestøyen med 
+$20 \log_{10}(N) \approx 30 \text{ dB}$. Vi får da 
+
+\begin{center}
+\begin{tabular}{| c | c | c |}
+    \hline
+    \textbf{Frekvens (Hz)} & \textbf{Fasestøy oscillator (dBc/Hz)} & \textbf{Fasestøy PLL (dBc/Hz)} \\
+    \hline
+    \hline 
+    100 & -90.78 & -60.8 \\
+    \hline 
+    1000 & -126.10 & -96.1 \\
+    \hline 
+\end{tabular}
+\end{center}
+
+\section*{Oppgave 3.}
+Lavpass Pi-filter (slik vi har brukt i prosjektene på strømforsyningen).
+Holde strømforsyningen for analog elektronikk (som preges av støyen) unna digital elektronikk (som ikke preges like mye av støyen).
+
+\end{document}

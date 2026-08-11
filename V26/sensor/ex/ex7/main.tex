@@ -1,0 +1,52 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Absorpsjon skjer når fotoner fra en lyskilde blir tatt opp av atomer og molekyler, ved at elektroner blir eksitert til høyere energinivå.
+        $\mu_a$ koeffisienten sier noe om sannsynligheten for absorpsjon per lengde.
+    \item Spredning oppstår når lys passerer gjennom stoffer med forskjellige brytningsindekser, hvor lys blir sent i nye retninger, gjerne avhengig av
+        lystets frekvens. $\mu_s$ koeffisienten sier noe om sannsynligheten for spredning per lengde.
+    \item Høy $\mu_s$ gjør at fotonest effektive veilengde blir større, altså større sannsynlighet for å bli absorbert, som reduserer inntrengningsdybden,
+        slik vist i bildet under,
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.9\textwidth]{Bilder/scattering.png}
+        \end{figure}
+        mens $\mu_a$ reduserer inntrengingsdybden direkte ved at fotonene blir absorbert, i.e. færre fotoner kommer dybt inn i stoffet.
+\end{enumerate}
+
+\section*{Oppgave 2.}
+Setter inn i ligningen og får
+\begin{align*}
+    \mu_a (\phi(0) e^{-Cz}) - D \frac{d^2}{dz^2}(\phi(0) e^{-Cz}) &= 0 \\
+    \mu_a (\phi(0) e^{-Cz}) - C^2 \cdot D \cdot \phi(0) e^{-Cz} &= 0 \\
+    (\mu_a  - C^2 \cdot D) \cdot \phi(0) e^{-Cz} &= 0
+\end{align*}
+Så vi får at 
+\[
+    C = \sqrt{\frac{\mu_a}{D}}
+\]
+
+\section*{Oppgave 3.}
+\begin{enumerate}
+    \item Har at $\Omega = \pi \frac{r^2}{R^2}$ hvor $r$ er radiusen på lyktens åpning og $R$ er avstanden fra kilden til fronten av lykten, altså er
+        $\Omega = \frac{\pi}{25}$, og får da at
+        \[
+            I = \frac{dP}{d\Omega} = \frac{125}{\pi} \text{ W}
+        \]
+    \item Radiansen til midten av lykten er
+        \[
+            L = \frac{dI}{dA \cos \theta} = \frac{125/\pi}{\pi \cdot \SI{1}{\centi\meter}^2} \approx 1.27 \cdot 10^{5} \text{ W}
+        \]
+    \item Får at irradiansen blir
+        \[
+            E = \frac{dP}{dA} = \frac{\SI{5}{\watt}}{\pi \cdot (\SI{5}{\centi\meter})^2} \approx \SI{637}{\watt\per\meter^2}
+        \]
+\end{enumerate}
+
+\end{document}

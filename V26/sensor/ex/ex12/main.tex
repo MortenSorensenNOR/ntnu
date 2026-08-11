@@ -1,0 +1,79 @@
+\documentclass[a4paper,11pt,norsk]{article}
+\usepackage{packages}
+
+\begin{document}
+
+\input{Header/overskrift}
+
+\section*{Oppgave 1.}
+\begin{enumerate}
+    \item Vi har 
+        \[
+            F_\text{coil} = m_\text{coil} \cdot j\omega u_\text{coil} = \frac{k_\text{sus}}{j\omega}(u_\text{ground} - u_\text{coil})
+        \]
+        Så
+        \[
+            \left(\frac{m_\text{coil} (j\omega)^2 + k_\text{sus}}{k_\text{sus}}\right) u_\text{coil} = u_\text{ground}
+        \]
+        altså
+        \[
+            \left|\frac{u_\text{coil}}{u_\text{ground}}\right| = \left| \frac{k_\text{sus}}{k_\text{sus} - m_\text{coil} \omega^2} \right|
+        \]
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{Bilder/1a.png}
+        \end{figure}
+
+    \item Maks blir når $k_\text{sus} - m_\text{coil} \omega^2 = 0$, altså
+        \[
+            \omega = \sqrt{\frac{k_\text{sus}}{m_\text{coil}}}
+        \]
+
+    \item 
+
+        \begin{align*}
+            \left|\frac{e}{u_\text{ground}}\right| &= Bl \cdot \left|\left\frac{u_\text{coil}}{u_\text{ground}} - 1\right\right| \\
+                                                   &= Bl \cdot \left|\left\frac{k_\text{sus}}{k_\text{sus} - m_\text{coil} \cdot \omega^2} - 1\right\right| \\
+                                                   &= Bl \cdot \left|\frac{m_\text{coil} \omega^2}{k_\text{sus} - m_\text{coil}\omega^2}\right|
+        \end{align*}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{Bilder/1c.png}
+        \end{figure}
+\end{enumerate}
+
+\section*{Oppgave 2.}
+\begin{enumerate}
+    \item Ved $T = 0$ får vi uansett $R_\text{approks.}(0) = R(0)$, og ved $T = 100$ får vi
+        \begin{align*}
+            R_\text{approks.}(100) &= R(100) \\
+            R(0)[1 + 100D] &= R(0)[1 + 3.9083 \cdot 10^{-3} \cdot 100 + (-5.775 \cdot 10^{-7}) \cdot 100^2] \\
+            D &= 3.9083 \cdot 10^{-3} + (-5.775 \cdot 10^{-7}) \cdot 100 \approx \underline{\underline{3.85055 \cdot 10^{-3}}}
+        \end{align*}
+
+    \item Vi har at feilen er uttrykket som
+        \begin{align*}
+            E(T) &= R_\text{approks.}(T) - R(T) \\
+                 &= R(0)\left(DT - AT - BT^2\right)
+        \end{align*}
+        Deriverer mhp. $T$ og setter lik 0, får
+        \[
+            \frac{d}{dT} E(T) = R(0)\left(D - A - 2BT \right) = 0
+        \]
+        som gir
+        \[
+            T = -\frac{A - D}{2B} = 50
+        \]
+        med en feil på 
+        \[
+            |E(T)| = 1.44375 \cdot 10^{-3}
+        \]
+        Sjekker så endepunktene på intervallet. Vet at ved 0 grader er $R_\text{approks.}(T) = R(T)$ etter definisjon, så
+        maks kan kunn være ved $T = 500$:
+        \[
+            |E(500)| = 0.1155
+        \]
+        altså omtrent 80 ganger større feil enn ved $T = 50$. Maks feil er derfor 0.1155 ohm.
+\end{enumerate}
+
+\end{document}
